@@ -5,6 +5,7 @@ import '../../presentation/screens/deleted_items/deleted_items_screen.dart';
 import '../../presentation/screens/expense_detail/expense_detail_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_screen.dart';
 import '../../presentation/screens/shell/app_shell.dart';
+import 'page_transitions.dart';
 
 /// App 路由管理
 class AppRouter {
@@ -23,20 +24,23 @@ class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case onboarding:
-        return MaterialPageRoute(
-          builder: (_) => const OnboardingScreen(),
+        // Onboarding 使用淡入效果
+        return FadePageRoute(
+          page: const OnboardingScreen(),
           settings: settings,
         );
 
       case home:
-        return MaterialPageRoute(
-          builder: (_) => const AppShell(),
+        // 首頁使用標準淡入
+        return FadePageRoute(
+          page: const AppShell(),
           settings: settings,
         );
 
       case addExpense:
-        return MaterialPageRoute(
-          builder: (_) => const AddExpenseScreen(),
+        // 新增支出從底部滑入（模態對話框風格）
+        return BottomSlidePageRoute(
+          page: const AddExpenseScreen(),
           settings: settings,
           fullscreenDialog: true,
         );
@@ -45,8 +49,8 @@ class AppRouter {
         // 安全的類型檢查
         final args = settings.arguments;
         if (args is! int) {
-          return MaterialPageRoute(
-            builder: (_) => Scaffold(
+          return SlidePageRoute(
+            page: Scaffold(
               appBar: AppBar(title: const Text('錯誤')),
               body: const Center(
                 child: Text('無效的支出 ID'),
@@ -55,22 +59,24 @@ class AppRouter {
             settings: settings,
           );
         }
-        return MaterialPageRoute(
-          builder: (_) => ExpenseDetailScreen(expenseId: args),
+        // 詳情頁面從右滑入（支援 Hero 動畫）
+        return SlidePageRoute(
+          page: ExpenseDetailScreen(expenseId: args),
           settings: settings,
         );
 
       case deletedItems:
-        return MaterialPageRoute(
-          builder: (_) => const DeletedItemsScreen(),
+        // 已刪除項目從右滑入
+        return SlidePageRoute(
+          page: const DeletedItemsScreen(),
           settings: settings,
         );
 
       // export 和 settings 會在 AppShell 中處理
 
       default:
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
+        return SlidePageRoute(
+          page: Scaffold(
             appBar: AppBar(title: const Text('頁面不存在')),
             body: Center(
               child: Text('找不到路由: ${settings.name}'),

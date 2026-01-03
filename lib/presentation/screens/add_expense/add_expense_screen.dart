@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/currency_constants.dart';
 import '../../../core/constants/validation_rules.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/animation_utils.dart';
 import '../../../core/utils/formatters.dart';
 import '../../providers/exchange_rate_provider.dart';
 import '../../providers/expense_provider.dart';
@@ -354,6 +355,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   }
 
   Future<void> _pickFromCamera() async {
+    // 觸覺回饋 - 拍照
+    AnimationUtils.selectionClick();
+
     final provider = context.read<ExpenseProvider>();
     final result = await provider.pickImageFromCamera();
 
@@ -364,6 +368,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         }
       },
       onSuccess: (path) {
+        // 觸覺回饋 - 成功拍照
+        AnimationUtils.lightImpact();
         setState(() => _selectedImagePath = path);
       },
     );
@@ -433,9 +439,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
       result.fold(
         onFailure: (error) {
+          // 觸覺回饋 - 錯誤
+          AnimationUtils.heavyImpact();
           _showError(error.message);
         },
         onSuccess: (_) {
+          // 觸覺回饋 - 儲存成功
+          AnimationUtils.lightImpact();
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('支出已新增')),

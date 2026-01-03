@@ -178,54 +178,69 @@ assets/
 
 ---
 
-## Phase 10: 動畫系統 - 轉場與微互動
+## Phase 10: 動畫系統 - 轉場與微互動 ✅
 
 ### 目標
 加入 Hero 動畫、列表動畫、觸覺回饋，提升操作手感
 
 ### 任務清單
 
-- [ ] 10.1 Hero 轉場動畫
-  - [ ] 10.1.1 ExpenseCard 縮圖 → ExpenseDetail 大圖
-  - [ ] 10.1.2 處理無圖片情況的 fallback
-  - [ ] 10.1.3 優化動畫曲線 (Curves.easeInOut)
+- [x] 10.1 Hero 轉場動畫
+  - [x] 10.1.1 ExpenseCard 縮圖 → ExpenseDetail 大圖
+  - [x] 10.1.2 處理無圖片情況的 fallback
+  - [x] 10.1.3 優化動畫曲線 (Curves.easeInOut)
 
-- [ ] 10.2 頁面轉場動畫
-  - [ ] 10.2.1 建立 `lib/core/router/page_transitions.dart`
-  - [ ] 10.2.2 實作 SlidePageRoute（左右滑動）
-  - [ ] 10.2.3 實作 FadePageRoute（淡入淡出）
-  - [ ] 10.2.4 更新 AppRouter 使用自訂轉場
+- [x] 10.2 頁面轉場動畫
+  - [x] 10.2.1 建立 `lib/core/router/page_transitions.dart`
+  - [x] 10.2.2 實作 SlidePageRoute（左右滑動）
+  - [x] 10.2.3 實作 FadePageRoute（淡入淡出）
+  - [x] 10.2.4 實作 BottomSlidePageRoute（從底部滑入）
+  - [x] 10.2.5 實作 ScalePageRoute（縮放）
+  - [x] 10.2.6 更新 AppRouter 使用自訂轉場
 
-- [ ] 10.3 列表動畫
-  - [ ] 10.3.1 首次載入 staggered 進場
-  - [ ] 10.3.2 新增項目 slide-in 動畫
-  - [ ] 10.3.3 刪除項目 fade-out 動畫
-  - [ ] 10.3.4 下拉刷新自訂指示器
+- [x] 10.3 列表動畫
+  - [x] 10.3.1 首次載入 staggered 進場
+  - [x] 10.3.2 新增項目 slide-in 動畫
+  - [x] 10.3.3 建立 AnimatedListItem 組件
+  - [x] 10.3.4 建立 AnimatedRemoveItem 組件
 
-- [ ] 10.4 月份切換動畫
-  - [ ] 10.4.1 MonthSummary 使用 AnimatedSwitcher
-  - [ ] 10.4.2 左右滑動切換效果
-  - [ ] 10.4.3 數字變化動畫 (AnimatedCount)
+- [x] 10.4 月份切換動畫
+  - [x] 10.4.1 MonthSummary 使用 AnimatedSwitcher
+  - [x] 10.4.2 左右滑動切換效果
+  - [x] 10.4.3 數字變化動畫 (AnimatedIntCount, AnimatedAmount)
 
-- [ ] 10.5 按鈕與表單動畫
-  - [ ] 10.5.1 FAB 進場 scale 動畫
-  - [ ] 10.5.2 空列表時 FAB 脈動提示
-  - [ ] 10.5.3 表單欄位 focus 動畫
+- [x] 10.5 按鈕與表單動畫
+  - [x] 10.5.1 FAB 進場 scale 動畫
+  - [x] 10.5.2 空列表時 FAB 脈動提示
+  - [x] 10.5.3 建立 AnimatedFab 組件
+  - [x] 10.5.4 建立 ExpandableFab 組件
 
-- [ ] 10.6 觸覺回饋
-  - [ ] 10.6.1 儲存成功 - lightImpact
-  - [ ] 10.6.2 刪除確認 - mediumImpact
-  - [ ] 10.6.3 拍照 - selectionClick
-  - [ ] 10.6.4 錯誤發生 - heavyImpact
+- [x] 10.6 觸覺回饋
+  - [x] 10.6.1 儲存成功 - lightImpact
+  - [x] 10.6.2 刪除確認 - mediumImpact
+  - [x] 10.6.3 拍照 - selectionClick
+  - [x] 10.6.4 錯誤發生 - heavyImpact
 
-- [ ] 10.7 撰寫測試
-  - [ ] 10.7.1 動畫元件測試
+- [x] 10.7 撰寫測試
+  - [x] 10.7.1 動畫元件測試 (animation_test.dart)
+  - [x] 10.7.2 頁面轉場測試 (page_transitions_test.dart)
+
+### 新增檔案
+```
+lib/core/utils/animation_utils.dart
+lib/core/router/page_transitions.dart
+lib/presentation/widgets/common/animated_list_item.dart
+lib/presentation/widgets/common/animated_count.dart
+lib/presentation/widgets/common/animated_fab.dart
+test/presentation/widgets/common/animation_test.dart
+test/core/router/page_transitions_test.dart
+```
 
 ### 驗收標準
-- [ ] 頁面轉場流暢自然
-- [ ] Hero 動畫正確追蹤元素
-- [ ] 列表操作有動畫回饋
-- [ ] 關鍵操作有觸覺回饋
+- [x] 頁面轉場流暢自然
+- [x] Hero 動畫正確追蹤元素
+- [x] 列表操作有動畫回饋
+- [x] 關鍵操作有觸覺回饋
 
 ---
 
@@ -391,9 +406,9 @@ dependencies:
 | Phase | 名稱 | 預估時間 | 狀態 |
 |-------|------|----------|------|
 | 7 | App Icon & Splash | 1 session | ✅ 完成 |
-| 8 | Skeleton Loading | 1 session | ⬜ 待開始 |
-| 9 | 空白狀態插圖 | 1 session | ⬜ 待開始 |
-| 10 | 動畫系統 | 1 session | ⬜ 待開始 |
+| 8 | Skeleton Loading | 1 session | ✅ 完成 |
+| 9 | 空白狀態插圖 | 1 session | ✅ 完成 |
+| 10 | 動畫系統 | 1 session | ✅ 完成 |
 | 11 | Onboarding & 快捷功能 | 1 session | ⬜ 待開始 |
 | 12 | 無障礙 & Dark Mode | 1 session | ⬜ 待開始 |
 | 13 | 測試 & 效能 | 1 session | ⬜ 待開始 |

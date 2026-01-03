@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/currency_constants.dart';
 import '../../../core/constants/validation_rules.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/animation_utils.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/expense.dart';
 import '../../providers/expense_provider.dart';
@@ -193,7 +194,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
     return GestureDetector(
       onTap: () => _showFullImage(context),
       child: Hero(
-        tag: 'receipt_${_expense!.id}',
+        tag: HeroTags.receiptImage(_expense!.id!),
         child: Container(
           height: 250,
           width: double.infinity,
@@ -427,6 +428,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
 
       result.fold(
         onFailure: (error) {
+          // 觸覺回饋 - 錯誤
+          AnimationUtils.heavyImpact();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('儲存失敗: ${error.message}'),
@@ -435,6 +438,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           );
         },
         onSuccess: (expense) {
+          // 觸覺回饋 - 儲存成功
+          AnimationUtils.lightImpact();
           setState(() {
             _expense = expense;
             _isEditing = false;
@@ -463,7 +468,11 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
             child: const Text('取消'),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
+            onPressed: () {
+              // 觸覺回饋 - 確認刪除
+              AnimationUtils.mediumImpact();
+              Navigator.of(context).pop(true);
+            },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
             child: const Text('刪除'),
           ),
@@ -480,6 +489,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
 
     result.fold(
       onFailure: (error) {
+        // 觸覺回饋 - 錯誤
+        AnimationUtils.heavyImpact();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('刪除失敗: ${error.message}'),
@@ -488,6 +499,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
         );
       },
       onSuccess: (_) {
+        // 觸覺回饋 - 刪除成功
+        AnimationUtils.lightImpact();
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('已刪除')),
@@ -566,7 +579,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       MaterialPageRoute(
         builder: (context) => _FullImageViewer(
           imagePath: _expense!.receiptImagePath!,
-          heroTag: 'receipt_${_expense!.id}',
+          heroTag: HeroTags.receiptImage(_expense!.id!),
         ),
       ),
     );

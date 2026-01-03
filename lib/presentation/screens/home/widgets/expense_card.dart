@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/currency_constants.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/animation_utils.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../data/models/expense.dart';
 
@@ -138,6 +139,7 @@ class ExpenseCard extends StatelessWidget {
 
   /// 建立縮圖
   Widget _buildThumbnail() {
+    // 無收據時不使用 Hero（避免動畫衝突）
     if (!expense.hasReceipt) {
       return Container(
         width: 48,
@@ -153,6 +155,53 @@ class ExpenseCard extends StatelessWidget {
       );
     }
 
+    // 有收據時使用 Hero 動畫（確保 id 非空）
+    final expenseId = expense.id;
+    if (expenseId == null) {
+      // 防禦性處理：ID 為空時不使用 Hero
+      return _buildThumbnailImage();
+    }
+
+    return Hero(
+      tag: HeroTags.receiptImage(expenseId),
+      // 避免動畫過程中裁剪
+      flightShuttleBuilder: (
+        BuildContext flightContext,
+        Animation<double> animation,
+        HeroFlightDirection flightDirection,
+        BuildContext fromHeroContext,
+        BuildContext toHeroContext,
+      ) {
+        return AnimatedBuilder(
+          animation: animation,
+          builder: (context, child) {
+            // 動畫過程中平滑變換圓角
+            final borderRadius = BorderRadius.circular(
+              8.0 * (1 - animation.value),
+            );
+            return ClipRRect(
+              borderRadius: borderRadius,
+              child: Image.file(
+                File(expense.thumbnailPath!),
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  color: AppColors.divider,
+                  child: const Icon(
+                    Icons.broken_image_outlined,
+                    color: AppColors.textHint,
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: _buildThumbnailImage(),
+    );
+  }
+
+  /// 建立縮圖圖片（不含 Hero）
+  Widget _buildThumbnailImage() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: SizedBox(
@@ -208,6 +257,9 @@ class ExpenseCard extends StatelessWidget {
 
   /// 顯示刪除確認對話框
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
+    // 觸覺回饋 - 滑動到位
+    AnimationUtils.mediumImpact();
+
     return await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
@@ -219,7 +271,11 @@ class ExpenseCard extends StatelessWidget {
                 child: const Text('取消'),
               ),
               TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
+                onPressed: () {
+                  // 觸覺回饋 - 確認刪除
+                  AnimationUtils.mediumImpact();
+                  Navigator.of(context).pop(true);
+                },
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.error,
                 ),

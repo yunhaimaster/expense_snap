@@ -5,6 +5,7 @@ import '../../../core/errors/app_exception.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../providers/expense_provider.dart';
+import '../../widgets/common/animated_fab.dart';
 import '../../widgets/common/connectivity_banner.dart';
 import 'widgets/expense_list.dart';
 import 'widgets/month_summary.dart';
@@ -101,12 +102,18 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(AppRouter.addExpense);
+      floatingActionButton: Consumer<ExpenseProvider>(
+        builder: (context, provider, _) {
+          // 空列表時顯示脈動提示
+          final showPulse = !provider.isLoading && provider.expenses.isEmpty;
+          return AnimatedFab(
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRouter.addExpense);
+            },
+            tooltip: '新增支出',
+            showPulse: showPulse,
+          );
         },
-        tooltip: '新增支出',
-        child: const Icon(Icons.add),
       ),
     );
   }
