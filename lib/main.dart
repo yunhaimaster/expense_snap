@@ -18,6 +18,7 @@ import 'presentation/providers/connectivity_provider.dart';
 import 'presentation/providers/exchange_rate_provider.dart';
 import 'presentation/providers/expense_provider.dart';
 import 'presentation/providers/settings_provider.dart';
+import 'presentation/providers/showcase_provider.dart';
 import 'presentation/widgets/common/error_boundary.dart';
 import 'services/background_service.dart';
 import 'services/image_service.dart';
@@ -226,6 +227,9 @@ class ExpenseSnapApp extends StatelessWidget {
             databaseHelper: sl.databaseHelper,
             backupRepository: backupRepository,
           ),
+        ),
+        ChangeNotifierProvider<ShowcaseProvider>(
+          create: (_) => ShowcaseProvider()..initialize(),
         ),
       ],
       child: ErrorBoundary(

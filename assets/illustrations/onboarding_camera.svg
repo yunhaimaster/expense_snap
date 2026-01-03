@@ -1,0 +1,35 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 拍照記錄介紹插圖 -->
+  <!-- 手機外框 -->
+  <rect x="55" y="25" width="90" height="150" rx="12" fill="white" stroke="#2196F3" stroke-width="2"/>
+  <rect x="60" y="35" width="80" height="120" rx="4" fill="#E3F2FD"/>
+
+  <!-- 收據圖片 -->
+  <rect x="70" y="50" width="60" height="80" rx="4" fill="white" stroke="#BBDEFB" stroke-width="1.5"/>
+  <path d="M70 50 L75 46 L80 50 L85 46 L90 50 L95 46 L100 50 L105 46 L110 50 L115 46 L120 50 L125 46 L130 50" stroke="#2196F3" stroke-width="1.5" fill="white"/>
+
+  <!-- 收據內容 -->
+  <rect x="78" y="62" width="44" height="4" rx="2" fill="#BBDEFB"/>
+  <rect x="78" y="72" width="32" height="3" rx="1.5" fill="#E3F2FD"/>
+  <rect x="78" y="80" width="38" height="3" rx="1.5" fill="#E3F2FD"/>
+  <rect x="78" y="95" width="44" height="12" rx="3" fill="#E3F2FD"/>
+  <text x="100" y="104" font-family="Arial" font-size="8" font-weight="bold" fill="#2196F3" text-anchor="middle">$128</text>
+
+  <!-- 相機按鈕 -->
+  <circle cx="100" cy="165" r="10" fill="#2196F3"/>
+  <circle cx="100" cy="165" r="6" fill="white"/>
+
+  <!-- 快門動畫指示 -->
+  <circle cx="155" cy="80" r="18" fill="#2196F3"/>
+  <circle cx="155" cy="80" r="12" fill="white"/>
+  <circle cx="155" cy="80" r="6" fill="#2196F3"/>
+
+  <!-- 閃光效果 -->
+  <path d="M155 55 L155 48" stroke="#64B5F6" stroke-width="2" stroke-linecap="round"/>
+  <path d="M175 80 L182 80" stroke="#64B5F6" stroke-width="2" stroke-linecap="round"/>
+  <path d="M170 65 L176 59" stroke="#64B5F6" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- 裝飾 -->
+  <circle cx="35" cy="140" r="5" fill="#90CAF9"/>
+  <circle cx="45" cy="70" r="4" fill="#BBDEFB"/>
+</svg>

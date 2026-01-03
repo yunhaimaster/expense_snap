@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/currency_constants.dart';
-import '../../../core/constants/validation_rules.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/animation_utils.dart';
 import '../../../core/utils/formatters.dart';
@@ -14,7 +13,10 @@ import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/forms/amount_input.dart';
 import '../../widgets/forms/currency_dropdown.dart';
 import '../../widgets/forms/date_picker_field.dart';
+import '../../widgets/dialogs/smart_prompt_dialogs.dart';
+import '../../widgets/forms/description_autocomplete.dart';
 import '../../widgets/forms/exchange_rate_display.dart';
+import '../../../core/services/smart_prompt_service.dart';
 
 /// 新增支出畫面
 class AddExpenseScreen extends StatefulWidget {
@@ -224,25 +226,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   const SizedBox(height: 16),
                 ],
 
-                // 描述
-                TextFormField(
+                // 描述（含自動完成）
+                DescriptionAutocomplete(
                   controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: '描述',
-                    hintText: '例如：午餐、交通費',
-                    prefixIcon: Icon(Icons.description_outlined),
-                  ),
-                  maxLength: ValidationRules.maxDescriptionLength,
-                  maxLines: 2,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return '請輸入描述';
-                    }
-                    if (value.length < ValidationRules.minDescriptionLength) {
-                      return '描述至少需要 ${ValidationRules.minDescriptionLength} 個字';
-                    }
-                    return null;
-                  },
                 ),
 
                 const SizedBox(height: 32),
@@ -396,28 +382,60 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       return;
     }
 
+    // 安全解析金額（表單驗證應已確保有效，但加上防護）
+    final amount = double.tryParse(_amountController.text);
+    if (amount == null || amount <= 0) {
+      _showError('請輸入有效金額');
+      return;
+    }
+    final amountCents = Formatters.amountToCents(amount);
+
+    // 安全解析匯率
+    final rate = _selectedCurrency == 'HKD'
+        ? 1.0
+        : (double.tryParse(_exchangeRateController.text) ?? 1.0);
+    final rateMicros = Formatters.rateToMicros(rate);
+
+    final hkdAmountCents = _selectedCurrency == 'HKD'
+        ? amountCents
+        : (amountCents * rate).round();
+
+    // 智慧提示檢查
+    final smartPrompt = SmartPromptService.instance;
+
+    // 檢查大金額
+    if (smartPrompt.isLargeAmount(hkdAmountCents)) {
+      final confirmed = await SmartPromptDialogs.showLargeAmountConfirmation(
+        context,
+        amount: amount,
+        currency: _selectedCurrency,
+        hkdAmount: hkdAmountCents / 100,
+      );
+      if (!mounted) return;
+      if (!confirmed) return;
+    }
+
+    // 檢查重複支出
+    final duplicate = await smartPrompt.findDuplicateExpense(
+      hkdAmountCents: hkdAmountCents,
+      description: _descriptionController.text.trim(),
+      date: _selectedDate,
+    );
+    if (!mounted) return;
+
+    if (duplicate != null) {
+      final proceed = await SmartPromptDialogs.showDuplicateWarning(
+        context,
+        existingExpense: duplicate,
+      );
+      if (!mounted) return;
+      if (!proceed) return;
+    }
+
     setState(() => _isLoading = true);
 
     try {
       final provider = context.read<ExpenseProvider>();
-
-      // 安全解析金額（表單驗證應已確保有效，但加上防護）
-      final amount = double.tryParse(_amountController.text);
-      if (amount == null || amount <= 0) {
-        _showError('請輸入有效金額');
-        return;
-      }
-      final amountCents = Formatters.amountToCents(amount);
-
-      // 安全解析匯率
-      final rate = _selectedCurrency == 'HKD'
-          ? 1.0
-          : (double.tryParse(_exchangeRateController.text) ?? 1.0);
-      final rateMicros = Formatters.rateToMicros(rate);
-
-      final hkdAmountCents = _selectedCurrency == 'HKD'
-          ? amountCents
-          : (amountCents * rate).round();
 
       // 使用追蹤的匯率來源
       final rateSource = _selectedCurrency == 'HKD'

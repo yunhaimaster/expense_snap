@@ -244,55 +244,94 @@ test/core/router/page_transitions_test.dart
 
 ---
 
-## Phase 11: 使用者體驗 - Onboarding 與快捷功能
+## Phase 11: 使用者體驗 - Onboarding 與快捷功能 ✅
 
 ### 目標
 增強新手引導，加入快捷輸入功能
 
 ### 任務清單
 
-- [ ] 11.1 增強 Onboarding
-  - [ ] 11.1.1 設計 3 步驟 carousel
+- [x] 11.1 增強 Onboarding
+  - [x] 11.1.1 設計 3 步驟 carousel
     - Step 1: 歡迎 + 拍照記錄介紹
     - Step 2: 多幣種轉換介紹
     - Step 3: 一鍵匯出介紹
-  - [ ] 11.1.2 實作 PageView + 指示器
-  - [ ] 11.1.3 Skip 按鈕 + 完成按鈕
-  - [ ] 11.1.4 頁面切換動畫
+  - [x] 11.1.2 實作 PageView + 指示器
+  - [x] 11.1.3 Skip 按鈕 + 完成按鈕
+  - [x] 11.1.4 頁面切換動畫
 
-- [ ] 11.2 功能發現提示
-  - [ ] 11.2.1 加入 showcaseview 依賴
-  - [ ] 11.2.2 首次使用 FAB 提示
-  - [ ] 11.2.3 首筆支出滑動刪除提示
-  - [ ] 11.2.4 5 筆支出後匯出功能提示
-  - [ ] 11.2.5 提示狀態持久化
+- [x] 11.2 功能發現提示
+  - [x] 11.2.1 加入 showcaseview 依賴
+  - [x] 11.2.2 首次使用 FAB 提示
+  - [x] 11.2.3 首筆支出滑動刪除提示
+  - [x] 11.2.4 5 筆支出後匯出功能提示
+  - [x] 11.2.5 提示狀態持久化
 
-- [ ] 11.3 快捷輸入功能
-  - [ ] 11.3.1 「今天」「昨天」日期快捷按鈕
-  - [ ] 11.3.2 常用描述自動完成（最近 10 筆）
-  - [ ] 11.3.3 最近使用幣種優先顯示
-  - [ ] 11.3.4 儲存常用描述列表
+- [x] 11.3 快捷輸入功能
+  - [x] 11.3.1 「今天」「昨天」日期快捷按鈕
+  - [x] 11.3.2 常用描述自動完成（最近 10 筆）
+  - [x] 11.3.3 最近使用幣種優先顯示
+  - [x] 11.3.4 儲存常用描述列表
 
-- [ ] 11.4 智慧提示
-  - [ ] 11.4.1 重複支出偵測警告
-  - [ ] 11.4.2 大金額確認提示
-  - [ ] 11.4.3 月底匯出提醒 (本地通知)
+- [x] 11.4 智慧提示
+  - [x] 11.4.1 重複支出偵測警告
+  - [x] 11.4.2 大金額確認提示
+  - [x] 11.4.3 月底匯出提醒 (本地通知)
 
-- [ ] 11.5 撰寫測試
-  - [ ] 11.5.1 Onboarding flow 測試
-  - [ ] 11.5.2 快捷功能測試
+- [x] 11.5 撰寫測試
+  - [x] 11.5.1 Onboarding flow 測試
+  - [x] 11.5.2 快捷功能測試
 
 ### 新增依賴
 ```yaml
 dependencies:
   showcaseview: ^3.0.0
   flutter_local_notifications: ^18.0.1
+  timezone: ^0.10.0
 ```
 
+### 新增檔案
+```
+assets/illustrations/
+  onboarding_camera.svg
+  onboarding_currency.svg
+  onboarding_export.svg
+
+lib/core/services/
+  showcase_service.dart
+  quick_input_service.dart
+  smart_prompt_service.dart
+  notification_service.dart
+
+lib/presentation/providers/
+  showcase_provider.dart
+
+lib/presentation/widgets/forms/
+  description_autocomplete.dart
+
+lib/presentation/widgets/dialogs/
+  smart_prompt_dialogs.dart
+
+test/
+  presentation/screens/onboarding/onboarding_test.dart
+  presentation/widgets/forms/date_picker_test.dart
+  presentation/widgets/dialogs/smart_prompt_dialogs_test.dart
+  presentation/providers/showcase_provider_test.dart
+  core/services/smart_prompt_test.dart
+```
+
+### 修改檔案
+- lib/main.dart (加入 ShowcaseProvider)
+- lib/presentation/screens/onboarding/onboarding_screen.dart (3 步驟 carousel)
+- lib/presentation/screens/home/home_screen.dart (ShowcaseView 整合)
+- lib/presentation/screens/home/widgets/expense_list.dart (滑動刪除 Showcase)
+- lib/presentation/screens/add_expense/add_expense_screen.dart (智慧提示)
+- lib/presentation/widgets/forms/date_picker_field.dart (快捷按鈕)
+
 ### 驗收標準
-- [ ] 新手有完整功能導覽
-- [ ] 關鍵功能有發現提示
-- [ ] 快捷輸入減少操作步驟
+- [x] 新手有完整功能導覽
+- [x] 關鍵功能有發現提示
+- [x] 快捷輸入減少操作步驟
 
 ---
 
@@ -409,7 +448,7 @@ dependencies:
 | 8 | Skeleton Loading | 1 session | ✅ 完成 |
 | 9 | 空白狀態插圖 | 1 session | ✅ 完成 |
 | 10 | 動畫系統 | 1 session | ✅ 完成 |
-| 11 | Onboarding & 快捷功能 | 1 session | ⬜ 待開始 |
+| 11 | Onboarding & 快捷功能 | 1 session | ✅ 完成 |
 | 12 | 無障礙 & Dark Mode | 1 session | ⬜ 待開始 |
 | 13 | 測試 & 效能 | 1 session | ⬜ 待開始 |
 

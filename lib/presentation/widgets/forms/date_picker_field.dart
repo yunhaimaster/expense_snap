@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 
-/// 日期選擇欄位
+/// 日期選擇欄位（含快捷按鈕）
 class DatePickerField extends StatelessWidget {
   const DatePickerField({
     super.key,
@@ -13,6 +13,7 @@ class DatePickerField extends StatelessWidget {
     this.enabled = true,
     this.firstDate,
     this.lastDate,
+    this.showQuickButtons = true,
   });
 
   final DateTime value;
@@ -22,25 +23,44 @@ class DatePickerField extends StatelessWidget {
   final DateTime? firstDate;
   final DateTime? lastDate;
 
+  /// 是否顯示「今天」「昨天」快捷按鈕
+  final bool showQuickButtons;
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: enabled ? () => _showDatePicker(context) : null,
-      borderRadius: BorderRadius.circular(8),
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: const Icon(Icons.calendar_today),
-          suffixIcon: const Icon(
-            Icons.arrow_drop_down,
-            color: AppColors.textSecondary,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 快捷按鈕
+        if (showQuickButtons) ...[
+          _QuickDateButtons(
+            selectedDate: value,
+            onDateSelected: onChanged,
+            enabled: enabled,
+          ),
+          const SizedBox(height: 8),
+        ],
+
+        // 日期選擇器
+        InkWell(
+          onTap: enabled ? () => _showDatePicker(context) : null,
+          borderRadius: BorderRadius.circular(8),
+          child: InputDecorator(
+            decoration: InputDecoration(
+              labelText: label,
+              prefixIcon: const Icon(Icons.calendar_today),
+              suffixIcon: const Icon(
+                Icons.arrow_drop_down,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            child: Text(
+              Formatters.formatDate(value),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ),
         ),
-        child: Text(
-          Formatters.formatDate(value),
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-      ),
+      ],
     );
   }
 
@@ -199,6 +219,76 @@ class MonthPickerField extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+/// 日期快捷按鈕
+class _QuickDateButtons extends StatelessWidget {
+  const _QuickDateButtons({
+    required this.selectedDate,
+    required this.onDateSelected,
+    required this.enabled,
+  });
+
+  final DateTime selectedDate;
+  final ValueChanged<DateTime> onDateSelected;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
+    final selectedDay = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+    );
+
+    return Row(
+      children: [
+        _QuickDateChip(
+          label: '今天',
+          isSelected: selectedDay == today,
+          onTap: enabled ? () => onDateSelected(today) : null,
+        ),
+        const SizedBox(width: 8),
+        _QuickDateChip(
+          label: '昨天',
+          isSelected: selectedDay == yesterday,
+          onTap: enabled ? () => onDateSelected(yesterday) : null,
+        ),
+      ],
+    );
+  }
+}
+
+/// 日期快捷按鈕 Chip
+class _QuickDateChip extends StatelessWidget {
+  const _QuickDateChip({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ActionChip(
+      label: Text(label),
+      onPressed: onTap,
+      backgroundColor: isSelected ? AppColors.primaryLight : null,
+      labelStyle: TextStyle(
+        color: isSelected ? AppColors.primary : AppColors.textSecondary,
+        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+      ),
+      side: BorderSide(
+        color: isSelected ? AppColors.primary : AppColors.divider,
+      ),
     );
   }
 }

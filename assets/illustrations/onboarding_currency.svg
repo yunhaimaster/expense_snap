@@ -1,0 +1,37 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 多幣種轉換介紹插圖 -->
+  <!-- HKD 硬幣 -->
+  <circle cx="60" cy="90" r="35" fill="#2196F3"/>
+  <circle cx="60" cy="90" r="28" fill="white"/>
+  <text x="60" y="96" font-family="Arial" font-size="16" font-weight="bold" fill="#2196F3" text-anchor="middle">HK$</text>
+
+  <!-- CNY 硬幣 -->
+  <circle cx="140" cy="70" r="28" fill="#64B5F6"/>
+  <circle cx="140" cy="70" r="22" fill="white"/>
+  <text x="140" y="76" font-family="Arial" font-size="14" font-weight="bold" fill="#64B5F6" text-anchor="middle">¥</text>
+
+  <!-- USD 硬幣 -->
+  <circle cx="140" cy="130" r="28" fill="#1976D2"/>
+  <circle cx="140" cy="130" r="22" fill="white"/>
+  <text x="140" y="136" font-family="Arial" font-size="14" font-weight="bold" fill="#1976D2" text-anchor="middle">$</text>
+
+  <!-- 箭頭：轉換方向 -->
+  <path d="M98 85 L115 75" stroke="#2196F3" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M98 95 L115 120" stroke="#2196F3" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- 箭頭定義 -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#2196F3"/>
+    </marker>
+  </defs>
+
+  <!-- 匯率標籤 -->
+  <rect x="65" y="145" width="70" height="24" rx="12" fill="#E3F2FD"/>
+  <text x="100" y="161" font-family="Arial" font-size="10" fill="#2196F3" text-anchor="middle">自動轉換</text>
+
+  <!-- 裝飾 -->
+  <circle cx="30" cy="50" r="5" fill="#90CAF9"/>
+  <circle cx="170" cy="165" r="6" fill="#BBDEFB"/>
+  <circle cx="50" cy="160" r="4" fill="#E3F2FD"/>
+</svg>

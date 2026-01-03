@@ -69,6 +69,13 @@ dependencies:
   # SVG 圖片支援
   flutter_svg: ^2.0.17
 
+  # 功能發現提示
+  showcaseview: ^3.0.0
+
+  # 本地通知（月底匯出提醒）
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.10.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

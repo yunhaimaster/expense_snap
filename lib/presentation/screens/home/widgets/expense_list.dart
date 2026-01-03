@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:showcaseview/showcaseview.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../data/models/expense.dart';
 import '../../../widgets/common/animated_list_item.dart';
 import '../../../widgets/common/empty_state.dart';
@@ -20,6 +22,8 @@ class ExpenseList extends StatefulWidget {
     required this.onLoadMore,
     required this.onExpenseTap,
     required this.onExpenseDelete,
+    this.swipeShowcaseKey,
+    this.onFirstExpenseLoaded,
   });
 
   final List<Expense> expenses;
@@ -29,6 +33,12 @@ class ExpenseList extends StatefulWidget {
   final VoidCallback onLoadMore;
   final void Function(Expense) onExpenseTap;
   final void Function(Expense) onExpenseDelete;
+
+  /// Showcase 鍵，用於滑動刪除提示
+  final GlobalKey? swipeShowcaseKey;
+
+  /// 首筆支出載入後的回調
+  final VoidCallback? onFirstExpenseLoaded;
 
   @override
   State<ExpenseList> createState() => _ExpenseListState();
@@ -43,6 +53,9 @@ class _ExpenseListState extends State<ExpenseList> {
 
   // 最大追蹤項目數（防止記憶體無限增長）
   static const int _maxAnimatedItemsCount = 100;
+
+  // 是否已觸發首筆支出載入回調
+  bool _firstExpenseCallbackFired = false;
 
   @override
   void didUpdateWidget(ExpenseList oldWidget) {
@@ -79,6 +92,16 @@ class _ExpenseListState extends State<ExpenseList> {
     // 空列表
     if (widget.expenses.isEmpty) {
       return EmptyStates.noExpenses();
+    }
+
+    // 觸發首筆支出載入回調（用於 Showcase 提示）
+    if (!_firstExpenseCallbackFired && widget.onFirstExpenseLoaded != null) {
+      _firstExpenseCallbackFired = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          widget.onFirstExpenseLoaded?.call();
+        }
+      });
     }
 
     return RefreshIndicator(
@@ -129,15 +152,30 @@ class _ExpenseListState extends State<ExpenseList> {
             // 更新長度記錄
             if (index == widget.expenses.length - 1) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                _previousLength = widget.expenses.length;
+                if (mounted) {
+                  _previousLength = widget.expenses.length;
+                }
               });
             }
 
-            final card = ExpenseCard(
+            Widget card = ExpenseCard(
               expense: expense,
               onTap: () => widget.onExpenseTap(expense),
               onDismissed: () => widget.onExpenseDelete(expense),
             );
+
+            // 第一個項目加上滑動刪除 Showcase 提示
+            if (index == 0 && widget.swipeShowcaseKey != null) {
+              card = Showcase(
+                key: widget.swipeShowcaseKey!,
+                title: '滑動刪除',
+                description: '向左滑動可以刪除支出記錄',
+                targetBorderRadius: BorderRadius.circular(12),
+                tooltipBackgroundColor: AppColors.primary,
+                textColor: Colors.white,
+                child: card,
+              );
+            }
 
             // 新增項目從左側滑入
             if (isNewItem) {

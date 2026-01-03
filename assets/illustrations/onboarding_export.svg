@@ -1,0 +1,33 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 一鍵匯出介紹插圖 -->
+  <!-- Excel 文件 -->
+  <rect x="50" y="40" width="70" height="90" rx="4" fill="white" stroke="#2196F3" stroke-width="2"/>
+  <rect x="50" y="40" width="70" height="20" rx="4" fill="#2196F3"/>
+  <text x="85" y="54" font-family="Arial" font-size="10" font-weight="bold" fill="white" text-anchor="middle">報銷單</text>
+
+  <!-- 表格內容 -->
+  <rect x="58" y="68" width="54" height="8" rx="2" fill="#E3F2FD"/>
+  <rect x="58" y="82" width="54" height="8" rx="2" fill="#BBDEFB"/>
+  <rect x="58" y="96" width="54" height="8" rx="2" fill="#E3F2FD"/>
+  <rect x="58" y="110" width="54" height="8" rx="2" fill="#BBDEFB"/>
+
+  <!-- ZIP 圖示 -->
+  <rect x="130" y="55" width="40" height="50" rx="4" fill="white" stroke="#64B5F6" stroke-width="2"/>
+  <rect x="145" y="55" width="10" height="50" fill="#E3F2FD"/>
+  <rect x="145" y="60" width="10" height="6" fill="#BBDEFB"/>
+  <rect x="145" y="72" width="10" height="6" fill="#BBDEFB"/>
+  <rect x="145" y="84" width="10" height="6" fill="#BBDEFB"/>
+  <text x="150" y="115" font-family="Arial" font-size="8" fill="#64B5F6" text-anchor="middle">ZIP</text>
+
+  <!-- 分享箭頭 -->
+  <circle cx="100" cy="155" r="22" fill="#2196F3"/>
+  <path d="M100 145 L100 160 M92 152 L100 145 L108 152" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="88" y="162" width="24" height="3" rx="1.5" fill="white"/>
+
+  <!-- 雲端圖示 -->
+  <path d="M145 145 C135 145 128 152 128 160 C128 168 135 175 145 175 L165 175 C172 175 178 169 178 162 C178 155 172 149 165 149 C165 143 158 138 150 138 C142 138 136 143 136 150" fill="#E3F2FD" stroke="#BBDEFB" stroke-width="1.5"/>
+
+  <!-- 裝飾 -->
+  <circle cx="35" cy="80" r="5" fill="#90CAF9"/>
+  <circle cx="45" cy="160" r="4" fill="#BBDEFB"/>
+</svg>
