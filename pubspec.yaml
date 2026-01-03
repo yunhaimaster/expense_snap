@@ -26,6 +26,7 @@ dependencies:
 
   # 網絡請求
   dio: ^5.8.0+1
+  http: ^1.2.2
 
   # 圖片處理
   flutter_image_compress: ^2.3.0

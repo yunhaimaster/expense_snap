@@ -134,4 +134,22 @@ class Formatters {
       return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
     }
   }
+
+  /// 格式化時間戳用於檔名（yyyyMMdd_HHmmss）
+  static String formatTimestampForFileName(DateTime dateTime) {
+    final year = dateTime.year.toString();
+    final month = dateTime.month.toString().padLeft(2, '0');
+    final day = dateTime.day.toString().padLeft(2, '0');
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    final second = dateTime.second.toString().padLeft(2, '0');
+    return '${year}${month}${day}_$hour$minute$second';
+  }
+
+  /// 格式化日期時間用於顯示（yyyy年M月d日 HH:mm）
+  static String formatDateTimeForDisplay(DateTime dateTime) {
+    return '${dateTime.year}年${dateTime.month}月${dateTime.day}日 '
+        '${dateTime.hour.toString().padLeft(2, '0')}:'
+        '${dateTime.minute.toString().padLeft(2, '0')}';
+  }
 }
