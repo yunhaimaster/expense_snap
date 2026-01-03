@@ -119,8 +119,9 @@ class ImageService {
         await directory.create(recursive: true);
       }
 
-      // 處理圖片（在 isolate 中執行避免阻塞 UI）
-      final result = await compute(_processImageIsolate, _ProcessImageParams(
+      // 處理圖片
+      // 優先在 isolate 中執行避免阻塞 UI，失敗時回退到主線程
+      final params = _ProcessImageParams(
         sourcePath: sourcePath,
         fullPath: fullPath,
         thumbPath: thumbPath,
@@ -128,7 +129,22 @@ class ImageService {
         maxHeight: AppConstants.imageMaxHeight,
         quality: AppConstants.imageQuality,
         thumbnailSize: AppConstants.thumbnailSize,
-      ));
+      );
+
+      _ProcessImageResult result;
+      try {
+        result = await compute(_processImageIsolate, params);
+
+        // 若 isolate 內部因 UnimplementedError 失敗，回退到主線程重試
+        if (!result.success && result.error?.contains('UnimplementedError') == true) {
+          AppLogger.warning('Isolate image processing not supported, retrying on main thread');
+          result = await _processImageMainThread(params);
+        }
+      } catch (e) {
+        // Isolate 執行本身失敗，回退到主線程
+        AppLogger.warning('Isolate image processing failed, falling back to main thread: $e');
+        result = await _processImageMainThread(params);
+      }
 
       if (!result.success) {
         return Result.failure(ImageException(result.error ?? '圖片處理失敗'));
@@ -308,6 +324,68 @@ Future<_ProcessImageResult> _processImageIsolate(_ProcessImageParams params) asy
       quality: params.quality,
       format: CompressFormat.jpeg,
       // 自動旋轉但不保留 EXIF（移除 GPS 等隱私資訊）
+      autoCorrectionAngle: true,
+      keepExif: false,
+    );
+
+    if (compressedBytes.isEmpty) {
+      return const _ProcessImageResult(
+        success: false,
+        error: '圖片壓縮失敗',
+      );
+    }
+
+    // 儲存壓縮後的原圖
+    await File(params.fullPath).writeAsBytes(compressedBytes);
+
+    // 生成縮圖
+    final thumbnailBytes = await FlutterImageCompress.compressWithList(
+      compressedBytes,
+      minWidth: params.thumbnailSize,
+      minHeight: params.thumbnailSize,
+      quality: 80,
+      format: CompressFormat.jpeg,
+      keepExif: false,
+    );
+
+    if (thumbnailBytes.isEmpty) {
+      return const _ProcessImageResult(
+        success: false,
+        error: '縮圖生成失敗',
+      );
+    }
+
+    // 儲存縮圖
+    await File(params.thumbPath).writeAsBytes(thumbnailBytes);
+
+    return _ProcessImageResult(
+      success: true,
+      fullSize: (compressedBytes.length / 1024).round(),
+      thumbSize: (thumbnailBytes.length / 1024).round(),
+    );
+  } catch (e) {
+    return _ProcessImageResult(
+      success: false,
+      error: e.toString(),
+    );
+  }
+}
+
+/// 主線程版本的圖片處理（備援方案）
+///
+/// 當 isolate 不支援時使用此方法
+Future<_ProcessImageResult> _processImageMainThread(_ProcessImageParams params) async {
+  try {
+    // 讀取原圖
+    final sourceBytes = await File(params.sourcePath).readAsBytes();
+
+    // 壓縮原圖
+    final compressedBytes = await FlutterImageCompress.compressWithList(
+      sourceBytes,
+      minWidth: params.maxWidth,
+      minHeight: params.maxHeight,
+      quality: params.quality,
+      format: CompressFormat.jpeg,
       autoCorrectionAngle: true,
       keepExif: false,
     );

@@ -39,14 +39,24 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
   @override
   void initState() {
     super.initState();
-    _loadRate();
+    // 延遲到 build 完成後再載入匯率，避免在 build 過程中觸發 notifyListeners
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _loadRate();
+      }
+    });
   }
 
   @override
   void didUpdateWidget(ExchangeRateDisplay oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.currency != widget.currency) {
-      _loadRate();
+      // 使用 postFrameCallback 避免在 build 過程中觸發 notifyListeners
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _loadRate();
+        }
+      });
     }
   }
 

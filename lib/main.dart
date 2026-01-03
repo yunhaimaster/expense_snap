@@ -10,12 +10,14 @@ import 'core/di/service_locator.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/app_logger.dart';
+import 'data/repositories/backup_repository.dart';
 import 'data/repositories/exchange_rate_repository.dart';
 import 'data/repositories/expense_repository.dart';
 import 'domain/repositories/expense_repository.dart';
 import 'presentation/providers/connectivity_provider.dart';
 import 'presentation/providers/exchange_rate_provider.dart';
 import 'presentation/providers/expense_provider.dart';
+import 'presentation/providers/settings_provider.dart';
 import 'presentation/widgets/common/error_boundary.dart';
 import 'services/background_service.dart';
 import 'services/image_service.dart';
@@ -55,6 +57,9 @@ void main() async {
     final exchangeRateRepository = ExchangeRateRepository(
       databaseHelper: sl.databaseHelper,
     );
+    final backupRepository = BackupRepository(
+      databaseHelper: sl.databaseHelper,
+    );
 
     // 檢查是否需要 onboarding
     final needsOnboarding = await _checkOnboarding();
@@ -67,6 +72,7 @@ void main() async {
       expenseRepository: expenseRepository,
       imageService: imageService,
       exchangeRateRepository: exchangeRateRepository,
+      backupRepository: backupRepository,
     ));
   }, (error, stackTrace) {
     // 捕獲所有未處理的異步錯誤
@@ -124,9 +130,9 @@ Future<void> _initializeWorkManager() async {
       BackgroundService.cleanupTaskName,
       frequency: const Duration(days: 7),
       constraints: Constraints(
-        networkType: NetworkType.not_required,
+        networkType: NetworkType.notRequired,
       ),
-      existingWorkPolicy: ExistingWorkPolicy.keep,
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
     );
 
     AppLogger.info('WorkManager initialized');
@@ -182,12 +188,14 @@ class ExpenseSnapApp extends StatelessWidget {
     required this.expenseRepository,
     required this.imageService,
     required this.exchangeRateRepository,
+    required this.backupRepository,
   });
 
   final bool needsOnboarding;
   final ExpenseRepository expenseRepository;
   final ImageService imageService;
   final ExchangeRateRepository exchangeRateRepository;
+  final BackupRepository backupRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -211,6 +219,12 @@ class ExpenseSnapApp extends StatelessWidget {
         ChangeNotifierProvider<ExchangeRateProvider>(
           create: (_) => ExchangeRateProvider(
             repository: exchangeRateRepository,
+          ),
+        ),
+        ChangeNotifierProvider<SettingsProvider>(
+          create: (_) => SettingsProvider(
+            databaseHelper: sl.databaseHelper,
+            backupRepository: backupRepository,
           ),
         ),
       ],

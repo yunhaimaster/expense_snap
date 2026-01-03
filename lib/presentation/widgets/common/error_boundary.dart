@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../../core/errors/app_exception.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/app_logger.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/error_messages.dart';
 
 /// 全局錯誤邊界組件
@@ -32,25 +33,23 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   @override
   void initState() {
     super.initState();
-    // 設置 Flutter 錯誤處理
-    FlutterError.onError = _handleFlutterError;
-  }
-
-  void _handleFlutterError(FlutterErrorDetails details) {
-    AppLogger.error(
-      'Flutter error caught by ErrorBoundary',
-      error: details.exception,
-      stackTrace: details.stack,
-    );
-
-    widget.onError?.call(details.exception, details.stack ?? StackTrace.current);
-
-    if (mounted) {
-      setState(() {
-        _hasError = true;
-        _error = details.exception;
+    // 設置 Widget build 錯誤處理
+    // 注意：FlutterError.onError 已在 main.dart 設置用於全局異步錯誤
+    // 這裡使用 ErrorWidget.builder 捕獲 Widget build 過程中的錯誤
+    ErrorWidget.builder = (FlutterErrorDetails details) {
+      widget.onError?.call(details.exception, details.stack ?? StackTrace.current);
+      // 使用 addPostFrameCallback 避免在 build 過程中 setState
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _hasError = true;
+            _error = details.exception;
+          });
+        }
       });
-    }
+      // 返回空白佔位，實際錯誤畫面由 ErrorBoundary 顯示
+      return const SizedBox.shrink();
+    };
   }
 
   void _resetError() {
@@ -99,8 +98,12 @@ class ErrorFallbackScreen extends StatelessWidget {
     final suggestedAction = ErrorMessages.getSuggestedAction(errorCode);
     final isRetryable = ErrorMessages.isRetryable(errorCode);
 
-    return Material(
-      child: SafeArea(
+    // 使用獨立的 MaterialApp 包裹，避免在外層 MaterialApp 初始化失敗時無法取得 Theme
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light, // 使用 App 主題確保樣式一致
+      home: Material(
+        child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -176,6 +179,7 @@ class ErrorFallbackScreen extends StatelessWidget {
                 ),
             ],
           ),
+        ),
         ),
       ),
     );

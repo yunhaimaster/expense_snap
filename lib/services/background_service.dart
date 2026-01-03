@@ -109,7 +109,7 @@ class BackgroundService {
       '${cleanupTaskId}_immediate',
       cleanupTaskName,
       constraints: Constraints(
-        networkType: NetworkType.not_required,
+        networkType: NetworkType.notRequired,
       ),
     );
     AppLogger.info('Immediate cleanup scheduled');

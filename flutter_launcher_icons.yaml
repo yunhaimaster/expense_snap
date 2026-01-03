@@ -1,0 +1,22 @@
+# flutter_launcher_icons 配置
+# 執行: flutter pub run flutter_launcher_icons
+
+flutter_launcher_icons:
+  android: true
+  ios: false  # 暫時只做 Android
+
+  # 主 App Icon
+  image_path: "assets/icon/icon.png"
+
+  # Android Adaptive Icon (Android 8.0+)
+  adaptive_icon_background: "assets/icon/icon_background.png"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+
+  # Android 12+ 主題 icon
+  android_monochrome: "assets/icon/icon_foreground.png"
+
+  # 移除 alpha channel（避免透明問題）
+  remove_alpha_ios: true
+
+  # icon 圓角（Android 會自動處理）
+  # adaptive_icon_round: true

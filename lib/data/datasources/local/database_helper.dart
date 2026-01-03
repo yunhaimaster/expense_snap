@@ -60,10 +60,24 @@ class DatabaseHelper {
 
   /// 設定資料庫（啟用 WAL mode 和外鍵約束）
   Future<void> _onConfigure(Database db) async {
-    // 啟用 WAL mode 提升並發性能
-    await db.execute('PRAGMA journal_mode=WAL');
+    // 啟用 WAL mode 提升並發性能（使用 rawQuery 因為 PRAGMA 會返回結果）
+    final walResult = await db.rawQuery('PRAGMA journal_mode=WAL');
+    final journalMode = walResult.isNotEmpty
+        ? walResult.first['journal_mode'] as String?
+        : null;
+    if (journalMode != 'wal') {
+      AppLogger.warning('WAL mode not enabled, got: $journalMode');
+    }
+
     // 啟用外鍵約束
-    await db.execute('PRAGMA foreign_keys=ON');
+    await db.rawQuery('PRAGMA foreign_keys=ON');
+    final fkResult = await db.rawQuery('PRAGMA foreign_keys');
+    final fkEnabled = fkResult.isNotEmpty
+        ? fkResult.first['foreign_keys'] as int?
+        : null;
+    if (fkEnabled != 1) {
+      AppLogger.warning('Foreign keys not enabled, got: $fkEnabled');
+    }
 
     AppLogger.database('Database configured with WAL mode');
   }

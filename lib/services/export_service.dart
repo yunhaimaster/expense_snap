@@ -65,9 +65,13 @@ class ExportService {
       final excel = Excel.createExcel();
       final sheetName = '$year年$month月報銷單';
 
-      // 刪除預設 sheet，建立新 sheet
-      excel.delete('Sheet1');
+      // 建立新 sheet
       final sheet = excel[sheetName];
+      // 設為預設 sheet 並刪除預設的 Sheet1
+      excel.setDefaultSheet(sheetName);
+      if (excel.sheets.containsKey('Sheet1')) {
+        excel.delete('Sheet1');
+      }
 
       // 設定標題列
       _setHeaderRow(sheet);
@@ -76,7 +80,15 @@ class ExportService {
       int totalHkdCents = 0;
       for (int i = 0; i < expenses.length; i++) {
         final expense = expenses[i];
-        _setDataRow(sheet, i + 1, expense);
+        final rowIndex = i + 1;
+
+        // 生成收據檔名（如果有收據）
+        String? receiptFileName;
+        if (expense.hasReceipt && expense.receiptImagePath != null) {
+          receiptFileName = _generateReceiptFileName(expense, rowIndex, expense.receiptImagePath!);
+        }
+
+        _setDataRow(sheet, rowIndex, expense, receiptFileName: receiptFileName);
         totalHkdCents += expense.hkdAmountCents;
       }
 
@@ -176,17 +188,21 @@ class ExportService {
       ));
       onProgress?.call(0.3);
 
-      // 2. 加入收據圖片
-      final expensesWithReceipts = expenses.where((e) => e.hasReceipt).toList();
-      for (int i = 0; i < expensesWithReceipts.length; i++) {
-        final expense = expensesWithReceipts[i];
+      // 2. 加入收據圖片（使用 Excel 行號作為檔名序號，方便配對）
+      final receiptCount = expenses.where((e) => e.hasReceipt).length;
+      int processedReceipts = 0;
+      for (int i = 0; i < expenses.length; i++) {
+        final expense = expenses[i];
+        if (!expense.hasReceipt) continue;
+
         final imagePath = expense.receiptImagePath;
+        final excelRowIndex = i + 1; // Excel 行號（1-based，與表格序號一致）
 
         if (imagePath != null && imagePath.isNotEmpty) {
           final imageFile = File(imagePath);
           if (await imageFile.exists()) {
             final imageBytes = await imageFile.readAsBytes();
-            final imageName = _generateReceiptFileName(expense, i + 1, imagePath);
+            final imageName = _generateReceiptFileName(expense, excelRowIndex, imagePath);
 
             archive.addFile(ArchiveFile(
               'receipts/$imageName',
@@ -196,8 +212,9 @@ class ExportService {
           }
         }
 
+        processedReceipts++;
         // 更新進度（0.3 ~ 0.9）
-        final progress = 0.3 + (0.6 * (i + 1) / expensesWithReceipts.length);
+        final progress = 0.3 + (0.6 * processedReceipts / receiptCount);
         onProgress?.call(progress);
       }
 
@@ -236,7 +253,7 @@ class ExportService {
         fileSize: fileSize,
         expenseCount: expenses.length,
         totalHkdCents: excelInfo.totalHkdCents,
-        receiptCount: expensesWithReceipts.length,
+        receiptCount: receiptCount,
       ));
     } catch (e) {
       AppLogger.error('exportToZip failed', error: e);
@@ -308,7 +325,7 @@ class ExportService {
       '匯率',
       '匯率來源',
       '港幣金額',
-      '有收據',
+      '收據檔名',
     ];
 
     for (int i = 0; i < headers.length; i++) {
@@ -323,7 +340,7 @@ class ExportService {
   }
 
   /// 設定資料列
-  void _setDataRow(Sheet sheet, int rowIndex, Expense expense) {
+  void _setDataRow(Sheet sheet, int rowIndex, Expense expense, {String? receiptFileName}) {
     // 序號
     sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: rowIndex))
       .value = IntCellValue(rowIndex);
@@ -357,9 +374,9 @@ class ExportService {
     sheet.cell(CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: rowIndex))
       .value = DoubleCellValue(expense.hkdAmount);
 
-    // 有收據
+    // 收據檔名（有收據則顯示檔名，無則顯示「-」）
     sheet.cell(CellIndex.indexByColumnRow(columnIndex: 8, rowIndex: rowIndex))
-      .value = TextCellValue(expense.hasReceipt ? '是' : '否');
+      .value = TextCellValue(receiptFileName ?? '-');
   }
 
   /// 設定合計列
@@ -401,8 +418,9 @@ class ExportService {
     required String extension,
   }) {
     final monthStr = month.toString().padLeft(2, '0');
+    // 加入時間戳避免檔名碰撞（同月多次匯出時會覆蓋）
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    return '${userName}_$year${monthStr}_$timestamp.$extension';
+    return '報銷單_$year年$monthStr月_$timestamp.$extension';
   }
 
   /// 生成收據圖片檔名
@@ -426,6 +444,9 @@ class ExportService {
         .replaceAll(RegExp(r'\s+'), '_')
         .trim();
 
+    // 若描述全為特殊字元，使用預設值
+    final finalDesc = safeDesc.isEmpty ? 'receipt' : safeDesc;
+
     // 保留原始副檔名，預設為 jpg
     final extension = originalPath.contains('.')
         ? originalPath.split('.').last.toLowerCase()
@@ -434,7 +455,7 @@ class ExportService {
     // 限制副檔名長度，避免惡意檔名
     final safeExtension = extension.length <= 4 ? extension : 'jpg';
 
-    return '${indexStr}_${dateStr}_$safeDesc.$safeExtension';
+    return '${indexStr}_${dateStr}_$finalDesc.$safeExtension';
   }
 }
 
