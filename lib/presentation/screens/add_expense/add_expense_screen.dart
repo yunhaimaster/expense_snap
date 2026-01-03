@@ -7,11 +7,13 @@ import '../../../core/constants/currency_constants.dart';
 import '../../../core/constants/validation_rules.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
+import '../../providers/exchange_rate_provider.dart';
 import '../../providers/expense_provider.dart';
 import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/forms/amount_input.dart';
 import '../../widgets/forms/currency_dropdown.dart';
 import '../../widgets/forms/date_picker_field.dart';
+import '../../widgets/forms/exchange_rate_display.dart';
 
 /// 新增支出畫面
 class AddExpenseScreen extends StatefulWidget {
@@ -33,10 +35,36 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   bool _isLoading = false;
   bool _useManualRate = false;
 
+  // 當前匯率資訊
+  int _currentRateMicros = CurrencyConstants.ratePrecision;
+  ExchangeRateSource _currentRateSource = ExchangeRateSource.defaultRate;
+
   @override
   void initState() {
     super.initState();
     _updateDefaultExchangeRate();
+    // 初始化時載入匯率
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadExchangeRate();
+    });
+  }
+
+  Future<void> _loadExchangeRate() async {
+    if (_selectedCurrency == 'HKD') return;
+
+    final provider = context.read<ExchangeRateProvider>();
+    final info = await provider.loadRate(_selectedCurrency);
+
+    if (info != null && mounted) {
+      setState(() {
+        _currentRateMicros = info.rateToHkd;
+        _currentRateSource = info.source;
+        if (!_useManualRate) {
+          _exchangeRateController.text =
+              Formatters.formatExchangeRate(info.rateToHkd);
+        }
+      });
+    }
   }
 
   @override
@@ -100,10 +128,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   onChanged: (currency) {
                     setState(() {
                       _selectedCurrency = currency;
+                      // 重置匯率來源為預設值，避免幣種切換時來源不同步
+                      _currentRateSource = ExchangeRateSource.defaultRate;
                       if (!_useManualRate) {
                         _updateDefaultExchangeRate();
                       }
                     });
+                    // 載入新幣種的匯率
+                    _loadExchangeRate();
                   },
                 ),
 
@@ -121,26 +153,58 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
                 // 匯率（非港幣時顯示）
                 if (_selectedCurrency != 'HKD') ...[
+                  // 匯率顯示區
+                  ExchangeRateDisplay(
+                    currency: _selectedCurrency,
+                    enabled: !_useManualRate,
+                    onRateChanged: (rate, source) {
+                      setState(() {
+                        _currentRateMicros = rate;
+                        _currentRateSource = source;
+                        if (!_useManualRate) {
+                          _exchangeRateController.text =
+                              Formatters.formatExchangeRate(rate);
+                        }
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // 手動輸入切換
                   Row(
                     children: [
                       Expanded(
-                        child: ExchangeRateInput(
-                          controller: _exchangeRateController,
-                          fromCurrency: _selectedCurrency,
-                          enabled: _useManualRate,
-                        ),
+                        child: _useManualRate
+                            ? ExchangeRateInput(
+                                controller: _exchangeRateController,
+                                fromCurrency: _selectedCurrency,
+                                enabled: true,
+                                onChanged: (_) {
+                                  // 更新手動匯率來源
+                                  setState(() {
+                                    _currentRateSource = ExchangeRateSource.manual;
+                                  });
+                                },
+                              )
+                            : const SizedBox.shrink(),
                       ),
-                      const SizedBox(width: 8),
-                      Column(
+                      Row(
                         children: [
-                          const Text('手動', style: TextStyle(fontSize: 12)),
+                          Text(
+                            '手動輸入',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                           Switch(
                             value: _useManualRate,
                             onChanged: (value) {
                               setState(() {
                                 _useManualRate = value;
                                 if (!value) {
-                                  _updateDefaultExchangeRate();
+                                  // 恢復自動匯率
+                                  _exchangeRateController.text =
+                                      Formatters.formatExchangeRate(_currentRateMicros);
+                                  _loadExchangeRate();
                                 }
                               });
                             },
@@ -349,11 +413,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           ? amountCents
           : (amountCents * rate).round();
 
+      // 使用追蹤的匯率來源
       final rateSource = _selectedCurrency == 'HKD'
           ? ExchangeRateSource.auto
-          : (_useManualRate
-              ? ExchangeRateSource.manual
-              : ExchangeRateSource.defaultRate); // Phase 3 會改進
+          : _currentRateSource;
 
       final result = await provider.addExpense(
         date: _selectedDate,

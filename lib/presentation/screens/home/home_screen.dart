@@ -5,6 +5,7 @@ import '../../../core/errors/app_exception.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../providers/expense_provider.dart';
+import '../../widgets/common/connectivity_banner.dart';
 import 'widgets/expense_list.dart';
 import 'widgets/month_summary.dart';
 
@@ -35,6 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, provider, child) {
           return Column(
             children: [
+              // 離線狀態橫幅
+              const AnimatedConnectivityBanner(),
+
               // 月份摘要
               MonthSummaryCard(
                 summary: provider.summary,

@@ -6,8 +6,11 @@ import 'core/di/service_locator.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/app_logger.dart';
+import 'data/repositories/exchange_rate_repository.dart';
 import 'data/repositories/expense_repository.dart';
 import 'domain/repositories/expense_repository.dart';
+import 'presentation/providers/connectivity_provider.dart';
+import 'presentation/providers/exchange_rate_provider.dart';
 import 'presentation/providers/expense_provider.dart';
 import 'services/image_service.dart';
 
@@ -25,6 +28,9 @@ void main() async {
     databaseHelper: sl.databaseHelper,
     imageService: imageService,
   );
+  final exchangeRateRepository = ExchangeRateRepository(
+    databaseHelper: sl.databaseHelper,
+  );
 
   // 檢查是否需要 onboarding
   final needsOnboarding = await _checkOnboarding();
@@ -33,6 +39,7 @@ void main() async {
     needsOnboarding: needsOnboarding,
     expenseRepository: expenseRepository,
     imageService: imageService,
+    exchangeRateRepository: exchangeRateRepository,
   ));
 }
 
@@ -75,11 +82,13 @@ class ExpenseSnapApp extends StatelessWidget {
     required this.needsOnboarding,
     required this.expenseRepository,
     required this.imageService,
+    required this.exchangeRateRepository,
   });
 
   final bool needsOnboarding;
   final ExpenseRepository expenseRepository;
   final ImageService imageService;
+  final ExchangeRateRepository exchangeRateRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +97,21 @@ class ExpenseSnapApp extends StatelessWidget {
         // Repository 層（使用 .value 因為生命週期由 main() 管理）
         Provider<IExpenseRepository>.value(value: expenseRepository),
         Provider<ImageService>.value(value: imageService),
+        Provider<ExchangeRateRepository>.value(value: exchangeRateRepository),
 
         // Provider 層（State Management）
         ChangeNotifierProvider<ExpenseProvider>(
           create: (_) => ExpenseProvider(
             repository: expenseRepository,
             imageService: imageService,
+          ),
+        ),
+        ChangeNotifierProvider<ConnectivityProvider>(
+          create: (_) => ConnectivityProvider(),
+        ),
+        ChangeNotifierProvider<ExchangeRateProvider>(
+          create: (_) => ExchangeRateProvider(
+            repository: exchangeRateRepository,
           ),
         ),
       ],
