@@ -79,3 +79,6 @@ test/failures/
 
 # OpenSpec local state
 openspec/changes/*/local/
+
+# Serena MCP local config
+.serena/

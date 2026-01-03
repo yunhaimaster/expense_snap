@@ -1,5 +1,5 @@
 name: expense_snap
-description: "A new Flutter project."
+description: "員工報銷收據記錄 App - 即時拍照記錄支出，支援多幣種自動轉換，月結匯出 Excel 報銷單"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
