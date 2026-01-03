@@ -1,0 +1,24 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 收據插圖 - 空白支出狀態 -->
+  <!-- 收據紙張 -->
+  <rect x="50" y="30" width="100" height="130" rx="4" fill="#E3F2FD"/>
+  <rect x="50" y="30" width="100" height="130" rx="4" stroke="#2196F3" stroke-width="2"/>
+
+  <!-- 收據頂部鋸齒 -->
+  <path d="M50 30 L55 25 L60 30 L65 25 L70 30 L75 25 L80 30 L85 25 L90 30 L95 25 L100 30 L105 25 L110 30 L115 25 L120 30 L125 25 L130 30 L135 25 L140 30 L145 25 L150 30" stroke="#2196F3" stroke-width="2" fill="#E3F2FD"/>
+
+  <!-- 收據內容線條 -->
+  <rect x="65" y="50" width="70" height="6" rx="3" fill="#90CAF9"/>
+  <rect x="65" y="65" width="50" height="6" rx="3" fill="#BBDEFB"/>
+  <rect x="65" y="80" width="60" height="6" rx="3" fill="#BBDEFB"/>
+  <rect x="65" y="95" width="40" height="6" rx="3" fill="#BBDEFB"/>
+
+  <!-- 金額 -->
+  <rect x="65" y="120" width="30" height="8" rx="4" fill="#2196F3"/>
+  <rect x="100" y="120" width="35" height="8" rx="4" fill="#64B5F6"/>
+
+  <!-- 加號圓圈 - 提示添加 -->
+  <circle cx="150" cy="145" r="25" fill="#2196F3"/>
+  <rect x="142" y="140" width="16" height="4" rx="2" fill="white"/>
+  <rect x="148" y="134" width="4" height="16" rx="2" fill="white"/>
+</svg>

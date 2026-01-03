@@ -66,6 +66,9 @@ dependencies:
   # Shimmer 載入效果
   shimmer: ^3.0.0
 
+  # SVG 圖片支援
+  flutter_svg: ^2.0.17
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -88,3 +91,4 @@ flutter:
 
   assets:
     - assets/icon/
+    - assets/illustrations/

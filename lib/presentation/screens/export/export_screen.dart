@@ -347,9 +347,10 @@ class _ExportScreenState extends State<ExportScreen> {
         child: Padding(
           padding: const EdgeInsets.all(32),
           child: EmptyState(
-            icon: Icons.description_outlined,
+            illustrationAsset: 'assets/illustrations/empty_expenses.svg',
             title: '沒有資料',
             subtitle: '$_selectedYear 年 $_selectedMonth 月沒有支出記錄',
+            animate: false,
           ),
         ),
       );

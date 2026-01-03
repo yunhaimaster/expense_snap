@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
@@ -36,19 +39,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             children: [
               const Spacer(),
 
-              // Logo / 歡迎圖示
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.receipt_long,
-                  size: 64,
-                  color: AppColors.primary,
-                ),
+              // Logo / 歡迎插圖
+              SvgPicture.asset(
+                'assets/illustrations/welcome.svg',
+                width: 180,
+                height: 180,
               ),
 
               const SizedBox(height: 32),
@@ -152,8 +147,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
       if (!mounted) return;
 
-      // 導航到主畫面
-      Navigator.of(context).pushReplacementNamed(AppRouter.home);
+      // 導航到主畫面（使用 unawaited 明確標示不需等待返回）
+      unawaited(Navigator.of(context).pushReplacementNamed(AppRouter.home));
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);

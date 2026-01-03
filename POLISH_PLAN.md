@@ -125,34 +125,33 @@ dependencies:
 
 ---
 
-## Phase 9: 空白狀態 - 插圖與引導
+## Phase 9: 空白狀態 - 插圖與引導 ✅
 
 ### 目標
 用精美插圖取代純 icon，增加情感連結
 
 ### 任務清單
 
-- [ ] 9.1 準備 SVG 插圖資源
-  - [ ] 9.1.1 從 Undraw/Storyset 選取適合插圖
-  - [ ] 9.1.2 下載並優化 SVG 檔案
-  - [ ] 9.1.3 建立 `assets/illustrations/` 目錄
-  - [ ] 9.1.4 加入 flutter_svg 依賴
+- [x] 9.1 準備 SVG 插圖資源
+  - [x] 9.1.1 創建自訂 SVG 插圖（品牌色 #2196F3）
+  - [x] 9.1.2 建立 `assets/illustrations/` 目錄
+  - [x] 9.1.3 加入 flutter_svg 依賴
 
-- [ ] 9.2 升級 EmptyState 元件
-  - [ ] 9.2.1 支援 SVG 插圖 (illustrationAsset)
-  - [ ] 9.2.2 加入進場動畫 (FadeIn + SlideUp)
-  - [ ] 9.2.3 優化文字間距與排版
+- [x] 9.2 升級 EmptyState 元件
+  - [x] 9.2.1 支援 SVG 插圖 (illustrationAsset)
+  - [x] 9.2.2 加入進場動畫 (FadeIn + SlideUp)
+  - [x] 9.2.3 新增 EmptyStates 工廠類別
 
-- [ ] 9.3 更新各場景空白狀態
-  - [ ] 9.3.1 無支出記錄 - 記帳插圖
-  - [ ] 9.3.2 無已刪除項目 - 空垃圾桶插圖
-  - [ ] 9.3.3 載入失敗 - 錯誤插圖
-  - [ ] 9.3.4 無網路連線 - 離線插圖
-  - [ ] 9.3.5 匯出完成 - 成功插圖
+- [x] 9.3 更新各場景空白狀態
+  - [x] 9.3.1 無支出記錄 - empty_expenses.svg
+  - [x] 9.3.2 無已刪除項目 - empty_trash.svg
+  - [x] 9.3.3 載入失敗 - error_state.svg
+  - [x] 9.3.4 無網路連線 - offline_mode.svg
+  - [x] 9.3.5 匯出完成 - success_export.svg
 
-- [ ] 9.4 Onboarding 插圖
-  - [ ] 9.4.1 歡迎頁面使用品牌插圖
-  - [ ] 9.4.2 優化整體視覺一致性
+- [x] 9.4 Onboarding 插圖
+  - [x] 9.4.1 歡迎頁面使用 welcome.svg
+  - [x] 9.4.2 18 個新測試通過
 
 ### 新增依賴
 ```yaml
