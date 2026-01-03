@@ -43,6 +43,12 @@ sealed class Result<T> {
         Failure<T>() => null,
       };
 
+  /// 安全取得錯誤，成功時回傳 null
+  AppException? get errorOrNull => switch (this) {
+        Success<T>() => null,
+        Failure<T>(:final error) => error,
+      };
+
   /// 取得資料，失敗時回傳預設值
   T getOrElse(T defaultValue) => switch (this) {
         Success<T>(:final data) => data,

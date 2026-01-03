@@ -83,6 +83,19 @@ void main() {
       });
     });
 
+    group('errorOrNull', () {
+      test('should return null for success', () {
+        final result = Result.success('test');
+        expect(result.errorOrNull, isNull);
+      });
+
+      test('should return error for failure', () {
+        const error = StorageException('Error');
+        final result = Result<String>.failure(error);
+        expect(result.errorOrNull, equals(error));
+      });
+    });
+
     group('getOrElse', () {
       test('should return data for success', () {
         final result = Result.success(100);
