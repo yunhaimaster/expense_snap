@@ -1,0 +1,15 @@
+# 此檔案為簽名設定模板
+# 複製此檔案為 key.properties 並填入實際值
+# 注意：key.properties 不應提交至版本控制
+
+# 金鑰庫檔案路徑
+storeFile=/path/to/your/keystore.jks
+
+# 金鑰庫密碼
+storePassword=your_keystore_password
+
+# 金鑰別名
+keyAlias=your_key_alias
+
+# 金鑰密碼
+keyPassword=your_key_password

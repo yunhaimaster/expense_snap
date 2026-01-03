@@ -197,6 +197,38 @@ class ImageService {
     return '${date.year}-$month';
   }
 
+  /// 清理匯出臨時檔案
+  ///
+  /// 刪除暫存目錄中超過 24 小時的檔案
+  Future<void> cleanupTempFiles() async {
+    try {
+      final tempDir = Directory('${PathValidator.appDocDir.path}/export_temp');
+      if (!await tempDir.exists()) return;
+
+      final now = DateTime.now();
+      final files = await tempDir.list().toList();
+
+      for (final entity in files) {
+        if (entity is File) {
+          try {
+            final stat = await entity.stat();
+            final age = now.difference(stat.modified);
+
+            // 刪除超過 24 小時的臨時檔案
+            if (age.inHours >= 24) {
+              await entity.delete();
+              AppLogger.debug('Deleted temp file: ${entity.path}');
+            }
+          } catch (e) {
+            AppLogger.warning('Failed to delete temp file: ${entity.path}');
+          }
+        }
+      }
+    } catch (e) {
+      AppLogger.warning('Failed to cleanup temp files: $e');
+    }
+  }
+
   /// 刪除檔案（如果存在）
   Future<void> _deleteFileIfExists(String path) async {
     // 驗證路徑安全性

@@ -32,10 +32,38 @@ android {
 
     buildTypes {
         release {
+            // 啟用代碼縮減和混淆
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            // ProGuard 規則
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
             // TODO: 正式發佈時配置簽名
+            // 1. 建立 key.properties 檔案（參見 key.properties.template）
+            // 2. 取消下方註解並移除 debug signingConfig
+            // signingConfig = signingConfigs.getByName("release")
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    // 正式發佈時取消此區塊的註解
+    // signingConfigs {
+    //     create("release") {
+    //         val keystoreFile = file("../key.properties")
+    //         if (keystoreFile.exists()) {
+    //             val props = java.util.Properties()
+    //             props.load(keystoreFile.inputStream())
+    //             storeFile = file(props.getProperty("storeFile"))
+    //             storePassword = props.getProperty("storePassword")
+    //             keyAlias = props.getProperty("keyAlias")
+    //             keyPassword = props.getProperty("keyPassword")
+    //         }
+    //     }
+    // }
 }
 
 flutter {
