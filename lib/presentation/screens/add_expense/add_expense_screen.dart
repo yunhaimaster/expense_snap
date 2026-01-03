@@ -1,0 +1,438 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../core/constants/currency_constants.dart';
+import '../../../core/constants/validation_rules.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/formatters.dart';
+import '../../providers/expense_provider.dart';
+import '../../widgets/common/loading_overlay.dart';
+import '../../widgets/forms/amount_input.dart';
+import '../../widgets/forms/currency_dropdown.dart';
+import '../../widgets/forms/date_picker_field.dart';
+
+/// 新增支出畫面
+class AddExpenseScreen extends StatefulWidget {
+  const AddExpenseScreen({super.key});
+
+  @override
+  State<AddExpenseScreen> createState() => _AddExpenseScreenState();
+}
+
+class _AddExpenseScreenState extends State<AddExpenseScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _amountController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _exchangeRateController = TextEditingController();
+
+  DateTime _selectedDate = DateTime.now();
+  String _selectedCurrency = CurrencyConstants.defaultCurrency;
+  String? _selectedImagePath;
+  bool _isLoading = false;
+  bool _useManualRate = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateDefaultExchangeRate();
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _descriptionController.dispose();
+    _exchangeRateController.dispose();
+    super.dispose();
+  }
+
+  void _updateDefaultExchangeRate() {
+    // 暫時使用預設匯率，Phase 3 會實作即時匯率
+    final rate = CurrencyConstants.defaultRates[_selectedCurrency] ?? 1.0;
+    _exchangeRateController.text = rate.toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LoadingOverlay(
+      isLoading: _isLoading,
+      message: '儲存中...',
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('新增支出'),
+          actions: [
+            TextButton(
+              onPressed: _saveExpense,
+              child: const Text(
+                '儲存',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // 收據圖片
+                _buildImagePicker(),
+
+                const SizedBox(height: 24),
+
+                // 日期
+                DatePickerField(
+                  value: _selectedDate,
+                  onChanged: (date) {
+                    setState(() => _selectedDate = date);
+                  },
+                  lastDate: DateTime.now(),
+                ),
+
+                const SizedBox(height: 16),
+
+                // 幣種
+                CurrencyButtonGroup(
+                  value: _selectedCurrency,
+                  onChanged: (currency) {
+                    setState(() {
+                      _selectedCurrency = currency;
+                      if (!_useManualRate) {
+                        _updateDefaultExchangeRate();
+                      }
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                // 金額
+                AmountInput(
+                  controller: _amountController,
+                  label: '金額',
+                  suffix: _selectedCurrency,
+                  autofocus: true,
+                ),
+
+                const SizedBox(height: 16),
+
+                // 匯率（非港幣時顯示）
+                if (_selectedCurrency != 'HKD') ...[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ExchangeRateInput(
+                          controller: _exchangeRateController,
+                          fromCurrency: _selectedCurrency,
+                          enabled: _useManualRate,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Column(
+                        children: [
+                          const Text('手動', style: TextStyle(fontSize: 12)),
+                          Switch(
+                            value: _useManualRate,
+                            onChanged: (value) {
+                              setState(() {
+                                _useManualRate = value;
+                                if (!value) {
+                                  _updateDefaultExchangeRate();
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // 換算金額預覽
+                  if (_amountController.text.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    _buildConversionPreview(),
+                  ],
+
+                  const SizedBox(height: 16),
+                ],
+
+                // 描述
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: '描述',
+                    hintText: '例如：午餐、交通費',
+                    prefixIcon: Icon(Icons.description_outlined),
+                  ),
+                  maxLength: ValidationRules.maxDescriptionLength,
+                  maxLines: 2,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return '請輸入描述';
+                    }
+                    if (value.length < ValidationRules.minDescriptionLength) {
+                      return '描述至少需要 ${ValidationRules.minDescriptionLength} 個字';
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 32),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImagePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '收據圖片',
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: AppColors.textSecondary,
+              ),
+        ),
+        const SizedBox(height: 8),
+
+        if (_selectedImagePath != null)
+          // 圖片預覽
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.file(
+                  File(_selectedImagePath!),
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() => _selectedImagePath = null);
+                  },
+                  icon: const Icon(Icons.close),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.black54,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          )
+        else
+          // 選擇按鈕
+          Row(
+            children: [
+              Expanded(
+                child: _ImagePickerButton(
+                  icon: Icons.camera_alt,
+                  label: '拍照',
+                  onTap: _pickFromCamera,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _ImagePickerButton(
+                  icon: Icons.photo_library,
+                  label: '相簿',
+                  onTap: _pickFromGallery,
+                ),
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget _buildConversionPreview() {
+    final amount = double.tryParse(_amountController.text) ?? 0;
+    final rate = double.tryParse(_exchangeRateController.text) ?? 1;
+    final hkdAmount = amount * rate;
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.primaryLight.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '$_selectedCurrency ${Formatters.formatCurrency(amount)}',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            child: Icon(Icons.arrow_forward, size: 16),
+          ),
+          Text(
+            'HKD ${Formatters.formatCurrency(hkdAmount)}',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickFromCamera() async {
+    final provider = context.read<ExpenseProvider>();
+    final result = await provider.pickImageFromCamera();
+
+    result.fold(
+      onFailure: (error) {
+        if (error.code != 'CANCELLED') {
+          _showError(error.message);
+        }
+      },
+      onSuccess: (path) {
+        setState(() => _selectedImagePath = path);
+      },
+    );
+  }
+
+  Future<void> _pickFromGallery() async {
+    final provider = context.read<ExpenseProvider>();
+    final result = await provider.pickImageFromGallery();
+
+    result.fold(
+      onFailure: (error) {
+        if (error.code != 'CANCELLED') {
+          _showError(error.message);
+        }
+      },
+      onSuccess: (path) {
+        setState(() => _selectedImagePath = path);
+      },
+    );
+  }
+
+  Future<void> _saveExpense() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final provider = context.read<ExpenseProvider>();
+
+      // 安全解析金額（表單驗證應已確保有效，但加上防護）
+      final amount = double.tryParse(_amountController.text);
+      if (amount == null || amount <= 0) {
+        _showError('請輸入有效金額');
+        return;
+      }
+      final amountCents = Formatters.amountToCents(amount);
+
+      // 安全解析匯率
+      final rate = _selectedCurrency == 'HKD'
+          ? 1.0
+          : (double.tryParse(_exchangeRateController.text) ?? 1.0);
+      final rateMicros = Formatters.rateToMicros(rate);
+
+      final hkdAmountCents = _selectedCurrency == 'HKD'
+          ? amountCents
+          : (amountCents * rate).round();
+
+      final rateSource = _selectedCurrency == 'HKD'
+          ? ExchangeRateSource.auto
+          : (_useManualRate
+              ? ExchangeRateSource.manual
+              : ExchangeRateSource.defaultRate); // Phase 3 會改進
+
+      final result = await provider.addExpense(
+        date: _selectedDate,
+        originalAmountCents: amountCents,
+        originalCurrency: _selectedCurrency,
+        exchangeRate: rateMicros,
+        exchangeRateSource: rateSource,
+        hkdAmountCents: hkdAmountCents,
+        description: _descriptionController.text.trim(),
+        imagePath: _selectedImagePath,
+      );
+
+      if (!mounted) return;
+
+      result.fold(
+        onFailure: (error) {
+          _showError(error.message);
+        },
+        onSuccess: (_) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('支出已新增')),
+          );
+        },
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppColors.error,
+      ),
+    );
+  }
+}
+
+/// 圖片選擇按鈕
+class _ImagePickerButton extends StatelessWidget {
+  const _ImagePickerButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.divider),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 32, color: AppColors.primary),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

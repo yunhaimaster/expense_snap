@@ -112,6 +112,16 @@ class Formatters {
     return rate.toStringAsFixed(4);
   }
 
+  /// 格式化貨幣金額（純數字，用於表單預覽）
+  static String formatCurrency(double amount) {
+    return _formatNumber(amount);
+  }
+
+  /// 匯率：轉換為 micros（×10⁶）
+  static int rateToMicros(double rate) {
+    return displayRateToStored(rate);
+  }
+
   /// 格式化檔案大小
   static String formatFileSize(int bytes) {
     if (bytes < 1024) {

@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # UI 元件
   cupertino_icons: ^1.0.8
@@ -28,6 +30,9 @@ dependencies:
   # 圖片處理
   flutter_image_compress: ^2.3.0
   image_picker: ^1.1.2
+
+  # UUID 生成
+  uuid: ^4.5.1
 
   # Excel 匯出
   excel: ^4.0.6

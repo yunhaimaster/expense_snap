@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'core/di/service_locator.dart';
+import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/app_logger.dart';
+import 'data/repositories/expense_repository.dart';
+import 'domain/repositories/expense_repository.dart';
+import 'presentation/providers/expense_provider.dart';
+import 'services/image_service.dart';
 
 /// App 入口點
 void main() async {
@@ -12,7 +19,21 @@ void main() async {
   // 初始化服務定位器（依賴注入）
   await _initializeApp();
 
-  runApp(const ExpenseSnapApp());
+  // 建立服務實例（在 runApp 之前，確保只建立一次）
+  final imageService = ImageService();
+  final expenseRepository = ExpenseRepository(
+    databaseHelper: sl.databaseHelper,
+    imageService: imageService,
+  );
+
+  // 檢查是否需要 onboarding
+  final needsOnboarding = await _checkOnboarding();
+
+  runApp(ExpenseSnapApp(
+    needsOnboarding: needsOnboarding,
+    expenseRepository: expenseRepository,
+    imageService: imageService,
+  ));
 }
 
 /// 初始化應用程式
@@ -33,52 +54,66 @@ Future<void> _initializeApp() async {
   }
 }
 
-/// App 根元件
-class ExpenseSnapApp extends StatelessWidget {
-  const ExpenseSnapApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Expense Snap',
-      theme: AppTheme.light,
-      debugShowCheckedModeBanner: false,
-      home: const _PlaceholderHomePage(),
-    );
+/// 檢查是否完成 onboarding
+Future<bool> _checkOnboarding() async {
+  try {
+    // 使用 ServiceLocator 保持一致性
+    final db = sl.databaseHelper;
+    final completed = await db.getSetting('onboarding_completed');
+    // 空字串或 null 都視為未完成
+    return completed != 'true';
+  } catch (e) {
+    AppLogger.warning('Failed to check onboarding status: $e');
+    return true;
   }
 }
 
-/// 臨時首頁（Phase 2 會替換）
-class _PlaceholderHomePage extends StatelessWidget {
-  const _PlaceholderHomePage();
+/// App 根元件
+class ExpenseSnapApp extends StatelessWidget {
+  const ExpenseSnapApp({
+    super.key,
+    required this.needsOnboarding,
+    required this.expenseRepository,
+    required this.imageService,
+  });
+
+  final bool needsOnboarding;
+  final ExpenseRepository expenseRepository;
+  final ImageService imageService;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Expense Snap'),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.receipt_long,
-              size: 64,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Phase 1 完成',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 8),
-            Text(
-              '專案基礎架構已建立',
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
+    return MultiProvider(
+      providers: [
+        // Repository 層（使用 .value 因為生命週期由 main() 管理）
+        Provider<IExpenseRepository>.value(value: expenseRepository),
+        Provider<ImageService>.value(value: imageService),
+
+        // Provider 層（State Management）
+        ChangeNotifierProvider<ExpenseProvider>(
+          create: (_) => ExpenseProvider(
+            repository: expenseRepository,
+            imageService: imageService,
+          ),
         ),
+      ],
+      child: MaterialApp(
+        title: 'Expense Snap',
+        theme: AppTheme.light,
+        debugShowCheckedModeBanner: false,
+        initialRoute: needsOnboarding ? AppRouter.onboarding : AppRouter.home,
+        onGenerateRoute: AppRouter.generateRoute,
+        // 支援繁體中文日期選擇器
+        locale: const Locale('zh', 'TW'),
+        supportedLocales: const [
+          Locale('zh', 'TW'),
+          Locale('en', 'US'),
+        ],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
       ),
     );
   }

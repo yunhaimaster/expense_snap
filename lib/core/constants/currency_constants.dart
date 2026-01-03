@@ -5,6 +5,9 @@ class CurrencyConstants {
   // 主要幣種（報銷結算幣種）
   static const String primaryCurrency = 'HKD';
 
+  // 預設幣種（新增支出時的預設選項）
+  static const String defaultCurrency = 'HKD';
+
   // 支援的幣種清單
   static const List<String> supportedCurrencies = ['HKD', 'CNY', 'USD'];
 
@@ -28,6 +31,13 @@ class CurrencyConstants {
     'HKD': 1000000, // 1:1，精度 ×10⁶
     'CNY': 1089000, // 1 CNY ≈ 1.089 HKD
     'USD': 7800000, // 1 USD ≈ 7.8 HKD
+  };
+
+  // 預設匯率（double 版本，用於 UI 顯示）
+  static const Map<String, double> defaultRates = {
+    'HKD': 1.0,
+    'CNY': 1.089,
+    'USD': 7.8,
   };
 
   // 匯率精度（用於儲存和計算）
