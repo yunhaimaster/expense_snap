@@ -3,14 +3,14 @@
 ## Phase 0: Project Initialization (NEW)
 
 ### 0.1 Repository Setup
-- [ ] 0.1.1 Initialize git repository with `git init`
-- [ ] 0.1.2 Create `.gitignore` from Flutter template
-- [ ] 0.1.3 Create initial commit
+- [x] 0.1.1 Initialize git repository with `git init`
+- [x] 0.1.2 Create `.gitignore` from Flutter template
+- [x] 0.1.3 Create initial commit
 
 ### 0.2 Flutter Project Creation
-- [ ] 0.2.1 Create Flutter project: `flutter create --org com.example expense_snap`
-- [ ] 0.2.2 Remove iOS/web/desktop directories (Android only for MVP)
-- [ ] 0.2.3 Verify project builds: `flutter build apk --debug`
+- [x] 0.2.1 Create Flutter project: `flutter create --org com.example expense_snap`
+- [x] 0.2.2 Remove iOS/web/desktop directories (Android only for MVP)
+- [x] 0.2.3 Verify project builds: `flutter build apk --debug`
 
 ---
 

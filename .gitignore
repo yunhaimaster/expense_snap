@@ -1,12 +1,36 @@
-# Flutter/Dart
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
 .pub/
-build/
-*.iml
+/build/
+/coverage/
 
 # Generated files
 *.g.dart
@@ -14,18 +38,16 @@ build/
 *.mocks.dart
 lib/generated_plugin_registrant.dart
 
-# IDE
-.idea/
-*.ipr
-*.iws
-.vscode/
+# Symbolication related
+app.*.symbols
 
-# Platform-specific (keep only Android for MVP)
-# ios/
-# linux/
-# macos/
-# web/
-# windows/
+# Obfuscation related
+app.*.map.json
+
+# Android Studio build artifacts
+/android/app/debug
+/android/app/profile
+/android/app/release
 
 # Android specific
 **/android/**/gradle-wrapper.jar
@@ -42,29 +64,18 @@ lib/generated_plugin_registrant.dart
 # Google Services (contains sensitive credentials)
 **/android/app/google-services.json
 
-# Coverage
-coverage/
+# Test outputs
+test/.test_coverage.dart
+test/failures/
 *.lcov
 
-# Logs
-*.log
-
-# macOS
-.DS_Store
+# Temporary files
+*~
 *.pem
 
 # Local environment
 .env
 .env.*
 
-# Test outputs
-test/.test_coverage.dart
-test/failures/
-
-# Temporary files
-*.swp
-*.swo
-*~
-
-# OpenSpec (keep specs, ignore local state)
+# OpenSpec local state
 openspec/changes/*/local/
