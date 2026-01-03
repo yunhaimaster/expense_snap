@@ -49,4 +49,8 @@ class AppColors {
     'CNY': Color(0xFFFF5722),
     'USD': Color(0xFF4CAF50),
   };
+
+  // Skeleton Loading 色彩
+  static const Color skeletonBase = Color(0xFFE0E0E0);
+  static const Color skeletonHighlight = Color(0xFFF5F5F5);
 }

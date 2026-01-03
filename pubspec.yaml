@@ -63,6 +63,9 @@ dependencies:
   # 縮圖快取
   flutter_cache_manager: ^3.4.1
 
+  # Shimmer 載入效果
+  shimmer: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

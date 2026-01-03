@@ -9,6 +9,7 @@ import '../../../domain/repositories/expense_repository.dart';
 import '../../../services/export_service.dart';
 import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/loading_overlay.dart';
+import '../../widgets/common/skeleton.dart';
 import '../../widgets/forms/date_picker_field.dart';
 
 /// 匯出畫面
@@ -336,12 +337,9 @@ class _ExportScreenState extends State<ExportScreen> {
 
   /// 建立預覽卡片
   Widget _buildPreviewCard() {
+    // 載入中 - 使用 shimmer 骨架屏
     if (_isLoadingPreview) {
-      return const Card(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const ExportPreviewSkeleton();
     }
 
     if (_expenses.isEmpty) {

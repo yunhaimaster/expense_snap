@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../domain/repositories/backup_repository.dart' show BackupInfo;
 import '../../providers/settings_provider.dart';
+import '../../widgets/common/skeleton.dart';
 
 /// 設定畫面
 class SettingsScreen extends StatefulWidget {
@@ -37,8 +38,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Consumer<SettingsProvider>(
         builder: (context, provider, child) {
+          // 載入中 - 使用 shimmer 骨架屏
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const SettingsListSkeleton(itemCount: 6);
           }
 
           return Stack(

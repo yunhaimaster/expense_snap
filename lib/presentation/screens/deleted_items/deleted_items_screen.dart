@@ -8,6 +8,7 @@ import '../../../data/models/expense.dart';
 import '../../../domain/repositories/expense_repository.dart';
 import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/loading_overlay.dart';
+import '../../widgets/common/skeleton.dart';
 
 /// 已刪除項目畫面
 ///
@@ -79,8 +80,9 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
   }
 
   Widget _buildBody() {
+    // 載入中 - 使用 shimmer 骨架屏
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const ExpenseListSkeleton(itemCount: 4);
     }
 
     if (_deletedExpenses.isEmpty) {

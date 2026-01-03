@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../data/models/expense.dart';
 import '../../../widgets/common/empty_state.dart';
 import '../../../widgets/common/loading_overlay.dart';
+import '../../../widgets/common/skeleton.dart';
 import 'expense_card.dart';
 
 /// 支出列表組件
@@ -30,9 +31,9 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 初次載入中
+    // 初次載入中 - 使用 shimmer 骨架屏
     if (isLoading && expenses.isEmpty) {
-      return const SkeletonList(itemCount: 5, itemHeight: 80);
+      return const ExpenseListSkeleton(itemCount: 5);
     }
 
     // 空列表

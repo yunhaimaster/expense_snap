@@ -82,35 +82,35 @@ dev_dependencies:
 
 ---
 
-## Phase 8: 載入狀態 - Skeleton Loading
+## Phase 8: 載入狀態 - Skeleton Loading ✅
 
 ### 目標
 用現代化 shimmer 效果取代傳統 spinner，提升感知效能
 
 ### 任務清單
 
-- [ ] 8.1 建立 Skeleton 元件庫
-  - [ ] 8.1.1 加入 shimmer 依賴
-  - [ ] 8.1.2 建立 `lib/presentation/widgets/common/skeleton.dart`
-  - [ ] 8.1.3 實作 SkeletonBox（基礎矩形）
-  - [ ] 8.1.4 實作 SkeletonCircle（圓形）
-  - [ ] 8.1.5 實作 SkeletonText（文字行）
+- [x] 8.1 建立 Skeleton 元件庫
+  - [x] 8.1.1 加入 shimmer 依賴
+  - [x] 8.1.2 建立 `lib/presentation/widgets/common/skeleton.dart`
+  - [x] 8.1.3 實作 SkeletonBox（基礎矩形）
+  - [x] 8.1.4 實作 SkeletonCircle（圓形）
+  - [x] 8.1.5 實作 SkeletonText（文字行）
 
-- [ ] 8.2 實作業務 Skeleton
-  - [ ] 8.2.1 ExpenseCardSkeleton（支出卡片骨架）
-  - [ ] 8.2.2 MonthSummarySkeleton（月份摘要骨架）
-  - [ ] 8.2.3 SettingsItemSkeleton（設定項目骨架）
-  - [ ] 8.2.4 ImageThumbnailSkeleton（縮圖骨架）
+- [x] 8.2 實作業務 Skeleton
+  - [x] 8.2.1 ExpenseCardSkeleton（支出卡片骨架）
+  - [x] 8.2.2 MonthSummarySkeleton（月份摘要骨架）
+  - [x] 8.2.3 SettingsItemSkeleton（設定項目骨架）
+  - [x] 8.2.4 ImageThumbnailSkeleton（縮圖骨架）
+  - [x] 8.2.5 ExportPreviewSkeleton（匯出預覽骨架）
 
-- [ ] 8.3 替換現有 Loading
-  - [ ] 8.3.1 HomeScreen 列表載入
-  - [ ] 8.3.2 ExpenseDetailScreen 載入
-  - [ ] 8.3.3 SettingsScreen 載入
-  - [ ] 8.3.4 ExportScreen 進度狀態
-  - [ ] 8.3.5 DeletedItemsScreen 載入
+- [x] 8.3 替換現有 Loading
+  - [x] 8.3.1 HomeScreen 列表載入 (expense_list.dart)
+  - [x] 8.3.2 SettingsScreen 載入
+  - [x] 8.3.3 ExportScreen 預覽狀態
+  - [x] 8.3.4 DeletedItemsScreen 載入
 
-- [ ] 8.4 撰寫測試
-  - [ ] 8.4.1 Skeleton widgets 單元測試
+- [x] 8.4 撰寫測試
+  - [x] 8.4.1 Skeleton widgets 單元測試 (22 tests)
 
 ### 新增依賴
 ```yaml
@@ -119,9 +119,9 @@ dependencies:
 ```
 
 ### 驗收標準
-- [ ] 所有載入狀態使用 shimmer 效果
-- [ ] Skeleton 形狀符合實際內容
-- [ ] 動畫流暢無卡頓
+- [x] 所有載入狀態使用 shimmer 效果
+- [x] Skeleton 形狀符合實際內容
+- [x] 動畫流暢無卡頓
 
 ---
 
