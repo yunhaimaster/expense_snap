@@ -1,4 +1,5 @@
 import 'package:expense_snap/core/constants/currency_constants.dart';
+import 'package:expense_snap/core/errors/app_exception.dart';
 import 'package:expense_snap/data/models/expense.dart';
 import 'package:expense_snap/services/export_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -318,6 +319,209 @@ void main() {
         expect(expense.description, contains('🍔'));
         expect(expense.description, contains('麥當勞'));
       });
+    });
+
+    group('exportToExcel 參數驗證', () {
+      late ExportService service;
+
+      setUp(() {
+        service = ExportService();
+      });
+
+      test('月份小於 1 應回傳錯誤', () async {
+        final result = await service.exportToExcel(
+          expenses: testExpenses,
+          year: 2025,
+          month: 0,
+          userName: 'Test',
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<ValidationException>());
+      });
+
+      test('月份大於 12 應回傳錯誤', () async {
+        final result = await service.exportToExcel(
+          expenses: testExpenses,
+          year: 2025,
+          month: 13,
+          userName: 'Test',
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<ValidationException>());
+      });
+
+      test('年份小於 2000 應回傳錯誤', () async {
+        final result = await service.exportToExcel(
+          expenses: testExpenses,
+          year: 1999,
+          month: 6,
+          userName: 'Test',
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<ValidationException>());
+      });
+
+      test('年份大於 2100 應回傳錯誤', () async {
+        final result = await service.exportToExcel(
+          expenses: testExpenses,
+          year: 2101,
+          month: 6,
+          userName: 'Test',
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<ValidationException>());
+      });
+
+      test('空支出清單應回傳錯誤', () async {
+        final result = await service.exportToExcel(
+          expenses: [],
+          year: 2025,
+          month: 6,
+          userName: 'Test',
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<ExportException>());
+      });
+
+      // 邊界值測試 - 驗證有效邊界值不會觸發 ValidationException
+      test('月份等於 1 應通過驗證', () async {
+        final result = await service.exportToExcel(
+          expenses: testExpenses,
+          year: 2025,
+          month: 1,
+          userName: 'Test',
+        );
+
+        // 可能因 path_provider 未初始化而失敗，但不應是 ValidationException
+        if (result.isFailure) {
+          expect(result.errorOrNull, isNot(isA<ValidationException>()));
+        }
+      });
+
+      test('月份等於 12 應通過驗證', () async {
+        final result = await service.exportToExcel(
+          expenses: testExpenses,
+          year: 2025,
+          month: 12,
+          userName: 'Test',
+        );
+
+        if (result.isFailure) {
+          expect(result.errorOrNull, isNot(isA<ValidationException>()));
+        }
+      });
+
+      test('年份等於 2000 應通過驗證', () async {
+        final result = await service.exportToExcel(
+          expenses: testExpenses,
+          year: 2000,
+          month: 6,
+          userName: 'Test',
+        );
+
+        if (result.isFailure) {
+          expect(result.errorOrNull, isNot(isA<ValidationException>()));
+        }
+      });
+
+      test('年份等於 2100 應通過驗證', () async {
+        final result = await service.exportToExcel(
+          expenses: testExpenses,
+          year: 2100,
+          month: 6,
+          userName: 'Test',
+        );
+
+        if (result.isFailure) {
+          expect(result.errorOrNull, isNot(isA<ValidationException>()));
+        }
+      });
+    });
+
+    group('exportToZip 參數驗證', () {
+      late ExportService service;
+
+      setUp(() {
+        service = ExportService();
+      });
+
+      test('月份無效應回傳錯誤', () async {
+        final result = await service.exportToZip(
+          expenses: testExpenses,
+          year: 2025,
+          month: 15,
+          userName: 'Test',
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<ValidationException>());
+      });
+
+      test('年份無效應回傳錯誤', () async {
+        final result = await service.exportToZip(
+          expenses: testExpenses,
+          year: 1800,
+          month: 6,
+          userName: 'Test',
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<ValidationException>());
+      });
+
+      test('空支出清單應回傳錯誤', () async {
+        final result = await service.exportToZip(
+          expenses: [],
+          year: 2025,
+          month: 6,
+          userName: 'Test',
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<ExportException>());
+      });
+    });
+
+    group('shareFile', () {
+      late ExportService service;
+
+      setUp(() {
+        service = ExportService();
+      });
+
+      test('不存在的檔案應回傳錯誤', () async {
+        final result = await service.shareFile('/non/existent/file.xlsx');
+
+        expect(result.isFailure, isTrue);
+        expect(result.errorOrNull, isA<StorageException>());
+      });
+    });
+  });
+
+  group('ExportException', () {
+    test('noData 應建立正確的例外', () {
+      final exception = ExportException.noData();
+      expect(exception.message, contains('無資料'));
+    });
+
+    test('excelGenerationFailed 應建立正確的例外', () {
+      final exception = ExportException.excelGenerationFailed('test error');
+      expect(exception.message, contains('Excel'));
+    });
+
+    test('zipFailed 應建立正確的例外', () {
+      final exception = ExportException.zipFailed('test error');
+      expect(exception.message, contains('ZIP'));
+    });
+
+    test('shareFailed 應建立正確的例外', () {
+      final exception = ExportException.shareFailed();
+      expect(exception.message, contains('分享'));
     });
   });
 }

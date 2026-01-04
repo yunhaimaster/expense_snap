@@ -165,10 +165,11 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-      floatingActionButton: Consumer<ExpenseProvider>(
-        builder: (context, provider, _) {
-          // 空列表時顯示脈動提示
-          final showPulse = !provider.isLoading && provider.expenses.isEmpty;
+      floatingActionButton: Selector<ExpenseProvider, ({bool isLoading, bool isEmpty})>(
+        selector: (_, p) => (isLoading: p.isLoading, isEmpty: p.expenses.isEmpty),
+        builder: (context, state, _) {
+          // 空列表時顯示脈動提示（Selector 只在這兩個值變化時重建）
+          final showPulse = !state.isLoading && state.isEmpty;
           return Showcase(
             key: _fabShowcaseKey,
             title: '新增支出',

@@ -12,9 +12,11 @@ class ConnectivityBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ConnectivityProvider>(
-      builder: (context, provider, child) {
-        if (provider.isConnected) {
+    // Selector 只在 isConnected 變化時重建
+    return Selector<ConnectivityProvider, bool>(
+      selector: (_, p) => p.isConnected,
+      builder: (context, isConnected, child) {
+        if (isConnected) {
           return const SizedBox.shrink();
         }
 
@@ -55,15 +57,17 @@ class AnimatedConnectivityBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ConnectivityProvider>(
-      builder: (context, provider, child) {
+    // Selector 只在 isOffline 變化時重建
+    return Selector<ConnectivityProvider, bool>(
+      selector: (_, p) => p.isOffline,
+      builder: (context, isOffline, child) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: provider.isOffline ? 40 : 0,
+          height: isOffline ? 40 : 0,
           curve: Curves.easeInOut,
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 200),
-            opacity: provider.isOffline ? 1.0 : 0.0,
+            opacity: isOffline ? 1.0 : 0.0,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

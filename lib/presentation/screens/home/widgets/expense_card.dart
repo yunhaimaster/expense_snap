@@ -56,7 +56,9 @@ class ExpenseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget card = Semantics(
+    // RepaintBoundary 減少列表滾動時的重繪範圍
+    Widget card = RepaintBoundary(
+      child: Semantics(
       label: _buildSemanticLabel(),
       button: true,
       child: Card(
@@ -139,6 +141,7 @@ class ExpenseCard extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
 
     // 滑動刪除
@@ -239,20 +242,26 @@ class ExpenseCard extends StatelessWidget {
 
   /// 建立縮圖圖片（不含 Hero）
   Widget _buildThumbnailImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: SizedBox(
-        width: 48,
-        height: 48,
-        child: Builder(
-          builder: (context) => Image.file(
-            File(expense.thumbnailPath!),
-            fit: BoxFit.cover,
-            errorBuilder: (ctx, error, stack) => Container(
-              color: Theme.of(ctx).dividerColor,
-              child: Icon(
-                Icons.broken_image_outlined,
-                color: Theme.of(ctx).hintColor,
+    // RepaintBoundary 隔離圖片渲染，避免影響其他元素
+    return RepaintBoundary(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: SizedBox(
+          width: 48,
+          height: 48,
+          child: Builder(
+            builder: (context) => Image.file(
+              File(expense.thumbnailPath!),
+              fit: BoxFit.cover,
+              // 快取提示
+              cacheWidth: 96,
+              cacheHeight: 96,
+              errorBuilder: (ctx, error, stack) => Container(
+                color: Theme.of(ctx).dividerColor,
+                child: Icon(
+                  Icons.broken_image_outlined,
+                  color: Theme.of(ctx).hintColor,
+                ),
               ),
             ),
           ),
