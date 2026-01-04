@@ -160,7 +160,7 @@ void main() {
             body: MonthPickerField(
               year: 2026,
               month: 1,
-              onChanged: (_, __) {},
+              onChanged: (year, month) {},
             ),
           ),
         ),
@@ -176,7 +176,7 @@ void main() {
             body: MonthPickerField(
               year: 2026,
               month: 1,
-              onChanged: (_, __) {},
+              onChanged: (year, month) {},
             ),
           ),
         ),

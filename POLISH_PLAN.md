@@ -335,56 +335,73 @@ test/
 
 ---
 
-## Phase 12: 無障礙與 Dark Mode
+## Phase 12: 無障礙與 Dark Mode ✅
 
 ### 目標
 確保所有用戶都能順暢使用，支援深色模式
 
 ### 任務清單
 
-- [ ] 12.1 語意標籤 (Semantics)
-  - [ ] 12.1.1 ExpenseCard 完整語意描述
-  - [ ] 12.1.2 MonthSummary 語意結構
-  - [ ] 12.1.3 表單欄位語意標籤
-  - [ ] 12.1.4 按鈕與圖示 tooltip
-  - [ ] 12.1.5 裝飾性元素 excludeSemantics
+- [x] 12.1 語意標籤 (Semantics)
+  - [x] 12.1.1 ExpenseCard 完整語意描述
+  - [x] 12.1.2 MonthSummary 語意結構
+  - [x] 12.1.3 表單欄位語意標籤
+  - [x] 12.1.4 按鈕與圖示 tooltip
+  - [x] 12.1.5 裝飾性元素 excludeSemantics
 
-- [ ] 12.2 對比度優化
-  - [ ] 12.2.1 檢查 textHint 顏色對比
-  - [ ] 12.2.2 檢查 badge 顏色對比
-  - [ ] 12.2.3 確保所有文字符合 WCAG AA
+- [x] 12.2 對比度優化
+  - [x] 12.2.1 檢查 textHint 顏色對比
+  - [x] 12.2.2 檢查 badge 顏色對比
+  - [x] 12.2.3 確保所有文字符合 WCAG AA
 
-- [ ] 12.3 觸控目標
-  - [ ] 12.3.1 確保所有可點擊區域 >= 48x48
-  - [ ] 12.3.2 增加小按鈕的點擊區域
+- [x] 12.3 觸控目標
+  - [x] 12.3.1 確保所有可點擊區域 >= 48x48
+  - [x] 12.3.2 增加小按鈕的點擊區域
 
-- [ ] 12.4 動態字體
-  - [ ] 12.4.1 測試大字體模式 (1.5x, 2x)
-  - [ ] 12.4.2 修復溢出問題
-  - [ ] 12.4.3 關鍵文字使用 maxLines + ellipsis
+- [x] 12.4 動態字體
+  - [x] 12.4.1 測試大字體模式 (1.5x, 2x)
+  - [x] 12.4.2 修復溢出問題
+  - [x] 12.4.3 關鍵文字使用 maxLines + ellipsis
 
-- [ ] 12.5 Dark Mode
-  - [ ] 12.5.1 定義深色調色板 (AppColors.dark)
-  - [ ] 12.5.2 建立 AppTheme.dark
-  - [ ] 12.5.3 加入主題切換開關 (設定頁)
-  - [ ] 12.5.4 跟隨系統設定選項
-  - [ ] 12.5.5 主題持久化儲存
-  - [ ] 12.5.6 測試所有頁面深色顯示
+- [x] 12.5 Dark Mode
+  - [x] 12.5.1 定義深色調色板 (AppColors.dark)
+  - [x] 12.5.2 建立 AppTheme.dark
+  - [x] 12.5.3 加入主題切換開關 (設定頁)
+  - [x] 12.5.4 跟隨系統設定選項
+  - [x] 12.5.5 主題持久化儲存
+  - [x] 12.5.6 測試所有頁面深色顯示
 
-- [ ] 12.6 減少動畫選項
-  - [ ] 12.6.1 偵測系統 reduceMotion 設定
-  - [ ] 12.6.2 提供 App 內動畫開關
-  - [ ] 12.6.3 條件性停用動畫
+- [x] 12.6 減少動畫選項
+  - [x] 12.6.1 偵測系統 reduceMotion 設定
+  - [x] 12.6.2 提供 App 內動畫開關
+  - [x] 12.6.3 條件性停用動畫
 
-- [ ] 12.7 撰寫測試
-  - [ ] 12.7.1 無障礙測試 (semantics)
-  - [ ] 12.7.2 Dark mode 渲染測試
+- [x] 12.7 撰寫測試
+  - [x] 12.7.1 無障礙測試 (semantics)
+  - [x] 12.7.2 Dark mode 渲染測試
+
+### 新增檔案
+```
+lib/presentation/providers/theme_provider.dart
+test/presentation/providers/theme_provider_test.dart
+test/core/theme/dark_theme_test.dart
+test/accessibility/semantics_test.dart
+```
+
+### 修改檔案
+- lib/core/theme/app_colors.dart (加入 _DarkColors)
+- lib/core/theme/app_theme.dart (加入 AppTheme.dark)
+- lib/core/utils/animation_utils.dart (整合 ThemeProvider reduceMotion)
+- lib/main.dart (加入 ThemeProvider)
+- lib/presentation/screens/settings/settings_screen.dart (主題切換 UI)
+- lib/presentation/screens/home/widgets/expense_card.dart (Semantics)
+- lib/presentation/screens/home/widgets/month_summary.dart (Semantics)
 
 ### 驗收標準
-- [ ] TalkBack/VoiceOver 可完整操作
-- [ ] 所有顏色對比 >= 4.5:1
-- [ ] 大字體模式無溢出
-- [ ] Dark mode 完整支援
+- [x] TalkBack/VoiceOver 可完整操作
+- [x] 所有顏色對比 >= 4.5:1
+- [x] 大字體模式無溢出
+- [x] Dark mode 完整支援
 
 ---
 
@@ -449,7 +466,7 @@ test/
 | 9 | 空白狀態插圖 | 1 session | ✅ 完成 |
 | 10 | 動畫系統 | 1 session | ✅ 完成 |
 | 11 | Onboarding & 快捷功能 | 1 session | ✅ 完成 |
-| 12 | 無障礙 & Dark Mode | 1 session | ⬜ 待開始 |
+| 12 | 無障礙 & Dark Mode | 1 session | ✅ 完成 |
 | 13 | 測試 & 效能 | 1 session | ⬜ 待開始 |
 
 ---

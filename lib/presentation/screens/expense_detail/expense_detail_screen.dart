@@ -202,7 +202,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           child: Image.file(
             File(_expense!.receiptImagePath!),
             fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => const Center(
+            errorBuilder: (context, error, stack) => const Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

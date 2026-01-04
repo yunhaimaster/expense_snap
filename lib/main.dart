@@ -19,6 +19,7 @@ import 'presentation/providers/exchange_rate_provider.dart';
 import 'presentation/providers/expense_provider.dart';
 import 'presentation/providers/settings_provider.dart';
 import 'presentation/providers/showcase_provider.dart';
+import 'presentation/providers/theme_provider.dart';
 import 'presentation/widgets/common/error_boundary.dart';
 import 'services/background_service.dart';
 import 'services/image_service.dart';
@@ -122,7 +123,7 @@ Future<void> _initializeWorkManager() async {
   try {
     await Workmanager().initialize(
       callbackDispatcher,
-      isInDebugMode: kDebugMode,
+      // isInDebugMode 已棄用，改用 WorkmanagerDebug handlers
     );
 
     // 註冊每週清理任務
@@ -208,6 +209,9 @@ class ExpenseSnapApp extends StatelessWidget {
         Provider<ExchangeRateRepository>.value(value: exchangeRateRepository),
 
         // Provider 層（State Management）
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (_) => ThemeProvider(),
+        ),
         ChangeNotifierProvider<ExpenseProvider>(
           create: (_) => ExpenseProvider(
             repository: expenseRepository,
@@ -236,23 +240,29 @@ class ExpenseSnapApp extends StatelessWidget {
         onError: (error, stackTrace) {
           AppLogger.error('Global error caught', error: error, stackTrace: stackTrace);
         },
-        child: MaterialApp(
-          title: 'Expense Snap',
-          theme: AppTheme.light,
-          debugShowCheckedModeBanner: false,
-          initialRoute: needsOnboarding ? AppRouter.onboarding : AppRouter.home,
-          onGenerateRoute: AppRouter.generateRoute,
-          // 支援繁體中文日期選擇器
-          locale: const Locale('zh', 'TW'),
-          supportedLocales: const [
-            Locale('zh', 'TW'),
-            Locale('en', 'US'),
-          ],
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
+        child: Consumer<ThemeProvider>(
+          builder: (context, themeProvider, child) {
+            return MaterialApp(
+              title: 'Expense Snap',
+              theme: AppTheme.light,
+              darkTheme: AppTheme.dark,
+              themeMode: themeProvider.materialThemeMode,
+              debugShowCheckedModeBanner: false,
+              initialRoute: needsOnboarding ? AppRouter.onboarding : AppRouter.home,
+              onGenerateRoute: AppRouter.generateRoute,
+              // 支援繁體中文日期選擇器
+              locale: const Locale('zh', 'TW'),
+              supportedLocales: const [
+                Locale('zh', 'TW'),
+                Locale('en', 'US'),
+              ],
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+            );
+          },
         ),
       ),
     );

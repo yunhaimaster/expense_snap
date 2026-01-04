@@ -364,7 +364,7 @@ class _DeletedExpenseCard extends StatelessWidget {
         child: Image.file(
           File(expense.thumbnailPath!),
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Container(
+          errorBuilder: (context, error, stack) => Container(
             color: AppColors.divider,
             child: const Icon(
               Icons.broken_image_outlined,

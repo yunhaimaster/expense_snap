@@ -33,7 +33,6 @@ void main() {
     test('completeFabShowcase marks FAB showcase as complete', () async {
       // 由於沒有實際數據庫，此方法應該安全地完成
       // 在實際應用中，這會更新數據庫
-      final initialValue = provider.fabShowcaseComplete;
       await provider.completeFabShowcase();
 
       // 完成後仍應為 true
@@ -42,7 +41,6 @@ void main() {
     });
 
     test('completeSwipeShowcase marks swipe showcase as complete', () async {
-      final initialValue = provider.swipeShowcaseComplete;
       await provider.completeSwipeShowcase();
 
       expect(provider.swipeShowcaseComplete, isTrue);
@@ -50,7 +48,6 @@ void main() {
     });
 
     test('completeExportShowcase marks export showcase as complete', () async {
-      final initialValue = provider.exportShowcaseComplete;
       await provider.completeExportShowcase();
 
       expect(provider.exportShowcaseComplete, isTrue);

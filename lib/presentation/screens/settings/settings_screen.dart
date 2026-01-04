@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../domain/repositories/backup_repository.dart' show BackupInfo;
 import '../../providers/settings_provider.dart';
+import '../../providers/theme_provider.dart';
 import '../../widgets/common/skeleton.dart';
 
 /// 設定畫面
@@ -48,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListView(
                 children: [
                   // 個人資料區塊
-                  _SectionHeader(title: '個人資料'),
+                  const _SectionHeader(title: '個人資料'),
                   ListTile(
                     leading: const Icon(Icons.person_outline),
                     title: const Text('姓名'),
@@ -59,8 +60,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                   const Divider(),
 
+                  // 外觀區塊
+                  const _SectionHeader(title: '外觀'),
+                  Consumer<ThemeProvider>(
+                    builder: (context, themeProvider, _) {
+                      return Column(
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.palette_outlined),
+                            title: const Text('主題'),
+                            subtitle: Text(_getThemeModeLabel(themeProvider.themeMode)),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => _showThemeModeDialog(themeProvider),
+                          ),
+                          SwitchListTile(
+                            secondary: const Icon(Icons.animation_outlined),
+                            title: const Text('減少動畫'),
+                            subtitle: const Text('減少動態效果，適合動暈症患者'),
+                            value: themeProvider.reduceMotion,
+                            onChanged: (value) => themeProvider.setReduceMotion(value),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+
+                  const Divider(),
+
                   // 資料管理區塊
-                  _SectionHeader(title: '資料管理'),
+                  const _SectionHeader(title: '資料管理'),
                   ListTile(
                     leading: const Icon(Icons.delete_outline),
                     title: const Text('已刪除項目'),
@@ -86,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const Divider(),
 
                   // 雲端備份區塊
-                  _SectionHeader(title: '雲端備份'),
+                  const _SectionHeader(title: '雲端備份'),
                   _GoogleAccountTile(provider: provider),
 
                   if (provider.isGoogleConnected) ...[
@@ -124,10 +152,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const Divider(),
 
                   // 關於區塊
-                  _SectionHeader(title: '關於'),
-                  ListTile(
-                    leading: const Icon(Icons.info_outline),
-                    title: const Text('版本'),
+                  const _SectionHeader(title: '關於'),
+                  const ListTile(
+                    leading: Icon(Icons.info_outline),
+                    title: Text('版本'),
                     subtitle: Text('${AppConstants.appName} v${AppConstants.appVersion}'),
                   ),
                 ],
@@ -141,6 +169,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
         },
       ),
     );
+  }
+
+  String _getThemeModeLabel(AppThemeMode mode) {
+    switch (mode) {
+      case AppThemeMode.light:
+        return '淺色';
+      case AppThemeMode.dark:
+        return '深色';
+      case AppThemeMode.system:
+        return '跟隨系統';
+    }
+  }
+
+  Future<void> _showThemeModeDialog(ThemeProvider themeProvider) async {
+    final selectedMode = await showDialog<AppThemeMode>(
+      context: context,
+      builder: (dialogContext) => SimpleDialog(
+        title: const Text('選擇主題'),
+        children: [
+          _ThemeModeOption(
+            icon: Icons.light_mode_outlined,
+            title: '淺色',
+            value: AppThemeMode.light,
+            groupValue: themeProvider.themeMode,
+            onTap: () => Navigator.of(dialogContext).pop(AppThemeMode.light),
+          ),
+          _ThemeModeOption(
+            icon: Icons.dark_mode_outlined,
+            title: '深色',
+            value: AppThemeMode.dark,
+            groupValue: themeProvider.themeMode,
+            onTap: () => Navigator.of(dialogContext).pop(AppThemeMode.dark),
+          ),
+          _ThemeModeOption(
+            icon: Icons.settings_brightness_outlined,
+            title: '跟隨系統',
+            value: AppThemeMode.system,
+            groupValue: themeProvider.themeMode,
+            onTap: () => Navigator.of(dialogContext).pop(AppThemeMode.system),
+          ),
+        ],
+      ),
+    );
+
+    if (selectedMode != null) {
+      await themeProvider.setThemeMode(selectedMode);
+    }
   }
 
   Future<void> _editUserName(SettingsProvider provider) async {
@@ -558,5 +633,36 @@ class _RestoreBackupDialog extends StatelessWidget {
     if (bytes < 1024) return '$bytes B';
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
     return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  }
+}
+
+/// 主題模式選項（避免 RadioListTile 棄用警告）
+class _ThemeModeOption extends StatelessWidget {
+  const _ThemeModeOption({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.groupValue,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final AppThemeMode value;
+  final AppThemeMode groupValue;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final isSelected = value == groupValue;
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      trailing: isSelected
+          ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
+          : null,
+      selected: isSelected,
+      onTap: onTap,
+    );
   }
 }

@@ -96,7 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
       if (!mounted) return;
 
-      AnimationUtils.lightImpact();
+      unawaited(AnimationUtils.lightImpact());
 
       // 導航到主畫面
       unawaited(Navigator.of(context).pushReplacementNamed(AppRouter.home));
@@ -120,7 +120,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 padding: const EdgeInsets.all(16),
                 child: TextButton(
                   onPressed: _isLoading ? null : () => _completeOnboarding(skip: true),
-                  child: Text(
+                  child: const Text(
                     '跳過',
                     style: TextStyle(
                       color: AppColors.textSecondary,

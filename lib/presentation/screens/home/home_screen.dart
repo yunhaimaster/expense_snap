@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // 使用 ShowCaseWidget 內的 context
       final showcaseContext = _showcaseContext;
-      if (showcaseContext != null) {
+      if (showcaseContext != null && showcaseContext.mounted) {
         ShowCaseWidget.of(showcaseContext).startShowCase([_fabShowcaseKey]);
       }
     }

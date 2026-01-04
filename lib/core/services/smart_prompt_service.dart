@@ -101,7 +101,7 @@ class SmartPromptService {
     }
 
     final commonWords =
-        validWords1.where((w) => validWords2.contains(w)).length;
+        validWords1.where(validWords2.contains).length;
     final maxWords =
         validWords1.length > validWords2.length ? validWords1.length : validWords2.length;
 

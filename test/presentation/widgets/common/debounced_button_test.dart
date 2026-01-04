@@ -182,14 +182,16 @@ void main() {
     });
 
     testWidgets('onPressed 為 null 時應禁用', (tester) async {
-      var clicked = false;
+      // 此測試驗證禁用按鈕不會觸發任何回調
+      // clicked 永遠為 false 因為 onPressed 為 null
+      const clicked = false;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: DebouncedButton(
               onPressed: null,
-              child: const Text('測試按鈕'),
+              child: Text('測試按鈕'),
             ),
           ),
         ),
@@ -199,7 +201,7 @@ void main() {
       await tester.tap(find.text('測試按鈕'));
       await tester.pumpAndSettle();
 
-      // 回調不應被觸發
+      // 回調不應被觸發（按鈕已禁用）
       expect(clicked, isFalse);
     });
   });

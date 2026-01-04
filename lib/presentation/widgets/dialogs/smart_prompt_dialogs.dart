@@ -50,7 +50,7 @@ class SmartPromptDialogs {
                   const SizedBox(height: 4),
                   Text(
                     'HKD ${Formatters.formatCurrency(existingExpense.hkdAmountCents / 100)}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w500,
                     ),
@@ -58,7 +58,7 @@ class SmartPromptDialogs {
                   const SizedBox(height: 4),
                   Text(
                     Formatters.formatDate(existingExpense.date),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 12,
                     ),
@@ -138,7 +138,7 @@ class SmartPromptDialogs {
                     const SizedBox(height: 4),
                     Text(
                       '≈ HKD ${Formatters.formatCurrency(hkdAmount)}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -174,14 +174,14 @@ class SmartPromptDialogs {
     await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Row(
+        title: const Row(
           children: [
             Icon(
               Icons.calendar_today,
               color: AppColors.primary,
             ),
-            const SizedBox(width: 8),
-            const Text('月底提醒'),
+            SizedBox(width: 8),
+            Text('月底提醒'),
           ],
         ),
         content: Column(
@@ -195,7 +195,7 @@ class SmartPromptDialogs {
             const SizedBox(height: 8),
             Text(
               '您本月共有 $expenseCount 筆支出記錄',
-              style: TextStyle(color: AppColors.textSecondary),
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 16),
             const Text('建議您匯出報銷單，以便月結報銷。'),

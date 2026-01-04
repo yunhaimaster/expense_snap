@@ -11,7 +11,7 @@ class SlidePageRoute<T> extends PageRouteBuilder<T> {
     super.settings,
     this.duration,
     this.reverseDuration,
-    this.fullscreenDialog = false,
+    super.fullscreenDialog = false,
   }) : super(
           pageBuilder: (context, animation, secondaryAnimation) => page,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -64,13 +64,11 @@ class SlidePageRoute<T> extends PageRouteBuilder<T> {
           transitionDuration: duration ?? AnimationUtils.pageTransition,
           reverseTransitionDuration:
               reverseDuration ?? AnimationUtils.pageTransition,
-          fullscreenDialog: fullscreenDialog,
         );
 
   final Widget page;
   final Duration? duration;
   final Duration? reverseDuration;
-  final bool fullscreenDialog;
 }
 
 /// 淡入淡出頁面轉場
@@ -82,7 +80,7 @@ class FadePageRoute<T> extends PageRouteBuilder<T> {
     super.settings,
     this.duration,
     this.reverseDuration,
-    this.fullscreenDialog = false,
+    super.fullscreenDialog = false,
   }) : super(
           pageBuilder: (context, animation, secondaryAnimation) => page,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -97,13 +95,11 @@ class FadePageRoute<T> extends PageRouteBuilder<T> {
           },
           transitionDuration: duration ?? AnimationUtils.standard,
           reverseTransitionDuration: reverseDuration ?? AnimationUtils.standard,
-          fullscreenDialog: fullscreenDialog,
         );
 
   final Widget page;
   final Duration? duration;
   final Duration? reverseDuration;
-  final bool fullscreenDialog;
 }
 
 /// 從底部滑入頁面轉場
@@ -115,7 +111,7 @@ class BottomSlidePageRoute<T> extends PageRouteBuilder<T> {
     super.settings,
     this.duration,
     this.reverseDuration,
-    this.fullscreenDialog = true,
+    super.fullscreenDialog = true,
   }) : super(
           pageBuilder: (context, animation, secondaryAnimation) => page,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -154,13 +150,11 @@ class BottomSlidePageRoute<T> extends PageRouteBuilder<T> {
           transitionDuration: duration ?? AnimationUtils.pageTransition,
           reverseTransitionDuration:
               reverseDuration ?? AnimationUtils.pageTransition,
-          fullscreenDialog: fullscreenDialog,
         );
 
   final Widget page;
   final Duration? duration;
   final Duration? reverseDuration;
-  final bool fullscreenDialog;
 }
 
 /// 縮放頁面轉場

@@ -143,7 +143,7 @@ class Formatters {
     final hour = dateTime.hour.toString().padLeft(2, '0');
     final minute = dateTime.minute.toString().padLeft(2, '0');
     final second = dateTime.second.toString().padLeft(2, '0');
-    return '${year}${month}${day}_$hour$minute$second';
+    return '$year$month${day}_$hour$minute$second';
   }
 
   /// 格式化日期時間用於顯示（yyyy年M月d日 HH:mm）

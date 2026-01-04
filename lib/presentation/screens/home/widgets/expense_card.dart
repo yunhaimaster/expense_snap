@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -23,86 +24,118 @@ class ExpenseCard extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback? onDismissed;
 
+  /// 建立語意描述（供螢幕閱讀器使用）
+  String _buildSemanticLabel() {
+    final buffer = StringBuffer();
+    buffer.write('支出項目：${expense.description}。');
+    buffer.write('金額：${expense.formattedHkdAmount}。');
+    if (expense.originalCurrency != 'HKD') {
+      buffer.write('原始金額：${expense.formattedOriginalAmount}。');
+    }
+    buffer.write('日期：${Formatters.formatDate(expense.date)}。');
+    buffer.write('匯率來源：${_getRateSourceLabel()}。');
+    if (expense.hasReceipt) {
+      buffer.write('有收據圖片。');
+    }
+    buffer.write('點擊查看詳情');
+    if (onDismissed != null) {
+      buffer.write('，向左滑動刪除');
+    }
+    return buffer.toString();
+  }
+
+  /// 取得匯率來源文字標籤
+  String _getRateSourceLabel() {
+    return switch (expense.exchangeRateSource) {
+      ExchangeRateSource.auto => '即時匯率',
+      ExchangeRateSource.offline => '離線快取',
+      ExchangeRateSource.defaultRate => '預設匯率',
+      ExchangeRateSource.manual => '手動輸入',
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget card = Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              // 縮圖
-              _buildThumbnail(),
+    Widget card = Semantics(
+      label: _buildSemanticLabel(),
+      button: true,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: ExcludeSemantics(
+              child: Row(
+                children: [
+                  // 縮圖
+                  _buildThumbnail(),
 
-              const SizedBox(width: 12),
+                  const SizedBox(width: 12),
 
-              // 內容
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 描述
-                    Text(
-                      expense.description,
-                      style: Theme.of(context).textTheme.titleMedium,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                    const SizedBox(height: 4),
-
-                    // 日期和匯率來源
-                    Row(
+                  // 內容
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // 描述
                         Text(
-                          Formatters.formatDate(expense.date),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          expense.description,
+                          style: Theme.of(context).textTheme.titleMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(width: 8),
-                        _buildRateSourceBadge(context),
+
+                        const SizedBox(height: 4),
+
+                        // 日期和匯率來源
+                        Row(
+                          children: [
+                            Text(
+                              Formatters.formatDate(expense.date),
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            const SizedBox(width: 8),
+                            _buildRateSourceBadge(context),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(width: 12),
-
-              // 金額
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  // 港幣金額
-                  Text(
-                    expense.formattedHkdAmount,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
                   ),
 
-                  // 原始金額（如果非港幣）
-                  if (expense.originalCurrency != 'HKD')
-                    Text(
-                      expense.formattedOriginalAmount,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                    ),
+                  const SizedBox(width: 12),
+
+                  // 金額
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      // 港幣金額
+                      Text(
+                        expense.formattedHkdAmount,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                      ),
+
+                      // 原始金額（如果非港幣）
+                      if (expense.originalCurrency != 'HKD')
+                        Text(
+                          expense.formattedOriginalAmount,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                    ],
+                  ),
+
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.chevron_right,
+                    color: Theme.of(context).hintColor,
+                  ),
                 ],
               ),
-
-              const SizedBox(width: 4),
-              const Icon(
-                Icons.chevron_right,
-                color: AppColors.textHint,
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -113,17 +146,19 @@ class ExpenseCard extends StatelessWidget {
       card = Dismissible(
         key: ValueKey(expense.id),
         direction: DismissDirection.endToStart,
-        background: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.error,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(right: 24),
-          child: const Icon(
-            Icons.delete_outline,
-            color: Colors.white,
+        background: Builder(
+          builder: (context) => Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.error,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(right: 24),
+            child: Icon(
+              Icons.delete_outline,
+              color: Theme.of(context).colorScheme.onError,
+            ),
           ),
         ),
         confirmDismiss: (_) async {
@@ -141,16 +176,18 @@ class ExpenseCard extends StatelessWidget {
   Widget _buildThumbnail() {
     // 無收據時不使用 Hero（避免動畫衝突）
     if (!expense.hasReceipt) {
-      return Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: AppColors.divider,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Icon(
-          Icons.receipt_outlined,
-          color: AppColors.textHint,
+      return Builder(
+        builder: (context) => Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Theme.of(context).dividerColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            Icons.receipt_outlined,
+            color: Theme.of(context).hintColor,
+          ),
         ),
       );
     }
@@ -184,11 +221,11 @@ class ExpenseCard extends StatelessWidget {
               child: Image.file(
                 File(expense.thumbnailPath!),
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: AppColors.divider,
-                  child: const Icon(
+                errorBuilder: (ctx, error, stack) => Container(
+                  color: Theme.of(ctx).dividerColor,
+                  child: Icon(
                     Icons.broken_image_outlined,
-                    color: AppColors.textHint,
+                    color: Theme.of(ctx).hintColor,
                   ),
                 ),
               ),
@@ -207,14 +244,16 @@ class ExpenseCard extends StatelessWidget {
       child: SizedBox(
         width: 48,
         height: 48,
-        child: Image.file(
-          File(expense.thumbnailPath!),
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Container(
-            color: AppColors.divider,
-            child: const Icon(
-              Icons.broken_image_outlined,
-              color: AppColors.textHint,
+        child: Builder(
+          builder: (context) => Image.file(
+            File(expense.thumbnailPath!),
+            fit: BoxFit.cover,
+            errorBuilder: (ctx, error, stack) => Container(
+              color: Theme.of(ctx).dividerColor,
+              child: Icon(
+                Icons.broken_image_outlined,
+                color: Theme.of(ctx).hintColor,
+              ),
             ),
           ),
         ),
@@ -224,11 +263,29 @@ class ExpenseCard extends StatelessWidget {
 
   /// 建立匯率來源標籤
   Widget _buildRateSourceBadge(BuildContext context) {
+    // 根據主題選擇顏色
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final (icon, color, label) = switch (expense.exchangeRateSource) {
-      ExchangeRateSource.auto => (Icons.check_circle, AppColors.rateAuto, '即時'),
-      ExchangeRateSource.offline => (Icons.offline_bolt, AppColors.rateOffline, '離線'),
-      ExchangeRateSource.defaultRate => (Icons.warning, AppColors.rateDefault, '預設'),
-      ExchangeRateSource.manual => (Icons.edit, AppColors.rateManual, '手動'),
+      ExchangeRateSource.auto => (
+          Icons.check_circle,
+          isDark ? AppColors.dark.rateAuto : AppColors.rateAuto,
+          '即時'
+        ),
+      ExchangeRateSource.offline => (
+          Icons.offline_bolt,
+          isDark ? AppColors.dark.rateOffline : AppColors.rateOffline,
+          '離線'
+        ),
+      ExchangeRateSource.defaultRate => (
+          Icons.warning,
+          isDark ? AppColors.dark.rateDefault : AppColors.rateDefault,
+          '預設'
+        ),
+      ExchangeRateSource.manual => (
+          Icons.edit,
+          isDark ? AppColors.dark.rateManual : AppColors.rateManual,
+          '手動'
+        ),
     };
 
     return Container(
@@ -258,7 +315,7 @@ class ExpenseCard extends StatelessWidget {
   /// 顯示刪除確認對話框
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
     // 觸覺回饋 - 滑動到位
-    AnimationUtils.mediumImpact();
+    unawaited(AnimationUtils.mediumImpact());
 
     return await showDialog<bool>(
           context: context,
@@ -277,7 +334,7 @@ class ExpenseCard extends StatelessWidget {
                   Navigator.of(context).pop(true);
                 },
                 style: TextButton.styleFrom(
-                  foregroundColor: AppColors.error,
+                  foregroundColor: Theme.of(context).colorScheme.error,
                 ),
                 child: const Text('刪除'),
               ),

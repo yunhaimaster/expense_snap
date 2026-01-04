@@ -21,15 +21,13 @@ void main() {
           updatedAt: DateTime.now(),
         );
 
-        bool? result;
-
         await tester.pumpWidget(
           MaterialApp(
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
                   onPressed: () async {
-                    result = await SmartPromptDialogs.showDuplicateWarning(
+                    await SmartPromptDialogs.showDuplicateWarning(
                       context,
                       existingExpense: expense,
                     );
@@ -147,16 +145,13 @@ void main() {
 
     group('showLargeAmountConfirmation', () {
       testWidgets('displays amount details', (tester) async {
-        bool? result;
-
         await tester.pumpWidget(
           MaterialApp(
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
                   onPressed: () async {
-                    result =
-                        await SmartPromptDialogs.showLargeAmountConfirmation(
+                    await SmartPromptDialogs.showLargeAmountConfirmation(
                       context,
                       amount: 1500.0,
                       currency: 'HKD',

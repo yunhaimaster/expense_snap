@@ -19,7 +19,7 @@ class CurrencyDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       decoration: const InputDecoration(
         labelText: '幣種',
         prefixIcon: Icon(Icons.monetization_on_outlined),

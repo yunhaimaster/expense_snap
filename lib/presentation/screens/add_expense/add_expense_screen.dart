@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -342,7 +343,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   Future<void> _pickFromCamera() async {
     // 觸覺回饋 - 拍照
-    AnimationUtils.selectionClick();
+    unawaited(AnimationUtils.selectionClick());
 
     final provider = context.read<ExpenseProvider>();
     final result = await provider.pickImageFromCamera();

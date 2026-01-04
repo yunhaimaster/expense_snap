@@ -129,9 +129,7 @@ class GoogleDriveApi {
       var account = await _googleSignIn.signInSilently();
 
       // 靜默登入失敗，顯示登入對話框
-      if (account == null) {
-        account = await _googleSignIn.signIn();
-      }
+      account ??= await _googleSignIn.signIn();
 
       if (account == null) {
         AppLogger.warning('Google Sign-In cancelled', tag: 'GoogleDrive');
@@ -292,7 +290,7 @@ class GoogleDriveApi {
       if (folderList.files != null && folderList.files!.isNotEmpty) {
         final firstFolder = folderList.files!.first;
         if (firstFolder.id == null) {
-          return Result.failure(StorageException('備份資料夾 ID 無效'));
+          return Result.failure(const StorageException('備份資料夾 ID 無效'));
         }
         AppLogger.info('Found existing backup folder: ${firstFolder.id}', tag: 'GoogleDrive');
         return Result.success(firstFolder.id!);
@@ -309,7 +307,7 @@ class GoogleDriveApi {
       );
 
       if (createdFolder.id == null) {
-        return Result.failure(StorageException('建立資料夾失敗：未取得 ID'));
+        return Result.failure(const StorageException('建立資料夾失敗：未取得 ID'));
       }
 
       AppLogger.info('Created backup folder: ${createdFolder.id}', tag: 'GoogleDrive');

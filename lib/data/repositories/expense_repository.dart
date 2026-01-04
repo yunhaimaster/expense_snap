@@ -138,7 +138,7 @@ class ExpenseRepository implements IExpenseRepository {
         offset: offset,
       );
 
-      final expenses = maps.map((m) => Expense.fromMap(m)).toList();
+      final expenses = maps.map(Expense.fromMap).toList();
       return Result.success(expenses);
     } catch (e) {
       AppLogger.error('getExpensesByMonth failed', error: e);
@@ -229,7 +229,7 @@ class ExpenseRepository implements IExpenseRepository {
   Future<Result<List<Expense>>> getDeletedExpenses() async {
     try {
       final maps = await _db.getDeletedExpenses();
-      final expenses = maps.map((m) => Expense.fromMap(m)).toList();
+      final expenses = maps.map(Expense.fromMap).toList();
       return Result.success(expenses);
     } catch (e) {
       AppLogger.error('getDeletedExpenses failed', error: e);

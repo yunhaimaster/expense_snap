@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import '../../presentation/providers/theme_provider.dart';
 
 /// 動畫工具類
 ///
@@ -76,9 +79,26 @@ class AnimationUtils {
     return staggerDelay * clampedIndex;
   }
 
-  /// 檢查是否應減少動畫（無障礙設定）
+  /// 檢查是否應減少動畫（無障礙設定 + App 內設定）
   static bool shouldReduceMotion(BuildContext context) {
-    return MediaQuery.of(context).disableAnimations;
+    // 系統無障礙設定
+    if (MediaQuery.of(context).disableAnimations) {
+      return true;
+    }
+
+    // App 內減少動畫設定
+    try {
+      final themeProvider = context.read<ThemeProvider>();
+      return themeProvider.reduceMotion;
+    } catch (_) {
+      // Provider 不可用時回傳 false
+      return false;
+    }
+  }
+
+  /// 取得適當的動畫時長（減少動畫模式時回傳 Duration.zero）
+  static Duration getAnimationDuration(BuildContext context, Duration normal) {
+    return shouldReduceMotion(context) ? Duration.zero : normal;
   }
 }
 
