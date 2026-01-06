@@ -28,6 +28,9 @@ class ExpenseProvider extends ChangeNotifier {
   final IExpenseRepository _repository;
   final ImageService _imageService;
 
+  // 生命週期管理
+  bool _disposed = false;
+
   // 狀態
   List<Expense> _expenses = [];
   MonthSummary _summary = MonthSummary.empty(DateTime.now().year, DateTime.now().month);
@@ -121,7 +124,7 @@ class ExpenseProvider extends ChangeNotifier {
       _error = DatabaseException.queryFailed(e.toString());
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _notifyIfNotDisposed();
     }
   }
 
@@ -295,7 +298,7 @@ class ExpenseProvider extends ChangeNotifier {
     );
     result.onSuccess((s) {
       _summary = s;
-      notifyListeners();
+      _notifyIfNotDisposed();
     });
   }
 
@@ -303,5 +306,19 @@ class ExpenseProvider extends ChangeNotifier {
   void clearError() {
     _error = null;
     notifyListeners();
+  }
+
+  /// 安全通知監聽器（防止 dispose 後呼叫）
+  void _notifyIfNotDisposed() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    AppLogger.debug('ExpenseProvider disposed');
+    super.dispose();
   }
 }

@@ -9,10 +9,17 @@ import '../../../core/utils/app_logger.dart';
 /// 匯率 API 資料來源
 ///
 /// 使用 fawazahmed0/currency-api，支援主要和備用 CDN
+/// 內建速率限制防止過於頻繁的 API 呼叫
 class ExchangeRateApi {
   ExchangeRateApi({Dio? dio}) : _dio = dio ?? _createDio();
 
   final Dio _dio;
+
+  /// 速率限制：最小間隔（秒）
+  static const int _minIntervalSeconds = 5;
+
+  /// 上次請求時間
+  DateTime? _lastRequestTime;
 
   /// 建立 Dio 實例
   static Dio _createDio() {
@@ -25,11 +32,35 @@ class ExchangeRateApi {
     );
   }
 
+  /// 檢查是否受速率限制
+  bool get _isRateLimited {
+    if (_lastRequestTime == null) return false;
+    final elapsed = DateTime.now().difference(_lastRequestTime!);
+    return elapsed.inSeconds < _minIntervalSeconds;
+  }
+
   /// 取得指定幣種對港幣的匯率
   ///
   /// 會先嘗試主要 API，失敗後自動切換到備用 API
   /// 回傳：{幣種: 匯率(×10⁶), ...}
+  ///
+  /// 注意：內建速率限制，若距上次請求不足 5 秒會回傳錯誤
   Future<Result<Map<String, int>>> fetchRates() async {
+    // 速率限制檢查
+    if (_isRateLimited) {
+      final elapsed = DateTime.now().difference(_lastRequestTime!);
+      final remaining = _minIntervalSeconds - elapsed.inSeconds;
+      AppLogger.warning('Rate limited, please wait $remaining seconds');
+      return Result.failure(
+        NetworkException(
+          '請求過於頻繁，請 $remaining 秒後再試',
+          code: 'RATE_LIMITED',
+        ),
+      );
+    }
+
+    // 記錄請求時間
+    _lastRequestTime = DateTime.now();
     // 嘗試主要 API
     final primaryResult = await _fetchFromUrl(
       ApiConfig.primaryExchangeRateApi,

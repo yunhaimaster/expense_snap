@@ -1,11 +1,16 @@
 import '../../data/datasources/local/database_helper.dart';
 import '../../data/datasources/local/secure_storage_helper.dart';
+import '../../data/repositories/backup_repository.dart';
+import '../../data/repositories/exchange_rate_repository.dart';
+import '../../data/repositories/expense_repository.dart';
+import '../../domain/repositories/expense_repository.dart';
+import '../../services/image_service.dart';
 import '../utils/app_logger.dart';
 import '../utils/path_validator.dart';
 
-/// 服務定位器 - 簡易依賴注入
+/// 服務定位器 - 依賴注入容器
 ///
-/// Phase 1 僅包含基礎設施，具體 Repository 實作在後續 Phase 新增
+/// 管理所有服務和 Repository 的生命週期
 class ServiceLocator {
   ServiceLocator._();
 
@@ -16,9 +21,17 @@ class ServiceLocator {
   /// 是否已初始化
   bool get isInitialized => _initialized;
 
-  // 基礎設施服務
-  late final DatabaseHelper _databaseHelper;
-  late final SecureStorageHelper _secureStorageHelper;
+  // 基礎設施服務（使用 late 而非 late final 以支援 reset() 後重新初始化）
+  late DatabaseHelper _databaseHelper;
+  late SecureStorageHelper _secureStorageHelper;
+
+  // 應用服務
+  late ImageService _imageService;
+
+  // Repositories
+  late ExpenseRepository _expenseRepository;
+  late ExchangeRateRepository _exchangeRateRepository;
+  late BackupRepository _backupRepository;
 
   /// 資料庫助手
   DatabaseHelper get databaseHelper {
@@ -30,6 +43,36 @@ class ServiceLocator {
   SecureStorageHelper get secureStorageHelper {
     _ensureInitialized();
     return _secureStorageHelper;
+  }
+
+  /// 圖片服務
+  ImageService get imageService {
+    _ensureInitialized();
+    return _imageService;
+  }
+
+  /// 支出 Repository（介面）
+  IExpenseRepository get expenseRepository {
+    _ensureInitialized();
+    return _expenseRepository;
+  }
+
+  /// 支出 Repository（實作，用於需要直接存取實作的場景）
+  ExpenseRepository get expenseRepositoryImpl {
+    _ensureInitialized();
+    return _expenseRepository;
+  }
+
+  /// 匯率 Repository
+  ExchangeRateRepository get exchangeRateRepository {
+    _ensureInitialized();
+    return _exchangeRateRepository;
+  }
+
+  /// 備份 Repository
+  BackupRepository get backupRepository {
+    _ensureInitialized();
+    return _backupRepository;
   }
 
   /// 初始化所有服務
@@ -46,12 +89,28 @@ class ServiceLocator {
     // 初始化路徑驗證器
     await PathValidator.initialize();
 
-    // 初始化資料庫
+    // 初始化基礎設施
     _databaseHelper = DatabaseHelper.instance;
     await _databaseHelper.database; // 觸發資料庫建立
 
-    // 初始化安全儲存
     _secureStorageHelper = SecureStorageHelper.instance;
+
+    // 初始化應用服務
+    _imageService = ImageService();
+
+    // 初始化 Repositories（依賴注入）
+    _expenseRepository = ExpenseRepository(
+      databaseHelper: _databaseHelper,
+      imageService: _imageService,
+    );
+
+    _exchangeRateRepository = ExchangeRateRepository(
+      databaseHelper: _databaseHelper,
+    );
+
+    _backupRepository = BackupRepository(
+      databaseHelper: _databaseHelper,
+    );
 
     _initialized = true;
     AppLogger.info('ServiceLocator initialized successfully');

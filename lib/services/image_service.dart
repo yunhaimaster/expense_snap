@@ -310,8 +310,15 @@ class _ProcessImageResult {
   final int? thumbSize;
 }
 
-/// 在 isolate 中處理圖片
-Future<_ProcessImageResult> _processImageIsolate(_ProcessImageParams params) async {
+/// 共用圖片處理邏輯（供 isolate 和主線程使用）
+///
+/// 步驟：
+/// 1. 讀取原圖
+/// 2. 壓縮原圖並移除 EXIF（保護隱私）
+/// 3. 儲存壓縮後的原圖
+/// 4. 生成縮圖
+/// 5. 儲存縮圖
+Future<_ProcessImageResult> _processImageCore(_ProcessImageParams params) async {
   try {
     // 讀取原圖
     final sourceBytes = await File(params.sourcePath).readAsBytes();
@@ -371,64 +378,14 @@ Future<_ProcessImageResult> _processImageIsolate(_ProcessImageParams params) asy
   }
 }
 
+/// 在 isolate 中處理圖片
+Future<_ProcessImageResult> _processImageIsolate(_ProcessImageParams params) async {
+  return _processImageCore(params);
+}
+
 /// 主線程版本的圖片處理（備援方案）
 ///
 /// 當 isolate 不支援時使用此方法
 Future<_ProcessImageResult> _processImageMainThread(_ProcessImageParams params) async {
-  try {
-    // 讀取原圖
-    final sourceBytes = await File(params.sourcePath).readAsBytes();
-
-    // 壓縮原圖
-    final compressedBytes = await FlutterImageCompress.compressWithList(
-      sourceBytes,
-      minWidth: params.maxWidth,
-      minHeight: params.maxHeight,
-      quality: params.quality,
-      format: CompressFormat.jpeg,
-      autoCorrectionAngle: true,
-      keepExif: false,
-    );
-
-    if (compressedBytes.isEmpty) {
-      return const _ProcessImageResult(
-        success: false,
-        error: '圖片壓縮失敗',
-      );
-    }
-
-    // 儲存壓縮後的原圖
-    await File(params.fullPath).writeAsBytes(compressedBytes);
-
-    // 生成縮圖
-    final thumbnailBytes = await FlutterImageCompress.compressWithList(
-      compressedBytes,
-      minWidth: params.thumbnailSize,
-      minHeight: params.thumbnailSize,
-      quality: 80,
-      format: CompressFormat.jpeg,
-      keepExif: false,
-    );
-
-    if (thumbnailBytes.isEmpty) {
-      return const _ProcessImageResult(
-        success: false,
-        error: '縮圖生成失敗',
-      );
-    }
-
-    // 儲存縮圖
-    await File(params.thumbPath).writeAsBytes(thumbnailBytes);
-
-    return _ProcessImageResult(
-      success: true,
-      fullSize: (compressedBytes.length / 1024).round(),
-      thumbSize: (thumbnailBytes.length / 1024).round(),
-    );
-  } catch (e) {
-    return _ProcessImageResult(
-      success: false,
-      error: e.toString(),
-    );
-  }
+  return _processImageCore(params);
 }

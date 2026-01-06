@@ -116,6 +116,14 @@ class DatabaseHelper {
     await db.execute('''
       CREATE INDEX idx_expenses_deleted_at ON expenses (deleted_at)
     ''');
+    // 複合索引：優化常見查詢（軟刪除篩選 + 建立時間排序）
+    await db.execute('''
+      CREATE INDEX idx_expenses_deleted_created ON expenses (is_deleted, created_at DESC)
+    ''');
+    // 複合索引：優化描述自動完成查詢
+    await db.execute('''
+      CREATE INDEX idx_expenses_deleted_description ON expenses (is_deleted, description)
+    ''');
 
     // 建立 exchange_rate_cache 表
     await db.execute('''

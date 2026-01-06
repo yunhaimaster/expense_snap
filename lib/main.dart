@@ -44,24 +44,17 @@ void main() async {
       }
     };
 
-    // 初始化服務定位器（依賴注入）
+    // 初始化服務定位器（依賴注入，包含所有 Repositories）
     await _initializeApp();
 
     // 初始化背景任務
     await _initializeWorkManager();
 
-    // 建立服務實例（在 runApp 之前，確保只建立一次）
-    final imageService = ImageService();
-    final expenseRepository = ExpenseRepository(
-      databaseHelper: sl.databaseHelper,
-      imageService: imageService,
-    );
-    final exchangeRateRepository = ExchangeRateRepository(
-      databaseHelper: sl.databaseHelper,
-    );
-    final backupRepository = BackupRepository(
-      databaseHelper: sl.databaseHelper,
-    );
+    // 從 ServiceLocator 取得已初始化的服務和 Repositories
+    final imageService = sl.imageService;
+    final expenseRepository = sl.expenseRepositoryImpl;
+    final exchangeRateRepository = sl.exchangeRateRepository;
+    final backupRepository = sl.backupRepository;
 
     // 檢查是否需要 onboarding
     final needsOnboarding = await _checkOnboarding();

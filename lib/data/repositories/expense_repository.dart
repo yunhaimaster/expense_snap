@@ -252,14 +252,25 @@ class ExpenseRepository implements IExpenseRepository {
 
       final expense = Expense.fromMap(existingMap);
 
-      // 刪除圖片
-      await _imageService.deleteImages(
-        fullPath: expense.receiptImagePath,
-        thumbnailPath: expense.thumbnailPath,
-      );
-
-      // 刪除資料庫記錄
+      // 先刪除資料庫記錄（確保原子性）
+      // 如果 DB 刪除失敗，圖片不會被刪除
       await _db.deleteExpense(id);
+
+      // DB 刪除成功後才刪除圖片
+      // 即使圖片刪除失敗，資料一致性已保證（但可能產生孤立圖片）
+      try {
+        await _imageService.deleteImages(
+          fullPath: expense.receiptImagePath,
+          thumbnailPath: expense.thumbnailPath,
+        );
+      } catch (imageError) {
+        // 記錄孤立圖片警告，但不影響整體刪除操作成功
+        AppLogger.warning(
+          'Failed to delete orphaned images for expense id=$id: '
+          'fullPath=${expense.receiptImagePath}, thumbPath=${expense.thumbnailPath}',
+          error: imageError,
+        );
+      }
 
       AppLogger.info('Expense permanently deleted: id=$id');
       return Result.success(null);
