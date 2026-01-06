@@ -1,3 +1,17 @@
+# Project Context
+
+**First step for new sessions:** Read `PROJECT_INDEX.md` for codebase overview (94% token reduction vs full exploration).
+
+## Quick Reference
+- **Architecture**: Clean Architecture + Provider
+- **Entry point**: `lib/main.dart`
+- **DI**: `lib/core/di/service_locator.dart` (`sl` global)
+- **Routes**: `lib/core/router/app_router.dart`
+- **Tests**: `flutter test`
+- **Type check**: `flutter analyze`
+
+---
+
 <!-- OPENSPEC:START -->
 # OpenSpec Instructions
 

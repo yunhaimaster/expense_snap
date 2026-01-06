@@ -96,16 +96,16 @@ class QuickInputService {
 
     // 取得最常用的金額（以分為單位）
     final result = await db.rawQuery('''
-      SELECT hkd_amount_cents, COUNT(*) as count
+      SELECT hkd_amount, COUNT(*) as count
       FROM expenses
-      WHERE deleted_at IS NULL AND hkd_amount_cents IS NOT NULL
-      GROUP BY hkd_amount_cents
+      WHERE deleted_at IS NULL AND hkd_amount IS NOT NULL
+      GROUP BY hkd_amount
       ORDER BY count DESC
       LIMIT 5
     ''');
 
     return result
-        .map((row) => row['hkd_amount_cents'] as int?)
+        .map((row) => row['hkd_amount'] as int?)
         .where((amount) => amount != null)
         .cast<int>()
         .toList();

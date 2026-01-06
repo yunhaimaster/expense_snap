@@ -380,6 +380,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   Future<void> _saveExpense() async {
     if (!_formKey.currentState!.validate()) {
+      // 觸覺回饋 - 驗證失敗
+      unawaited(AnimationUtils.heavyImpact());
       return;
     }
 

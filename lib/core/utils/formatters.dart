@@ -14,8 +14,9 @@ class Formatters {
   static final DateFormat _displayDateTimeFormatter = DateFormat('M月d日 HH:mm');
 
   /// 格式化日期（ISO 8601 格式，用於儲存）
+  /// 使用本地時間以確保日期查詢一致性
   static String formatDateForStorage(DateTime date) {
-    return date.toUtc().toIso8601String();
+    return date.toIso8601String();
   }
 
   /// 解析儲存的日期字串

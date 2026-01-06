@@ -14,7 +14,10 @@ import '../../widgets/forms/date_picker_field.dart';
 
 /// 匯出畫面
 class ExportScreen extends StatefulWidget {
-  const ExportScreen({super.key});
+  const ExportScreen({super.key, this.refreshTrigger = 0});
+
+  /// 刷新觸發器：每次值變化時重新載入資料
+  final int refreshTrigger;
 
   @override
   State<ExportScreen> createState() => _ExportScreenState();
@@ -40,6 +43,15 @@ class _ExportScreenState extends State<ExportScreen> {
     _exportService = ExportService();
     _loadPreview();
     _loadUserName();
+  }
+
+  @override
+  void didUpdateWidget(ExportScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // refreshTrigger 變化時重新載入資料
+    if (widget.refreshTrigger != oldWidget.refreshTrigger) {
+      _loadPreview();
+    }
   }
 
   /// 載入使用者名稱
@@ -94,64 +106,7 @@ class _ExportScreenState extends State<ExportScreen> {
     }
   }
 
-  /// 匯出 Excel
-  Future<void> _exportExcel() async {
-    if (_expenses.isEmpty || _isExporting) return;
-
-    // 快照當前資料，避免匯出中途資料變更
-    final expenses = List<Expense>.from(_expenses);
-    final year = _selectedYear;
-    final month = _selectedMonth;
-    final userName = _userName;
-
-    setState(() {
-      _isExporting = true;
-      _exportProgress = 0.0;
-      _exportMessage = '正在生成 Excel...';
-    });
-
-    try {
-      final result = await _exportService.exportToExcel(
-        expenses: expenses,
-        year: year,
-        month: month,
-        userName: userName,
-      );
-
-      if (!mounted) return;
-
-      if (result.isSuccess) {
-        final exportResult = result.getOrThrow();
-        setState(() {
-          _exportProgress = 1.0;
-          _exportMessage = '準備分享...';
-        });
-
-        // 分享檔案
-        final shareResult = await _exportService.shareFile(exportResult.filePath);
-
-        if (mounted) {
-          if (shareResult.isSuccess) {
-            _showSuccessSnackBar('Excel 匯出成功');
-          }
-          // 分享被取消時不顯示訊息
-        }
-      } else {
-        final error = result.errorOrNull;
-        _showErrorSnackBar('匯出失敗: ${error?.message ?? '未知錯誤'}');
-      }
-    } catch (e) {
-      if (mounted) {
-        _showErrorSnackBar('匯出失敗: $e');
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isExporting = false);
-      }
-    }
-  }
-
-  /// 匯出 ZIP（含收據）
+  /// 匯出 ZIP（含 Excel + 收據）
   Future<void> _exportZip() async {
     if (_expenses.isEmpty || _isExporting) return;
 
@@ -314,16 +269,8 @@ class _ExportScreenState extends State<ExportScreen> {
                 const SizedBox(height: 16),
               ],
 
-              // 匯出按鈕
+              // 匯出按鈕（Excel + 收據）
               ElevatedButton.icon(
-                onPressed: _expenses.isEmpty || _isExporting ? null : _exportExcel,
-                icon: const Icon(Icons.table_chart),
-                label: const Text('匯出 Excel'),
-              ),
-
-              const SizedBox(height: 12),
-
-              OutlinedButton.icon(
                 onPressed: _expenses.isEmpty || _isExporting ? null : _exportZip,
                 icon: const Icon(Icons.folder_zip),
                 label: const Text('匯出 Excel + 收據'),
@@ -362,7 +309,7 @@ class _ExportScreenState extends State<ExportScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // 圖示
             Container(
@@ -415,7 +362,7 @@ class _ExportScreenState extends State<ExportScreen> {
               value: '$receiptCount 張',
             ),
 
-            const Spacer(),
+            const SizedBox(height: 24),
 
             // 提示文字
             Text(

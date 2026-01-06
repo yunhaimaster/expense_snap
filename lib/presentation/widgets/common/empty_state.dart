@@ -130,7 +130,7 @@ class _EmptyStateState extends State<EmptyState>
       child: SlideTransition(
         position: _slideAnimation,
         child: Center(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(32),
             child: Column(
               mainAxisSize: MainAxisSize.min,

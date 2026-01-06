@@ -48,7 +48,7 @@ void main() {
     'updated_at': '2025-01-15T00:00:00.000',
   };
 
-  final testImagePaths = ProcessedImagePaths(
+  const testImagePaths = ProcessedImagePaths(
     fullPath: '/images/test_full.jpg',
     thumbnailPath: '/images/test_thumb.jpg',
   );

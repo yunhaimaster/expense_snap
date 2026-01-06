@@ -1,0 +1,105 @@
+{
+  "project": {
+    "name": "expense_snap",
+    "description": "員工報銷收據記錄 App - 即時拍照記錄支出，支援多幣種自動轉換，月結匯出 Excel 報銷單",
+    "version": "1.0.0+1",
+    "sdk": "^3.10.4",
+    "framework": "Flutter",
+    "architecture": "Clean Architecture + Provider",
+    "language": "Dart"
+  },
+  "entryPoints": {
+    "main": "lib/main.dart",
+    "serviceLocator": "lib/core/di/service_locator.dart",
+    "router": "lib/core/router/app_router.dart"
+  },
+  "routes": {
+    "onboarding": "/onboarding",
+    "home": "/",
+    "addExpense": "/add-expense",
+    "expenseDetail": "/expense",
+    "export": "/export",
+    "settings": "/settings",
+    "deletedItems": "/deleted-items"
+  },
+  "modules": {
+    "models": {
+      "path": "lib/data/models/",
+      "files": ["expense.dart", "app_settings.dart", "exchange_rate_cache.dart", "backup_status.dart"]
+    },
+    "repositories": {
+      "path": "lib/data/repositories/",
+      "files": ["expense_repository.dart", "exchange_rate_repository.dart", "backup_repository.dart"]
+    },
+    "providers": {
+      "path": "lib/presentation/providers/",
+      "files": ["expense_provider.dart", "exchange_rate_provider.dart", "settings_provider.dart", "connectivity_provider.dart", "theme_provider.dart", "showcase_provider.dart"]
+    },
+    "screens": {
+      "path": "lib/presentation/screens/",
+      "files": ["home/", "add_expense/", "expense_detail/", "export/", "settings/", "deleted_items/", "onboarding/", "shell/"]
+    },
+    "services": {
+      "path": "lib/services/",
+      "files": ["background_service.dart", "export_service.dart", "image_service.dart"]
+    },
+    "datasources": {
+      "local": ["database_helper.dart", "secure_storage_helper.dart"],
+      "remote": ["exchange_rate_api.dart", "google_drive_api.dart"]
+    }
+  },
+  "dependencies": {
+    "stateManagement": ["provider"],
+    "database": ["sqflite", "path_provider"],
+    "network": ["dio", "http", "connectivity_plus"],
+    "export": ["excel", "archive"],
+    "auth": ["google_sign_in", "googleapis", "flutter_secure_storage"],
+    "image": ["image_picker", "flutter_image_compress", "flutter_cache_manager"],
+    "background": ["workmanager"],
+    "ui": ["cupertino_icons", "shimmer", "flutter_svg", "showcaseview"],
+    "notifications": ["flutter_local_notifications", "timezone"],
+    "utility": ["uuid", "intl", "path", "share_plus"]
+  },
+  "devDependencies": {
+    "testing": ["flutter_test", "mockito", "build_runner"],
+    "linting": ["flutter_lints"],
+    "assets": ["flutter_launcher_icons", "flutter_native_splash"]
+  },
+  "tests": {
+    "unit": {
+      "core": ["formatters_test.dart", "validators_test.dart", "result_test.dart", "error_messages_test.dart", "app_exception_test.dart", "lru_cache_test.dart"],
+      "data": ["expense_test.dart", "database_helper_test.dart", "exchange_rate_api_test.dart", "google_drive_api_test.dart"],
+      "repositories": ["expense_repository_test.dart", "exchange_rate_repository_test.dart", "backup_repository_test.dart"]
+    },
+    "widget": {
+      "providers": ["expense_provider_test.dart", "exchange_rate_provider_test.dart", "settings_provider_test.dart", "connectivity_provider_test.dart", "theme_provider_test.dart", "showcase_provider_test.dart"],
+      "screens": ["add_expense_screen_test.dart", "expense_detail_screen_test.dart", "export_screen_test.dart", "settings_screen_test.dart", "onboarding_test.dart"],
+      "widgets": ["skeleton_test.dart", "empty_state_test.dart", "animation_test.dart", "debounced_button_test.dart", "date_picker_test.dart", "smart_prompt_dialogs_test.dart"]
+    },
+    "integration": ["page_transitions_test.dart", "smart_prompt_test.dart", "dark_theme_test.dart"],
+    "accessibility": ["semantics_test.dart"],
+    "services": ["background_service_test.dart", "export_service_test.dart", "image_service_test.dart"]
+  },
+  "assets": {
+    "icons": ["icon.png", "icon_foreground.png", "icon_background.png", "splash_logo.png", "feature_graphic.png"],
+    "illustrations": ["empty_expenses.svg", "empty_trash.svg", "error_state.svg", "offline_mode.svg", "success_export.svg", "welcome.svg", "onboarding_camera.svg", "onboarding_currency.svg", "onboarding_export.svg"]
+  },
+  "features": [
+    "Expense CRUD with soft delete",
+    "Receipt photo capture with compression",
+    "Multi-currency conversion with live rates",
+    "Excel export with image attachments",
+    "Google Drive backup",
+    "Offline-first with sync",
+    "Dark mode support",
+    "Accessibility (Semantics)"
+  ],
+  "commands": {
+    "test": "flutter test",
+    "analyze": "flutter analyze",
+    "buildMocks": "dart run build_runner build --delete-conflicting-outputs",
+    "generateIcon": "dart run flutter_launcher_icons",
+    "generateSplash": "dart run flutter_native_splash:create",
+    "buildApk": "flutter build apk --release"
+  }
+}

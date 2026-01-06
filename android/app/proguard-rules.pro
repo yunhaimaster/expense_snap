@@ -1,4 +1,4 @@
-# 報銷相機 ProGuard 規則
+# 支出易 ProGuard 規則
 # 保留 Flutter 相關類別
 
 # Flutter 引擎

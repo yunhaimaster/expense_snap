@@ -101,7 +101,7 @@ void main() {
       await tester.pumpWidget(buildTestWidget(tester));
       await tester.pumpAndSettle();
 
-      expect(find.text('匯出 Excel'), findsOneWidget);
+      expect(find.text('匯出 Excel + 收據'), findsOneWidget);
     });
 
     testWidgets('應顯示 ZIP 匯出按鈕', (tester) async {
@@ -128,7 +128,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // 匯出 Excel 按鈕文字應存在
-      expect(find.text('匯出 Excel'), findsOneWidget);
+      expect(find.text('匯出 Excel + 收據'), findsOneWidget);
     });
   });
 
@@ -158,7 +158,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // 匯出 Excel 按鈕文字應存在
-      expect(find.text('匯出 Excel'), findsOneWidget);
+      expect(find.text('匯出 Excel + 收據'), findsOneWidget);
     });
 
     testWidgets('應顯示支出筆數統計', (tester) async {

@@ -17,22 +17,27 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeScreen(),
-    ExportScreen(),
-    SettingsScreen(),
-  ];
+  // 匯出頁刷新計數器：每次切換到匯出頁時遞增
+  int _exportRefreshTrigger = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: [
+          const HomeScreen(),
+          ExportScreen(refreshTrigger: _exportRefreshTrigger),
+          const SettingsScreen(),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
+          // 切換到匯出頁時觸發刷新
+          if (index == 1) {
+            _exportRefreshTrigger++;
+          }
           setState(() => _currentIndex = index);
         },
         items: const [

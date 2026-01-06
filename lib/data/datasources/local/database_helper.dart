@@ -215,18 +215,18 @@ class DatabaseHelper {
   }) async {
     final db = await database;
 
-    // 計算月份起訖日期
-    final startDate = DateTime(year, month, 1);
-    final endDate = DateTime(year, month + 1, 0, 23, 59, 59);
+    // 使用年月前綴匹配，避免時區差異問題
+    final monthStr = month.toString().padLeft(2, '0');
+    final yearMonthPrefix = '$year-$monthStr';
 
     final where = includeDeleted
-        ? 'date BETWEEN ? AND ?'
-        : 'date BETWEEN ? AND ? AND is_deleted = 0';
+        ? 'substr(date, 1, 7) = ?'
+        : 'substr(date, 1, 7) = ? AND is_deleted = 0';
 
     final results = await db.query(
       'expenses',
       where: where,
-      whereArgs: [startDate.toIso8601String(), endDate.toIso8601String()],
+      whereArgs: [yearMonthPrefix],
       orderBy: 'date DESC, created_at DESC',
       limit: limit,
       offset: offset,
@@ -305,16 +305,17 @@ class DatabaseHelper {
   Future<Map<String, dynamic>> getMonthSummary(int year, int month) async {
     final db = await database;
 
-    final startDate = DateTime(year, month, 1);
-    final endDate = DateTime(year, month + 1, 0, 23, 59, 59);
+    // 使用年月前綴匹配，避免時區差異問題
+    final monthStr = month.toString().padLeft(2, '0');
+    final yearMonthPrefix = '$year-$monthStr';
 
     final results = await db.rawQuery('''
       SELECT
         COUNT(*) as total_count,
         COALESCE(SUM(hkd_amount), 0) as total_hkd_amount
       FROM expenses
-      WHERE date BETWEEN ? AND ? AND is_deleted = 0
-    ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
+      WHERE substr(date, 1, 7) = ? AND is_deleted = 0
+    ''', [yearMonthPrefix]);
 
     return results.first;
   }

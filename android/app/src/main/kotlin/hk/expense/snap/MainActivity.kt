@@ -1,4 +1,4 @@
-package com.example.expense_snap
+package hk.expense.snap
 
 import io.flutter.embedding.android.FlutterActivity
 

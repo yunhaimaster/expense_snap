@@ -418,9 +418,8 @@ class ExportService {
     required String extension,
   }) {
     final monthStr = month.toString().padLeft(2, '0');
-    // 加入時間戳避免檔名碰撞（同月多次匯出時會覆蓋）
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    return '報銷單_$year年$monthStr月_$timestamp.$extension';
+    // 簡化檔案名稱：報銷單_年月.副檔名
+    return '報銷單_$year年$monthStr月.$extension';
   }
 
   /// 生成收據圖片檔名

@@ -186,11 +186,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildPage(_OnboardingPage page, int index) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(height: 32),
           // 插圖（加入進場動畫）
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0.8, end: 1.0),
@@ -254,6 +255,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ],
+          const SizedBox(height: 32),
         ],
       ),
     );

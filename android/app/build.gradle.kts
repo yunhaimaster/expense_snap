@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -6,11 +8,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.expense_snap"
+    namespace = "hk.expense.snap"
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // 啟用 core library desugaring (flutter_local_notifications 需要)
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -20,7 +24,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.expense_snap"
+        applicationId = "hk.expense.snap"
         minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = flutter.versionCode
@@ -28,6 +32,23 @@ android {
 
         // 啟用 multidex 支援大型依賴
         multiDexEnabled = true
+    }
+
+    // Release 簽名設定
+    val keystorePropertiesFile = file("../key.properties")
+    val useReleaseKeystore = keystorePropertiesFile.exists()
+
+    signingConfigs {
+        if (useReleaseKeystore) {
+            create("release") {
+                val props = Properties()
+                props.load(keystorePropertiesFile.inputStream())
+                storeFile = file(props.getProperty("storeFile"))
+                storePassword = props.getProperty("storePassword")
+                keyAlias = props.getProperty("keyAlias")
+                keyPassword = props.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
@@ -42,28 +63,16 @@ android {
                 "proguard-rules.pro"
             )
 
-            // TODO: 正式發佈時配置簽名
-            // 1. 建立 key.properties 檔案（參見 key.properties.template）
-            // 2. 取消下方註解並移除 debug signingConfig
-            // signingConfig = signingConfigs.getByName("release")
-            signingConfig = signingConfigs.getByName("debug")
+            // 使用 Release 簽名（若有），否則 fallback 至 debug
+            signingConfig = if (useReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                // 開發環境沒有 key.properties 時使用 debug 簽名
+                println("⚠️ key.properties not found, using debug signing for release build")
+                signingConfigs.getByName("debug")
+            }
         }
     }
-
-    // 正式發佈時取消此區塊的註解
-    // signingConfigs {
-    //     create("release") {
-    //         val keystoreFile = file("../key.properties")
-    //         if (keystoreFile.exists()) {
-    //             val props = java.util.Properties()
-    //             props.load(keystoreFile.inputStream())
-    //             storeFile = file(props.getProperty("storeFile"))
-    //             storePassword = props.getProperty("storePassword")
-    //             keyAlias = props.getProperty("keyAlias")
-    //             keyPassword = props.getProperty("keyPassword")
-    //         }
-    //     }
-    // }
 }
 
 flutter {
@@ -73,4 +82,6 @@ flutter {
 dependencies {
     // Multidex 支援
     implementation("androidx.multidex:multidex:2.0.1")
+    // Core library desugaring (Java 8+ APIs on older Android)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

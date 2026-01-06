@@ -32,7 +32,7 @@ void main() {
     updatedAt: DateTime(2025, 1, 15),
   );
 
-  final testSummary = MonthSummary(
+  const testSummary = MonthSummary(
     year: 2025,
     month: 1,
     totalHkdAmountCents: 10000,

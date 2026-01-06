@@ -2,31 +2,22 @@
 # 執行: flutter pub run flutter_native_splash:create
 
 flutter_native_splash:
-  # 背景顏色（主色藍）
-  color: "#2196F3"
+  # 背景顏色（白色）
+  color: "#FFFFFF"
 
   # Splash Logo
-  image: assets/icon/splash_logo.png
-
-  # Logo 放置方式（預設居中）
-  # 用 android_gravity / ios_content_mode 控制
+  image: assets/icon/App_Icon.png
 
   # Android 12+ 設定
   android_12:
-    # 背景顏色
-    color: "#2196F3"
+    # 背景顏色（白色）
+    color: "#FFFFFF"
 
     # Icon（Android 12 用圓形裁切）
-    image: assets/icon/splash_logo.png
+    image: assets/icon/App_Icon.png
 
-    # Icon 背景色
-    icon_background_color: "#2196F3"
-
-    # 品牌圖片（底部，可選）
-    # branding: assets/icon/branding.png
+    # Icon 背景色（白色）
+    icon_background_color: "#FFFFFF"
 
   # 全屏模式（隱藏狀態列）
   fullscreen: false
-
-  # 保持 splash 直到手動移除
-  # android_disable_fullscreen: true

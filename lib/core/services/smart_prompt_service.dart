@@ -41,14 +41,14 @@ class SmartPromptService {
       'expenses',
       where: '''
         deleted_at IS NULL
-        AND hkd_amount_cents = ?
+        AND hkd_amount = ?
         AND date >= ?
         AND date <= ?
       ''',
       whereArgs: [
         hkdAmountCents,
-        startTime.millisecondsSinceEpoch,
-        endTime.millisecondsSinceEpoch,
+        startTime.toIso8601String(),
+        endTime.toIso8601String(),
       ],
       orderBy: 'date DESC',
       limit: 1,
@@ -122,20 +122,17 @@ class SmartPromptService {
   /// 取得當月支出數量
   Future<int> getCurrentMonthExpenseCount() async {
     final now = DateTime.now();
-    final startOfMonth = DateTime(now.year, now.month, 1);
-    final endOfMonth = DateTime(now.year, now.month + 1, 0, 23, 59, 59);
+    // 使用年月前綴匹配，避免時區差異問題
+    final monthStr = now.month.toString().padLeft(2, '0');
+    final yearMonthPrefix = '${now.year}-$monthStr';
 
     final db = await _db.database;
     final result = await db.rawQuery('''
       SELECT COUNT(*) as count
       FROM expenses
       WHERE deleted_at IS NULL
-        AND date >= ?
-        AND date <= ?
-    ''', [
-      startOfMonth.millisecondsSinceEpoch,
-      endOfMonth.millisecondsSinceEpoch,
-    ]);
+        AND substr(date, 1, 7) = ?
+    ''', [yearMonthPrefix]);
 
     return (result.first['count'] as int?) ?? 0;
   }
