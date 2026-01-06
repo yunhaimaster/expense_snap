@@ -9,16 +9,18 @@ This directory contains comprehensive documentation for the Expense Snap project
 | Document | Purpose | Audience |
 |----------|---------|----------|
 | [API.md](./API.md) | API reference for models, repositories, providers, services | Developers |
-| [KNOWLEDGE_BASE.md](./KNOWLEDGE_BASE.md) | Architecture, data flow, troubleshooting | Developers |
+| [KNOWLEDGE_BASE.md](./KNOWLEDGE_BASE.md) | Architecture, data flow, performance, troubleshooting | Developers |
+| [POLISH_PLAN.md](./POLISH_PLAN.md) | Polish phases 7-13 execution history (completed) | Historical |
 
 ## Related Files
 
 | File | Location | Purpose |
 |------|----------|---------|
 | [PROJECT_INDEX.md](../PROJECT_INDEX.md) | Root | AI-optimized codebase index (94% token reduction) |
-| [CLAUDE.md](../CLAUDE.md) | Root | AI assistant instructions |
+| [CLAUDE.md](../CLAUDE.md) | Root | AI assistant instructions & code conventions |
 | [README.md](../README.md) | Root | Project overview & getting started |
 | [openspec/](../openspec/) | Root | Feature specifications |
+| [.serena/memories/](../.serena/memories/) | Root | Cross-session context (Serena MCP) |
 
 ## Quick Links
 

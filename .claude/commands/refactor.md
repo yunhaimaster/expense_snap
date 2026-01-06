@@ -89,7 +89,7 @@ args: <action> <target> [options]
 
 ### Verification
 ✅ flutter analyze: 0 errors
-✅ flutter test: 188/188 passed
+✅ flutter test: 520/520 passed
 
 ### Git
 Changes staged. Run `git commit -m "refactor: rename ExpenseCard to ExpenseListItem"` to commit.

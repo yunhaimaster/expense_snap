@@ -126,7 +126,7 @@ test/
     └── semantics_test.dart
 ```
 
-**Test files**: 35 (不含 mocks)
+**Total tests**: 520+ (不含 mocks)
 
 ---
 
@@ -156,8 +156,8 @@ test/
 # 執行測試
 flutter test
 
-# 型別檢查
-npx tsc --noEmit  # (for Flutter, use: flutter analyze)
+# 靜態分析 & 型別檢查
+flutter analyze
 
 # 生成 Mocks
 dart run build_runner build --delete-conflicting-outputs

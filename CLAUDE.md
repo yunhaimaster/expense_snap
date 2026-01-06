@@ -3,12 +3,46 @@
 **First step for new sessions:** Read `PROJECT_INDEX.md` for codebase overview (94% token reduction vs full exploration).
 
 ## Quick Reference
-- **Architecture**: Clean Architecture + Provider
-- **Entry point**: `lib/main.dart`
-- **DI**: `lib/core/di/service_locator.dart` (`sl` global)
-- **Routes**: `lib/core/router/app_router.dart`
-- **Tests**: `flutter test`
-- **Type check**: `flutter analyze`
+
+| Item | Location |
+|------|----------|
+| **Architecture** | Clean Architecture + Provider |
+| **Entry point** | `lib/main.dart` |
+| **DI** | `lib/core/di/service_locator.dart` (`sl` global) |
+| **Routes** | `lib/core/router/app_router.dart` |
+| **Tests** | `flutter test` |
+| **Analyze** | `flutter analyze` |
+
+## Code Conventions
+
+### 金額處理
+- **金額以「分」儲存** - `amountCents = (dollars * 100).round()`
+- **匯率以 ×10⁶ 精度** - `storedRate = (rate * 1000000).round()`
+- 避免浮點誤差，所有計算使用整數
+
+### Error Handling
+- 使用 `Result<T>` pattern，不在 business logic 拋異常
+- `Result.success(value)` / `Result.failure(AppException(...))`
+- 用 `fold()` 處理結果
+
+### Provider Patterns
+- 用 `Selector` 替代 `Consumer` 減少 rebuild
+- `context.read<T>()` 用於事件處理
+- `context.watch<T>()` 用於 build
+
+### Widget Patterns
+- 使用 `const` constructors
+- 長列表用 `ListView.builder`
+- 效能敏感區域加 `RepaintBoundary`
+
+## Pre-commit Checklist
+```bash
+flutter analyze && flutter test
+```
+
+## Cross-session Context
+- `.serena/memories/` - 歷史 session 記錄
+- `.serena/memories/project-context.md` - 專案背景
 
 ---
 

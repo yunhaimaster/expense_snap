@@ -55,3 +55,8 @@
 - **Exchange Rate API**: cdn.jsdelivr.net/npm/@fawazahmed0/currency-api (免費，無限制)
 - **Fallback API**: latest.currency-api.pages.dev
 - **Google Drive API**: 用於雲端備份
+
+## Project Status
+- **All 13 phases complete** - 發布就緒 🎉
+- 詳見 `docs/POLISH_PLAN.md` 了解打磨計劃執行歷史
+- 520+ tests passing

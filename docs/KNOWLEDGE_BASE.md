@@ -10,6 +10,7 @@
 | Image Processing | [#image-processing](#image-processing) |
 | Error Handling | [#error-handling](#error-handling) |
 | Testing | [#testing](#testing) |
+| Performance | [#performance-optimization](#performance-optimization) |
 | Troubleshooting | [#troubleshooting](#troubleshooting) |
 
 ---
@@ -262,6 +263,50 @@ void main() {
   });
 }
 ```
+
+---
+
+## Performance Optimization
+
+### Provider Rebuild 優化
+
+```dart
+// ❌ 避免：整個 widget 隨任何變更 rebuild
+Consumer<ExpenseProvider>(
+  builder: (_, provider, __) => Text(provider.total),
+)
+
+// ✅ 建議：只監聽需要的屬性
+Selector<ExpenseProvider, String>(
+  selector: (_, p) => p.formattedTotal,
+  builder: (_, total, __) => Text(total),
+)
+```
+
+### RepaintBoundary 使用
+
+```dart
+// 列表項目加入 RepaintBoundary 避免整個列表重繪
+RepaintBoundary(
+  child: ExpenseCard(expense: expense),
+)
+```
+
+### LRU Cache 配置
+
+```dart
+// 圖片縮圖快取 (lib/core/utils/lru_cache.dart)
+final thumbnailCache = LruCache<String, Uint8List>(
+  maxSize: 50,  // 最多 50 張縮圖
+);
+```
+
+### 關鍵效能指標
+| 指標 | 目標 | 實際 |
+|------|------|------|
+| 冷啟動 | < 2s | ✅ |
+| 列表滾動 | 60fps | ✅ |
+| 記憶體洩漏 | 0 | ✅ |
 
 ---
 

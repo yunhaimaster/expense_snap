@@ -34,7 +34,9 @@
 
 ## Screenshots
 
-> TODO: Add screenshots
+<p align="center">
+  <i>Coming soon - App screenshots will be added here</i>
+</p>
 
 ---
 
@@ -195,13 +197,13 @@ flutter test --reporter expanded
 
 ### Test Coverage
 
-| Category | Files |
-|----------|-------|
-| Unit Tests | 15 |
-| Widget Tests | 14 |
-| Integration Tests | 3 |
-| Accessibility Tests | 1 |
-| **Total** | **35** |
+| Category | Description |
+|----------|-------------|
+| Unit Tests | Core logic, repositories, services, utilities |
+| Widget Tests | Screens, providers, common widgets |
+| Integration Tests | End-to-end flows |
+| Accessibility Tests | Semantics validation |
+| **Total** | **520+ tests** |
 
 ---
 

@@ -44,7 +44,7 @@ args: [path] [--coverage] [--watch]
 ## 輸出格式
 
 ```
-✅ 188/188 tests passed
+✅ 520/520 tests passed
 📊 Coverage: 82.5%
 
 低覆蓋率檔案：
