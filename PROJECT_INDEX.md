@@ -6,7 +6,7 @@ Generated: 2026-01-06
 
 **員工報銷收據記錄 App** - Flutter 應用程式，支援即時拍照記錄支出、多幣種自動轉換、月結匯出 Excel 報銷單
 
-- **Version**: 1.0.0+1
+- **Version**: 1.1.0
 - **SDK**: Flutter 3.10.4+
 - **Architecture**: Clean Architecture + Provider
 - **Language**: Dart, 繁體中文 UI
@@ -43,7 +43,7 @@ lib/
     ├── export_service.dart      # Excel 匯出
     ├── image_service.dart       # 圖片處理
     ├── ocr_service.dart         # OCR 文字識別 (ML Kit)
-    └── receipt_parser.dart      # 收據解析 (幣別/金額/描述)
+    └── receipt_parser.dart      # 收據解析 (幣別/金額/描述/日期)
 ```
 
 ---
@@ -183,7 +183,7 @@ flutter build apk --release
 
 1. **支出管理** - CRUD、軟刪除、30天自動清理
 2. **收據拍照** - 壓縮儲存、縮圖快取
-3. **收據 OCR** - 離線文字識別、自動提取幣別/金額/描述
+3. **收據 OCR** - 離線文字識別、自動提取幣別/金額/描述/日期
 4. **多幣種轉換** - 即時匯率 API、離線快取
 5. **Excel 匯出** - 月結報銷單、圖片附件
 6. **雲端備份** - Google Drive 同步

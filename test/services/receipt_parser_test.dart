@@ -21,6 +21,10 @@ void main() {
         const ReceiptParseResult(description: 'Test').hasData,
         isTrue,
       );
+      expect(
+        ReceiptParseResult(date: DateTime(2024, 1, 15)).hasData,
+        isTrue,
+      );
     });
 
     test('hasData returns false when no field is set', () {
@@ -450,6 +454,114 @@ void main() {
     });
   });
 
+  group('DateExtractor', () {
+    // 使用動態日期確保測試在任何時間都能通過
+    final now = DateTime.now();
+    final validYear = now.year;
+    final validMonth = now.month > 1 ? now.month - 1 : 12;
+    final adjustedYear = now.month > 1 ? validYear : validYear - 1;
+
+    test('extracts yyyy-MM-dd format', () {
+      final text = _createRecognizedText('日期: $adjustedYear-${validMonth.toString().padLeft(2, '0')}-15\nTotal: 100.00');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNotNull);
+      expect(result!.year, adjustedYear);
+      expect(result.month, validMonth);
+      expect(result.day, 15);
+    });
+
+    test('extracts yyyy/MM/dd format', () {
+      final text = _createRecognizedText('Date: $adjustedYear/${validMonth.toString().padLeft(2, '0')}/20');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNotNull);
+      expect(result!.year, adjustedYear);
+      expect(result.month, validMonth);
+      expect(result.day, 20);
+    });
+
+    test('extracts Chinese date format yyyy年M月d日', () {
+      final text = _createRecognizedText('$adjustedYear年${validMonth}月5日');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNotNull);
+      expect(result!.year, adjustedYear);
+      expect(result.month, validMonth);
+      expect(result.day, 5);
+    });
+
+    test('extracts dd/MM/yyyy format', () {
+      final text = _createRecognizedText('15/${validMonth.toString().padLeft(2, '0')}/$adjustedYear');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNotNull);
+      expect(result!.year, adjustedYear);
+      expect(result.month, validMonth);
+      expect(result.day, 15);
+    });
+
+    test('returns null for invalid month', () {
+      final text = _createRecognizedText('$validYear-13-01');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNull);
+    });
+
+    test('returns null for invalid day', () {
+      final text = _createRecognizedText('$validYear-01-32');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNull);
+    });
+
+    test('returns null for Feb 30 (invalid date)', () {
+      final text = _createRecognizedText('$validYear-02-30');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNull);
+    });
+
+    test('returns null for future date', () {
+      final futureYear = now.year + 2;
+      final text = _createRecognizedText('$futureYear-06-15');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNull);
+    });
+
+    test('returns null for date more than 1 year ago', () {
+      final oldYear = now.year - 2;
+      final text = _createRecognizedText('$oldYear-01-01');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNull);
+    });
+
+    test('returns null for empty text', () {
+      final text = _createRecognizedText('');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNull);
+    });
+
+    test('returns null for text without date', () {
+      final text = _createRecognizedText('Store Name\nTotal: 100.00');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNull);
+    });
+
+    test('handles single digit month and day', () {
+      final text = _createRecognizedText('$adjustedYear-$validMonth-5');
+      final result = DateExtractor.extract(text);
+
+      expect(result, isNotNull);
+      expect(result!.month, validMonth);
+      expect(result.day, 5);
+    });
+  });
+
   group('ReceiptParser integration', () {
     test('parses complete receipt', () {
       final text = _createRecognizedTextMultiBlock([
@@ -515,6 +627,28 @@ void main() {
 
       expect(result.currency, 'USD');
       expect(result.amountCents, 550);
+    });
+
+    test('parses receipt with date', () {
+      // 使用動態日期確保在有效範圍內
+      final now = DateTime.now();
+      final validMonth = now.month > 1 ? now.month - 1 : 12;
+      final adjustedYear = now.month > 1 ? now.year : now.year - 1;
+
+      final text = _createRecognizedTextMultiBlock([
+        _TextBlockData('大家樂快餐店', top: 0, bottom: 50),
+        _TextBlockData('$adjustedYear-${validMonth.toString().padLeft(2, '0')}-15 12:30', top: 60, bottom: 100),
+        _TextBlockData('Total HKD 68.00', top: 150, bottom: 200),
+      ]);
+
+      final parser = ReceiptParser(defaultCurrency: 'HKD');
+      final result = parser.parse(text);
+
+      expect(result.date, isNotNull);
+      expect(result.date!.year, adjustedYear);
+      expect(result.date!.month, validMonth);
+      expect(result.date!.day, 15);
+      expect(result.confidence, greaterThan(0.5));
     });
   });
 }

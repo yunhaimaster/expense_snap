@@ -6,6 +6,7 @@ import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../domain/repositories/backup_repository.dart' show BackupInfo;
+import '../../providers/expense_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/common/skeleton.dart';
@@ -403,6 +404,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
       },
       onSuccess: (_) {
+        // 刷新支出列表
+        context.read<ExpenseProvider>().refresh();
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('還原成功'),

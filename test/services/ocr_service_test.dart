@@ -27,8 +27,9 @@ void main() {
       customService.dispose();
     });
 
-    test('default timeout is 5 seconds', () {
-      expect(ocrService.timeoutDuration, const Duration(seconds: 5));
+    test('default timeout is 10 seconds', () {
+      // 中文模型較慢，預設 10 秒
+      expect(ocrService.timeoutDuration, const Duration(seconds: 10));
     });
 
     test('dispose completes without error', () async {

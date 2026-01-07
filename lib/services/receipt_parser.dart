@@ -6,6 +6,7 @@ class ReceiptParseResult {
     this.currency,
     this.amountCents,
     this.description,
+    this.date,
     this.confidence = 0.0,
   });
 
@@ -18,16 +19,20 @@ class ReceiptParseResult {
   /// 店名/描述
   final String? description;
 
+  /// 識別到的日期
+  final DateTime? date;
+
   /// 整體信心分數 0-1
   final double confidence;
 
   /// 是否有識別到任何資訊
-  bool get hasData => currency != null || amountCents != null || description != null;
+  bool get hasData =>
+      currency != null || amountCents != null || description != null || date != null;
 
   @override
   String toString() {
     return 'ReceiptParseResult(currency: $currency, amountCents: $amountCents, '
-        'description: $description, confidence: ${confidence.toStringAsFixed(2)})';
+        'description: $description, date: $date, confidence: ${confidence.toStringAsFixed(2)})';
   }
 }
 
@@ -50,6 +55,7 @@ class ReceiptParser {
     final currency = CurrencyDetector.detect(text, defaultCurrency);
     final amountResult = AmountExtractor.extract(text);
     final description = DescriptionExtractor.extract(text);
+    final date = DateExtractor.extract(text);
 
     // 計算整體信心分數
     double confidence = 0.0;
@@ -67,6 +73,10 @@ class ReceiptParser {
       confidence += 0.7;
       factors++;
     }
+    if (date != null) {
+      confidence += 0.8;
+      factors++;
+    }
 
     final avgConfidence = factors > 0 ? confidence / factors : 0.0;
 
@@ -74,6 +84,7 @@ class ReceiptParser {
       currency: currency.code,
       amountCents: amountResult?.cents,
       description: description,
+      date: date,
       confidence: avgConfidence,
     );
   }
@@ -297,31 +308,61 @@ class AmountExtractor {
 class DescriptionExtractor {
   DescriptionExtractor._();
 
-  /// 店名關鍵字
+  /// 店名關鍵字（擴充版）
   static final _storeKeywords = RegExp(
-    r'店|餐廳|餐厅|公司|商店|超市|酒樓|酒楼|'
-    r'商場|商场|百貨|百货|便利店|茶餐廳|茶餐厅|'
-    r'Restaurant|Store|Shop|Market|Mall|Co\.|Ltd',
+    // 餐飲
+    r'餐廳|餐厅|茶餐廳|茶餐厅|酒樓|酒楼|飯店|饭店|食堂|'
+    r'咖啡|Cafe|Coffee|麵包|面包|Bakery|麥當勞|麦当劳|肯德基|星巴克|'
+    // 零售
+    r'店|商店|超市|便利店|7-?Eleven|OK便利|惠康|百佳|AEON|'
+    r'商場|商场|百貨|百货|Mall|Plaza|Center|Centre|'
+    // 公司
+    r'公司|有限|Co\.|Ltd|Corp|Inc|'
+    // 服務
+    r'藥房|药房|診所|诊所|醫院|医院|理髮|理发|美容|'
+    // 交通
+    r'的士|出租車|Taxi|Uber|港鐵|地鐵|巴士|'
+    // 英文
+    r'Restaurant|Store|Shop|Market|Hotel|Motel',
+    caseSensitive: false,
+  );
+
+  /// 商品/服務關鍵字（用於提取項目描述）
+  static final _itemKeywords = RegExp(
+    r'午餐|晚餐|早餐|套餐|飲料|飲品|咖啡|奶茶|'
+    r'車費|車票|機票|住宿|酒店|'
+    r'文具|辦公|電腦|手機|'
+    r'Lunch|Dinner|Breakfast|Meal|Coffee|Tea',
     caseSensitive: false,
   );
 
   /// 需要過濾的內容
   static final _filterPatterns = [
-    // 地址（避免誤判超市、公司等）
-    RegExp(r'地址|Address|號$|号$|\d+樓|\d+楼|路$|街$|道中|道西|道東|大道', caseSensitive: false),
+    // 地址
+    RegExp(r'地址|Address|號$|号$|\d+樓|\d+楼|路$|街$|道$|大道|大廈|大厦', caseSensitive: false),
     // 電話
-    RegExp(r'電話|电话|Tel|Phone', caseSensitive: false),
+    RegExp(r'電話|电话|Tel|Phone|Fax|\d{8,}', caseSensitive: false),
     // 日期時間
     RegExp(r'\d{4}[-/年]\d{1,2}[-/月]|\d{1,2}:\d{2}'),
     // 收據編號
-    RegExp(r'單號|单号|Invoice|Receipt No', caseSensitive: false),
+    RegExp(r'單號|单号|Invoice|Receipt|Order|訂單|编号|編號', caseSensitive: false),
     // 金額相關
-    RegExp(r'總計|总计|Total|Amount|小計|小计|￥|¥|\$\d', caseSensitive: false),
+    RegExp(r'總計|总计|Total|Amount|小計|小计|合計|应付|應付|找續|找赎', caseSensitive: false),
+    // 付款方式
+    RegExp(r'現金|现金|Cash|信用卡|Credit|Visa|Master|八達通|支付寶|微信', caseSensitive: false),
+    // 常見無意義內容
+    RegExp(r'歡迎光臨|欢迎光临|謝謝|谢谢|Thank|Welcome|多謝|再見', caseSensitive: false),
+    // 純數字行
+    RegExp(r'^\d+$'),
+    // 稅務相關
+    RegExp(r'稅|税|VAT|GST', caseSensitive: false),
   ];
 
-  /// 提取描述（店名）
+  /// 提取描述（店名或商品項目）
   ///
-  /// 策略：收據頂部文字，過濾非店名內容
+  /// 策略：
+  /// 1. 優先找收據頂部的店名
+  /// 2. 若找不到店名，嘗試找商品項目
   static String? extract(RecognizedText text) {
     if (text.blocks.isEmpty) return null;
 
@@ -329,33 +370,48 @@ class DescriptionExtractor {
     final sortedBlocks = List<TextBlock>.from(text.blocks)
       ..sort((a, b) => a.boundingBox.top.compareTo(b.boundingBox.top));
 
-    // 檢查前 3 個區塊
+    // 第一輪：找店名（頂部，含關鍵字）
+    for (var i = 0; i < sortedBlocks.length && i < 4; i++) {
+      final block = sortedBlocks[i];
+
+      for (final line in block.lines) {
+        final lineText = line.text.trim();
+
+        if (!_isValidCandidate(lineText)) continue;
+        if (_shouldFilter(lineText)) continue;
+
+        // 優先選擇包含店名關鍵字的
+        if (_storeKeywords.hasMatch(lineText)) {
+          return _cleanDescription(lineText);
+        }
+      }
+    }
+
+    // 第二輪：找有意義的文字（頂部，非數字為主）
     for (var i = 0; i < sortedBlocks.length && i < 3; i++) {
       final block = sortedBlocks[i];
 
       for (final line in block.lines) {
         final lineText = line.text.trim();
 
-        // 跳過太短或太長的文字
-        if (lineText.length < 2 || lineText.length > 50) continue;
+        if (!_isValidCandidate(lineText)) continue;
+        if (_shouldFilter(lineText)) continue;
 
-        // 檢查是否需要過濾
-        bool shouldFilter = false;
-        for (final pattern in _filterPatterns) {
-          if (pattern.hasMatch(lineText)) {
-            shouldFilter = true;
-            break;
-          }
-        }
-        if (shouldFilter) continue;
-
-        // 優先選擇包含店名關鍵字的
-        if (_storeKeywords.hasMatch(lineText)) {
+        if (_isLikelyStoreName(lineText)) {
           return _cleanDescription(lineText);
         }
+      }
+    }
 
-        // 若沒有關鍵字但是純文字（非數字為主），也可考慮
-        if (_isLikelyStoreName(lineText)) {
+    // 第三輪：找商品/服務項目（中間區域）
+    for (final block in sortedBlocks) {
+      for (final line in block.lines) {
+        final lineText = line.text.trim();
+
+        if (!_isValidCandidate(lineText)) continue;
+        if (_shouldFilter(lineText)) continue;
+
+        if (_itemKeywords.hasMatch(lineText)) {
           return _cleanDescription(lineText);
         }
       }
@@ -364,24 +420,168 @@ class DescriptionExtractor {
     return null;
   }
 
+  /// 檢查是否為有效候選
+  static bool _isValidCandidate(String text) {
+    return text.length >= 2 && text.length <= 50;
+  }
+
+  /// 檢查是否需要過濾
+  static bool _shouldFilter(String text) {
+    for (final pattern in _filterPatterns) {
+      if (pattern.hasMatch(text)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /// 判斷是否像店名
   static bool _isLikelyStoreName(String text) {
-    // 數字佔比不超過 30%
+    // 數字佔比不超過 25%
     final digits = text.replaceAll(RegExp(r'[^\d]'), '').length;
     final ratio = digits / text.length;
-    return ratio < 0.3;
+
+    // 至少包含 2 個中文字或 4 個英文字母
+    final hasChineseChars = RegExp(r'[\u4e00-\u9fa5]{2,}').hasMatch(text);
+    final hasEnglishWords = RegExp(r'[a-zA-Z]{4,}').hasMatch(text);
+
+    return ratio < 0.25 && (hasChineseChars || hasEnglishWords);
   }
 
   /// 清理描述文字
   static String _cleanDescription(String text) {
-    // 移除多餘空白
-    var cleaned = text.replaceAll(RegExp(r'\s+'), ' ').trim();
+    // 移除多餘空白和特殊符號
+    var cleaned = text
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAll(RegExp(r'^[*#\-_=]+|[*#\-_=]+$'), '')
+        .trim();
+
+    // 移除括號內的地址/電話
+    cleaned = cleaned.replaceAll(RegExp(r'\([^)]*\d{6,}[^)]*\)'), '');
+    cleaned = cleaned.replaceAll(RegExp(r'（[^）]*\d{6,}[^）]*）'), '');
 
     // 限制長度
     if (cleaned.length > 30) {
-      cleaned = '${cleaned.substring(0, 30)}...';
+      cleaned = '${cleaned.substring(0, 27)}...';
     }
 
-    return cleaned;
+    return cleaned.trim();
+  }
+}
+
+/// 日期格式順序
+enum _DateOrder { ymd, dmy, mdy }
+
+/// 日期模式配置
+class _DatePattern {
+  const _DatePattern(this.pattern, this.order, {this.twoDigitYear = false});
+  final RegExp pattern;
+  final _DateOrder order;
+  final bool twoDigitYear;
+}
+
+/// 日期提取器
+class DateExtractor {
+  DateExtractor._();
+
+  /// 日期格式正則（使用結構化配置，避免字串比對）
+  /// 支援：2024-01-15, 2024/01/15, 2024年1月15日, 15/01/2024
+  static final _datePatterns = [
+    // yyyy-MM-dd 或 yyyy/MM/dd（ISO 格式，最常見）
+    _DatePattern(
+      RegExp(r'(\d{4})[-/](\d{1,2})[-/](\d{1,2})'),
+      _DateOrder.ymd,
+    ),
+    // yyyy年M月d日（中文格式）
+    _DatePattern(
+      RegExp(r'(\d{4})年(\d{1,2})月(\d{1,2})日?'),
+      _DateOrder.ymd,
+    ),
+    // dd/MM/yyyy 或 dd-MM-yyyy（歐洲/亞洲格式，日在前）
+    _DatePattern(
+      RegExp(r'(\d{1,2})[-/](\d{1,2})[-/](\d{4})'),
+      _DateOrder.dmy,
+    ),
+    // MM/dd/yy（美式兩位年份）
+    _DatePattern(
+      RegExp(r'(\d{1,2})[-/](\d{1,2})[-/](\d{2})(?!\d)'),
+      _DateOrder.mdy,
+      twoDigitYear: true,
+    ),
+  ];
+
+  /// 提取日期
+  ///
+  /// 搜尋收據中的日期，返回最可能的日期
+  /// 注意：對於 dd/MM/yyyy 與 MM/dd/yyyy 的歧義，預設採用 dd/MM/yyyy（亞洲慣例）
+  static DateTime? extract(RecognizedText text) {
+    final fullText = text.text;
+    final now = DateTime.now();
+
+    // 嘗試各種日期格式（按優先順序）
+    for (final config in _datePatterns) {
+      final matches = config.pattern.allMatches(fullText);
+
+      for (final match in matches) {
+        final date = _parseMatch(match, config);
+        if (date != null && _isReasonableDate(date, now)) {
+          return date;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /// 解析匹配結果為日期
+  static DateTime? _parseMatch(RegExpMatch match, _DatePattern config) {
+    try {
+      int year, month, day;
+
+      // 根據配置的順序解析
+      switch (config.order) {
+        case _DateOrder.ymd:
+          year = int.parse(match.group(1)!);
+          month = int.parse(match.group(2)!);
+          day = int.parse(match.group(3)!);
+        case _DateOrder.dmy:
+          day = int.parse(match.group(1)!);
+          month = int.parse(match.group(2)!);
+          year = int.parse(match.group(3)!);
+        case _DateOrder.mdy:
+          month = int.parse(match.group(1)!);
+          day = int.parse(match.group(2)!);
+          year = int.parse(match.group(3)!);
+      }
+
+      // 兩位年份轉換（00-99 → 2000-2099 或 1900-1999）
+      if (config.twoDigitYear && year < 100) {
+        // 假設 00-50 為 2000-2050，51-99 為 1951-1999
+        year += year <= 50 ? 2000 : 1900;
+      }
+
+      // 基本範圍驗證
+      if (month < 1 || month > 12) return null;
+      if (day < 1 || day > 31) return null;
+
+      // 建構日期並驗證（DateTime 會自動正規化無效日期如 Feb 30 → Mar 2）
+      final date = DateTime(year, month, day);
+
+      // 驗證日期未被正規化（表示輸入的日/月有效）
+      if (date.year != year || date.month != month || date.day != day) {
+        return null; // 無效日期如 Feb 30
+      }
+
+      return date;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// 檢查日期是否合理（不超過今天，不早於一年前）
+  static bool _isReasonableDate(DateTime date, DateTime now) {
+    final today = DateTime(now.year, now.month, now.day);
+    final oneYearAgo = today.subtract(const Duration(days: 365));
+    return !date.isAfter(today) && date.isAfter(oneYearAgo);
   }
 }

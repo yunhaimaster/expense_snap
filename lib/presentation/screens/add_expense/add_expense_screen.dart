@@ -479,6 +479,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               _amountController.text = Formatters.formatCurrency(amountDollars);
             }
 
+            // 日期
+            if (parsed.date != null) {
+              _selectedDate = parsed.date!;
+            }
+
             // 描述
             if (parsed.description != null && parsed.description!.isNotEmpty) {
               _descriptionController.text = parsed.description!;
