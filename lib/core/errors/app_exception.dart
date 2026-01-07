@@ -191,3 +191,16 @@ class ImageException extends AppException {
   factory ImageException.corrupted() =>
       const ImageException('圖片已損壞', code: 'CORRUPTED');
 }
+
+/// OCR 文字識別相關異常
+class OcrException extends AppException {
+  const OcrException(super.message, {super.code});
+
+  /// 識別超時
+  factory OcrException.timeout() =>
+      const OcrException('文字識別超時', code: 'OCR_TIMEOUT');
+
+  /// 無法識別文字
+  factory OcrException.noTextFound() =>
+      const OcrException('無法識別文字', code: 'NO_TEXT_FOUND');
+}

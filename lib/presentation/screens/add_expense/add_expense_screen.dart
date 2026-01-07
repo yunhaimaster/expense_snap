@@ -3,11 +3,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../core/constants/currency_constants.dart';
+import '../../../core/di/service_locator.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/animation_utils.dart';
+import '../../../core/utils/app_logger.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../services/receipt_parser.dart';
 import '../../providers/exchange_rate_provider.dart';
 import '../../providers/expense_provider.dart';
 import '../../widgets/common/loading_overlay.dart';
@@ -38,6 +42,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   String? _selectedImagePath;
   bool _isLoading = false;
   bool _useManualRate = false;
+  bool _isProcessingOcr = false;
 
   // 當前匯率資訊
   int _currentRateMicros = CurrencyConstants.ratePrecision;
@@ -145,13 +150,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
                 const SizedBox(height: 16),
 
-                // 金額
-                AmountInput(
-                  controller: _amountController,
-                  label: '金額',
-                  suffix: _selectedCurrency,
-                  autofocus: true,
-                ),
+                // 金額（含 OCR 識別中的 shimmer 效果）
+                _isProcessingOcr
+                    ? _buildOcrShimmer(label: '金額')
+                    : AmountInput(
+                        controller: _amountController,
+                        label: '金額',
+                        suffix: _selectedCurrency,
+                        autofocus: true,
+                      ),
 
                 const SizedBox(height: 16),
 
@@ -227,10 +234,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   const SizedBox(height: 16),
                 ],
 
-                // 描述（含自動完成）
-                DescriptionAutocomplete(
-                  controller: _descriptionController,
-                ),
+                // 描述（含自動完成、OCR 識別中的 shimmer 效果）
+                _isProcessingOcr
+                    ? _buildOcrShimmer(label: '描述')
+                    : DescriptionAutocomplete(
+                        controller: _descriptionController,
+                      ),
 
                 const SizedBox(height: 32),
               ],
@@ -307,6 +316,49 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     );
   }
 
+  /// 建立 OCR 處理中的 shimmer 效果
+  Widget _buildOcrShimmer({required String label}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: AppColors.textSecondary,
+              ),
+        ),
+        const SizedBox(height: 8),
+        Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.divider),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  const Icon(Icons.document_scanner, size: 20),
+                  const SizedBox(width: 12),
+                  Text(
+                    '正在識別收據...',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildConversionPreview() {
     final amount = double.tryParse(_amountController.text) ?? 0;
     final rate = double.tryParse(_exchangeRateController.text) ?? 1;
@@ -358,6 +410,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         // 觸覺回饋 - 成功拍照
         AnimationUtils.lightImpact();
         setState(() => _selectedImagePath = path);
+        // 執行 OCR 識別
+        _processOcr(path);
       },
     );
   }
@@ -374,8 +428,83 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       },
       onSuccess: (path) {
         setState(() => _selectedImagePath = path);
+        // 執行 OCR 識別
+        _processOcr(path);
       },
     );
+  }
+
+  /// 執行 OCR 識別並填入表單
+  Future<void> _processOcr(String imagePath) async {
+    if (!mounted) return;
+
+    setState(() => _isProcessingOcr = true);
+
+    try {
+      // 執行 OCR
+      final ocrService = sl.ocrService;
+      final result = await ocrService.recognizeText(imagePath);
+
+      if (!mounted) return;
+
+      result.fold(
+        onFailure: (error) {
+          // 靜默失敗，用戶可手動輸入
+          AppLogger.warning('OCR failed: ${error.message}');
+        },
+        onSuccess: (recognizedText) {
+          // 解析收據內容
+          final parser = ReceiptParser(
+            defaultCurrency: _selectedCurrency,
+          );
+          final parsed = parser.parse(recognizedText);
+
+          AppLogger.info('OCR parsed: $parsed');
+
+          if (!mounted) return;
+
+          // 自動填入表單
+          setState(() {
+            // 幣別
+            if (parsed.currency != null &&
+                CurrencyConstants.supportedCurrencies.contains(parsed.currency)) {
+              _selectedCurrency = parsed.currency!;
+              _updateDefaultExchangeRate();
+              _loadExchangeRate();
+            }
+
+            // 金額（轉換為元顯示）
+            if (parsed.amountCents != null) {
+              final amountDollars = parsed.amountCents! / 100;
+              _amountController.text = Formatters.formatCurrency(amountDollars);
+            }
+
+            // 描述
+            if (parsed.description != null && parsed.description!.isNotEmpty) {
+              _descriptionController.text = parsed.description!;
+            }
+          });
+
+          // 顯示 OCR 識別結果提示
+          if (parsed.hasData && mounted) {
+            AnimationUtils.lightImpact();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  '已自動識別收據內容'
+                  '${parsed.confidence >= 0.7 ? '' : '，請確認是否正確'}',
+                ),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        },
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isProcessingOcr = false);
+      }
+    }
   }
 
   Future<void> _saveExpense() async {

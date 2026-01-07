@@ -41,7 +41,9 @@ lib/
 └── services/                    # 應用服務
     ├── background_service.dart  # 背景任務 (WorkManager)
     ├── export_service.dart      # Excel 匯出
-    └── image_service.dart       # 圖片處理
+    ├── image_service.dart       # 圖片處理
+    ├── ocr_service.dart         # OCR 文字識別 (ML Kit)
+    └── receipt_parser.dart      # 收據解析 (幣別/金額/描述)
 ```
 
 ---
@@ -121,12 +123,14 @@ test/
 ├── services/                    # 服務測試
 │   ├── background_service_test.dart
 │   ├── export_service_test.dart
-│   └── image_service_test.dart
+│   ├── image_service_test.dart
+│   ├── ocr_service_test.dart
+│   └── receipt_parser_test.dart
 └── accessibility/               # 無障礙測試
     └── semantics_test.dart
 ```
 
-**Total tests**: 520+ (不含 mocks)
+**Total tests**: 580+ (不含 mocks)
 
 ---
 
@@ -147,6 +151,7 @@ test/
 | `flutter_image_compress` | 圖片壓縮 |
 | `showcaseview` | 功能發現提示 |
 | `flutter_local_notifications` | 本地通知 |
+| `google_mlkit_text_recognition` | 離線 OCR 文字識別 |
 
 ---
 
@@ -178,12 +183,13 @@ flutter build apk --release
 
 1. **支出管理** - CRUD、軟刪除、30天自動清理
 2. **收據拍照** - 壓縮儲存、縮圖快取
-3. **多幣種轉換** - 即時匯率 API、離線快取
-4. **Excel 匯出** - 月結報銷單、圖片附件
-5. **雲端備份** - Google Drive 同步
-6. **離線支援** - 本地優先、網路恢復同步
-7. **深色模式** - 系統/手動切換
-8. **無障礙** - Semantics、對比度優化
+3. **收據 OCR** - 離線文字識別、自動提取幣別/金額/描述
+4. **多幣種轉換** - 即時匯率 API、離線快取
+5. **Excel 匯出** - 月結報銷單、圖片附件
+6. **雲端備份** - Google Drive 同步
+7. **離線支援** - 本地優先、網路恢復同步
+8. **深色模式** - 系統/手動切換
+9. **無障礙** - Semantics、對比度優化
 
 ---
 

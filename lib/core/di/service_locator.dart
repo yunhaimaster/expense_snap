@@ -5,6 +5,7 @@ import '../../data/repositories/exchange_rate_repository.dart';
 import '../../data/repositories/expense_repository.dart';
 import '../../domain/repositories/expense_repository.dart';
 import '../../services/image_service.dart';
+import '../../services/ocr_service.dart';
 import '../utils/app_logger.dart';
 import '../utils/path_validator.dart';
 
@@ -27,6 +28,7 @@ class ServiceLocator {
 
   // 應用服務
   late ImageService _imageService;
+  OcrService? _ocrService; // 延遲初始化，只在使用時建立
 
   // Repositories
   late ExpenseRepository _expenseRepository;
@@ -49,6 +51,14 @@ class ServiceLocator {
   ImageService get imageService {
     _ensureInitialized();
     return _imageService;
+  }
+
+  /// OCR 文字識別服務（延遲初始化）
+  ///
+  /// 只在第一次訪問時建立，避免未使用時佔用資源
+  OcrService get ocrService {
+    _ensureInitialized();
+    return _ocrService ??= OcrService();
   }
 
   /// 支出 Repository（介面）
@@ -97,6 +107,7 @@ class ServiceLocator {
 
     // 初始化應用服務
     _imageService = ImageService();
+    // OcrService 採用延遲初始化，不在此處建立
 
     // 初始化 Repositories（依賴注入）
     _expenseRepository = ExpenseRepository(
@@ -128,6 +139,11 @@ class ServiceLocator {
   /// 重置（僅用於測試）
   Future<void> reset() async {
     if (_initialized) {
+      // 只有在 OcrService 已建立時才 dispose
+      if (_ocrService != null) {
+        await _ocrService!.dispose();
+        _ocrService = null;
+      }
       await _databaseHelper.close();
       _initialized = false;
       AppLogger.info('ServiceLocator reset');
