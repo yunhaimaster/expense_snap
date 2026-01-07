@@ -79,7 +79,7 @@ We may update this privacy policy from time to time. We will notify you of any c
 
 If you have any questions about this Privacy Policy, please contact us at:
 
-**Email**: [your-email@example.com]
+**Email**: yunhaimaster@gmail.com
 
 ---
 
