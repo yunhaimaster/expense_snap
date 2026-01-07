@@ -2,7 +2,7 @@ name: expense_snap
 description: "員工報銷收據記錄 App - 即時拍照記錄支出，支援多幣種自動轉換，月結匯出 Excel 報銷單"
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.1.0+2
 
 environment:
   sdk: ^3.10.4

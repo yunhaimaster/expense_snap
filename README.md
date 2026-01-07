@@ -1,7 +1,7 @@
 # Expense Snap (支出易)
 
 <p align="center">
-  <img src="assets/icon/icon.png" width="128" height="128" alt="Expense Snap Logo">
+  <img src="assets/icon/App_Icon.png" width="128" height="128" alt="Expense Snap Logo">
 </p>
 
 <p align="center">
@@ -23,6 +23,7 @@
 | Feature | Description |
 |---------|-------------|
 | 📸 **即影即記** | 拍照或選圖記錄收據，自動壓縮儲存 |
+| 🔍 **智能 OCR** | 離線文字識別，自動提取幣別、金額、店名 |
 | 💱 **自動換算** | 支援 HKD/CNY/USD，即時匯率轉換港幣 |
 | 📊 **Excel 匯出** | 月結報銷單 + 收據圖片 ZIP 打包 |
 | ☁️ **雲端備份** | Google Drive 安全同步 |
@@ -80,6 +81,7 @@
 | **Local Database** | sqflite |
 | **HTTP Client** | Dio |
 | **Image Processing** | flutter_image_compress |
+| **OCR** | Google ML Kit Text Recognition |
 | **Export** | excel + archive |
 | **Cloud Backup** | Google Sign-In + Drive API |
 | **Security** | flutter_secure_storage |
@@ -203,7 +205,7 @@ flutter test --reporter expanded
 | Widget Tests | Screens, providers, common widgets |
 | Integration Tests | End-to-end flows |
 | Accessibility Tests | Semantics validation |
-| **Total** | **520+ tests** |
+| **Total** | **580+ tests** |
 
 ---
 
