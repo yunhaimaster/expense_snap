@@ -41,19 +41,24 @@ class Formatters {
   }
 
   /// 格式化日期用於顯示（M月d日）
+  /// 自動轉換為本地時區
   static String formatDisplayDate(DateTime date) {
-    return _displayDateFormatter.format(date);
+    return _displayDateFormatter.format(date.toLocal());
   }
 
   /// 格式化日期時間用於顯示（M月d日 HH:mm）
+  /// 自動轉換為本地時區
   static String formatDisplayDateTime(DateTime dateTime) {
-    return _displayDateTimeFormatter.format(dateTime);
+    return _displayDateTimeFormatter.format(dateTime.toLocal());
   }
 
   /// 格式化相對時間（例如：5分鐘前、2小時前）
+  /// 自動轉換為本地時區進行計算
   static String formatRelativeTime(DateTime dateTime) {
     final now = DateTime.now();
-    final difference = now.difference(dateTime);
+    // 轉換為本地時間以確保正確的時間差計算
+    final localDateTime = dateTime.toLocal();
+    final difference = now.difference(localDateTime);
 
     if (difference.inSeconds < 60) {
       return '剛才';
@@ -64,7 +69,7 @@ class Formatters {
     } else if (difference.inDays < 7) {
       return '${difference.inDays}天前';
     } else {
-      return formatDisplayDate(dateTime);
+      return formatDisplayDate(localDateTime);
     }
   }
 
@@ -148,9 +153,12 @@ class Formatters {
   }
 
   /// 格式化日期時間用於顯示（yyyy年M月d日 HH:mm）
+  /// 自動轉換為本地時區
   static String formatDateTimeForDisplay(DateTime dateTime) {
-    return '${dateTime.year}年${dateTime.month}月${dateTime.day}日 '
-        '${dateTime.hour.toString().padLeft(2, '0')}:'
-        '${dateTime.minute.toString().padLeft(2, '0')}';
+    // 確保轉換為本地時間顯示
+    final local = dateTime.toLocal();
+    return '${local.year}年${local.month}月${local.day}日 '
+        '${local.hour.toString().padLeft(2, '0')}:'
+        '${local.minute.toString().padLeft(2, '0')}';
   }
 }

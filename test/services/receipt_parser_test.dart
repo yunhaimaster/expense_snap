@@ -440,7 +440,8 @@ void main() {
       ]);
       final result = DescriptionExtractor.extract(text);
 
-      expect(result, '惠康超市旺角分店');
+      // 注意：新實現會移除結尾的「分店」「分行」「門市」等標識
+      expect(result, '惠康超市旺角');
     });
 
     test('filters total/amount lines', () {

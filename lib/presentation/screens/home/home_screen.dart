@@ -53,6 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
       await Future.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;
 
+      // 確保 HomeScreen 是當前路由才顯示 Showcase
+      // 避免在其他畫面（如設定頁還原備份後）錯誤顯示
+      final isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? false;
+      if (!isCurrentRoute) return;
+
+      // 再次確認 widget 仍然存在
+      if (!mounted) return;
+
       // 使用 ShowCaseWidget 內的 context
       final showcaseContext = _showcaseContext;
       if (showcaseContext != null && showcaseContext.mounted) {
@@ -63,11 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 開始滑動刪除提示
   void _startSwipeShowcase() {
+    // 確保 widget 仍然存在且是當前路由
+    if (!mounted) return;
+    final isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? false;
+    if (!isCurrentRoute) return;
+
     final showcaseProvider = context.read<ShowcaseProvider>();
     if (showcaseProvider.shouldShowSwipeShowcase) {
       // 使用 ShowCaseWidget 內的 context
       final showcaseContext = _showcaseContext;
-      if (showcaseContext != null) {
+      if (showcaseContext != null && showcaseContext.mounted) {
         ShowCaseWidget.of(showcaseContext).startShowCase([_swipeShowcaseKey]);
       }
     }
@@ -184,6 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 targetBorderRadius: BorderRadius.circular(28),
                 tooltipBackgroundColor: AppColors.primary,
                 textColor: Colors.white,
+                // FAB 在右下角，tooltip 必須顯示在上方避免溢出
+                tooltipPosition: TooltipPosition.top,
                 child: AnimatedFab(
                   onPressed: () {
                     Navigator.of(context).pushNamed(AppRouter.addExpense);
