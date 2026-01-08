@@ -32,6 +32,9 @@ android {
 
         // 啟用 multidex 支援大型依賴
         multiDexEnabled = true
+
+        // 聲明支援的語言（Play Store 審核需要）
+        resourceConfigurations += listOf("zh-rTW", "zh-rHK", "en")
     }
 
     // Release 簽名設定

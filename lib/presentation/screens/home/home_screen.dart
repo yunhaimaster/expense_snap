@@ -94,99 +94,106 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildContent(BuildContext context) {
     return Scaffold(
-      body: Consumer<ExpenseProvider>(
-        builder: (context, provider, child) {
-          return Column(
-            children: [
-              // 離線狀態橫幅
-              const AnimatedConnectivityBanner(),
+      body: SafeArea(
+        bottom: false, // 底部讓 FAB 自己處理
+        child: Consumer<ExpenseProvider>(
+          builder: (context, provider, child) {
+            return Column(
+              children: [
+                // 離線狀態橫幅
+                const AnimatedConnectivityBanner(),
 
-              // 月份摘要
-              MonthSummaryCard(
-                summary: provider.summary,
-                onPreviousMonth: provider.previousMonth,
-                onNextMonth: provider.nextMonth,
-                canGoNext: !provider.isCurrentMonth,
-              ),
-
-              // 錯誤提示
-              if (provider.error != null)
-                _buildErrorBanner(context, provider.error!),
-
-              // 支出列表
-              Expanded(
-                child: ExpenseList(
-                  expenses: provider.expenses,
-                  isLoading: provider.isLoading,
-                  hasMore: provider.hasMore,
-                  onRefresh: provider.refresh,
-                  onLoadMore: provider.loadMore,
-                  swipeShowcaseKey: _swipeShowcaseKey,
-                  onFirstExpenseLoaded: _startSwipeShowcase,
-                  onExpenseTap: (expense) {
-                    Navigator.of(context).pushNamed(
-                      AppRouter.expenseDetail,
-                      arguments: expense.id,
-                    );
-                  },
-                  onExpenseDelete: (expense) async {
-                    final result = await provider.softDeleteExpense(expense.id!);
-                    if (!context.mounted) return;
-
-                    result.fold(
-                      onFailure: (error) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('刪除失敗: ${error.message}'),
-                            backgroundColor: AppColors.error,
-                          ),
-                        );
-                      },
-                      onSuccess: (_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text('已刪除支出'),
-                            action: SnackBarAction(
-                              label: '復原',
-                              onPressed: () async {
-                                await provider.restoreExpense(expense.id!);
-                                if (!context.mounted) return;
-                                await provider.refresh();
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
+                // 月份摘要
+                MonthSummaryCard(
+                  summary: provider.summary,
+                  onPreviousMonth: provider.previousMonth,
+                  onNextMonth: provider.nextMonth,
+                  canGoNext: !provider.isCurrentMonth,
                 ),
-              ),
-            ],
-          );
-        },
+
+                // 錯誤提示
+                if (provider.error != null)
+                  _buildErrorBanner(context, provider.error!),
+
+                // 支出列表
+                Expanded(
+                  child: ExpenseList(
+                    expenses: provider.expenses,
+                    isLoading: provider.isLoading,
+                    hasMore: provider.hasMore,
+                    onRefresh: provider.refresh,
+                    onLoadMore: provider.loadMore,
+                    swipeShowcaseKey: _swipeShowcaseKey,
+                    onFirstExpenseLoaded: _startSwipeShowcase,
+                    onExpenseTap: (expense) {
+                      Navigator.of(context).pushNamed(
+                        AppRouter.expenseDetail,
+                        arguments: expense.id,
+                      );
+                    },
+                    onExpenseDelete: (expense) async {
+                      final result = await provider.softDeleteExpense(
+                        expense.id!,
+                      );
+                      if (!context.mounted) return;
+
+                      result.fold(
+                        onFailure: (error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('刪除失敗: ${error.message}'),
+                              backgroundColor: AppColors.error,
+                            ),
+                          );
+                        },
+                        onSuccess: (_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('已刪除支出'),
+                              action: SnackBarAction(
+                                label: '復原',
+                                onPressed: () async {
+                                  await provider.restoreExpense(expense.id!);
+                                  if (!context.mounted) return;
+                                  await provider.refresh();
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
-      floatingActionButton: Selector<ExpenseProvider, ({bool isLoading, bool isEmpty})>(
-        selector: (_, p) => (isLoading: p.isLoading, isEmpty: p.expenses.isEmpty),
-        builder: (context, state, _) {
-          // 空列表時顯示脈動提示（Selector 只在這兩個值變化時重建）
-          final showPulse = !state.isLoading && state.isEmpty;
-          return Showcase(
-            key: _fabShowcaseKey,
-            title: '新增支出',
-            description: '點擊這裡拍照記錄你的支出',
-            targetBorderRadius: BorderRadius.circular(28),
-            tooltipBackgroundColor: AppColors.primary,
-            textColor: Colors.white,
-            child: AnimatedFab(
-              onPressed: () {
-                Navigator.of(context).pushNamed(AppRouter.addExpense);
-              },
-              tooltip: '新增支出',
-              showPulse: showPulse,
-            ),
-          );
-        },
-      ),
+      floatingActionButton:
+          Selector<ExpenseProvider, ({bool isLoading, bool isEmpty})>(
+            selector: (_, p) =>
+                (isLoading: p.isLoading, isEmpty: p.expenses.isEmpty),
+            builder: (context, state, _) {
+              // 空列表時顯示脈動提示（Selector 只在這兩個值變化時重建）
+              final showPulse = !state.isLoading && state.isEmpty;
+              return Showcase(
+                key: _fabShowcaseKey,
+                title: '新增支出',
+                description: '點擊這裡拍照記錄你的支出',
+                targetBorderRadius: BorderRadius.circular(28),
+                tooltipBackgroundColor: AppColors.primary,
+                textColor: Colors.white,
+                child: AnimatedFab(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AppRouter.addExpense);
+                  },
+                  tooltip: '新增支出',
+                  showPulse: showPulse,
+                ),
+              );
+            },
+          ),
     );
   }
 
@@ -202,9 +209,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: Text(
               error.message,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.error,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppColors.error),
             ),
           ),
           TextButton(
