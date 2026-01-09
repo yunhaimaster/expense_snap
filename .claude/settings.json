@@ -1,0 +1,37 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "IMPORTANT: Before editing, verify you have READ this file in the current conversation. If not, read it first to understand context."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "fp=$(echo $TOOL_INPUT | jq -r '.file_path // .filePath // empty'); [ -z \"$fp\" ] && exit 0; [[ \"$fp\" == *.dart ]] && dart format \"$fp\" 2>/dev/null; exit 0",
+            "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Before completing: If Dart/Flutter files were modified, remind user to run `flutter analyze && flutter test` if not already done."
+          }
+        ]
+      }
+    ]
+  }
+}
