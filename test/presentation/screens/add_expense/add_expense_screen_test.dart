@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/core/constants/currency_constants.dart';
 import 'package:expense_snap/core/errors/result.dart';
 import 'package:expense_snap/domain/repositories/expense_repository.dart';
@@ -62,6 +63,9 @@ void main() {
             value: exchangeRateProvider),
       ],
       child: const MaterialApp(
+        locale: Locale('zh'),
+        supportedLocales: S.supportedLocales,
+        localizationsDelegates: S.localizationsDelegates,
         home: AddExpenseScreen(),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/animation_utils.dart';
@@ -30,22 +31,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
   bool _isLoading = false;
 
-  /// Onboarding 頁面資料
+  /// Onboarding 頁面資料（使用 key 引用，實際文字在 build 時透過 l10n 取得）
   static const _pages = [
     _OnboardingPage(
       illustration: 'assets/illustrations/onboarding_camera.svg',
-      title: '拍照記錄支出',
-      description: '隨手拍攝收據，即時記錄每筆支出\n再也不怕遺失收據',
+      pageIndex: 1,
     ),
     _OnboardingPage(
       illustration: 'assets/illustrations/onboarding_currency.svg',
-      title: '多幣種自動轉換',
-      description: '支援 HKD、CNY、USD\n系統自動取得即時匯率',
+      pageIndex: 2,
     ),
     _OnboardingPage(
       illustration: 'assets/illustrations/onboarding_export.svg',
-      title: '一鍵匯出報銷單',
-      description: '月結時一鍵匯出 Excel + 收據圖片\n輕鬆完成報銷',
+      pageIndex: 3,
       isLastPage: true,
     ),
   ];
@@ -120,9 +118,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 padding: const EdgeInsets.all(16),
                 child: TextButton(
                   onPressed: _isLoading ? null : () => _completeOnboarding(skip: true),
-                  child: const Text(
-                    '跳過',
-                    style: TextStyle(
+                  child: Text(
+                    S.of(context).onboarding_skip,
+                    style: const TextStyle(
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -172,7 +170,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         )
                       : Text(
-                          _currentPage < _pages.length - 1 ? '下一步' : '開始使用',
+                          _currentPage < _pages.length - 1
+                              ? S.of(context).onboarding_next
+                              : S.of(context).onboarding_start,
                         ),
                 ),
               ),
@@ -186,6 +186,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildPage(_OnboardingPage page, int index) {
+    final l10n = S.of(context);
+
+    // 根據頁面索引取得對應的標題和描述
+    final String title;
+    final String description;
+    switch (page.pageIndex) {
+      case 1:
+        title = l10n.onboarding_page1Title;
+        description = l10n.onboarding_page1Desc;
+      case 2:
+        title = l10n.onboarding_page2Title;
+        description = l10n.onboarding_page2Desc;
+      case 3:
+        title = l10n.onboarding_page3Title;
+        description = l10n.onboarding_page3Desc;
+      default:
+        title = '';
+        description = '';
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -214,7 +234,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // 標題
           Text(
-            page.title,
+            title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -225,7 +245,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // 描述
           Text(
-            page.description,
+            description,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppColors.textSecondary,
                   height: 1.5,
@@ -240,15 +260,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               key: _formKey,
               child: TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: '您的名字（選填）',
-                  hintText: '用於報銷單標題',
-                  prefixIcon: Icon(Icons.person_outline),
+                decoration: InputDecoration(
+                  labelText: l10n.onboarding_nameLabel,
+                  hintText: l10n.onboarding_nameHint,
+                  prefixIcon: const Icon(Icons.person_outline),
                 ),
                 textCapitalization: TextCapitalization.words,
                 validator: (value) {
                   if (value != null && value.trim().length > 50) {
-                    return '名字不能超過 50 個字';
+                    return l10n.onboarding_nameTooLong;
                   }
                   return null;
                 },
@@ -266,14 +286,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 class _OnboardingPage {
   const _OnboardingPage({
     required this.illustration,
-    required this.title,
-    required this.description,
+    required this.pageIndex,
     this.isLastPage = false,
   });
 
   final String illustration;
-  final String title;
-  final String description;
+
+  /// 頁面索引（1-3），用於在 build 時查詢對應的 l10n 字串
+  final int pageIndex;
   final bool isLastPage;
 }
 

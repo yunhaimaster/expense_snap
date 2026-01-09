@@ -1,10 +1,25 @@
 // EmptyState 元件測試
 
 import 'package:expense_snap/core/theme/app_colors.dart';
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/presentation/widgets/common/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// 建立帶有 l10n 支援的測試 Widget
+Widget buildTestApp({required Widget Function(BuildContext context) builder}) {
+  return MaterialApp(
+    locale: const Locale('zh'),
+    supportedLocales: S.supportedLocales,
+    localizationsDelegates: S.localizationsDelegates,
+    home: Scaffold(
+      body: Builder(
+        builder: (context) => builder(context),
+      ),
+    ),
+  );
+}
 
 void main() {
   group('EmptyState', () {
@@ -192,11 +207,7 @@ void main() {
   group('EmptyStates 工廠', () {
     testWidgets('noExpenses 應使用正確插圖', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.noExpenses(),
-          ),
-        ),
+        buildTestApp(builder: (context) => EmptyStates.noExpenses(context)),
       );
 
       await tester.pumpAndSettle();
@@ -210,9 +221,10 @@ void main() {
       var called = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.noExpenses(onAddExpense: () => called = true),
+        buildTestApp(
+          builder: (context) => EmptyStates.noExpenses(
+            context,
+            onAddExpense: () => called = true,
           ),
         ),
       );
@@ -227,11 +239,7 @@ void main() {
 
     testWidgets('noDeletedItems 應使用正確插圖', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.noDeletedItems(),
-          ),
-        ),
+        buildTestApp(builder: (context) => EmptyStates.noDeletedItems(context)),
       );
 
       // noDeletedItems 設定 animate: false
@@ -241,10 +249,8 @@ void main() {
 
     testWidgets('error 應使用錯誤插圖', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.error(message: '發生錯誤'),
-          ),
+        buildTestApp(
+          builder: (context) => EmptyStates.error(context, message: '發生錯誤'),
         ),
       );
 
@@ -259,12 +265,11 @@ void main() {
       var retried = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.error(
-              message: '錯誤訊息',
-              onRetry: () => retried = true,
-            ),
+        buildTestApp(
+          builder: (context) => EmptyStates.error(
+            context,
+            message: '錯誤訊息',
+            onRetry: () => retried = true,
           ),
         ),
       );
@@ -279,11 +284,7 @@ void main() {
 
     testWidgets('offline 應使用離線插圖', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.offline(),
-          ),
-        ),
+        buildTestApp(builder: (context) => EmptyStates.offline(context)),
       );
 
       await tester.pumpAndSettle();
@@ -295,10 +296,9 @@ void main() {
 
     testWidgets('offline 應支援自訂訊息', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.offline(message: '自訂離線訊息'),
-          ),
+        buildTestApp(
+          builder: (context) =>
+              EmptyStates.offline(context, message: '自訂離線訊息'),
         ),
       );
 
@@ -309,11 +309,7 @@ void main() {
 
     testWidgets('exportSuccess 應使用成功插圖', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.exportSuccess(),
-          ),
-        ),
+        buildTestApp(builder: (context) => EmptyStates.exportSuccess(context)),
       );
 
       await tester.pumpAndSettle();
@@ -327,10 +323,9 @@ void main() {
       var shared = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: EmptyStates.exportSuccess(onShare: () => shared = true),
-          ),
+        buildTestApp(
+          builder: (context) =>
+              EmptyStates.exportSuccess(context, onShare: () => shared = true),
         ),
       );
 

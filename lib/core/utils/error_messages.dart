@@ -32,6 +32,8 @@ class ErrorMessages {
     'LENGTH_EXCEEDED': '輸入的內容過長',
     'INVALID_FORMAT': '輸入的格式不正確',
     'INVALID_DATE': '請選擇有效的日期',
+    'INVALID_MONTH': '月份必須介於 1 到 12 之間',
+    'INVALID_YEAR': '年份必須介於 2000 到 2100 之間',
 
     // 認證錯誤
     'NOT_SIGNED_IN': '請先登入 Google 帳號',

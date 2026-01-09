@@ -1,3 +1,4 @@
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:expense_snap/presentation/widgets/forms/date_picker_field.dart';
@@ -9,6 +10,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: DatePickerField(
               value: selectedDate,
@@ -27,6 +31,9 @@ void main() {
         (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: DatePickerField(
               value: DateTime.now(),
@@ -48,6 +55,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: StatefulBuilder(
               builder: (context, setState) {
@@ -79,6 +89,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: StatefulBuilder(
               builder: (context, setState) {
@@ -110,6 +123,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: DatePickerField(
               value: today,
@@ -133,6 +149,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: DatePickerField(
               value: selectedDate,
@@ -156,6 +175,9 @@ void main() {
     testWidgets('displays year and month', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: MonthPickerField(
               year: 2026,
@@ -172,6 +194,9 @@ void main() {
     testWidgets('opens month picker dialog on tap', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: MonthPickerField(
               year: 2026,

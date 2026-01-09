@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/expense.dart';
 import '../../../domain/repositories/expense_repository.dart';
@@ -43,7 +44,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('載入失敗: ${error.message}'),
+            content: Text(S.of(context).deletedItems_loadFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
@@ -58,18 +59,19 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     return LoadingOverlay(
       isLoading: _isProcessing,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('已刪除項目'),
+          title: Text(l10n.deletedItems_title),
           actions: [
             if (_deletedExpenses.isNotEmpty)
               TextButton(
                 onPressed: _confirmClearAll,
-                child: const Text(
-                  '清空',
-                  style: TextStyle(color: Colors.white),
+                child: Text(
+                  l10n.deletedItems_clearAll,
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
           ],
@@ -86,7 +88,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
     }
 
     if (_deletedExpenses.isEmpty) {
-      return EmptyStates.noDeletedItems();
+      return EmptyStates.noDeletedItems(context);
     }
 
     return RefreshIndicator(
@@ -107,6 +109,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
   }
 
   Future<void> _restoreExpense(Expense expense) async {
+    final l10n = S.of(context);
     setState(() => _isProcessing = true);
 
     final repository = context.read<IExpenseRepository>();
@@ -118,7 +121,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('還原失敗: ${error.message}'),
+            content: Text(l10n.deletedItems_restoreFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
@@ -128,7 +131,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
           _deletedExpenses.removeWhere((e) => e.id == expense.id);
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('已還原')),
+          SnackBar(content: Text(l10n.deletedItems_restored)),
         );
       },
     );
@@ -137,20 +140,21 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
   }
 
   Future<void> _confirmPermanentDelete(Expense expense) async {
+    final l10n = S.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('永久刪除'),
-        content: const Text('此操作無法復原，確定要永久刪除嗎？'),
+        title: Text(l10n.deletedItems_permanentDelete),
+        content: Text(l10n.deletedItems_permanentDeleteConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('取消'),
+            child: Text(l10n.common_cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('永久刪除'),
+            child: Text(l10n.deletedItems_permanentDelete),
           ),
         ],
       ),
@@ -169,7 +173,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('刪除失敗: ${error.message}'),
+            content: Text(l10n.deletedItems_permanentDeleteFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
@@ -179,7 +183,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
           _deletedExpenses.removeWhere((e) => e.id == expense.id);
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('已永久刪除')),
+          SnackBar(content: Text(l10n.deletedItems_permanentDeleted)),
         );
       },
     );
@@ -188,20 +192,21 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
   }
 
   Future<void> _confirmClearAll() async {
+    final l10n = S.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('清空所有'),
-        content: Text('確定要永久刪除全部 ${_deletedExpenses.length} 筆記錄嗎？\n此操作無法復原。'),
+        title: Text(l10n.deletedItems_clearAllTitle),
+        content: Text(l10n.deletedItems_clearAllConfirm(_deletedExpenses.length)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('取消'),
+            child: Text(l10n.common_cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('全部刪除'),
+            child: Text(l10n.deletedItems_clearAllButton),
           ),
         ],
       ),
@@ -229,7 +234,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('已刪除 $deletedCount 筆記錄')),
+      SnackBar(content: Text(l10n.deletedItems_clearedCount(deletedCount))),
     );
 
     setState(() => _isProcessing = false);
@@ -250,6 +255,7 @@ class _DeletedExpenseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     final daysRemaining = expense.daysUntilPermanentDelete ?? 0;
 
     return Card(
@@ -307,8 +313,8 @@ class _DeletedExpenseCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     daysRemaining > 0
-                        ? '還有 $daysRemaining 天自動刪除'
-                        : '即將自動刪除',
+                        ? l10n.deletedItems_daysRemaining(daysRemaining)
+                        : l10n.deletedItems_soonDeleted,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: daysRemaining <= 7
                               ? AppColors.error
@@ -319,7 +325,7 @@ class _DeletedExpenseCard extends StatelessWidget {
                 TextButton.icon(
                   onPressed: onRestore,
                   icon: const Icon(Icons.restore, size: 18),
-                  label: const Text('還原'),
+                  label: Text(l10n.common_restore),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.secondary,
                   ),
@@ -327,7 +333,7 @@ class _DeletedExpenseCard extends StatelessWidget {
                 TextButton.icon(
                   onPressed: onDelete,
                   icon: const Icon(Icons.delete_forever, size: 18),
-                  label: const Text('刪除'),
+                  label: Text(l10n.common_delete),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.error,
                   ),

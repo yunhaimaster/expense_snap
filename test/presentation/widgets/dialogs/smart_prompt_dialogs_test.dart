@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:expense_snap/core/constants/currency_constants.dart';
 import 'package:expense_snap/data/models/expense.dart';
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/presentation/widgets/dialogs/smart_prompt_dialogs.dart';
 
 void main() {
@@ -23,6 +24,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
@@ -72,6 +76,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
@@ -116,6 +123,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
@@ -147,6 +157,9 @@ void main() {
       testWidgets('displays amount details', (tester) async {
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
@@ -182,6 +195,9 @@ void main() {
           (tester) async {
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
@@ -212,6 +228,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
@@ -245,6 +264,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Builder(
               builder: (context) {
                 return ElevatedButton(
@@ -278,6 +300,9 @@ void main() {
       testWidgets('displays expense count', (tester) async {
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Builder(
               builder: (context) {
                 return ElevatedButton(

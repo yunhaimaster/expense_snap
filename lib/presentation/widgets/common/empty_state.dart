@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// 空狀態組件
 ///
@@ -217,53 +218,68 @@ class EmptyStates {
   EmptyStates._();
 
   /// 無支出記錄
-  static EmptyState noExpenses({VoidCallback? onAddExpense}) {
+  static EmptyState noExpenses(
+    BuildContext context, {
+    VoidCallback? onAddExpense,
+  }) {
+    final l10n = S.of(context);
     return EmptyState(
       illustrationAsset: 'assets/illustrations/empty_expenses.svg',
-      title: '暫無支出記錄',
-      subtitle: '點擊右下角按鈕新增第一筆支出',
-      actionLabel: onAddExpense != null ? '新增支出' : null,
+      title: l10n.emptyState_noExpenses,
+      subtitle: l10n.emptyState_noExpensesHint,
+      actionLabel: onAddExpense != null ? l10n.home_addExpense : null,
       onAction: onAddExpense,
     );
   }
 
   /// 無已刪除項目
-  static EmptyState noDeletedItems() {
-    return const EmptyState(
+  static EmptyState noDeletedItems(BuildContext context) {
+    final l10n = S.of(context);
+    return EmptyState(
       illustrationAsset: 'assets/illustrations/empty_trash.svg',
-      title: '沒有已刪除的項目',
-      subtitle: '刪除的支出會在這裡保留 30 天',
+      title: l10n.emptyState_noDeletedItems,
+      subtitle: l10n.emptyState_noDeletedItemsHint,
       animate: false,
     );
   }
 
   /// 載入失敗
-  static EmptyState error({required String message, VoidCallback? onRetry}) {
+  static EmptyState error(
+    BuildContext context, {
+    required String message,
+    VoidCallback? onRetry,
+  }) {
+    final l10n = S.of(context);
     return EmptyState(
       illustrationAsset: 'assets/illustrations/error_state.svg',
-      title: '載入失敗',
+      title: l10n.emptyState_error,
       subtitle: message,
-      actionLabel: onRetry != null ? '重試' : null,
+      actionLabel: onRetry != null ? l10n.common_retry : null,
       onAction: onRetry,
     );
   }
 
   /// 離線模式
-  static EmptyState offline({String? message}) {
+  static EmptyState offline(BuildContext context, {String? message}) {
+    final l10n = S.of(context);
     return EmptyState(
       illustrationAsset: 'assets/illustrations/offline_mode.svg',
-      title: '無網路連線',
-      subtitle: message ?? '請檢查您的網路設定',
+      title: l10n.emptyState_offline,
+      subtitle: message ?? l10n.emptyState_offlineHint,
     );
   }
 
   /// 匯出成功
-  static EmptyState exportSuccess({VoidCallback? onShare}) {
+  static EmptyState exportSuccess(
+    BuildContext context, {
+    VoidCallback? onShare,
+  }) {
+    final l10n = S.of(context);
     return EmptyState(
       illustrationAsset: 'assets/illustrations/success_export.svg',
-      title: '匯出成功',
-      subtitle: '檔案已準備就緒',
-      actionLabel: onShare != null ? '分享' : null,
+      title: l10n.emptyState_exportSuccess,
+      subtitle: l10n.emptyState_exportSuccessHint,
+      actionLabel: onShare != null ? l10n.common_share : null,
       onAction: onShare,
     );
   }

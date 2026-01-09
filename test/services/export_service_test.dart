@@ -4,9 +4,34 @@ import 'package:expense_snap/data/models/expense.dart';
 import 'package:expense_snap/services/export_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// 建立測試用的 ExportStrings
+ExportStrings createTestExportStrings({int year = 2025, int month = 1}) {
+  final monthStr = month.toString().padLeft(2, '0');
+  return ExportStrings(
+    sheetName: '$year年$month月報銷單',
+    shareSubject: 'Expense Snap 報銷單',
+    fileName: '報銷單_$year年${monthStr}月',
+    headerIndex: '序號',
+    headerDate: '日期',
+    headerDescription: '描述',
+    headerOriginalAmount: '原始金額',
+    headerOriginalCurrency: '原始幣種',
+    headerExchangeRate: '匯率',
+    headerRateSource: '匯率來源',
+    headerHkdAmount: '港幣金額',
+    headerReceiptFile: '收據檔名',
+    headerTotal: '合計',
+    rateSourceAuto: '自動',
+    rateSourceOffline: '離線快取',
+    rateSourceDefault: '預設',
+    rateSourceManual: '手動',
+  );
+}
+
 void main() {
   group('ExportService', () {
     late List<Expense> testExpenses;
+    late ExportStrings testStrings;
 
     setUp(() {
       // 建立測試用支出
@@ -55,6 +80,7 @@ void main() {
           updatedAt: now,
         ),
       ];
+      testStrings = createTestExportStrings();
     });
 
     group('ExportResult', () {
@@ -334,6 +360,7 @@ void main() {
           year: 2025,
           month: 0,
           userName: 'Test',
+          strings: testStrings,
         );
 
         expect(result.isFailure, isTrue);
@@ -346,6 +373,7 @@ void main() {
           year: 2025,
           month: 13,
           userName: 'Test',
+          strings: testStrings,
         );
 
         expect(result.isFailure, isTrue);
@@ -358,6 +386,7 @@ void main() {
           year: 1999,
           month: 6,
           userName: 'Test',
+          strings: testStrings,
         );
 
         expect(result.isFailure, isTrue);
@@ -370,6 +399,7 @@ void main() {
           year: 2101,
           month: 6,
           userName: 'Test',
+          strings: testStrings,
         );
 
         expect(result.isFailure, isTrue);
@@ -382,6 +412,7 @@ void main() {
           year: 2025,
           month: 6,
           userName: 'Test',
+          strings: testStrings,
         );
 
         expect(result.isFailure, isTrue);
@@ -395,6 +426,7 @@ void main() {
           year: 2025,
           month: 1,
           userName: 'Test',
+          strings: testStrings,
         );
 
         // 可能因 path_provider 未初始化而失敗，但不應是 ValidationException
@@ -409,6 +441,7 @@ void main() {
           year: 2025,
           month: 12,
           userName: 'Test',
+          strings: testStrings,
         );
 
         if (result.isFailure) {
@@ -422,6 +455,7 @@ void main() {
           year: 2000,
           month: 6,
           userName: 'Test',
+          strings: testStrings,
         );
 
         if (result.isFailure) {
@@ -435,6 +469,7 @@ void main() {
           year: 2100,
           month: 6,
           userName: 'Test',
+          strings: testStrings,
         );
 
         if (result.isFailure) {
@@ -456,6 +491,7 @@ void main() {
           year: 2025,
           month: 15,
           userName: 'Test',
+          strings: testStrings,
         );
 
         expect(result.isFailure, isTrue);
@@ -468,6 +504,7 @@ void main() {
           year: 1800,
           month: 6,
           userName: 'Test',
+          strings: testStrings,
         );
 
         expect(result.isFailure, isTrue);
@@ -480,6 +517,7 @@ void main() {
           year: 2025,
           month: 6,
           userName: 'Test',
+          strings: testStrings,
         );
 
         expect(result.isFailure, isTrue);

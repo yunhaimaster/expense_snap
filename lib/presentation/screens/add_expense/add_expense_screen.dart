@@ -11,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/animation_utils.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../services/receipt_parser.dart';
 import '../../providers/exchange_rate_provider.dart';
 import '../../providers/expense_provider.dart';
@@ -92,18 +93,19 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     return LoadingOverlay(
       isLoading: _isLoading,
-      message: '儲存中...',
+      message: l10n.common_saving,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('新增支出'),
+          title: Text(l10n.addExpense_title),
           actions: [
             TextButton(
               onPressed: _saveExpense,
-              child: const Text(
-                '儲存',
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                l10n.common_save,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -152,10 +154,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
                 // 金額（含 OCR 識別中的 shimmer 效果）
                 _isProcessingOcr
-                    ? _buildOcrShimmer(label: '金額')
+                    ? _buildOcrShimmer(context, label: l10n.addExpense_amount)
                     : AmountInput(
                         controller: _amountController,
-                        label: '金額',
+                        label: l10n.addExpense_amount,
                         suffix: _selectedCurrency,
                         autofocus: true,
                       ),
@@ -203,7 +205,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       Row(
                         children: [
                           Text(
-                            '手動輸入',
+                            l10n.addExpense_manualInput,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Switch(
@@ -236,7 +238,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
                 // 描述（含自動完成、OCR 識別中的 shimmer 效果）
                 _isProcessingOcr
-                    ? _buildOcrShimmer(label: '描述')
+                    ? _buildOcrShimmer(context, label: l10n.addExpense_description)
                     : DescriptionAutocomplete(
                         controller: _descriptionController,
                       ),
@@ -251,11 +253,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   }
 
   Widget _buildImagePicker() {
+    final l10n = S.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '收據圖片',
+          l10n.addExpense_receiptImage,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -298,7 +301,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               Expanded(
                 child: _ImagePickerButton(
                   icon: Icons.camera_alt,
-                  label: '拍照',
+                  label: l10n.addExpense_camera,
                   onTap: _pickFromCamera,
                 ),
               ),
@@ -306,7 +309,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               Expanded(
                 child: _ImagePickerButton(
                   icon: Icons.photo_library,
-                  label: '相簿',
+                  label: l10n.addExpense_gallery,
                   onTap: _pickFromGallery,
                 ),
               ),
@@ -317,7 +320,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   }
 
   /// 建立 OCR 處理中的 shimmer 效果
-  Widget _buildOcrShimmer({required String label}) {
+  Widget _buildOcrShimmer(BuildContext context, {required String label}) {
+    final l10n = S.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -345,7 +349,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   const Icon(Icons.document_scanner, size: 20),
                   const SizedBox(width: 12),
                   Text(
-                    '正在識別收據...',
+                    l10n.addExpense_ocrProcessing,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -493,11 +497,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           // 顯示 OCR 識別結果提示
           if (parsed.hasData && mounted) {
             AnimationUtils.lightImpact();
+            final l10n = S.of(context);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  '已自動識別收據內容'
-                  '${parsed.confidence >= 0.7 ? '' : '，請確認是否正確'}',
+                  parsed.confidence >= 0.7
+                      ? l10n.addExpense_ocrSuccess
+                      : l10n.addExpense_ocrSuccessVerify,
                 ),
                 duration: const Duration(seconds: 2),
               ),
@@ -522,7 +528,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     // 安全解析金額（表單驗證應已確保有效，但加上防護）
     final amount = double.tryParse(_amountController.text);
     if (amount == null || amount <= 0) {
-      _showError('請輸入有效金額');
+      _showError(S.of(context).addExpense_invalidAmount);
       return;
     }
     final amountCents = Formatters.amountToCents(amount);
@@ -603,7 +609,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           AnimationUtils.lightImpact();
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('支出已新增')),
+            SnackBar(content: Text(S.of(context).addExpense_success)),
           );
         },
       );

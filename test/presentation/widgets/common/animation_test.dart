@@ -1,4 +1,5 @@
 import 'package:expense_snap/core/utils/animation_utils.dart';
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/presentation/widgets/common/animated_count.dart';
 import 'package:expense_snap/presentation/widgets/common/animated_fab.dart';
 import 'package:expense_snap/presentation/widgets/common/animated_list_item.dart';
@@ -51,8 +52,11 @@ void main() {
   group('AnimatedListItem', () {
     testWidgets('渲染子組件', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedListItem(
               index: 0,
               child: Text('Test'),
@@ -68,6 +72,9 @@ void main() {
       for (final direction in SlideDirection.values) {
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Scaffold(
               body: AnimatedListItem(
                 index: 0,
@@ -84,8 +91,11 @@ void main() {
 
     testWidgets('animateOnMount false 時直接顯示', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedListItem(
               index: 0,
               animateOnMount: false,
@@ -101,8 +111,11 @@ void main() {
 
     testWidgets('執行進場動畫', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedListItem(
               index: 0,
               child: Text('Animated'),
@@ -120,8 +133,11 @@ void main() {
   group('AnimatedRemoveItem', () {
     testWidgets('正常顯示子組件', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedRemoveItem(
               removed: false,
               child: Text('Not Removed'),
@@ -206,8 +222,11 @@ void main() {
   group('AnimatedIntCount', () {
     testWidgets('顯示正確數值', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedIntCount(
               count: 42,
             ),
@@ -220,8 +239,11 @@ void main() {
 
     testWidgets('支援前後綴', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedIntCount(
               count: 10,
               prefix: '共 ',
@@ -236,8 +258,11 @@ void main() {
 
     testWidgets('數值變化時執行動畫', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedIntCount(count: 0),
           ),
         ),
@@ -246,8 +271,11 @@ void main() {
       expect(find.text('0'), findsOneWidget);
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedIntCount(count: 100),
           ),
         ),
@@ -265,8 +293,11 @@ void main() {
   group('AnimatedAmount', () {
     testWidgets('顯示格式化金額', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedAmount(
               amount: 123456, // 1234.56 元
               currencySymbol: 'HK\$',
@@ -281,8 +312,11 @@ void main() {
 
     testWidgets('金額變化時執行動畫', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedAmount(
               amount: 10000, // 100.00
               currencySymbol: '\$',
@@ -295,8 +329,11 @@ void main() {
       expect(find.text('\$100.00'), findsOneWidget);
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
+          home: const Scaffold(
             body: AnimatedAmount(
               amount: 50000, // 500.00
               currencySymbol: '\$',

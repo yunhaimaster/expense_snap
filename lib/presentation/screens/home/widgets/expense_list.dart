@@ -3,6 +3,7 @@ import 'package:showcaseview/showcaseview.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../data/models/expense.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../widgets/common/animated_list_item.dart';
 import '../../../widgets/common/empty_state.dart';
 import '../../../widgets/common/loading_overlay.dart';
@@ -91,7 +92,7 @@ class _ExpenseListState extends State<ExpenseList> {
 
     // 空列表
     if (widget.expenses.isEmpty) {
-      return EmptyStates.noExpenses();
+      return EmptyStates.noExpenses(context);
     }
 
     // 觸發首筆支出載入回調（用於 Showcase 提示）
@@ -168,8 +169,8 @@ class _ExpenseListState extends State<ExpenseList> {
             if (index == 0 && widget.swipeShowcaseKey != null) {
               card = Showcase(
                 key: widget.swipeShowcaseKey!,
-                title: '滑動刪除',
-                description: '向左滑動可以刪除支出記錄',
+                title: S.of(context).showcase_swipeDeleteTitle,
+                description: S.of(context).showcase_swipeDeleteDesc,
                 targetBorderRadius: BorderRadius.circular(12),
                 tooltipBackgroundColor: AppColors.primary,
                 textColor: Colors.white,

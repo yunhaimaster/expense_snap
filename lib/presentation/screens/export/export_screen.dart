@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../core/di/service_locator.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/expense.dart';
@@ -115,11 +116,15 @@ class _ExportScreenState extends State<ExportScreen> {
     final year = _selectedYear;
     final month = _selectedMonth;
     final userName = _userName;
+    final l10n = S.of(context);
+
+    // 建立本地化字串（在 context 有效時建立）
+    final exportStrings = ExportStrings.fromL10n(l10n, year: year, month: month);
 
     setState(() {
       _isExporting = true;
       _exportProgress = 0.0;
-      _exportMessage = '正在打包...';
+      _exportMessage = l10n.export_packing;
     });
 
     try {
@@ -128,16 +133,18 @@ class _ExportScreenState extends State<ExportScreen> {
         year: year,
         month: month,
         userName: userName,
+        strings: exportStrings,
         onProgress: (progress) {
           if (mounted) {
+            final l10n = S.of(context);
             setState(() {
               _exportProgress = progress;
               if (progress < 0.3) {
-                _exportMessage = '正在生成 Excel...';
+                _exportMessage = l10n.export_generatingExcel;
               } else if (progress < 0.9) {
-                _exportMessage = '正在打包收據圖片...';
+                _exportMessage = l10n.export_packingReceipts;
               } else {
-                _exportMessage = '正在壓縮...';
+                _exportMessage = l10n.export_compressing;
               }
             });
           }
@@ -150,25 +157,28 @@ class _ExportScreenState extends State<ExportScreen> {
         final exportResult = result.getOrThrow();
         setState(() {
           _exportProgress = 1.0;
-          _exportMessage = '準備分享...';
+          _exportMessage = S.of(context).export_preparingShare;
         });
 
         // 分享檔案
-        final shareResult = await _exportService.shareFile(exportResult.filePath);
+        final shareResult = await _exportService.shareFile(
+          exportResult.filePath,
+          shareSubject: exportStrings.shareSubject,
+        );
 
         if (mounted) {
           if (shareResult.isSuccess) {
-            _showSuccessSnackBar('匯出成功 (${exportResult.formattedFileSize})');
+            _showSuccessSnackBar(S.of(context).export_success(exportResult.formattedFileSize));
           }
           // 分享被取消時不顯示訊息
         }
       } else {
         final error = result.errorOrNull;
-        _showErrorSnackBar('匯出失敗: ${error?.message ?? '未知錯誤'}');
+        _showErrorSnackBar(S.of(context).export_failed(error?.message ?? S.of(context).error_unknown));
       }
     } catch (e) {
       if (mounted) {
-        _showErrorSnackBar('匯出失敗: $e');
+        _showErrorSnackBar(S.of(context).export_failed('$e'));
       }
     } finally {
       if (mounted) {
@@ -216,7 +226,7 @@ class _ExportScreenState extends State<ExportScreen> {
       message: _exportMessage,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('匯出報銷單'),
+          title: Text(S.of(context).export_title),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16),
@@ -273,7 +283,7 @@ class _ExportScreenState extends State<ExportScreen> {
               ElevatedButton.icon(
                 onPressed: _expenses.isEmpty || _isExporting ? null : _exportZip,
                 icon: const Icon(Icons.folder_zip),
-                label: const Text('匯出 Excel + 收據'),
+                label: Text(S.of(context).export_excelWithReceipts),
               ),
             ],
           ),
@@ -290,13 +300,14 @@ class _ExportScreenState extends State<ExportScreen> {
     }
 
     if (_expenses.isEmpty) {
+      final l10n = S.of(context);
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(32),
           child: EmptyState(
             illustrationAsset: 'assets/illustrations/empty_expenses.svg',
-            title: '沒有資料',
-            subtitle: '$_selectedYear 年 $_selectedMonth 月沒有支出記錄',
+            title: l10n.export_noData,
+            subtitle: l10n.export_noDataMessage(_selectedYear, _selectedMonth),
             animate: false,
           ),
         ),
@@ -304,6 +315,7 @@ class _ExportScreenState extends State<ExportScreen> {
     }
 
     final receiptCount = _expenses.where((e) => e.hasReceipt).length;
+    final l10n = S.of(context);
 
     return Card(
       child: Padding(
@@ -330,7 +342,7 @@ class _ExportScreenState extends State<ExportScreen> {
 
             // 月份
             Text(
-              '$_selectedYear 年 $_selectedMonth 月',
+              l10n.export_yearMonth(_selectedYear, _selectedMonth),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -341,15 +353,15 @@ class _ExportScreenState extends State<ExportScreen> {
             // 統計資料
             _buildStatRow(
               icon: Icons.receipt_long,
-              label: '支出筆數',
-              value: '${_summary?.totalCount ?? _expenses.length} 筆',
+              label: l10n.export_expenseCount,
+              value: l10n.export_countUnit(_summary?.totalCount ?? _expenses.length),
             ),
 
             const SizedBox(height: 8),
 
             _buildStatRow(
               icon: Icons.attach_money,
-              label: '港幣總額',
+              label: l10n.export_totalHkd,
               value: _summary?.formattedTotalAmount ?? 'HKD 0.00',
               valueColor: AppColors.primary,
             ),
@@ -358,15 +370,15 @@ class _ExportScreenState extends State<ExportScreen> {
 
             _buildStatRow(
               icon: Icons.photo,
-              label: '收據圖片',
-              value: '$receiptCount 張',
+              label: l10n.export_receiptCount,
+              value: l10n.export_imageUnit(receiptCount),
             ),
 
             const SizedBox(height: 24),
 
             // 提示文字
             Text(
-              '匯出的 Excel 包含完整支出明細',
+              l10n.export_hint,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.textTertiary,
                   ),

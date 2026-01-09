@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../export/export_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
@@ -22,11 +23,12 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          const HomeScreen(),
+          HomeScreen(isActive: _currentIndex == 0),
           ExportScreen(refreshTrigger: _exportRefreshTrigger),
           const SettingsScreen(),
         ],
@@ -40,21 +42,21 @@ class _AppShellState extends State<AppShell> {
           }
           setState(() => _currentIndex = index);
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: '首頁',
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home),
+            label: l10n.nav_home,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.file_download_outlined),
-            activeIcon: Icon(Icons.file_download),
-            label: '匯出',
+            icon: const Icon(Icons.file_download_outlined),
+            activeIcon: const Icon(Icons.file_download),
+            label: l10n.nav_export,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            activeIcon: Icon(Icons.settings),
-            label: '設定',
+            icon: const Icon(Icons.settings_outlined),
+            activeIcon: const Icon(Icons.settings),
+            label: l10n.nav_settings,
           ),
         ],
       ),

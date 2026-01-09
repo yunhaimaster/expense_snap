@@ -11,6 +11,74 @@ import '../core/errors/result.dart';
 import '../core/utils/app_logger.dart';
 import '../core/utils/formatters.dart';
 import '../data/models/expense.dart';
+import '../l10n/app_localizations.dart';
+
+/// 匯出服務所需的本地化字串
+///
+/// 由於 Service 層沒有 BuildContext，需要從 UI 層傳入已解析的字串
+class ExportStrings {
+  const ExportStrings({
+    required this.sheetName,
+    required this.shareSubject,
+    required this.fileName,
+    required this.headerIndex,
+    required this.headerDate,
+    required this.headerDescription,
+    required this.headerOriginalAmount,
+    required this.headerOriginalCurrency,
+    required this.headerExchangeRate,
+    required this.headerRateSource,
+    required this.headerHkdAmount,
+    required this.headerReceiptFile,
+    required this.headerTotal,
+    required this.rateSourceAuto,
+    required this.rateSourceOffline,
+    required this.rateSourceDefault,
+    required this.rateSourceManual,
+  });
+
+  /// 從 S (AppLocalizations) 建立
+  factory ExportStrings.fromL10n(S l10n, {required int year, required int month}) {
+    final monthStr = month.toString().padLeft(2, '0');
+    return ExportStrings(
+      sheetName: l10n.export_sheetName(year, month),
+      shareSubject: l10n.export_shareSubject,
+      fileName: l10n.export_fileName(year, monthStr),
+      headerIndex: l10n.export_headerIndex,
+      headerDate: l10n.export_headerDate,
+      headerDescription: l10n.export_headerDescription,
+      headerOriginalAmount: l10n.export_headerOriginalAmount,
+      headerOriginalCurrency: l10n.export_headerOriginalCurrency,
+      headerExchangeRate: l10n.export_headerExchangeRate,
+      headerRateSource: l10n.export_headerRateSource,
+      headerHkdAmount: l10n.export_headerHkdAmount,
+      headerReceiptFile: l10n.export_headerReceiptFile,
+      headerTotal: l10n.export_headerTotal,
+      rateSourceAuto: l10n.export_rateSourceAuto,
+      rateSourceOffline: l10n.export_rateSourceOffline,
+      rateSourceDefault: l10n.export_rateSourceDefault,
+      rateSourceManual: l10n.export_rateSourceManual,
+    );
+  }
+
+  final String sheetName;
+  final String shareSubject;
+  final String fileName;
+  final String headerIndex;
+  final String headerDate;
+  final String headerDescription;
+  final String headerOriginalAmount;
+  final String headerOriginalCurrency;
+  final String headerExchangeRate;
+  final String headerRateSource;
+  final String headerHkdAmount;
+  final String headerReceiptFile;
+  final String headerTotal;
+  final String rateSourceAuto;
+  final String rateSourceOffline;
+  final String rateSourceDefault;
+  final String rateSourceManual;
+}
 
 /// 匯出服務
 ///
@@ -38,6 +106,7 @@ class ExportService {
   /// [year] 年份
   /// [month] 月份
   /// [userName] 使用者名稱（用於檔名）
+  /// [strings] 本地化字串（用於 Excel 標題和內容）
   ///
   /// 回傳匯出的檔案路徑
   Future<Result<ExportResult>> exportToExcel({
@@ -45,6 +114,7 @@ class ExportService {
     required int year,
     required int month,
     required String userName,
+    required ExportStrings strings,
   }) async {
     try {
       // 參數驗證
@@ -63,7 +133,7 @@ class ExportService {
       }
 
       final excel = Excel.createExcel();
-      final sheetName = '$year年$month月報銷單';
+      final sheetName = strings.sheetName;
 
       // 建立新 sheet
       final sheet = excel[sheetName];
@@ -74,7 +144,7 @@ class ExportService {
       }
 
       // 設定標題列
-      _setHeaderRow(sheet);
+      _setHeaderRow(sheet, strings);
 
       // 填入資料
       int totalHkdCents = 0;
@@ -88,21 +158,16 @@ class ExportService {
           receiptFileName = _generateReceiptFileName(expense, rowIndex, expense.receiptImagePath!);
         }
 
-        _setDataRow(sheet, rowIndex, expense, receiptFileName: receiptFileName);
+        _setDataRow(sheet, rowIndex, expense, strings, receiptFileName: receiptFileName);
         totalHkdCents += expense.hkdAmountCents;
       }
 
       // 設定合計列
-      _setTotalRow(sheet, expenses.length + 1, totalHkdCents);
+      _setTotalRow(sheet, expenses.length + 1, totalHkdCents, strings);
 
       // 儲存檔案
       final tempDir = await _tempDir;
-      final fileName = _generateFileName(
-        userName: userName,
-        year: year,
-        month: month,
-        extension: 'xlsx',
-      );
+      final fileName = '${strings.fileName}.xlsx';
       final filePath = '${tempDir.path}/$fileName';
 
       final fileBytes = excel.encode();
@@ -138,6 +203,7 @@ class ExportService {
   /// [year] 年份
   /// [month] 月份
   /// [userName] 使用者名稱（用於檔名）
+  /// [strings] 本地化字串（用於 Excel 標題和內容）
   /// [onProgress] 進度回調（0.0 ~ 1.0）
   ///
   /// 回傳匯出的檔案路徑
@@ -146,6 +212,7 @@ class ExportService {
     required int year,
     required int month,
     required String userName,
+    required ExportStrings strings,
     void Function(double progress)? onProgress,
   }) async {
     try {
@@ -173,6 +240,7 @@ class ExportService {
         year: year,
         month: month,
         userName: userName,
+        strings: strings,
       );
 
       if (excelResult.isFailure) {
@@ -226,12 +294,7 @@ class ExportService {
       }
 
       final tempDir = await _tempDir;
-      final fileName = _generateFileName(
-        userName: userName,
-        year: year,
-        month: month,
-        extension: 'zip',
-      );
+      final fileName = '${strings.fileName}.zip';
       final filePath = '${tempDir.path}/$fileName';
 
       await File(filePath).writeAsBytes(zipBytes);
@@ -262,7 +325,10 @@ class ExportService {
   }
 
   /// 分享檔案
-  Future<Result<void>> shareFile(String filePath) async {
+  ///
+  /// [filePath] 檔案路徑
+  /// [shareSubject] 分享主題（本地化字串）
+  Future<Result<void>> shareFile(String filePath, {String? shareSubject}) async {
     try {
       final file = File(filePath);
       if (!await file.exists()) {
@@ -271,7 +337,7 @@ class ExportService {
 
       final result = await Share.shareXFiles(
         [XFile(filePath)],
-        subject: 'Expense Snap 報銷單',
+        subject: shareSubject ?? 'Expense Snap Report',
       );
 
       if (result.status == ShareResultStatus.dismissed) {
@@ -315,17 +381,17 @@ class ExportService {
   // ============ 私有方法 ============
 
   /// 設定標題列
-  void _setHeaderRow(Sheet sheet) {
+  void _setHeaderRow(Sheet sheet, ExportStrings strings) {
     final headers = [
-      '序號',
-      '日期',
-      '描述',
-      '原始金額',
-      '原始幣種',
-      '匯率',
-      '匯率來源',
-      '港幣金額',
-      '收據檔名',
+      strings.headerIndex,
+      strings.headerDate,
+      strings.headerDescription,
+      strings.headerOriginalAmount,
+      strings.headerOriginalCurrency,
+      strings.headerExchangeRate,
+      strings.headerRateSource,
+      strings.headerHkdAmount,
+      strings.headerReceiptFile,
     ];
 
     for (int i = 0; i < headers.length; i++) {
@@ -340,7 +406,7 @@ class ExportService {
   }
 
   /// 設定資料列
-  void _setDataRow(Sheet sheet, int rowIndex, Expense expense, {String? receiptFileName}) {
+  void _setDataRow(Sheet sheet, int rowIndex, Expense expense, ExportStrings strings, {String? receiptFileName}) {
     // 序號
     sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: rowIndex))
       .value = IntCellValue(rowIndex);
@@ -366,7 +432,7 @@ class ExportService {
       .value = TextCellValue(expense.formattedExchangeRate);
 
     // 匯率來源
-    final rateSourceText = _getRateSourceText(expense.exchangeRateSource);
+    final rateSourceText = _getRateSourceText(expense.exchangeRateSource, strings);
     sheet.cell(CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: rowIndex))
       .value = TextCellValue(rateSourceText);
 
@@ -380,12 +446,12 @@ class ExportService {
   }
 
   /// 設定合計列
-  void _setTotalRow(Sheet sheet, int rowIndex, int totalHkdCents) {
+  void _setTotalRow(Sheet sheet, int rowIndex, int totalHkdCents, ExportStrings strings) {
     // 合計標籤
     final labelCell = sheet.cell(
       CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: rowIndex),
     );
-    labelCell.value = TextCellValue('合計');
+    labelCell.value = TextCellValue(strings.headerTotal);
     labelCell.cellStyle = CellStyle(bold: true);
 
     // 合計金額
@@ -397,29 +463,17 @@ class ExportService {
   }
 
   /// 取得匯率來源文字
-  String _getRateSourceText(ExchangeRateSource source) {
+  String _getRateSourceText(ExchangeRateSource source, ExportStrings strings) {
     switch (source) {
       case ExchangeRateSource.auto:
-        return '自動';
+        return strings.rateSourceAuto;
       case ExchangeRateSource.offline:
-        return '離線快取';
+        return strings.rateSourceOffline;
       case ExchangeRateSource.defaultRate:
-        return '預設';
+        return strings.rateSourceDefault;
       case ExchangeRateSource.manual:
-        return '手動';
+        return strings.rateSourceManual;
     }
-  }
-
-  /// 生成檔案名稱
-  String _generateFileName({
-    required String userName,
-    required int year,
-    required int month,
-    required String extension,
-  }) {
-    final monthStr = month.toString().padLeft(2, '0');
-    // 簡化檔案名稱：報銷單_年月.副檔名
-    return '報銷單_$year年$monthStr月.$extension';
   }
 
   /// 生成收據圖片檔名

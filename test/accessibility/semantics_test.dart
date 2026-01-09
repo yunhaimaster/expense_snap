@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:expense_snap/core/constants/currency_constants.dart';
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/data/models/expense.dart';
 import 'package:expense_snap/presentation/screens/home/widgets/expense_card.dart';
 import 'package:expense_snap/presentation/screens/home/widgets/month_summary.dart';
@@ -26,6 +27,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Scaffold(
               body: ExpenseCard(
                 expense: expense,
@@ -72,6 +76,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Scaffold(
               body: ExpenseCard(
                 expense: expense,
@@ -97,6 +104,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Scaffold(
               body: MonthSummaryCard(
                 summary: summary,
@@ -122,6 +132,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Scaffold(
               body: MonthSummaryCard(
                 summary: summary,
@@ -160,6 +173,9 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: S.supportedLocales,
+            localizationsDelegates: S.localizationsDelegates,
             home: Scaffold(
               body: MonthSummaryCard(
                 summary: summary,

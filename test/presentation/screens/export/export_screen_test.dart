@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/core/constants/currency_constants.dart';
 import 'package:expense_snap/core/errors/result.dart';
 import 'package:expense_snap/data/models/expense.dart';
@@ -73,6 +74,9 @@ void main() {
         Provider<IExpenseRepository>.value(value: mockRepository),
       ],
       child: const MaterialApp(
+        locale: Locale('zh'),
+        supportedLocales: S.supportedLocales,
+        localizationsDelegates: S.localizationsDelegates,
         home: ExportScreen(),
       ),
     );
@@ -104,13 +108,8 @@ void main() {
       expect(find.text('匯出 Excel + 收據'), findsOneWidget);
     });
 
-    testWidgets('應顯示 ZIP 匯出按鈕', (tester) async {
-      addTearDown(() => tester.view.resetPhysicalSize());
-      await tester.pumpWidget(buildTestWidget(tester));
-      await tester.pumpAndSettle();
-
-      expect(find.text('匯出 Excel + 收據'), findsOneWidget);
-    });
+    // 注意：目前只有一個匯出按鈕（Excel + 收據），不需要分開測試
+    // 如果將來新增單獨的 ZIP 匯出功能，再添加對應測試
   });
 
   group('ExportScreen 空資料狀態', () {

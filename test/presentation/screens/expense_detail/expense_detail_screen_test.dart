@@ -8,6 +8,7 @@ import 'package:expense_snap/core/constants/currency_constants.dart';
 import 'package:expense_snap/core/errors/result.dart';
 import 'package:expense_snap/data/models/expense.dart';
 import 'package:expense_snap/domain/repositories/expense_repository.dart';
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/presentation/providers/expense_provider.dart';
 import 'package:expense_snap/presentation/screens/expense_detail/expense_detail_screen.dart';
 import 'package:expense_snap/services/image_service.dart';
@@ -83,6 +84,9 @@ void main() {
     return ChangeNotifierProvider<ExpenseProvider>.value(
       value: provider,
       child: MaterialApp(
+        locale: const Locale('zh'),
+        supportedLocales: S.supportedLocales,
+        localizationsDelegates: S.localizationsDelegates,
         home: ExpenseDetailScreen(expenseId: expenseId),
       ),
     );

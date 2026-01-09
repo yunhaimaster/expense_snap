@@ -4,10 +4,12 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/core/errors/result.dart';
 import 'package:expense_snap/data/datasources/local/database_helper.dart';
 import 'package:expense_snap/data/models/backup_status.dart';
 import 'package:expense_snap/data/repositories/backup_repository.dart';
+import 'package:expense_snap/presentation/providers/locale_provider.dart';
 import 'package:expense_snap/presentation/providers/settings_provider.dart';
 import 'package:expense_snap/presentation/providers/theme_provider.dart';
 import 'package:expense_snap/presentation/screens/settings/settings_screen.dart';
@@ -64,13 +66,18 @@ void main() {
       backupRepository: mockBackupRepository,
     );
     final themeProvider = ThemeProvider();
+    final localeProvider = LocaleProvider();
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<SettingsProvider>.value(value: settingsProvider),
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
+        ChangeNotifierProvider<LocaleProvider>.value(value: localeProvider),
       ],
       child: const MaterialApp(
+        locale: Locale('zh'),
+        supportedLocales: S.supportedLocales,
+        localizationsDelegates: S.localizationsDelegates,
         home: SettingsScreen(),
       ),
     );

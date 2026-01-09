@@ -9,7 +9,7 @@ Generated: 2026-01-06
 - **Version**: 1.1.0
 - **SDK**: Flutter 3.10.4+
 - **Architecture**: Clean Architecture + Provider
-- **Language**: Dart, 繁體中文 UI
+- **Language**: Dart, 繁體中文 / English UI (i18n)
 
 ---
 
@@ -26,6 +26,9 @@ lib/
 │   ├── services/                # 核心服務
 │   ├── theme/                   # 主題配置
 │   └── utils/                   # 工具類
+├── l10n/                        # 國際化 (i18n)
+│   ├── app_zh.arb               # 繁體中文 (source of truth)
+│   └── app_en.arb               # English
 ├── data/                        # 資料層
 │   ├── datasources/
 │   │   ├── local/               # SQLite, SecureStorage
@@ -78,6 +81,7 @@ lib/
 - `connectivity_provider.dart` - 網路狀態
 - `theme_provider.dart` - 主題切換
 - `showcase_provider.dart` - 功能發現提示
+- `locale_provider.dart` - 語言設定 (zh/en/system)
 
 ### Screens (`lib/presentation/screens/`)
 - `home/` - 首頁支出列表
@@ -99,6 +103,7 @@ lib/
 | `analysis_options.yaml` | Lint 規則 |
 | `flutter_launcher_icons.yaml` | App Icon 生成 |
 | `flutter_native_splash.yaml` | 啟動畫面配置 |
+| `l10n.yaml` | 國際化配置 (ARB files, gen-l10n) |
 
 ---
 
@@ -130,7 +135,7 @@ test/
     └── semantics_test.dart
 ```
 
-**Total tests**: 580+ (不含 mocks)
+**Total tests**: 656+ (不含 mocks)
 
 ---
 
@@ -167,6 +172,9 @@ flutter analyze
 # 生成 Mocks
 dart run build_runner build --delete-conflicting-outputs
 
+# 重新生成國際化檔案
+flutter gen-l10n
+
 # 生成 App Icon
 dart run flutter_launcher_icons
 
@@ -190,6 +198,7 @@ flutter build apk --release
 7. **離線支援** - 本地優先、網路恢復同步
 8. **深色模式** - 系統/手動切換
 9. **無障礙** - Semantics、對比度優化
+10. **國際化** - 繁體中文 / English 雙語支援
 
 ---
 
@@ -225,6 +234,20 @@ assets/
 
 ---
 
+## 🌐 Internationalization (i18n)
+
+```
+lib/l10n/
+├── app_zh.arb               # 繁體中文 (source of truth, ~170 keys)
+└── app_en.arb               # English (~170 keys)
+```
+
+**配置**: `l10n.yaml`
+**用法**: `S.of(context).keyName` 或 `context.l10n.keyName`
+**Provider**: `LocaleProvider` - 支援 zh/en/system (跟隨系統)
+
+---
+
 ## 📌 Development Notes
 
 - 金額以「分」儲存，避免浮點誤差
@@ -232,3 +255,4 @@ assets/
 - 使用 Result 型別處理錯誤，不拋出異常
 - UI 註解使用繁體中文
 - 測試使用 Mockito 生成 mocks
+- 國際化使用 ARB files + flutter gen-l10n

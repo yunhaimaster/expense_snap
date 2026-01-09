@@ -1,5 +1,6 @@
 import 'package:expense_snap/core/router/page_transitions.dart';
 import 'package:expense_snap/core/utils/animation_utils.dart';
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,6 +9,9 @@ void main() {
     testWidgets('建立成功並顯示頁面', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
@@ -63,6 +67,9 @@ void main() {
     testWidgets('建立成功並顯示頁面', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
@@ -99,6 +106,9 @@ void main() {
     testWidgets('建立成功並顯示頁面', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
@@ -135,6 +145,9 @@ void main() {
     testWidgets('建立成功並顯示頁面', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
@@ -172,6 +185,9 @@ void main() {
     testWidgets('SlidePageRoute 可正常返回', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
@@ -204,6 +220,9 @@ void main() {
     testWidgets('BottomSlidePageRoute 可正常返回', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('zh'),
+          supportedLocales: S.supportedLocales,
+          localizationsDelegates: S.localizationsDelegates,
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {

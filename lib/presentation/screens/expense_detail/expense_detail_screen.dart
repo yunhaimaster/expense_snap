@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../core/constants/currency_constants.dart';
 import '../../../core/constants/validation_rules.dart';
 import '../../../core/theme/app_colors.dart';
@@ -45,10 +46,21 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   DateTime _selectedDate = DateTime.now();
   String _selectedCurrency = CurrencyConstants.defaultCurrency;
 
+  bool _initialized = false;
+
   @override
   void initState() {
     super.initState();
-    _loadExpense();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 只在首次呼叫時載入資料（避免重複載入）
+    if (!_initialized) {
+      _initialized = true;
+      _loadExpense();
+    }
   }
 
   @override
@@ -69,7 +81,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       _setExpenseData(result);
     } else {
       setState(() {
-        _error = '找不到支出記錄';
+        _error = S.of(context).expenseDetail_expenseNotFound;
         _isLoading = false;
       });
     }
@@ -96,19 +108,20 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
     }
 
     if (_error != null || _expense == null) {
+      final l10n = S.of(context);
       return Scaffold(
-        appBar: AppBar(title: const Text('支出詳情')),
+        appBar: AppBar(title: Text(l10n.expenseDetail_title)),
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.error_outline, size: 48, color: AppColors.error),
               const SizedBox(height: 16),
-              Text(_error ?? '載入失敗'),
+              Text(_error ?? l10n.common_loading),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('返回'),
+                child: Text(l10n.common_back),
               ),
             ],
           ),
@@ -116,23 +129,24 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       );
     }
 
+    final l10n = S.of(context);
     return LoadingOverlay(
       isLoading: _isSaving,
-      message: '儲存中...',
+      message: l10n.common_saving,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_isEditing ? '編輯支出' : '支出詳情'),
+          title: Text(_isEditing ? l10n.expenseDetail_editTitle : l10n.expenseDetail_title),
           actions: [
             if (_isEditing)
               TextButton(
                 onPressed: _saveChanges,
-                child: const Text('儲存', style: TextStyle(color: Colors.white)),
+                child: Text(l10n.common_save, style: const TextStyle(color: Colors.white)),
               )
             else ...[
               IconButton(
                 onPressed: () => setState(() => _isEditing = true),
                 icon: const Icon(Icons.edit),
-                tooltip: '編輯',
+                tooltip: l10n.common_edit,
               ),
               PopupMenuButton<String>(
                 onSelected: (value) {
@@ -143,23 +157,23 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'replace_image',
                     child: Row(
                       children: [
-                        Icon(Icons.image, color: AppColors.textSecondary),
-                        SizedBox(width: 8),
-                        Text('更換圖片'),
+                        const Icon(Icons.image, color: AppColors.textSecondary),
+                        const SizedBox(width: 8),
+                        Text(l10n.expenseDetail_replaceImage),
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'delete',
                     child: Row(
                       children: [
-                        Icon(Icons.delete, color: AppColors.error),
-                        SizedBox(width: 8),
-                        Text('刪除', style: TextStyle(color: AppColors.error)),
+                        const Icon(Icons.delete, color: AppColors.error),
+                        const SizedBox(width: 8),
+                        Text(l10n.common_delete, style: const TextStyle(color: AppColors.error)),
                       ],
                     ),
                   ),
@@ -202,13 +216,13 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           child: Image.file(
             File(_expense!.receiptImagePath!),
             fit: BoxFit.contain,
-            errorBuilder: (context, error, stack) => const Center(
+            errorBuilder: (context, error, stack) => Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.broken_image, size: 48, color: Colors.white54),
-                  SizedBox(height: 8),
-                  Text('圖片載入失敗', style: TextStyle(color: Colors.white54)),
+                  const Icon(Icons.broken_image, size: 48, color: Colors.white54),
+                  const SizedBox(height: 8),
+                  Text(S.of(context).expenseDetail_imageLoadFailed, style: const TextStyle(color: Colors.white54)),
                 ],
               ),
             ),
@@ -222,13 +236,13 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
     return Container(
       height: 150,
       color: AppColors.divider,
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.receipt_outlined, size: 48, color: AppColors.textHint),
-            SizedBox(height: 8),
-            Text('無收據圖片', style: TextStyle(color: AppColors.textHint)),
+            const Icon(Icons.receipt_outlined, size: 48, color: AppColors.textHint),
+            const SizedBox(height: 8),
+            Text(S.of(context).expenseDetail_noReceipt, style: const TextStyle(color: AppColors.textHint)),
           ],
         ),
       ),
@@ -236,12 +250,13 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   }
 
   Widget _buildDetailView() {
+    final l10n = S.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 金額
         _DetailRow(
-          label: '金額',
+          label: l10n.expenseDetail_amount,
           value: _expense!.formattedOriginalAmount,
           valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
@@ -252,12 +267,12 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
         if (_expense!.originalCurrency != 'HKD') ...[
           const SizedBox(height: 8),
           _DetailRow(
-            label: '港幣金額',
+            label: l10n.expenseDetail_hkdAmount,
             value: _expense!.formattedHkdAmount,
           ),
           const SizedBox(height: 8),
           _DetailRow(
-            label: '匯率',
+            label: l10n.expenseDetail_exchangeRate,
             value: '1 ${_expense!.originalCurrency} = ${_expense!.formattedExchangeRate} HKD',
             trailing: _buildRateSourceChip(),
           ),
@@ -266,21 +281,21 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
         const Divider(height: 32),
 
         _DetailRow(
-          label: '描述',
+          label: l10n.expenseDetail_description,
           value: _expense!.description,
         ),
 
         const SizedBox(height: 16),
 
         _DetailRow(
-          label: '日期',
+          label: l10n.expenseDetail_date,
           value: Formatters.formatDate(_expense!.date),
         ),
 
         const SizedBox(height: 16),
 
         _DetailRow(
-          label: '建立時間',
+          label: l10n.expenseDetail_createdAt,
           value: Formatters.formatDateTime(_expense!.createdAt),
           valueStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppColors.textSecondary,
@@ -291,11 +306,12 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   }
 
   Widget _buildRateSourceChip() {
+    final l10n = S.of(context);
     final (icon, color, label) = switch (_expense!.exchangeRateSource) {
-      ExchangeRateSource.auto => (Icons.check_circle, AppColors.rateAuto, '即時匯率'),
-      ExchangeRateSource.offline => (Icons.offline_bolt, AppColors.rateOffline, '離線快取'),
-      ExchangeRateSource.defaultRate => (Icons.warning, AppColors.rateDefault, '預設匯率'),
-      ExchangeRateSource.manual => (Icons.edit, AppColors.rateManual, '手動輸入'),
+      ExchangeRateSource.auto => (Icons.check_circle, AppColors.rateAuto, l10n.rateSource_auto),
+      ExchangeRateSource.offline => (Icons.offline_bolt, AppColors.rateOffline, l10n.rateSource_offline),
+      ExchangeRateSource.defaultRate => (Icons.warning, AppColors.rateDefault, l10n.rateSource_default),
+      ExchangeRateSource.manual => (Icons.edit, AppColors.rateManual, l10n.rateSource_manual),
     };
 
     return Container(
@@ -316,6 +332,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   }
 
   Widget _buildEditForm() {
+    final l10n = S.of(context);
     return Form(
       key: _formKey,
       child: Column(
@@ -337,7 +354,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
 
           AmountInput(
             controller: _amountController,
-            label: '金額',
+            label: l10n.expenseDetail_amount,
             suffix: _selectedCurrency,
           ),
 
@@ -353,15 +370,15 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
 
           TextFormField(
             controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: '描述',
-              prefixIcon: Icon(Icons.description_outlined),
+            decoration: InputDecoration(
+              labelText: l10n.expenseDetail_description,
+              prefixIcon: const Icon(Icons.description_outlined),
             ),
             maxLength: ValidationRules.maxDescriptionLength,
             maxLines: 2,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return '請輸入描述';
+                return l10n.expenseDetail_descriptionRequired;
               }
               return null;
             },
@@ -374,7 +391,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
               _setExpenseData(_expense!);
               setState(() => _isEditing = false);
             },
-            child: const Text('取消編輯'),
+            child: Text(l10n.expenseDetail_cancelEdit),
           ),
         ],
       ),
@@ -384,6 +401,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   Future<void> _saveChanges() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final l10n = S.of(context);
     setState(() => _isSaving = true);
 
     try {
@@ -393,8 +411,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       final amount = double.tryParse(_amountController.text);
       if (amount == null || amount <= 0) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('請輸入有效金額'),
+          SnackBar(
+            content: Text(l10n.addExpense_invalidAmount),
             backgroundColor: AppColors.error,
           ),
         );
@@ -432,7 +450,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           AnimationUtils.heavyImpact();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('儲存失敗: ${error.message}'),
+              content: Text(l10n.expenseDetail_saveFailed(error.message)),
               backgroundColor: AppColors.error,
             ),
           );
@@ -445,7 +463,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
             _isEditing = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('已儲存')),
+            SnackBar(content: Text(l10n.expenseDetail_saved)),
           );
         },
       );
@@ -457,15 +475,16 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   }
 
   Future<void> _confirmDelete() async {
+    final l10n = S.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('確認刪除'),
-        content: const Text('確定要刪除這筆支出嗎？\n刪除後可在「已刪除項目」中還原。'),
+        title: Text(l10n.expenseDetail_confirmDelete),
+        content: Text(l10n.expenseDetail_confirmDeleteMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('取消'),
+            child: Text(l10n.common_cancel),
           ),
           TextButton(
             onPressed: () {
@@ -474,7 +493,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
               Navigator.of(context).pop(true);
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('刪除'),
+            child: Text(l10n.common_delete),
           ),
         ],
       ),
@@ -493,7 +512,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
         AnimationUtils.heavyImpact();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('刪除失敗: ${error.message}'),
+            content: Text(l10n.expenseDetail_deleteFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
@@ -503,13 +522,14 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
         AnimationUtils.lightImpact();
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('已刪除')),
+          SnackBar(content: Text(l10n.expenseDetail_deleted)),
         );
       },
     );
   }
 
   Future<void> _replaceImage() async {
+    final l10n = S.of(context);
     final source = await showModalBottomSheet<_ImagePickSource>(
       context: context,
       builder: (context) => SafeArea(
@@ -518,12 +538,12 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: const Text('拍照'),
+              title: Text(l10n.addExpense_camera),
               onTap: () => Navigator.pop(context, _ImagePickSource.camera),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('從相簿選擇'),
+              title: Text(l10n.expenseDetail_selectFromGallery),
               onTap: () => Navigator.pop(context, _ImagePickSource.gallery),
             ),
           ],
@@ -556,7 +576,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('更換圖片失敗: ${error.message}'),
+            content: Text(l10n.expenseDetail_imageReplaceFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
@@ -566,7 +586,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           _expense = updated;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('圖片已更換')),
+          SnackBar(content: Text(l10n.expenseDetail_imageReplaceSuccess)),
         );
       },
     );

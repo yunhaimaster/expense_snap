@@ -6,7 +6,9 @@ import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../domain/repositories/backup_repository.dart' show BackupInfo;
+import '../../../l10n/app_localizations.dart';
 import '../../providers/expense_provider.dart';
+import '../../providers/locale_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/common/skeleton.dart';
@@ -36,7 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('設定'),
+        title: Text(S.of(context).settings_title),
       ),
       body: Consumer<SettingsProvider>(
         builder: (context, provider, child) {
@@ -50,10 +52,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListView(
                 children: [
                   // 個人資料區塊
-                  const _SectionHeader(title: '個人資料'),
+                  _SectionHeader(title: S.of(context).settings_profile),
                   ListTile(
                     leading: const Icon(Icons.person_outline),
-                    title: const Text('姓名'),
+                    title: Text(S.of(context).settings_nameLabel),
                     subtitle: Text(provider.userName),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _editUserName(provider),
@@ -62,22 +64,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const Divider(),
 
                   // 外觀區塊
-                  const _SectionHeader(title: '外觀'),
+                  _SectionHeader(title: S.of(context).settings_appearance),
                   Consumer<ThemeProvider>(
                     builder: (context, themeProvider, _) {
                       return Column(
                         children: [
                           ListTile(
                             leading: const Icon(Icons.palette_outlined),
-                            title: const Text('主題'),
-                            subtitle: Text(_getThemeModeLabel(themeProvider.themeMode)),
+                            title: Text(S.of(context).settings_theme),
+                            subtitle: Text(_getThemeModeLabel(context, themeProvider.themeMode)),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () => _showThemeModeDialog(themeProvider),
                           ),
                           SwitchListTile(
                             secondary: const Icon(Icons.animation_outlined),
-                            title: const Text('減少動畫'),
-                            subtitle: const Text('減少動態效果，適合動暈症患者'),
+                            title: Text(S.of(context).settings_reduceMotion),
+                            subtitle: Text(S.of(context).settings_reduceMotionDesc),
                             value: themeProvider.reduceMotion,
                             onChanged: (value) => themeProvider.setReduceMotion(value),
                           ),
@@ -85,15 +87,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       );
                     },
                   ),
+                  // 語言設定
+                  Consumer<LocaleProvider>(
+                    builder: (context, localeProvider, _) {
+                      return ListTile(
+                        leading: const Icon(Icons.language_outlined),
+                        title: Text(S.of(context).settings_language),
+                        subtitle: Text(localeProvider.currentLocaleName),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => _showLanguageDialog(localeProvider),
+                      );
+                    },
+                  ),
 
                   const Divider(),
 
                   // 資料管理區塊
-                  const _SectionHeader(title: '資料管理'),
+                  _SectionHeader(title: S.of(context).settings_data),
                   ListTile(
                     leading: const Icon(Icons.delete_outline),
-                    title: const Text('已刪除項目'),
-                    subtitle: const Text('查看和還原已刪除的支出'),
+                    title: Text(S.of(context).settings_deletedItems),
+                    subtitle: Text(S.of(context).settings_deletedItemsDesc),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.of(context).pushNamed(AppRouter.deletedItems);
@@ -101,13 +115,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   ListTile(
                     leading: const Icon(Icons.storage_outlined),
-                    title: const Text('本地儲存使用量'),
+                    title: Text(S.of(context).settings_storageUsage),
                     subtitle: Text(provider.formattedStorageUsage),
                   ),
                   ListTile(
                     leading: const Icon(Icons.cleaning_services_outlined),
-                    title: const Text('清理暫存檔'),
-                    subtitle: const Text('釋放匯出和備份暫存空間'),
+                    title: Text(S.of(context).settings_clearCache),
+                    subtitle: Text(S.of(context).settings_clearCacheDesc),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _cleanupTempFiles(provider),
                   ),
@@ -115,7 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const Divider(),
 
                   // 雲端備份區塊
-                  const _SectionHeader(title: '雲端備份'),
+                  _SectionHeader(title: S.of(context).settings_cloudBackup),
                   _GoogleAccountTile(provider: provider),
 
                   if (provider.isGoogleConnected) ...[
@@ -123,7 +137,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     if (provider.backupStatus.lastBackupAt != null)
                       ListTile(
                         leading: const Icon(Icons.history),
-                        title: const Text('上次備份'),
+                        title: Text(S.of(context).settings_lastBackupTime),
                         subtitle: Text(
                           '${provider.backupStatus.formattedLastBackupAt} · ${provider.backupStatus.formattedSize}',
                         ),
@@ -132,8 +146,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     // 備份按鈕
                     ListTile(
                       leading: const Icon(Icons.backup_outlined),
-                      title: const Text('立即備份'),
-                      subtitle: const Text('備份資料庫和收據到 Google 雲端硬碟'),
+                      title: Text(S.of(context).settings_backupNow),
+                      subtitle: Text(S.of(context).settings_backupNowDesc),
                       trailing: const Icon(Icons.chevron_right),
                       enabled: !provider.isOperationInProgress,
                       onTap: () => _performBackup(provider),
@@ -142,8 +156,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     // 還原按鈕
                     ListTile(
                       leading: const Icon(Icons.restore_outlined),
-                      title: const Text('還原備份'),
-                      subtitle: const Text('從 Google 雲端硬碟還原'),
+                      title: Text(S.of(context).settings_restoreBackupTitle),
+                      subtitle: Text(S.of(context).settings_restoreBackupDesc),
                       trailing: const Icon(Icons.chevron_right),
                       enabled: !provider.isOperationInProgress,
                       onTap: () => _showRestoreDialog(provider),
@@ -153,10 +167,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const Divider(),
 
                   // 關於區塊
-                  const _SectionHeader(title: '關於'),
-                  const ListTile(
-                    leading: Icon(Icons.info_outline),
-                    title: Text('版本'),
+                  _SectionHeader(title: S.of(context).settings_about),
+                  ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: Text(S.of(context).settings_version),
                     subtitle: Text('${AppConstants.appName} v${AppConstants.appVersion}'),
                   ),
                 ],
@@ -172,40 +186,80 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  String _getThemeModeLabel(AppThemeMode mode) {
+  String _getThemeModeLabel(BuildContext context, AppThemeMode mode) {
+    final s = S.of(context);
     switch (mode) {
       case AppThemeMode.light:
-        return '淺色';
+        return s.settings_themeLight;
       case AppThemeMode.dark:
-        return '深色';
+        return s.settings_themeDark;
       case AppThemeMode.system:
-        return '跟隨系統';
+        return s.settings_themeSystem;
     }
+  }
+
+  Future<void> _showLanguageDialog(LocaleProvider localeProvider) async {
+    final s = S.of(context);
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => SimpleDialog(
+        title: Text(s.settings_language),
+        children: [
+          _LanguageOption(
+            code: 'system',
+            title: S.of(context).settings_languageSystem,
+            isSelected: localeProvider.isSelected('system'),
+            onTap: () {
+              localeProvider.setLocaleByCode('system');
+              Navigator.of(dialogContext).pop();
+            },
+          ),
+          _LanguageOption(
+            code: 'zh',
+            title: '繁體中文',
+            isSelected: localeProvider.isSelected('zh'),
+            onTap: () {
+              localeProvider.setLocaleByCode('zh');
+              Navigator.of(dialogContext).pop();
+            },
+          ),
+          _LanguageOption(
+            code: 'en',
+            title: 'English',
+            isSelected: localeProvider.isSelected('en'),
+            onTap: () {
+              localeProvider.setLocaleByCode('en');
+              Navigator.of(dialogContext).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _showThemeModeDialog(ThemeProvider themeProvider) async {
     final selectedMode = await showDialog<AppThemeMode>(
       context: context,
       builder: (dialogContext) => SimpleDialog(
-        title: const Text('選擇主題'),
+        title: Text(S.of(context).settings_selectTheme),
         children: [
           _ThemeModeOption(
             icon: Icons.light_mode_outlined,
-            title: '淺色',
+            title: S.of(context).settings_themeLight,
             value: AppThemeMode.light,
             groupValue: themeProvider.themeMode,
             onTap: () => Navigator.of(dialogContext).pop(AppThemeMode.light),
           ),
           _ThemeModeOption(
             icon: Icons.dark_mode_outlined,
-            title: '深色',
+            title: S.of(context).settings_themeDark,
             value: AppThemeMode.dark,
             groupValue: themeProvider.themeMode,
             onTap: () => Navigator.of(dialogContext).pop(AppThemeMode.dark),
           ),
           _ThemeModeOption(
             icon: Icons.settings_brightness_outlined,
-            title: '跟隨系統',
+            title: S.of(context).settings_languageSystem,
             value: AppThemeMode.system,
             groupValue: themeProvider.themeMode,
             onTap: () => Navigator.of(dialogContext).pop(AppThemeMode.system),
@@ -226,12 +280,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final newName = await showDialog<String>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('編輯姓名'),
+          title: Text(S.of(context).settings_editName),
           content: TextField(
             controller: controller,
-            decoration: const InputDecoration(
-              labelText: '姓名',
-              hintText: '用於報銷單標題',
+            decoration: InputDecoration(
+              labelText: S.of(context).settings_nameLabel,
+              hintText: S.of(context).settings_nameHint,
             ),
             autofocus: true,
             textCapitalization: TextCapitalization.words,
@@ -239,11 +293,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('取消'),
+              child: Text(S.of(context).common_cancel),
             ),
             ElevatedButton(
               onPressed: () => Navigator.of(context).pop(controller.text.trim()),
-              child: const Text('儲存'),
+              child: Text(S.of(context).common_save),
             ),
           ],
         ),
@@ -255,7 +309,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       if (mounted && success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('已儲存')),
+          SnackBar(content: Text(S.of(context).settings_saved)),
         );
       }
     } finally {
@@ -272,14 +326,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('清理失敗: ${error.message}'),
+            content: Text(S.of(context).settings_cleanupFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
       },
       onSuccess: (count) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('已清理 $count 個暫存檔案')),
+          SnackBar(content: Text(S.of(context).settings_cleanedFiles(count))),
         );
       },
     );
@@ -290,16 +344,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('備份到雲端'),
-        content: const Text('這將備份所有支出記錄和收據圖片到 Google 雲端硬碟。\n\n繼續？'),
+        title: Text(S.of(context).settings_backupToCloud),
+        content: Text(S.of(context).settings_backupConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('取消'),
+            child: Text(S.of(context).common_cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('備份'),
+            child: Text(S.of(context).settings_backup),
           ),
         ],
       ),
@@ -320,15 +374,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('備份失敗: ${error.message}'),
+            content: Text(S.of(context).settings_backupFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
       },
       onSuccess: (_) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('備份成功'),
+          SnackBar(
+            content: Text(S.of(context).settings_backupSuccess),
             backgroundColor: AppColors.success,
           ),
         );
@@ -344,7 +398,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (provider.cloudBackups.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('沒有找到雲端備份')),
+        SnackBar(content: Text(S.of(context).settings_noBackupFound)),
       );
       return;
     }
@@ -361,15 +415,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('確認還原'),
-        content: Text(
-          '這將使用 "${selectedBackup.fileName}" 取代目前所有資料。\n\n'
-          '此操作無法復原，確定要繼續嗎？',
-        ),
+        title: Text(S.of(context).settings_confirmRestoreTitle),
+        content: Text(S.of(context).settings_confirmRestoreDesc(selectedBackup.fileName)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('取消'),
+            child: Text(S.of(context).common_cancel),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -377,7 +428,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               foregroundColor: Colors.white,
             ),
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('還原'),
+            child: Text(S.of(context).settings_restore),
           ),
         ],
       ),
@@ -398,7 +449,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('還原失敗: ${error.message}'),
+            content: Text(S.of(context).settings_restoreFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
@@ -408,8 +459,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         context.read<ExpenseProvider>().refresh();
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('還原成功'),
+          SnackBar(
+            content: Text(S.of(context).settings_restoreSuccess),
             backgroundColor: AppColors.success,
           ),
         );
@@ -450,26 +501,26 @@ class _GoogleAccountTile extends StatelessWidget {
     if (provider.isGoogleConnected) {
       return ListTile(
         leading: const Icon(Icons.cloud_done, color: AppColors.success),
-        title: const Text('Google 雲端硬碟'),
-        subtitle: Text(provider.backupStatus.googleEmail ?? '已連接'),
+        title: Text(S.of(context).settings_googleDrive),
+        subtitle: Text(provider.backupStatus.googleEmail ?? S.of(context).settings_connected),
         trailing: TextButton(
           onPressed: provider.isOperationInProgress
               ? null
               : () => _disconnectGoogle(context),
-          child: const Text('斷開'),
+          child: Text(S.of(context).settings_disconnect),
         ),
       );
     }
 
     return ListTile(
       leading: const Icon(Icons.cloud_outlined),
-      title: const Text('Google 雲端硬碟'),
-      subtitle: const Text('尚未連接'),
+      title: Text(S.of(context).settings_googleDrive),
+      subtitle: Text(S.of(context).settings_notConnected),
       trailing: ElevatedButton(
         onPressed: provider.isOperationInProgress
             ? null
             : () => _connectGoogle(context),
-        child: const Text('連接'),
+        child: Text(S.of(context).settings_connect),
       ),
     );
   }
@@ -488,7 +539,7 @@ class _GoogleAccountTile extends StatelessWidget {
         if (error.code != 'CANCELLED') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('連接失敗: ${error.message}'),
+              content: Text(S.of(context).settings_connectFailed(error.message)),
               backgroundColor: AppColors.error,
             ),
           );
@@ -496,8 +547,8 @@ class _GoogleAccountTile extends StatelessWidget {
       },
       onSuccess: (_) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('已連接 Google 帳號'),
+          SnackBar(
+            content: Text(S.of(context).settings_googleConnected),
             backgroundColor: AppColors.success,
           ),
         );
@@ -510,16 +561,16 @@ class _GoogleAccountTile extends StatelessWidget {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('斷開 Google 帳號'),
-        content: const Text('斷開後將無法使用雲端備份功能。\n\n確定要斷開嗎？'),
+        title: Text(S.of(context).settings_disconnectTitle),
+        content: Text(S.of(context).settings_disconnectConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('取消'),
+            child: Text(S.of(context).common_cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('斷開'),
+            child: Text(S.of(context).settings_disconnect),
           ),
         ],
       ),
@@ -537,14 +588,14 @@ class _GoogleAccountTile extends StatelessWidget {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('斷開失敗: ${error.message}'),
+            content: Text(S.of(context).settings_disconnectFailed(error.message)),
             backgroundColor: AppColors.error,
           ),
         );
       },
       onSuccess: (_) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('已斷開 Google 帳號')),
+          SnackBar(content: Text(S.of(context).settings_googleDisconnected)),
         );
       },
     );
@@ -605,7 +656,7 @@ class _RestoreBackupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('選擇備份'),
+      title: Text(S.of(context).settings_selectBackup),
       content: SizedBox(
         width: double.maxFinite,
         child: ListView.builder(
@@ -627,7 +678,7 @@ class _RestoreBackupDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('取消'),
+          child: Text(S.of(context).common_cancel),
         ),
       ],
     );
@@ -661,6 +712,38 @@ class _ThemeModeOption extends StatelessWidget {
     final isSelected = value == groupValue;
     return ListTile(
       leading: Icon(icon),
+      title: Text(title),
+      trailing: isSelected
+          ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
+          : null,
+      selected: isSelected,
+      onTap: onTap,
+    );
+  }
+}
+
+/// 語言選項
+class _LanguageOption extends StatelessWidget {
+  const _LanguageOption({
+    required this.code,
+    required this.title,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String code;
+  final String title;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(
+        code == 'system'
+            ? Icons.settings_brightness_outlined
+            : Icons.translate_outlined,
+      ),
       title: Text(title),
       trailing: isSelected
           ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)

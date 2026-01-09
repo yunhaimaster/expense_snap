@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -14,9 +13,11 @@ import 'data/repositories/backup_repository.dart';
 import 'data/repositories/exchange_rate_repository.dart';
 import 'data/repositories/expense_repository.dart';
 import 'domain/repositories/expense_repository.dart';
+import 'l10n/app_localizations.dart';
 import 'presentation/providers/connectivity_provider.dart';
 import 'presentation/providers/exchange_rate_provider.dart';
 import 'presentation/providers/expense_provider.dart';
+import 'presentation/providers/locale_provider.dart';
 import 'presentation/providers/settings_provider.dart';
 import 'presentation/providers/showcase_provider.dart';
 import 'presentation/providers/theme_provider.dart';
@@ -228,13 +229,16 @@ class ExpenseSnapApp extends StatelessWidget {
         ChangeNotifierProvider<ShowcaseProvider>(
           create: (_) => ShowcaseProvider()..initialize(),
         ),
+        ChangeNotifierProvider<LocaleProvider>(
+          create: (_) => LocaleProvider()..initialize(),
+        ),
       ],
       child: ErrorBoundary(
         onError: (error, stackTrace) {
           AppLogger.error('Global error caught', error: error, stackTrace: stackTrace);
         },
-        child: Consumer<ThemeProvider>(
-          builder: (context, themeProvider, child) {
+        child: Consumer2<ThemeProvider, LocaleProvider>(
+          builder: (context, themeProvider, localeProvider, child) {
             return MaterialApp(
               title: 'Expense Snap',
               theme: AppTheme.light,
@@ -243,17 +247,10 @@ class ExpenseSnapApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               initialRoute: needsOnboarding ? AppRouter.onboarding : AppRouter.home,
               onGenerateRoute: AppRouter.generateRoute,
-              // 支援繁體中文日期選擇器
-              locale: const Locale('zh', 'TW'),
-              supportedLocales: const [
-                Locale('zh', 'TW'),
-                Locale('en', 'US'),
-              ],
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
+              // 語言設定（null 表示跟隨系統）
+              locale: localeProvider.locale,
+              supportedLocales: S.supportedLocales,
+              localizationsDelegates: S.localizationsDelegates,
             );
           },
         ),

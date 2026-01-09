@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/utils/animation_utils.dart';
 import '../../../../data/models/expense.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../widgets/common/animated_count.dart';
 
 /// 月份摘要組件
@@ -40,20 +41,23 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
   }
 
   /// 建立語意描述
-  String _buildSemanticLabel() {
+  String _buildSemanticLabel(BuildContext context) {
     final totalAmount = (widget.summary.totalHkdAmountCents / 100).toStringAsFixed(2);
-    return '${widget.summary.formattedMonth}月份摘要。'
-        '總支出：港幣 $totalAmount 元。'
-        '共 ${widget.summary.totalCount} 筆支出。';
+    return S.of(context).monthSummary_semanticLabel(
+      widget.summary.formattedMonth,
+      totalAmount,
+      widget.summary.totalCount,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     // 減少動畫模式
     final reduceMotion = AnimationUtils.shouldReduceMotion(context);
+    final l10n = S.of(context);
 
     return Semantics(
-      label: _buildSemanticLabel(),
+      label: _buildSemanticLabel(context),
       container: true,
       child: Card(
         margin: const EdgeInsets.all(16),
@@ -67,11 +71,11 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
                 children: [
                   Semantics(
                     button: true,
-                    label: '切換到上個月',
+                    label: l10n.monthSummary_previousMonth,
                     child: IconButton(
                       onPressed: _handlePreviousMonth,
                       icon: const Icon(Icons.chevron_left),
-                      tooltip: '上個月',
+                      tooltip: l10n.monthSummary_previousMonth,
                     ),
                   ),
                   // 月份標題使用 AnimatedSwitcher（支援減少動畫模式）
@@ -119,11 +123,11 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
                   ),
                   Semantics(
                     button: true,
-                    label: widget.canGoNext ? '切換到下個月' : '已是最新月份',
+                    label: widget.canGoNext ? l10n.monthSummary_nextMonth : l10n.monthSummary_isLatestMonth,
                     child: IconButton(
                       onPressed: widget.canGoNext ? _handleNextMonth : null,
                       icon: const Icon(Icons.chevron_right),
-                      tooltip: '下個月',
+                      tooltip: l10n.monthSummary_nextMonth,
                     ),
                   ),
                 ],
@@ -140,7 +144,7 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
                   children: [
                     // 總金額（使用動畫）
                     _AnimatedStatItem(
-                      label: '總支出',
+                      label: l10n.monthSummary_totalExpense,
                       amount: widget.summary.totalHkdAmountCents,
                       icon: Icons.account_balance_wallet_outlined,
                       color: Theme.of(context).colorScheme.primary,
@@ -155,9 +159,9 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
 
                     // 筆數（使用動畫）
                     _AnimatedCountStatItem(
-                      label: '筆數',
+                      label: l10n.monthSummary_count,
                       count: widget.summary.totalCount,
-                      suffix: ' 筆',
+                      suffix: l10n.monthSummary_countSuffix,
                       icon: Icons.receipt_long_outlined,
                       color: Theme.of(context).colorScheme.secondary,
                     ),

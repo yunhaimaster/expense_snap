@@ -5,6 +5,7 @@ import 'package:showcaseview/showcaseview.dart';
 import '../../../core/errors/app_exception.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../providers/expense_provider.dart';
 import '../../providers/showcase_provider.dart';
 import '../../widgets/common/animated_fab.dart';
@@ -16,7 +17,10 @@ import 'widgets/month_summary.dart';
 ///
 /// 顯示月份摘要和支出列表，包含功能發現提示
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.isActive = true});
+
+  /// 是否為當前活動的 tab（用於 IndexedStack）
+  final bool isActive;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -40,6 +44,23 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  @override
+  void didUpdateWidget(HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 當從活動變為非活動時，關閉 showcase
+    if (oldWidget.isActive && !widget.isActive) {
+      _dismissShowcase();
+    }
+  }
+
+  /// 關閉 showcase
+  void _dismissShowcase() {
+    final showcaseContext = _showcaseContext;
+    if (showcaseContext != null && showcaseContext.mounted) {
+      ShowCaseWidget.of(showcaseContext).dismiss();
+    }
+  }
+
   /// 檢查並開始 Showcase
   Future<void> _checkAndStartShowcase() async {
     final showcaseProvider = context.read<ShowcaseProvider>();
@@ -53,10 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
       await Future.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;
 
-      // 確保 HomeScreen 是當前路由才顯示 Showcase
-      // 避免在其他畫面（如設定頁還原備份後）錯誤顯示
-      final isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? false;
-      if (!isCurrentRoute) return;
+      // 確保 HomeScreen 是當前活動的 tab
+      if (!widget.isActive) return;
 
       // 再次確認 widget 仍然存在
       if (!mounted) return;
@@ -71,10 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 開始滑動刪除提示
   void _startSwipeShowcase() {
-    // 確保 widget 仍然存在且是當前路由
+    // 確保 widget 仍然存在且是活動的 tab
     if (!mounted) return;
-    final isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? false;
-    if (!isCurrentRoute) return;
+    if (!widget.isActive) return;
 
     final showcaseProvider = context.read<ShowcaseProvider>();
     if (showcaseProvider.shouldShowSwipeShowcase) {
@@ -154,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onFailure: (error) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('刪除失敗: ${error.message}'),
+                              content: Text(S.of(context).home_deleteFailed(error.message)),
                               backgroundColor: AppColors.error,
                             ),
                           );
@@ -162,9 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onSuccess: (_) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text('已刪除支出'),
+                              content: Text(S.of(context).home_deleteSuccess),
                               action: SnackBarAction(
-                                label: '復原',
+                                label: S.of(context).home_undo,
                                 onPressed: () async {
                                   await provider.restoreExpense(expense.id!);
                                   if (!context.mounted) return;
@@ -192,8 +210,8 @@ class _HomeScreenState extends State<HomeScreen> {
               final showPulse = !state.isLoading && state.isEmpty;
               return Showcase(
                 key: _fabShowcaseKey,
-                title: '新增支出',
-                description: '點擊這裡拍照記錄你的支出',
+                title: S.of(context).showcase_addExpenseTitle,
+                description: S.of(context).showcase_addExpenseDesc,
                 targetBorderRadius: BorderRadius.circular(28),
                 tooltipBackgroundColor: AppColors.primary,
                 textColor: Colors.white,
@@ -203,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     Navigator.of(context).pushNamed(AppRouter.addExpense);
                   },
-                  tooltip: '新增支出',
+                  tooltip: S.of(context).home_addExpense,
                   showPulse: showPulse,
                 ),
               );
@@ -234,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
               context.read<ExpenseProvider>().clearError();
               context.read<ExpenseProvider>().refresh();
             },
-            child: const Text('重試'),
+            child: Text(S.of(context).common_retry),
           ),
         ],
       ),
