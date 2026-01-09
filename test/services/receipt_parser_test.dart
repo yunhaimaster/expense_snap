@@ -281,10 +281,10 @@ void main() {
     test('extracts largest amount in bottom half as fallback', () {
       // 模擬沒有關鍵字的收據，取下半部最大金額
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('Store Name', top: 0, bottom: 50),
-        _TextBlockData('Item A 25.00', top: 100, bottom: 150),
-        _TextBlockData('Item B 35.00', top: 200, bottom: 250),
-        _TextBlockData('88.00', top: 300, bottom: 350),
+        const _TextBlockData('Store Name', top: 0, bottom: 50),
+        const _TextBlockData('Item A 25.00', top: 100, bottom: 150),
+        const _TextBlockData('Item B 35.00', top: 200, bottom: 250),
+        const _TextBlockData('88.00', top: 300, bottom: 350),
       ]);
       final result = AmountExtractor.extract(text);
 
@@ -334,9 +334,9 @@ void main() {
   group('DescriptionExtractor', () {
     test('extracts store name with 店 keyword', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('大家樂快餐店', top: 0, bottom: 50),
-        _TextBlockData('地址: 中環123號', top: 60, bottom: 100),
-        _TextBlockData('Total: 50.00', top: 150, bottom: 200),
+        const _TextBlockData('大家樂快餐店', top: 0, bottom: 50),
+        const _TextBlockData('地址: 中環123號', top: 60, bottom: 100),
+        const _TextBlockData('Total: 50.00', top: 150, bottom: 200),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -345,8 +345,8 @@ void main() {
 
     test('extracts store name with 餐廳 keyword', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('翠華餐廳', top: 0, bottom: 50),
-        _TextBlockData('電話: 12345678', top: 60, bottom: 100),
+        const _TextBlockData('翠華餐廳', top: 0, bottom: 50),
+        const _TextBlockData('電話: 12345678', top: 60, bottom: 100),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -355,8 +355,8 @@ void main() {
 
     test('extracts store name with Restaurant keyword', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('ABC Restaurant', top: 0, bottom: 50),
-        _TextBlockData('Address: 123 Street', top: 60, bottom: 100),
+        const _TextBlockData('ABC Restaurant', top: 0, bottom: 50),
+        const _TextBlockData('Address: 123 Street', top: 60, bottom: 100),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -365,8 +365,8 @@ void main() {
 
     test('filters address lines', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('香港中環德輔道中123號', top: 0, bottom: 50),
-        _TextBlockData('美心西餅店', top: 60, bottom: 100),
+        const _TextBlockData('香港中環德輔道中123號', top: 0, bottom: 50),
+        const _TextBlockData('美心西餅店', top: 60, bottom: 100),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -376,8 +376,8 @@ void main() {
 
     test('filters phone numbers', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('電話: 21234567', top: 0, bottom: 50),
-        _TextBlockData('好味道餐廳中環店', top: 60, bottom: 100),
+        const _TextBlockData('電話: 21234567', top: 0, bottom: 50),
+        const _TextBlockData('好味道餐廳中環店', top: 60, bottom: 100),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -386,8 +386,8 @@ void main() {
 
     test('filters receipt numbers', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('Receipt No. 12345', top: 0, bottom: 50),
-        _TextBlockData('Pacific Coffee', top: 60, bottom: 100),
+        const _TextBlockData('Receipt No. 12345', top: 0, bottom: 50),
+        const _TextBlockData('Pacific Coffee', top: 60, bottom: 100),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -403,7 +403,7 @@ void main() {
 
     test('truncates long descriptions', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData(
+        const _TextBlockData(
           '這是一個非常長的餐廳超過三十個字元應該被截斷顯示省略號哦',
           top: 0,
           bottom: 50,
@@ -417,8 +417,8 @@ void main() {
 
     test('skips too short text', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('A', top: 0, bottom: 50),
-        _TextBlockData('好味餐廳', top: 60, bottom: 100),
+        const _TextBlockData('A', top: 0, bottom: 50),
+        const _TextBlockData('好味餐廳', top: 60, bottom: 100),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -427,7 +427,7 @@ void main() {
 
     test('handles 公司 keyword', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('美心食品有限公司', top: 0, bottom: 50),
+        const _TextBlockData('美心食品有限公司', top: 0, bottom: 50),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -436,7 +436,7 @@ void main() {
 
     test('handles 超市 keyword', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('惠康超市旺角分店', top: 0, bottom: 50),
+        const _TextBlockData('惠康超市旺角分店', top: 0, bottom: 50),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -446,8 +446,8 @@ void main() {
 
     test('filters total/amount lines', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('Total: 100.00', top: 0, bottom: 50),
-        _TextBlockData('麥當勞', top: 60, bottom: 100),
+        const _TextBlockData('Total: 100.00', top: 0, bottom: 50),
+        const _TextBlockData('麥當勞', top: 60, bottom: 100),
       ]);
       final result = DescriptionExtractor.extract(text);
 
@@ -483,7 +483,7 @@ void main() {
     });
 
     test('extracts Chinese date format yyyy年M月d日', () {
-      final text = _createRecognizedText('$adjustedYear年${validMonth}月5日');
+      final text = _createRecognizedText('$adjustedYear年$validMonth月5日');
       final result = DateExtractor.extract(text);
 
       expect(result, isNotNull);
@@ -566,9 +566,9 @@ void main() {
   group('ReceiptParser integration', () {
     test('parses complete receipt', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('大家樂快餐店', top: 0, bottom: 50),
-        _TextBlockData('香港中環', top: 60, bottom: 100),
-        _TextBlockData('Total HKD 88.00', top: 200, bottom: 250),
+        const _TextBlockData('大家樂快餐店', top: 0, bottom: 50),
+        const _TextBlockData('香港中環', top: 60, bottom: 100),
+        const _TextBlockData('Total HKD 88.00', top: 200, bottom: 250),
       ]);
 
       final parser = ReceiptParser(defaultCurrency: 'CNY');
@@ -583,8 +583,8 @@ void main() {
 
     test('uses default currency when not detected', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('Store Name', top: 0, bottom: 50),
-        _TextBlockData('Total: 50.00', top: 100, bottom: 150),
+        const _TextBlockData('Store Name', top: 0, bottom: 50),
+        const _TextBlockData('Total: 50.00', top: 100, bottom: 150),
       ]);
 
       final parser = ReceiptParser(defaultCurrency: 'HKD');
@@ -605,8 +605,8 @@ void main() {
 
     test('parses CNY receipt', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('星巴克咖啡店', top: 0, bottom: 50),
-        _TextBlockData('總計: ¥38.00', top: 100, bottom: 150),
+        const _TextBlockData('星巴克咖啡店', top: 0, bottom: 50),
+        const _TextBlockData('總計: ¥38.00', top: 100, bottom: 150),
       ]);
 
       final parser = ReceiptParser(defaultCurrency: 'HKD');
@@ -619,8 +619,8 @@ void main() {
 
     test('parses USD receipt', () {
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('Starbucks Store', top: 0, bottom: 50),
-        _TextBlockData('Total USD 5.50', top: 100, bottom: 150),
+        const _TextBlockData('Starbucks Store', top: 0, bottom: 50),
+        const _TextBlockData('Total USD 5.50', top: 100, bottom: 150),
       ]);
 
       final parser = ReceiptParser(defaultCurrency: 'HKD');
@@ -637,9 +637,9 @@ void main() {
       final adjustedYear = now.month > 1 ? now.year : now.year - 1;
 
       final text = _createRecognizedTextMultiBlock([
-        _TextBlockData('大家樂快餐店', top: 0, bottom: 50),
+        const _TextBlockData('大家樂快餐店', top: 0, bottom: 50),
         _TextBlockData('$adjustedYear-${validMonth.toString().padLeft(2, '0')}-15 12:30', top: 60, bottom: 100),
-        _TextBlockData('Total HKD 68.00', top: 150, bottom: 200),
+        const _TextBlockData('Total HKD 68.00', top: 150, bottom: 200),
       ]);
 
       final parser = ReceiptParser(defaultCurrency: 'HKD');

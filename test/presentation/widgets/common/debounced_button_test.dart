@@ -207,17 +207,17 @@ void main() {
       // 此測試驗證當 onPressed 為 null 時，點擊按鈕不會觸發任何回調或錯誤
       // 注意：DebouncedButton 內部會包裝 onPressed，所以 ElevatedButton.onPressed
       // 技術上不是 null，但內部會檢查並提前返回
-      var callbackTriggered = false;
+      const callbackTriggered = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
           home: Scaffold(
             body: DebouncedButton(
               onPressed: null,
-              child: const Text('測試按鈕'),
+              child: Text('測試按鈕'),
             ),
           ),
         ),

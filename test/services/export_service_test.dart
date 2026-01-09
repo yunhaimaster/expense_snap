@@ -10,7 +10,7 @@ ExportStrings createTestExportStrings({int year = 2025, int month = 1}) {
   return ExportStrings(
     sheetName: '$year年$month月報銷單',
     shareSubject: 'Expense Snap 報銷單',
-    fileName: '報銷單_$year年${monthStr}月',
+    fileName: '報銷單_$year年$monthStr月',
     headerIndex: '序號',
     headerDate: '日期',
     headerDescription: '描述',

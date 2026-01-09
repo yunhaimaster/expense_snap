@@ -207,7 +207,7 @@ void main() {
   group('EmptyStates 工廠', () {
     testWidgets('noExpenses 應使用正確插圖', (tester) async {
       await tester.pumpWidget(
-        buildTestApp(builder: (context) => EmptyStates.noExpenses(context)),
+        buildTestApp(builder: EmptyStates.noExpenses),
       );
 
       await tester.pumpAndSettle();
@@ -239,7 +239,7 @@ void main() {
 
     testWidgets('noDeletedItems 應使用正確插圖', (tester) async {
       await tester.pumpWidget(
-        buildTestApp(builder: (context) => EmptyStates.noDeletedItems(context)),
+        buildTestApp(builder: EmptyStates.noDeletedItems),
       );
 
       // noDeletedItems 設定 animate: false
@@ -284,7 +284,7 @@ void main() {
 
     testWidgets('offline 應使用離線插圖', (tester) async {
       await tester.pumpWidget(
-        buildTestApp(builder: (context) => EmptyStates.offline(context)),
+        buildTestApp(builder: EmptyStates.offline),
       );
 
       await tester.pumpAndSettle();
@@ -309,7 +309,7 @@ void main() {
 
     testWidgets('exportSuccess 應使用成功插圖', (tester) async {
       await tester.pumpWidget(
-        buildTestApp(builder: (context) => EmptyStates.exportSuccess(context)),
+        buildTestApp(builder: EmptyStates.exportSuccess),
       );
 
       await tester.pumpAndSettle();

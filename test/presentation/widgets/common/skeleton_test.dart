@@ -10,11 +10,11 @@ void main() {
   group('SkeletonBox', () {
     testWidgets('應正確渲染指定尺寸', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonBox(width: 100, height: 50),
           ),
         ),
@@ -29,11 +29,11 @@ void main() {
 
     testWidgets('寬度為 null 時應填滿可用空間', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SizedBox(
               width: 200,
               child: SkeletonBox(height: 50),
@@ -49,11 +49,11 @@ void main() {
 
     testWidgets('應套用指定的圓角', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonBox(width: 100, height: 50, borderRadius: 12.0),
           ),
         ),
@@ -70,11 +70,11 @@ void main() {
   group('SkeletonCircle', () {
     testWidgets('應渲染為圓形', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonCircle(size: 40),
           ),
         ),
@@ -88,11 +88,11 @@ void main() {
 
     testWidgets('應使用指定尺寸', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonCircle(size: 60),
           ),
         ),
@@ -108,11 +108,11 @@ void main() {
   group('SkeletonText', () {
     testWidgets('單行時應渲染單個 SkeletonBox', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonText(width: 100, lines: 1),
           ),
         ),
@@ -123,11 +123,11 @@ void main() {
 
     testWidgets('多行時應渲染多個 SkeletonBox', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonText(width: 100, lines: 3),
           ),
         ),
@@ -138,11 +138,11 @@ void main() {
 
     testWidgets('寬度為 null 時最後一行應為 70% 寬度', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SizedBox(
               width: 200,
               child: SkeletonText(lines: 2),
@@ -159,11 +159,11 @@ void main() {
 
     testWidgets('指定寬度時所有行應使用相同寬度', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonText(width: 150, lines: 3),
           ),
         ),
@@ -178,11 +178,11 @@ void main() {
   group('SkeletonThumbnail', () {
     testWidgets('應渲染為正方形', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonThumbnail(size: 80),
           ),
         ),
@@ -196,11 +196,11 @@ void main() {
 
     testWidgets('應使用指定圓角', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonThumbnail(size: 60, borderRadius: 12),
           ),
         ),
@@ -216,11 +216,11 @@ void main() {
   group('SkeletonShimmer', () {
     testWidgets('應包裝 Shimmer 效果', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SkeletonShimmer(
               child: SkeletonBox(width: 100, height: 50),
             ),
@@ -235,11 +235,11 @@ void main() {
   group('ExpenseCardSkeleton', () {
     testWidgets('應正確渲染卡片骨架', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: ExpenseCardSkeleton(),
           ),
         ),
@@ -251,11 +251,11 @@ void main() {
 
     testWidgets('應包含縮圖骨架', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: ExpenseCardSkeleton(),
           ),
         ),
@@ -268,11 +268,11 @@ void main() {
   group('ExpenseListSkeleton', () {
     testWidgets('應渲染指定數量的卡片骨架', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: ExpenseListSkeleton(itemCount: 3),
           ),
         ),
@@ -283,11 +283,11 @@ void main() {
 
     testWidgets('預設應渲染 5 個卡片', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: ExpenseListSkeleton(),
           ),
         ),
@@ -300,11 +300,11 @@ void main() {
   group('MonthSummarySkeleton', () {
     testWidgets('應正確渲染摘要骨架', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: MonthSummarySkeleton(),
           ),
         ),
@@ -316,11 +316,11 @@ void main() {
 
     testWidgets('應包含導航按鈕骨架 (2 個圓形)', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: MonthSummarySkeleton(),
           ),
         ),
@@ -334,11 +334,11 @@ void main() {
   group('SettingsItemSkeleton', () {
     testWidgets('應正確渲染設定項目骨架', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SettingsItemSkeleton(),
           ),
         ),
@@ -352,11 +352,11 @@ void main() {
   group('SettingsListSkeleton', () {
     testWidgets('應渲染指定數量的項目骨架', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SettingsListSkeleton(itemCount: 5),
           ),
         ),
@@ -367,11 +367,11 @@ void main() {
 
     testWidgets('預設應渲染 4 個項目', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: SettingsListSkeleton(),
           ),
         ),
@@ -384,11 +384,11 @@ void main() {
   group('ExportPreviewSkeleton', () {
     testWidgets('應正確渲染匯出預覽骨架', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: ExportPreviewSkeleton(),
           ),
         ),
@@ -400,11 +400,11 @@ void main() {
 
     testWidgets('應包含圖示骨架 (大圓形)', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const Scaffold(
+          home: Scaffold(
             body: ExportPreviewSkeleton(),
           ),
         ),

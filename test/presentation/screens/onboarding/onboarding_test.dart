@@ -10,11 +10,11 @@ void main() {
 
     testWidgets('renders 3-step carousel', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const OnboardingScreen(),
+          home: OnboardingScreen(),
         ),
       );
 
@@ -28,11 +28,11 @@ void main() {
 
     testWidgets('displays first page content correctly', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const OnboardingScreen(),
+          home: OnboardingScreen(),
         ),
       );
 
@@ -51,11 +51,11 @@ void main() {
 
     testWidgets('navigates to second page on next button tap', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const OnboardingScreen(),
+          home: OnboardingScreen(),
         ),
       );
 
@@ -74,11 +74,11 @@ void main() {
       addTearDown(() => tester.view.resetPhysicalSize());
 
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const OnboardingScreen(),
+          home: OnboardingScreen(),
         ),
       );
 
@@ -108,11 +108,11 @@ void main() {
       addTearDown(() => tester.view.resetPhysicalSize());
 
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const OnboardingScreen(),
+          home: OnboardingScreen(),
         ),
       );
 
@@ -134,11 +134,11 @@ void main() {
       addTearDown(() => tester.view.resetPhysicalSize());
 
       await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('zh'),
+        const MaterialApp(
+          locale: Locale('zh'),
           supportedLocales: S.supportedLocales,
           localizationsDelegates: S.localizationsDelegates,
-          home: const OnboardingScreen(),
+          home: OnboardingScreen(),
         ),
       );
 

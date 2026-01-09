@@ -73,7 +73,7 @@ class OcrService {
       final recognizer = await _getRecognizer();
       if (recognizer == null) {
         return Result.failure(
-          OcrException('無法初始化文字識別器', code: 'RECOGNIZER_INIT_FAILED'),
+          const OcrException('無法初始化文字識別器', code: 'RECOGNIZER_INIT_FAILED'),
         );
       }
 

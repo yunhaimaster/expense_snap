@@ -171,7 +171,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ListTile(
                     leading: const Icon(Icons.info_outline),
                     title: Text(S.of(context).settings_version),
-                    subtitle: Text('${AppConstants.appName} v${AppConstants.appVersion}'),
+                    subtitle: const Text('${AppConstants.appName} v${AppConstants.appVersion}'),
                   ),
                 ],
               ),
