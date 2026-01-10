@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../core/utils/app_logger.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/di/service_locator.dart';
 import '../../../core/theme/app_colors.dart';
@@ -63,6 +64,7 @@ class _ExportScreenState extends State<ExportScreen> {
         setState(() => _userName = name);
       }
     } catch (e) {
+      AppLogger.warning('Failed to load user name for export', error: e);
       // 使用預設名稱
     }
   }
@@ -97,6 +99,7 @@ class _ExportScreenState extends State<ExportScreen> {
         });
       }
     } catch (e) {
+      AppLogger.warning('Failed to load export preview', error: e, tag: 'Export');
       if (mounted) {
         setState(() {
           _expenses = [];
@@ -177,6 +180,7 @@ class _ExportScreenState extends State<ExportScreen> {
         _showErrorSnackBar(S.of(context).export_failed(error?.message ?? S.of(context).error_unknown));
       }
     } catch (e) {
+      AppLogger.error('Export ZIP failed unexpectedly', error: e, tag: 'Export');
       if (mounted) {
         _showErrorSnackBar(S.of(context).export_failed('$e'));
       }

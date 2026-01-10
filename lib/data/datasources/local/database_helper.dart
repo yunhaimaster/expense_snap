@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:synchronized/synchronized.dart';
 
 import '../../../core/utils/app_logger.dart';
 
@@ -16,30 +15,24 @@ class DatabaseHelper {
   static const int _databaseVersion = 2; // v1→v2: 新增 category 欄位
 
   Database? _database;
-  Completer<Database>? _initCompleter;
+  // 使用 Lock 確保並發初始化時的線程安全
+  final Lock _initLock = Lock();
 
-  /// 取得資料庫實例（使用 Completer 確保線程安全）
+  /// 取得資料庫實例（使用 Lock 確保線程安全）
+  ///
+  /// 使用 synchronized 套件的 Lock，確保並發呼叫時只初始化一次
   Future<Database> get database async {
-    // 如果已初始化，直接返回
+    // 快速路徑：如果已初始化，直接返回
     if (_database != null) return _database!;
 
-    // 如果正在初始化中，等待完成
-    if (_initCompleter != null) {
-      return _initCompleter!.future;
-    }
+    // 使用 Lock 確保初始化只執行一次
+    return _initLock.synchronized(() async {
+      // 再次檢查（雙重檢查鎖定模式）
+      if (_database != null) return _database!;
 
-    // 開始初始化
-    _initCompleter = Completer<Database>();
-
-    try {
       _database = await _initDatabase();
-      _initCompleter!.complete(_database!);
       return _database!;
-    } catch (e) {
-      _initCompleter!.completeError(e);
-      _initCompleter = null; // 重置以便重試
-      rethrow;
-    }
+    });
   }
 
   /// 初始化資料庫
@@ -175,6 +168,7 @@ class DatabaseHelper {
 
   /// 升級資料庫
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    final stopwatch = Stopwatch()..start();
     AppLogger.database('Upgrading database from v$oldVersion to v$newVersion');
 
     // v1 → v2: 新增 category 欄位和索引
@@ -194,8 +188,13 @@ class DatabaseHelper {
         CREATE INDEX IF NOT EXISTS idx_expenses_deleted_category ON expenses (is_deleted, category)
       ''');
 
-      AppLogger.database('Migration v1→v2 completed');
+      // 執行 ANALYZE 更新統計資訊，優化查詢計劃
+      await db.execute('ANALYZE');
+
+      AppLogger.database('Migration v1→v2 completed in ${stopwatch.elapsedMilliseconds}ms');
     }
+
+    stopwatch.stop();
   }
 
   /// 關閉資料庫
@@ -203,7 +202,6 @@ class DatabaseHelper {
     if (_database != null) {
       await _database!.close();
       _database = null;
-      _initCompleter = null; // 重置 completer 以便重新初始化
       AppLogger.database('Database closed');
     }
   }
@@ -271,6 +269,25 @@ class DatabaseHelper {
     );
 
     return results;
+  }
+
+  /// 查詢月份支出數量（用於串流匯出判斷）
+  Future<int> getExpenseCountByMonth({
+    required int year,
+    required int month,
+  }) async {
+    final db = await database;
+
+    final monthStr = month.toString().padLeft(2, '0');
+    final yearMonthPrefix = '$year-$monthStr';
+
+    final results = await db.rawQuery('''
+      SELECT COUNT(*) as count
+      FROM expenses
+      WHERE substr(date, 1, 7) = ? AND is_deleted = 0
+    ''', [yearMonthPrefix]);
+
+    return results.first['count'] as int;
   }
 
   /// 查詢單筆支出

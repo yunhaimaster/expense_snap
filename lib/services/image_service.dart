@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -20,10 +21,16 @@ import '../core/utils/path_validator.dart';
 /// - 生成縮圖
 /// - 管理圖片儲存路徑
 class ImageService {
-  ImageService({ImagePicker? picker}) : _picker = picker ?? ImagePicker();
+  ImageService({
+    ImagePicker? picker,
+    this.processingTimeout = const Duration(seconds: 5),
+  }) : _picker = picker ?? ImagePicker();
 
   final ImagePicker _picker;
   static const _uuid = Uuid();
+
+  /// 圖片處理超時時間（預設 5 秒）
+  final Duration processingTimeout;
 
   /// 從相機拍照
   Future<Result<String>> pickFromCamera() async {
@@ -133,17 +140,29 @@ class ImageService {
 
       _ProcessImageResult result;
       try {
-        result = await compute(_processImageIsolate, params);
+        result = await compute(_processImageIsolate, params)
+            .timeout(processingTimeout);
 
         // 若 isolate 內部因 UnimplementedError 失敗，回退到主線程重試
         if (!result.success && result.error?.contains('UnimplementedError') == true) {
           AppLogger.warning('Isolate image processing not supported, retrying on main thread');
-          result = await _processImageMainThread(params);
+          result = await _processImageMainThread(params)
+              .timeout(processingTimeout);
         }
+      } on TimeoutException {
+        // 超時不回退到主線程，直接返回超時錯誤
+        AppLogger.warning('Image processing timeout after ${processingTimeout.inSeconds}s');
+        return Result.failure(ImageException.processingTimeout());
       } catch (e) {
-        // Isolate 執行本身失敗，回退到主線程
+        // Isolate 執行本身失敗，回退到主線程（含超時）
         AppLogger.warning('Isolate image processing failed, falling back to main thread: $e');
-        result = await _processImageMainThread(params);
+        try {
+          result = await _processImageMainThread(params)
+              .timeout(processingTimeout);
+        } on TimeoutException {
+          AppLogger.warning('Main thread image processing timeout after ${processingTimeout.inSeconds}s');
+          return Result.failure(ImageException.processingTimeout());
+        }
       }
 
       if (!result.success) {
@@ -203,6 +222,7 @@ class ImageService {
       }
       return 0;
     } catch (e) {
+      AppLogger.warning('getImageSizeKb failed for path: $path', error: e);
       return 0;
     }
   }

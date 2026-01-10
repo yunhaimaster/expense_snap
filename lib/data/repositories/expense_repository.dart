@@ -40,8 +40,10 @@ class ExpenseRepository implements IExpenseRepository {
           expenseDate: expense.date,
         );
 
-        if (imageResult.isFailure) {
-          return Result.failure((imageResult as Failure).error);
+        // 使用 errorOrNull 替代 dangerous cast，確保類型安全
+        final error = imageResult.errorOrNull;
+        if (error != null) {
+          return Result.failure(error);
         }
 
         final paths = imageResult.getOrThrow();
@@ -142,6 +144,22 @@ class ExpenseRepository implements IExpenseRepository {
       return Result.success(expenses);
     } catch (e) {
       AppLogger.error('getExpensesByMonth failed', error: e);
+      return Result.failure(
+        DatabaseException.queryFailed(e.toString()),
+      );
+    }
+  }
+
+  /// 查詢月份支出數量（用於串流匯出判斷）
+  Future<Result<int>> getExpenseCount({
+    required int year,
+    required int month,
+  }) async {
+    try {
+      final count = await _db.getExpenseCountByMonth(year: year, month: month);
+      return Result.success(count);
+    } catch (e) {
+      AppLogger.error('getExpenseCount failed', error: e);
       return Result.failure(
         DatabaseException.queryFailed(e.toString()),
       );
@@ -345,8 +363,10 @@ class ExpenseRepository implements IExpenseRepository {
         expenseDate: existing.date,
       );
 
-      if (imageResult.isFailure) {
-        return Result.failure((imageResult as Failure).error);
+      // 使用 errorOrNull 替代 dangerous cast，確保類型安全
+      final error = imageResult.errorOrNull;
+      if (error != null) {
+        return Result.failure(error);
       }
 
       final paths = imageResult.getOrThrow();

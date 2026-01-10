@@ -24,6 +24,9 @@ dependencies:
   path_provider: ^2.1.5
   path: ^1.9.0
 
+  # 線程同步（資料庫初始化）
+  synchronized: ^3.1.0+1
+
   # 網絡請求
   dio: ^5.8.0+1
   http: ^1.2.2
@@ -88,6 +91,9 @@ dev_dependencies:
 
   # Mock 測試
   mockito: ^5.4.5
+  # Platform mocking for tests
+  path_provider_platform_interface: ^2.1.0
+  plugin_platform_interface: ^2.1.0
   build_runner: ^2.4.15
 
   # App Icon 生成

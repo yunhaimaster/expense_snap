@@ -118,6 +118,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             16,
             16,
             16,
+            // 使用 viewPadding.bottom 處理安全區域（如 iPhone 底部 Home Indicator）
             16 + MediaQuery.of(context).viewPadding.bottom,
           ),
           child: Form(

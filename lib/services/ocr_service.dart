@@ -12,13 +12,22 @@ import '../core/utils/app_logger.dart';
 /// 使用 Google ML Kit Text Recognition 進行離線文字識別
 /// 使用中文模型（bundled，離線可用），可識別中英文混合收據
 class OcrService {
-  OcrService({this.timeoutDuration = const Duration(seconds: 10)});
+  OcrService({
+    this.timeoutDuration = const Duration(seconds: 5),
+    this.rateLimitDuration = const Duration(seconds: 2),
+  });
 
-  /// OCR 處理超時時間（預設 10 秒，中文模型較慢）
+  /// OCR 處理超時時間（預設 5 秒）
   final Duration timeoutDuration;
+
+  /// 請求間隔限制（預設 2 秒）
+  final Duration rateLimitDuration;
 
   /// 延遲初始化的 TextRecognizer
   TextRecognizer? _textRecognizer;
+
+  /// 上一次 OCR 請求的時間戳
+  DateTime? _lastOcrRequest;
 
   /// 初始化 Completer（用於處理並發初始化請求）
   Completer<TextRecognizer?>? _initCompleter;
@@ -57,12 +66,39 @@ class OcrService {
     }
   }
 
+  /// 檢查是否在速率限制內
+  ///
+  /// 如果距離上次請求時間不足 [rateLimitDuration]，返回剩餘等待時間
+  /// 否則返回 null（可以繼續請求）
+  Duration? getRateLimitRemaining() {
+    if (_lastOcrRequest == null) return null;
+    final elapsed = DateTime.now().difference(_lastOcrRequest!);
+    if (elapsed < rateLimitDuration) {
+      return rateLimitDuration - elapsed;
+    }
+    return null;
+  }
+
   /// 從圖片路徑執行 OCR
   ///
   /// [imagePath] - 圖片檔案路徑
   /// 返回識別結果，包含文字區塊和位置資訊
+  /// 會進行速率限制檢查（預設 2 秒間隔）
   Future<Result<RecognizedText>> recognizeText(String imagePath) async {
     try {
+      // 速率限制檢查
+      final rateLimitRemaining = getRateLimitRemaining();
+      if (rateLimitRemaining != null) {
+        final waitMs = rateLimitRemaining.inMilliseconds;
+        AppLogger.info('OCR rate limited, wait ${waitMs}ms');
+        return Result.failure(
+          OcrException.rateLimited(rateLimitRemaining),
+        );
+      }
+
+      // 記錄請求時間
+      _lastOcrRequest = DateTime.now();
+
       // 驗證檔案存在
       final file = File(imagePath);
       if (!await file.exists()) {
@@ -120,6 +156,7 @@ class OcrService {
       await _textRecognizer?.close();
       _textRecognizer = null;
       _initCompleter = null;
+      _lastOcrRequest = null;
       _scriptType = 'unknown';
       AppLogger.info('OcrService disposed');
     } catch (e) {

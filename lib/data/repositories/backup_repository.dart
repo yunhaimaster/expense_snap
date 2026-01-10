@@ -202,8 +202,10 @@ class BackupRepository implements IBackupRepository {
         },
       );
 
-      if (result.isFailure) {
-        return Result.failure((result as Failure).error);
+      // 使用 errorOrNull 替代 dangerous cast
+      final error = result.errorOrNull;
+      if (error != null) {
+        return Result.failure(error);
       }
 
       final backupInfo = result.getOrThrow();
@@ -235,8 +237,10 @@ class BackupRepository implements IBackupRepository {
     try {
       final result = await _driveApi.listBackups();
 
-      if (result.isFailure) {
-        return Result.failure((result as Failure).error);
+      // 使用 errorOrNull 替代 dangerous cast
+      final error = result.errorOrNull;
+      if (error != null) {
+        return Result.failure(error);
       }
 
       final driveBackups = result.getOrThrow();
@@ -266,8 +270,10 @@ class BackupRepository implements IBackupRepository {
 
       final result = await _driveApi.downloadBackup(fileId);
 
-      if (result.isFailure) {
-        return Result.failure((result as Failure).error);
+      // 使用 errorOrNull 替代 dangerous cast
+      final error = result.errorOrNull;
+      if (error != null) {
+        return Result.failure(error);
       }
 
       onProgress?.call(0.7, '儲存檔案...');
@@ -565,8 +571,10 @@ class BackupRepository implements IBackupRepository {
   Future<Result<String>> signInWithGoogle() async {
     final result = await _driveApi.signIn();
 
-    if (result.isFailure) {
-      return Result.failure((result as Failure).error);
+    // 使用 errorOrNull 替代 dangerous cast
+    final error = result.errorOrNull;
+    if (error != null) {
+      return Result.failure(error);
     }
 
     final accountInfo = result.getOrThrow();
@@ -604,8 +612,10 @@ class BackupRepository implements IBackupRepository {
   Future<Result<String?>> tryRestoreGoogleSession() async {
     final result = await _driveApi.tryRestoreSession();
 
-    if (result.isFailure) {
-      return Result.failure((result as Failure).error);
+    // 使用 errorOrNull 替代 dangerous cast
+    final error = result.errorOrNull;
+    if (error != null) {
+      return Result.failure(error);
     }
 
     final accountInfo = result.getOrNull();

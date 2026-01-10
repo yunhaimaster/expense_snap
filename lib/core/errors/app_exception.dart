@@ -190,6 +190,10 @@ class ImageException extends AppException {
   /// 圖片損壞
   factory ImageException.corrupted() =>
       const ImageException('圖片已損壞', code: 'CORRUPTED');
+
+  /// 圖片處理超時
+  factory ImageException.processingTimeout() =>
+      const ImageException('圖片處理超時', code: 'PROCESSING_TIMEOUT');
 }
 
 /// OCR 文字識別相關異常
@@ -203,4 +207,10 @@ class OcrException extends AppException {
   /// 無法識別文字
   factory OcrException.noTextFound() =>
       const OcrException('無法識別文字', code: 'NO_TEXT_FOUND');
+
+  /// 請求過於頻繁（速率限制）
+  factory OcrException.rateLimited(Duration waitTime) => OcrException(
+        '請稍候 ${(waitTime.inMilliseconds / 1000).toStringAsFixed(1)} 秒後再試',
+        code: 'RATE_LIMITED',
+      );
 }

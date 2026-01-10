@@ -5,13 +5,24 @@
         "matcher": "Edit",
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "IMPORTANT: Before editing, verify you have READ this file in the current conversation. If not, read it first to understand context."
+            "type": "command",
+            "command": ".claude/hooks/check-read-before-edit.sh",
+            "timeout": 5000
           }
         ]
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/cache-read-file.sh",
+            "timeout": 5000
+          }
+        ]
+      },
       {
         "matcher": "Edit|Write",
         "hooks": [

@@ -296,6 +296,7 @@ class SettingsProvider extends ChangeNotifier {
       _setOperationState(BackupOperationState.success, 1.0, '備份完成');
       return Result.success(null);
     } catch (e) {
+      AppLogger.error('Backup to Google Drive failed', error: e, tag: 'Settings');
       _setError('備份失敗: $e');
       return Result.failure(StorageException('備份失敗: $e'));
     } finally {
@@ -374,6 +375,7 @@ class SettingsProvider extends ChangeNotifier {
       _setOperationState(BackupOperationState.success, 1.0, '還原完成');
       return Result.success(null);
     } catch (e) {
+      AppLogger.error('Restore from Google Drive failed', error: e, tag: 'Settings');
       _setError('還原失敗: $e');
       return Result.failure(StorageException('還原失敗: $e'));
     } finally {
@@ -416,6 +418,7 @@ class SettingsProvider extends ChangeNotifier {
 
       return result;
     } catch (e) {
+      AppLogger.error('Cleanup temp files failed', error: e, tag: 'Settings');
       return Result.failure(StorageException('清理失敗: $e'));
     }
   }

@@ -82,6 +82,10 @@ class GoogleDriveApi {
   // 大檔案閾值（5MB 以上使用 resumable upload）
   static const int _resumableUploadThreshold = 5 * 1024 * 1024;
 
+  // API 操作超時時間（60 秒）
+  static const Duration _apiTimeout = Duration(seconds: 60);
+
+
   // 當前登入帳號
   GoogleSignInAccount? _currentAccount;
 
@@ -273,8 +277,10 @@ class GoogleDriveApi {
   /// 取得或建立備份資料夾
   Future<Result<String>> _getOrCreateBackupFolder() async {
     final authResult = await _ensureAuthenticated();
-    if (authResult.isFailure) {
-      return Result.failure((authResult as Failure).error);
+    // 使用 errorOrNull 替代 dangerous cast，確保類型安全
+    final authError = authResult.errorOrNull;
+    if (authError != null) {
+      return Result.failure(authError);
     }
 
     try {
@@ -285,7 +291,7 @@ class GoogleDriveApi {
         q: "name = '$_backupFolderName' and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
         spaces: 'drive',
         $fields: 'files(id, name)',
-      );
+      ).timeout(_apiTimeout);
 
       if (folderList.files != null && folderList.files!.isNotEmpty) {
         final firstFolder = folderList.files!.first;
@@ -304,7 +310,7 @@ class GoogleDriveApi {
       final createdFolder = await driveApi.files.create(
         folder,
         $fields: 'id',
-      );
+      ).timeout(_apiTimeout);
 
       if (createdFolder.id == null) {
         return Result.failure(const StorageException('建立資料夾失敗：未取得 ID'));
@@ -312,6 +318,9 @@ class GoogleDriveApi {
 
       AppLogger.info('Created backup folder: ${createdFolder.id}', tag: 'GoogleDrive');
       return Result.success(createdFolder.id!);
+    } on TimeoutException {
+      AppLogger.warning('Folder operation timeout after ${_apiTimeout.inSeconds}s', tag: 'GoogleDrive');
+      return Result.failure(NetworkException.timeout());
     } catch (e) {
       AppLogger.error('Failed to get/create backup folder', error: e, tag: 'GoogleDrive');
       return Result.failure(StorageException('無法建立備份資料夾: $e'));
@@ -327,8 +336,10 @@ class GoogleDriveApi {
     UploadProgressCallback? onProgress,
   }) async {
     final folderResult = await _getOrCreateBackupFolder();
-    if (folderResult.isFailure) {
-      return Result.failure((folderResult as Failure).error);
+    // 使用 errorOrNull 替代 dangerous cast，確保類型安全
+    final folderError = folderResult.errorOrNull;
+    if (folderError != null) {
+      return Result.failure(folderError);
     }
 
     final folderId = folderResult.getOrThrow();
@@ -362,7 +373,7 @@ class GoogleDriveApi {
           driveFile,
           uploadMedia: media,
           $fields: 'id, name, createdTime, size',
-        );
+        ).timeout(_apiTimeout);
       }
 
       final backupInfo = DriveBackupInfo(
@@ -374,6 +385,9 @@ class GoogleDriveApi {
 
       AppLogger.info('Backup uploaded successfully: ${backupInfo.id}', tag: 'GoogleDrive');
       return Result.success(backupInfo);
+    } on TimeoutException {
+      AppLogger.warning('Upload timeout after ${_apiTimeout.inSeconds}s', tag: 'GoogleDrive');
+      return Result.failure(NetworkException.timeout());
     } catch (e) {
       AppLogger.error('Failed to upload backup', error: e, tag: 'GoogleDrive');
       return Result.failure(StorageException('上傳備份失敗: $e'));
@@ -396,11 +410,17 @@ class GoogleDriveApi {
     // 回報初始進度
     onProgress?.call(0, fileSize);
 
-    final result = await _driveApi!.files.create(
-      driveFile,
-      uploadMedia: media,
-      $fields: 'id, name, createdTime, size',
-    );
+    drive.File result;
+    try {
+      result = await _driveApi!.files.create(
+        driveFile,
+        uploadMedia: media,
+        $fields: 'id, name, createdTime, size',
+      ).timeout(_apiTimeout);
+    } on TimeoutException {
+      AppLogger.warning('Upload timeout after ${_apiTimeout.inSeconds}s');
+      throw TimeoutException('上傳超時', _apiTimeout);
+    }
 
     // 回報完成進度
     onProgress?.call(fileSize, fileSize);
@@ -411,8 +431,10 @@ class GoogleDriveApi {
   /// 列出備份檔案
   Future<Result<List<DriveBackupInfo>>> listBackups() async {
     final folderResult = await _getOrCreateBackupFolder();
-    if (folderResult.isFailure) {
-      return Result.failure((folderResult as Failure).error);
+    // 使用 errorOrNull 替代 dangerous cast，確保類型安全
+    final folderError = folderResult.errorOrNull;
+    if (folderError != null) {
+      return Result.failure(folderError);
     }
 
     final folderId = folderResult.getOrThrow();
@@ -423,7 +445,7 @@ class GoogleDriveApi {
         spaces: 'drive',
         orderBy: 'createdTime desc',
         $fields: 'files(id, name, createdTime, size)',
-      );
+      ).timeout(_apiTimeout);
 
       final backups = (fileList.files ?? [])
           .where((f) => f.id != null && f.name != null)
@@ -437,6 +459,9 @@ class GoogleDriveApi {
 
       AppLogger.info('Found ${backups.length} backups', tag: 'GoogleDrive');
       return Result.success(backups);
+    } on TimeoutException {
+      AppLogger.warning('List backups timeout after ${_apiTimeout.inSeconds}s', tag: 'GoogleDrive');
+      return Result.failure(NetworkException.timeout());
     } catch (e) {
       AppLogger.error('Failed to list backups', error: e, tag: 'GoogleDrive');
       return Result.failure(StorageException('無法列出備份: $e'));
@@ -448,8 +473,10 @@ class GoogleDriveApi {
   /// 回傳下載檔案的 bytes。對於大檔案，使用串流寫入暫存檔案以避免記憶體問題。
   Future<Result<Uint8List>> downloadBackup(String fileId) async {
     final authResult = await _ensureAuthenticated();
-    if (authResult.isFailure) {
-      return Result.failure((authResult as Failure).error);
+    // 使用 errorOrNull 替代 dangerous cast，確保類型安全
+    final authError = authResult.errorOrNull;
+    if (authError != null) {
+      return Result.failure(authError);
     }
 
     try {
@@ -458,7 +485,7 @@ class GoogleDriveApi {
       final media = await _driveApi!.files.get(
         fileId,
         downloadOptions: drive.DownloadOptions.fullMedia,
-      ) as drive.Media;
+      ).timeout(_apiTimeout) as drive.Media;
 
       // 使用暫存檔案串流寫入，避免大檔案記憶體問題
       final tempDir = await getTemporaryDirectory();
@@ -504,14 +531,16 @@ class GoogleDriveApi {
   /// 刪除備份檔案
   Future<Result<void>> deleteBackup(String fileId) async {
     final authResult = await _ensureAuthenticated();
-    if (authResult.isFailure) {
-      return Result.failure((authResult as Failure).error);
+    // 使用 errorOrNull 替代 dangerous cast，確保類型安全
+    final authError = authResult.errorOrNull;
+    if (authError != null) {
+      return Result.failure(authError);
     }
 
     try {
       AppLogger.info('Deleting backup: $fileId', tag: 'GoogleDrive');
 
-      await _driveApi!.files.delete(fileId);
+      await _driveApi!.files.delete(fileId).timeout(_apiTimeout);
 
       AppLogger.info('Backup deleted successfully', tag: 'GoogleDrive');
       return Result.success(null);
