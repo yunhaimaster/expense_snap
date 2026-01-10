@@ -97,7 +97,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.light,
           home: Scaffold(
-            body: const ErrorBanner(error: exception),
+            body: ErrorBanner(error: exception),
           ),
         ),
       );

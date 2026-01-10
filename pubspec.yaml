@@ -101,6 +101,7 @@ dev_dependencies:
 
   # Native Splash Screen
   flutter_native_splash: ^2.4.4
+  very_good_analysis: ^10.0.0
 
 flutter:
   uses-material-design: true

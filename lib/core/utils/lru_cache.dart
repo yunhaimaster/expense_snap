@@ -10,7 +10,7 @@ import 'dart:collection';
 /// - 若儲存 null 值，get() 將無法區分「鍵不存在」與「值為 null」
 ///   （建議使用非空值類型 V，或先用 containsKey 檢查）
 class LruCache<K, V> {
-  LruCache({required this.maxSize}) : assert(maxSize > 0);
+  LruCache({required this.maxSize}) : assert(maxSize > 0, 'maxSize must be positive');
 
   /// 快取容量上限
   final int maxSize;

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_returning_this
 import 'app_exception.dart';
 
 /// 操作結果封裝 - 強制處理成功/失敗兩種情況

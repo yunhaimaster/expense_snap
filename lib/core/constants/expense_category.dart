@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_dynamic_calls
 import 'package:flutter/material.dart';
 
 import '../utils/app_logger.dart';
@@ -77,12 +78,13 @@ extension ExpenseCategoryExtension on ExpenseCategory {
   /// - 若 value 為無效值，記錄警告並返回 other
   static ExpenseCategory? fromString(String? value) {
     if (value == null) return null;
-    try {
+    // 安全解析：先檢查是否為有效值
+    final validNames = ExpenseCategory.values.map((e) => e.name).toSet();
+    if (validNames.contains(value)) {
       return ExpenseCategory.values.byName(value);
-    } on ArgumentError {
-      // 記錄未知分類值，便於除錯
-      AppLogger.warning('Unknown expense category: $value, defaulting to other');
-      return ExpenseCategory.other;
     }
+    // 記錄未知分類值，便於除錯
+    AppLogger.warning('Unknown expense category: $value, defaulting to other');
+    return ExpenseCategory.other;
   }
 }

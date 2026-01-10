@@ -40,7 +40,7 @@ class ConnectivityProvider extends ChangeNotifier {
     try {
       _connectionTypes = await _connectivity.checkConnectivity();
       _updateConnectionStatus(_connectionTypes);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to check initial connectivity', error: e);
     }
 
@@ -74,7 +74,7 @@ class ConnectivityProvider extends ChangeNotifier {
       final results = await _connectivity.checkConnectivity();
       _updateConnectionStatus(results);
       return _isConnected;
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to check connectivity', error: e);
       return _isConnected;
     }

@@ -1,94 +1,89 @@
-# 靜態分析設定 - 啟用嚴格模式確保程式碼品質
+# 靜態分析設定 - 使用 very_good_analysis 嚴格規則
+# https://pub.dev/packages/very_good_analysis
 
-include: package:flutter_lints/flutter.yaml
+include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
   errors:
     missing_return: error
     missing_required_param: error
+    # 停用型別推斷警告
+    inference_failure_on_instance_creation: ignore
+    inference_failure_on_function_invocation: ignore
+    inference_failure_on_untyped_parameter: ignore
   language:
     strict-casts: true
     strict-raw-types: true
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.mocks.dart"
+    - "build/**"
+    - ".dart_tool/**"
 
 linter:
   rules:
-    # 錯誤預防
+    # === 停用過於嚴格的風格規則 ===
+    public_member_api_docs: false  # 暫不強制公開 API 文件
+    lines_longer_than_80_chars: false  # 允許較長行數
+    flutter_style_todos: false  # TODO 格式不強制
+    one_member_abstracts: false  # 允許單方法抽象類
+    sort_pub_dependencies: false  # pubspec 依賴排序不強制
+
+    # 風格偏好 - 停用
+    always_use_package_imports: false  # 允許相對 import
+    prefer_int_literals: false  # 允許 0.0 寫法
+    omit_local_variable_types: false  # 允許明確型別宣告
+    cascade_invocations: false  # 不強制 cascade
+    always_put_required_named_parameters_first: false  # 參數順序不強制
+    directives_ordering: false  # import 排序不強制
+    sort_constructors_first: false  # 建構子順序不強制
+    avoid_redundant_argument_values: false  # 允許明確預設值
+    join_return_with_assignment: false  # 允許分開寫 return
+    avoid_escaping_inner_quotes: false  # 允許轉義引號
+    use_is_even_rather_than_modulo: false  # 允許 % 2
+
+    # 風格偏好 - 停用（額外）
+    avoid_positional_boolean_parameters: false  # 允許 bool 位置參數
+    use_null_aware_elements: false  # 允許 if null check
+    unnecessary_breaks: false  # 允許 break
+    use_if_null_to_convert_nulls_to_bools: false  # 允許其他 null 檢查
+    avoid_multiple_declarations_per_line: false  # 允許多變數宣告
+    prefer_if_elements_to_conditional_expressions: false  # 允許三元
+
+    # Raw string - 停用兩者避免衝突
+    unnecessary_raw_strings: false
+    use_raw_strings: false
+
+    # Catch 規則 - 暫時停用（需要大量重構）
+    avoid_catches_without_on_clauses: false
+
+    # Async 規則 - 停用過於嚴格的
+    discarded_futures: false  # 暫停，需逐步修復
+    unnecessary_await_in_return: false
+
+    # 其他 - 停用
+    avoid_slow_async_io: false  # File.exists 等常用 API
+    document_ignores: false
+    unreachable_from_main: false
+    specify_nonobvious_property_types: false
+    use_colored_box: false  # Container 仍可用
+    cast_nullable_to_non_nullable: false
+    avoid_equals_and_hash_code_on_mutable_classes: false
+
+    # === 保留重要安全規則 ===
     avoid_print: true
-    avoid_empty_else: true
-    avoid_returning_null_for_future: true
     cancel_subscriptions: true
     close_sinks: true
     literal_only_boolean_expressions: true
-    no_duplicate_case_values: true
     throw_in_finally: true
     unnecessary_statements: true
-
-    # 程式碼風格
-    always_declare_return_types: true
-    annotate_overrides: true
-    avoid_init_to_null: true
-    avoid_null_checks_in_equality_operators: true
-    avoid_unused_constructor_parameters: true
-    await_only_futures: true
-    camel_case_extensions: true
-    camel_case_types: true
-    constant_identifier_names: true
-    curly_braces_in_flow_control_structures: true
-    empty_catches: true
-    empty_constructor_bodies: true
-    exhaustive_cases: true
-    file_names: true
-    implementation_imports: true
-    library_names: true
-    library_prefixes: true
-    non_constant_identifier_names: true
-    null_closures: true
-    overridden_fields: true
-    package_names: true
-    prefer_adjacent_string_concatenation: true
-    prefer_collection_literals: true
-    prefer_conditional_assignment: true
-    prefer_const_constructors: true
-    prefer_const_constructors_in_immutables: true
-    prefer_const_declarations: true
-    prefer_const_literals_to_create_immutables: true
-    prefer_contains: true
-    prefer_final_fields: true
-    prefer_final_in_for_each: true
-    prefer_final_locals: true
-    prefer_for_elements_to_map_fromIterable: true
-    prefer_function_declarations_over_variables: true
-    prefer_if_null_operators: true
-    prefer_initializing_formals: true
-    prefer_inlined_adds: true
-    prefer_interpolation_to_compose_strings: true
-    prefer_is_empty: true
-    prefer_is_not_empty: true
-    prefer_is_not_operator: true
-    prefer_iterable_whereType: true
-    prefer_null_aware_operators: true
     prefer_single_quotes: true
-    prefer_spread_collections: true
-    prefer_typing_uninitialized_variables: true
-    recursive_getters: true
-    slash_for_doc_comments: true
     sort_child_properties_last: true
-    type_init_formals: true
-    unawaited_futures: true
-    unnecessary_brace_in_string_interps: true
-    unnecessary_const: true
-    unnecessary_getters_setters: true
-    unnecessary_lambdas: true
-    unnecessary_new: true
-    unnecessary_null_aware_assignments: true
-    unnecessary_null_in_if_null_operators: true
-    unnecessary_overrides: true
-    unnecessary_parenthesis: true
-    unnecessary_string_escapes: true
-    unnecessary_string_interpolations: true
-    unnecessary_this: true
-    unrelated_type_equality_checks: true
     use_full_hex_values_for_flutter_colors: true
-    use_function_type_syntax_for_parameters: true
-    use_rethrow_when_possible: true
-    void_checks: true
+    prefer_const_constructors: false  # 允許非 const widget（測試中常見）
+
+    # 保持這些重要檢查（來自 very_good_analysis）
+    # - avoid_dynamic_calls: 避免 dynamic 調用（file-level ignore 用於特定檔案）
+    # - avoid_catching_errors: 不要 catch Error
+    # - unawaited_futures: 明確標記不等待的 Future

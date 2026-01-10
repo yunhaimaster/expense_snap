@@ -162,14 +162,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 const SizedBox(height: 16),
 
                 // 金額（含 OCR 識別中的 shimmer 效果）
-                _isProcessingOcr
-                    ? _buildOcrShimmer(context, label: l10n.addExpense_amount)
-                    : AmountInput(
-                        controller: _amountController,
-                        label: l10n.addExpense_amount,
-                        suffix: _selectedCurrency,
-                        autofocus: true,
-                      ),
+                if (_isProcessingOcr)
+                  _buildOcrShimmer(context, label: l10n.addExpense_amount)
+                else
+                  AmountInput(
+                    controller: _amountController,
+                    label: l10n.addExpense_amount,
+                    suffix: _selectedCurrency,
+                    autofocus: true,
+                  ),
 
                 const SizedBox(height: 16),
 
@@ -246,11 +247,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 ],
 
                 // 描述（含自動完成、OCR 識別中的 shimmer 效果）
-                _isProcessingOcr
-                    ? _buildOcrShimmer(context, label: l10n.addExpense_description)
-                    : DescriptionAutocomplete(
-                        controller: _descriptionController,
-                      ),
+                if (_isProcessingOcr)
+                  _buildOcrShimmer(context, label: l10n.addExpense_description)
+                else
+                  DescriptionAutocomplete(
+                    controller: _descriptionController,
+                  ),
 
                 const SizedBox(height: 16),
 

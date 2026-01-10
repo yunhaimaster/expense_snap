@@ -386,7 +386,7 @@ void main() {
       // 且其 parent chain 中有 Semantics widget（這是我們添加的）
       final semanticsWidgets = tester.widgetList<Semantics>(find.byType(Semantics));
       final hasExcludeSemanticsWrapper = semanticsWidgets.any(
-        (s) => s.excludeSemantics == true,
+        (s) => s.excludeSemantics ,
       );
       expect(hasExcludeSemanticsWrapper, isTrue);
     });

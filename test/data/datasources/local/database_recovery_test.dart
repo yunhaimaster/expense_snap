@@ -247,7 +247,7 @@ void main() {
       // 模擬並發錯誤
       final futures = List.generate(5, (i) async {
         try {
-          if (i % 2 == 0) {
+          if (i.isEven) {
             throw DatabaseException.queryFailed('錯誤 $i');
           }
           return i;
