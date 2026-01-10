@@ -1,5 +1,6 @@
 {
   "@@locale": "en",
+  "@@context": "ExpenseSnap Localization",
   "appTitle": "Expense Snap",
   "common_save": "Save",
   "common_cancel": "Cancel",
@@ -24,6 +25,13 @@
   "home_addExpense": "Add Expense",
   "home_deleteSuccess": "Expense deleted",
   "home_deleteFailed": "Delete failed: {message}",
+  "@home_deleteFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "home_undo": "Undo",
   "showcase_addExpenseTitle": "Add Expense",
   "showcase_addExpenseDesc": "Tap here to take a photo and record your expense",
@@ -60,24 +68,62 @@
   "expenseDetail_cancelEdit": "Cancel Edit",
   "expenseDetail_saved": "Saved",
   "expenseDetail_saveFailed": "Save failed: {message}",
+  "@expenseDetail_saveFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "expenseDetail_deleted": "Deleted",
   "expenseDetail_deleteFailed": "Delete failed: {message}",
+  "@expenseDetail_deleteFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "expenseDetail_confirmDelete": "Confirm Delete",
   "expenseDetail_confirmDeleteMessage": "Are you sure you want to delete this expense?\nYou can restore it from Deleted Items.",
   "expenseDetail_expenseNotFound": "Expense not found",
   "expenseDetail_imageReplaceSuccess": "Image replaced",
   "expenseDetail_imageReplaceFailed": "Replace image failed: {message}",
+  "@expenseDetail_imageReplaceFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "expenseDetail_selectFromGallery": "Select from Gallery",
   "rateSource_auto": "Live Rate",
   "rateSource_offline": "Cached Rate",
   "rateSource_default": "Default Rate",
   "rateSource_manual": "Manual Input",
+  "rateSource_auto_short": "Live",
+  "rateSource_offline_short": "Cached",
+  "rateSource_default_short": "Default",
+  "rateSource_manual_short": "Manual",
   "monthSummary_totalExpense": "Total Expense",
   "monthSummary_count": "Count",
   "monthSummary_countSuffix": "",
   "monthSummary_previousMonth": "Previous Month",
   "monthSummary_nextMonth": "Next Month",
   "monthSummary_semanticLabel": "{month} summary. Total expense: HKD {amount}. {count} expenses.",
+  "@monthSummary_semanticLabel": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "monthSummary_isLatestMonth": "Already at latest month",
   "export_title": "Export Report",
   "export_preview": "Preview",
@@ -85,11 +131,45 @@
   "export_totalHkd": "HKD Total",
   "export_receiptCount": "Receipt Images",
   "export_countUnit": "{count}",
+  "@export_countUnit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "export_imageUnit": "{count}",
+  "@export_imageUnit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "export_excelWithReceipts": "Export Excel + Receipts",
   "export_noData": "No Data",
   "export_noDataMessage": "No expenses recorded in {year}/{month}",
+  "@export_noDataMessage": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
+    }
+  },
   "export_yearMonth": "{year}/{month}",
+  "@export_yearMonth": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
+    }
+  },
   "export_hint": "Exported Excel contains complete expense details",
   "export_packing": "Packing...",
   "export_generatingExcel": "Generating Excel...",
@@ -97,8 +177,32 @@
   "export_compressing": "Compressing...",
   "export_preparingShare": "Preparing to share...",
   "export_success": "Export successful ({size})",
+  "@export_success": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
   "export_failed": "Export failed: {message}",
+  "@export_failed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "export_sheetName": "{year}/{month} Expense Report",
+  "@export_sheetName": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
+    }
+  },
   "export_shareSubject": "Expense Snap Report",
   "export_headerIndex": "No.",
   "export_headerDate": "Date",
@@ -115,6 +219,16 @@
   "export_rateSourceDefault": "Default",
   "export_rateSourceManual": "Manual",
   "export_fileName": "Expense_Report_{year}_{month}",
+  "@export_fileName": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  },
   "settings_title": "Settings",
   "settings_general": "General",
   "settings_userName": "Username",
@@ -139,30 +253,100 @@
   "settings_signInGoogle": "Sign in with Google",
   "settings_signOutGoogle": "Sign out",
   "settings_signedInAs": "Signed in as: {email}",
+  "@settings_signedInAs": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "settings_backupSuccess": "Backup successful",
   "settings_backupFailed": "Backup failed: {message}",
+  "@settings_backupFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "settings_restoreSuccess": "Restore successful",
   "settings_restoreFailed": "Restore failed: {message}",
+  "@settings_restoreFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "settings_cacheCleared": "Cache cleared",
   "settings_noBackupFound": "No backup found",
   "settings_confirmRestore": "Confirm Restore",
   "settings_confirmRestoreMessage": "Restore will overwrite current data. Continue?",
   "settings_lastBackup": "Last backup: {date}",
+  "@settings_lastBackup": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "deletedItems_title": "Deleted Items",
   "deletedItems_clearAll": "Clear All",
   "deletedItems_daysRemaining": "{days} days until auto-delete",
+  "@deletedItems_daysRemaining": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "deletedItems_soonDeleted": "Will be deleted soon",
   "deletedItems_restored": "Restored",
   "deletedItems_restoreFailed": "Restore failed: {message}",
+  "@deletedItems_restoreFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "deletedItems_permanentDelete": "Delete Permanently",
   "deletedItems_permanentDeleteConfirm": "This cannot be undone. Delete permanently?",
   "deletedItems_permanentDeleted": "Permanently deleted",
   "deletedItems_permanentDeleteFailed": "Delete failed: {message}",
+  "@deletedItems_permanentDeleteFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "deletedItems_clearAllTitle": "Clear All",
   "deletedItems_clearAllConfirm": "Permanently delete all {count} items?\nThis cannot be undone.",
+  "@deletedItems_clearAllConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "deletedItems_clearAllButton": "Delete All",
   "deletedItems_clearedCount": "Deleted {count} items",
+  "@deletedItems_clearedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "deletedItems_loadFailed": "Load failed: {message}",
+  "@deletedItems_loadFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "onboarding_skip": "Skip",
   "onboarding_next": "Next",
   "onboarding_start": "Get Started",
@@ -188,6 +372,13 @@
   "dialog_monthEndTitle": "Month End Reminder",
   "dialog_monthEndMessage": "Month is ending soon!",
   "dialog_monthEndExpenseCount": "You have {count} expenses this month",
+  "@dialog_monthEndExpenseCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dialog_monthEndSuggestion": "Consider exporting your expense report.",
   "dialog_later": "Later",
   "dialog_goExport": "Export Now",
@@ -211,7 +402,27 @@
   "excel_header_receiptFile": "Receipt File",
   "excel_total": "Total",
   "excel_sheetName": "Expenses_{year}_{month}",
+  "@excel_sheetName": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      }
+    }
+  },
   "excel_fileName": "Expenses_{year}_{month}",
+  "@excel_fileName": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  },
   "excel_shareSubject": "Expense Snap Report",
   "excel_rateSourceAuto": "Auto",
   "excel_rateSourceOffline": "Cached",
@@ -310,5 +521,89 @@
     }
   },
   "settings_googleConnected": "Google account connected",
-  "settings_googleDisconnected": "Google account disconnected"
+  "settings_googleDisconnected": "Google account disconnected",
+  "category_label": "Category (Optional)",
+  "category_meals": "Meals",
+  "category_transport": "Transport",
+  "category_accommodation": "Accommodation",
+  "category_officeSupplies": "Office Supplies",
+  "category_communication": "Communication",
+  "category_entertainment": "Entertainment",
+  "category_medical": "Medical",
+  "category_other": "Other",
+  "category_statistics": "Category Statistics",
+  "category_uncategorized": "Uncategorized",
+  "excel_header_category": "Category",
+  "semantic_category_prefix": "Category",
+  "semantic_expenseItem": "Expense item: {description}",
+  "@semantic_expenseItem": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_amount": "Amount: {amount}",
+  "@semantic_amount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_originalAmount": "Original amount: {amount}",
+  "@semantic_originalAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_date": "Date: {date}",
+  "@semantic_date": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_rateSource": "Rate source: {source}",
+  "@semantic_rateSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_hasReceipt": "Has receipt image",
+  "semantic_tapForDetails": "Tap to view details",
+  "semantic_swipeToDelete": "Swipe left to delete",
+  "validation_amountRequired": "Please enter an amount",
+  "validation_amountTooSmall": "Amount cannot be less than {min}",
+  "@validation_amountTooSmall": {
+    "placeholders": {
+      "min": {
+        "type": "num"
+      }
+    }
+  },
+  "validation_amountTooLarge": "Amount cannot exceed {max}",
+  "@validation_amountTooLarge": {
+    "placeholders": {
+      "max": {
+        "type": "num"
+      }
+    }
+  },
+  "validation_exchangeRateLabel": "Exchange Rate",
+  "validation_exchangeRateHint": "1 {currency} = ? HKD",
+  "@validation_exchangeRateHint": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "validation_exchangeRateRequired": "Please enter exchange rate",
+  "validation_exchangeRateInvalid": "Please enter a valid exchange rate"
 }

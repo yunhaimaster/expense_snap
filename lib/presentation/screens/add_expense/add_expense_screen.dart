@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/constants/currency_constants.dart';
+import '../../../core/constants/expense_category.dart';
 import '../../../core/di/service_locator.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/animation_utils.dart';
@@ -17,6 +18,7 @@ import '../../providers/exchange_rate_provider.dart';
 import '../../providers/expense_provider.dart';
 import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/forms/amount_input.dart';
+import '../../widgets/forms/category_picker.dart';
 import '../../widgets/forms/currency_dropdown.dart';
 import '../../widgets/forms/date_picker_field.dart';
 import '../../widgets/dialogs/smart_prompt_dialogs.dart';
@@ -41,6 +43,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   DateTime _selectedDate = DateTime.now();
   String _selectedCurrency = CurrencyConstants.defaultCurrency;
   String? _selectedImagePath;
+  ExpenseCategory? _selectedCategory;
   bool _isLoading = false;
   bool _useManualRate = false;
   bool _isProcessingOcr = false;
@@ -111,7 +114,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           ],
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.fromLTRB(
+            16,
+            16,
+            16,
+            16 + MediaQuery.of(context).viewPadding.bottom,
+          ),
           child: Form(
             key: _formKey,
             child: Column(
@@ -242,6 +250,16 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     : DescriptionAutocomplete(
                         controller: _descriptionController,
                       ),
+
+                const SizedBox(height: 16),
+
+                // 分類選擇器
+                CategoryPicker(
+                  value: _selectedCategory,
+                  onChanged: (category) {
+                    setState(() => _selectedCategory = category);
+                  },
+                ),
 
                 const SizedBox(height: 32),
               ],
@@ -492,6 +510,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             if (parsed.description != null && parsed.description!.isNotEmpty) {
               _descriptionController.text = parsed.description!;
             }
+
+            // 分類（OCR 建議）
+            if (parsed.suggestedCategory != null) {
+              _selectedCategory = parsed.suggestedCategory;
+            }
           });
 
           // 顯示 OCR 識別結果提示
@@ -594,6 +617,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         hkdAmountCents: hkdAmountCents,
         description: _descriptionController.text.trim(),
         imagePath: _selectedImagePath,
+        category: _selectedCategory,
       );
 
       if (!mounted) return;

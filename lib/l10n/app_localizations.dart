@@ -529,6 +529,30 @@ abstract class S {
   /// **'手動輸入'**
   String get rateSource_manual;
 
+  /// No description provided for @rateSource_auto_short.
+  ///
+  /// In zh, this message translates to:
+  /// **'即時'**
+  String get rateSource_auto_short;
+
+  /// No description provided for @rateSource_offline_short.
+  ///
+  /// In zh, this message translates to:
+  /// **'離線'**
+  String get rateSource_offline_short;
+
+  /// No description provided for @rateSource_default_short.
+  ///
+  /// In zh, this message translates to:
+  /// **'預設'**
+  String get rateSource_default_short;
+
+  /// No description provided for @rateSource_manual_short.
+  ///
+  /// In zh, this message translates to:
+  /// **'手動'**
+  String get rateSource_manual_short;
+
   /// No description provided for @monthSummary_totalExpense.
   ///
   /// In zh, this message translates to:
@@ -1752,6 +1776,174 @@ abstract class S {
   /// In zh, this message translates to:
   /// **'已斷開 Google 帳號'**
   String get settings_googleDisconnected;
+
+  /// No description provided for @category_label.
+  ///
+  /// In zh, this message translates to:
+  /// **'分類（選填）'**
+  String get category_label;
+
+  /// No description provided for @category_meals.
+  ///
+  /// In zh, this message translates to:
+  /// **'餐飲'**
+  String get category_meals;
+
+  /// No description provided for @category_transport.
+  ///
+  /// In zh, this message translates to:
+  /// **'交通'**
+  String get category_transport;
+
+  /// No description provided for @category_accommodation.
+  ///
+  /// In zh, this message translates to:
+  /// **'住宿'**
+  String get category_accommodation;
+
+  /// No description provided for @category_officeSupplies.
+  ///
+  /// In zh, this message translates to:
+  /// **'辦公用品'**
+  String get category_officeSupplies;
+
+  /// No description provided for @category_communication.
+  ///
+  /// In zh, this message translates to:
+  /// **'通訊'**
+  String get category_communication;
+
+  /// No description provided for @category_entertainment.
+  ///
+  /// In zh, this message translates to:
+  /// **'娛樂'**
+  String get category_entertainment;
+
+  /// No description provided for @category_medical.
+  ///
+  /// In zh, this message translates to:
+  /// **'醫療'**
+  String get category_medical;
+
+  /// No description provided for @category_other.
+  ///
+  /// In zh, this message translates to:
+  /// **'其他'**
+  String get category_other;
+
+  /// No description provided for @category_statistics.
+  ///
+  /// In zh, this message translates to:
+  /// **'分類統計'**
+  String get category_statistics;
+
+  /// No description provided for @category_uncategorized.
+  ///
+  /// In zh, this message translates to:
+  /// **'未分類'**
+  String get category_uncategorized;
+
+  /// No description provided for @excel_header_category.
+  ///
+  /// In zh, this message translates to:
+  /// **'分類'**
+  String get excel_header_category;
+
+  /// No description provided for @semantic_category_prefix.
+  ///
+  /// In zh, this message translates to:
+  /// **'分類'**
+  String get semantic_category_prefix;
+
+  /// No description provided for @semantic_expenseItem.
+  ///
+  /// In zh, this message translates to:
+  /// **'支出項目：{description}'**
+  String semantic_expenseItem(String description);
+
+  /// No description provided for @semantic_amount.
+  ///
+  /// In zh, this message translates to:
+  /// **'金額：{amount}'**
+  String semantic_amount(String amount);
+
+  /// No description provided for @semantic_originalAmount.
+  ///
+  /// In zh, this message translates to:
+  /// **'原始金額：{amount}'**
+  String semantic_originalAmount(String amount);
+
+  /// No description provided for @semantic_date.
+  ///
+  /// In zh, this message translates to:
+  /// **'日期：{date}'**
+  String semantic_date(String date);
+
+  /// No description provided for @semantic_rateSource.
+  ///
+  /// In zh, this message translates to:
+  /// **'匯率來源：{source}'**
+  String semantic_rateSource(String source);
+
+  /// No description provided for @semantic_hasReceipt.
+  ///
+  /// In zh, this message translates to:
+  /// **'有收據圖片'**
+  String get semantic_hasReceipt;
+
+  /// No description provided for @semantic_tapForDetails.
+  ///
+  /// In zh, this message translates to:
+  /// **'點擊查看詳情'**
+  String get semantic_tapForDetails;
+
+  /// No description provided for @semantic_swipeToDelete.
+  ///
+  /// In zh, this message translates to:
+  /// **'向左滑動刪除'**
+  String get semantic_swipeToDelete;
+
+  /// No description provided for @validation_amountRequired.
+  ///
+  /// In zh, this message translates to:
+  /// **'請輸入金額'**
+  String get validation_amountRequired;
+
+  /// No description provided for @validation_amountTooSmall.
+  ///
+  /// In zh, this message translates to:
+  /// **'金額不能小於 {min}'**
+  String validation_amountTooSmall(num min);
+
+  /// No description provided for @validation_amountTooLarge.
+  ///
+  /// In zh, this message translates to:
+  /// **'金額不能大於 {max}'**
+  String validation_amountTooLarge(num max);
+
+  /// No description provided for @validation_exchangeRateLabel.
+  ///
+  /// In zh, this message translates to:
+  /// **'匯率'**
+  String get validation_exchangeRateLabel;
+
+  /// No description provided for @validation_exchangeRateHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'1 {currency} = ? HKD'**
+  String validation_exchangeRateHint(String currency);
+
+  /// No description provided for @validation_exchangeRateRequired.
+  ///
+  /// In zh, this message translates to:
+  /// **'請輸入匯率'**
+  String get validation_exchangeRateRequired;
+
+  /// No description provided for @validation_exchangeRateInvalid.
+  ///
+  /// In zh, this message translates to:
+  /// **'請輸入有效匯率'**
+  String get validation_exchangeRateInvalid;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

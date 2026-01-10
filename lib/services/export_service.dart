@@ -10,6 +10,7 @@ import '../core/errors/app_exception.dart';
 import '../core/errors/result.dart';
 import '../core/utils/app_logger.dart';
 import '../core/utils/formatters.dart';
+import '../core/constants/expense_category.dart';
 import '../data/models/expense.dart';
 import '../l10n/app_localizations.dart';
 
@@ -30,11 +31,21 @@ class ExportStrings {
     required this.headerRateSource,
     required this.headerHkdAmount,
     required this.headerReceiptFile,
+    required this.headerCategory,
     required this.headerTotal,
     required this.rateSourceAuto,
     required this.rateSourceOffline,
     required this.rateSourceDefault,
     required this.rateSourceManual,
+    required this.categoryUncategorized,
+    required this.categoryMeals,
+    required this.categoryTransport,
+    required this.categoryAccommodation,
+    required this.categoryOfficeSupplies,
+    required this.categoryCommunication,
+    required this.categoryEntertainment,
+    required this.categoryMedical,
+    required this.categoryOther,
   });
 
   /// 從 S (AppLocalizations) 建立
@@ -58,6 +69,16 @@ class ExportStrings {
       rateSourceOffline: l10n.export_rateSourceOffline,
       rateSourceDefault: l10n.export_rateSourceDefault,
       rateSourceManual: l10n.export_rateSourceManual,
+      headerCategory: l10n.excel_header_category,
+      categoryUncategorized: l10n.category_uncategorized,
+      categoryMeals: l10n.category_meals,
+      categoryTransport: l10n.category_transport,
+      categoryAccommodation: l10n.category_accommodation,
+      categoryOfficeSupplies: l10n.category_officeSupplies,
+      categoryCommunication: l10n.category_communication,
+      categoryEntertainment: l10n.category_entertainment,
+      categoryMedical: l10n.category_medical,
+      categoryOther: l10n.category_other,
     );
   }
 
@@ -78,6 +99,41 @@ class ExportStrings {
   final String rateSourceOffline;
   final String rateSourceDefault;
   final String rateSourceManual;
+  final String headerCategory;
+  final String categoryUncategorized;
+  // 分類名稱（用於 Excel 輸出）
+  final String categoryMeals;
+  final String categoryTransport;
+  final String categoryAccommodation;
+  final String categoryOfficeSupplies;
+  final String categoryCommunication;
+  final String categoryEntertainment;
+  final String categoryMedical;
+  final String categoryOther;
+
+  // 為了與 S 類別的 category_* 屬性命名保持一致（用於 getLocalizedName 動態調用）
+  // ignore: non_constant_identifier_names
+  String get category_meals => categoryMeals;
+  // ignore: non_constant_identifier_names
+  String get category_transport => categoryTransport;
+  // ignore: non_constant_identifier_names
+  String get category_accommodation => categoryAccommodation;
+  // ignore: non_constant_identifier_names
+  String get category_officeSupplies => categoryOfficeSupplies;
+  // ignore: non_constant_identifier_names
+  String get category_communication => categoryCommunication;
+  // ignore: non_constant_identifier_names
+  String get category_entertainment => categoryEntertainment;
+  // ignore: non_constant_identifier_names
+  String get category_medical => categoryMedical;
+  // ignore: non_constant_identifier_names
+  String get category_other => categoryOther;
+
+  /// 根據分類取得本地化名稱
+  String getCategoryName(ExpenseCategory? category) {
+    if (category == null) return categoryUncategorized;
+    return category.getLocalizedName(this);
+  }
 }
 
 /// 匯出服務
@@ -282,8 +338,10 @@ class ExportService {
 
         processedReceipts++;
         // 更新進度（0.3 ~ 0.9）
-        final progress = 0.3 + (0.6 * processedReceipts / receiptCount);
-        onProgress?.call(progress);
+        if (receiptCount > 0) {
+          final progress = 0.3 + (0.6 * processedReceipts / receiptCount);
+          onProgress?.call(progress);
+        }
       }
 
       // 3. 壓縮並儲存 ZIP
@@ -391,6 +449,7 @@ class ExportService {
       strings.headerExchangeRate,
       strings.headerRateSource,
       strings.headerHkdAmount,
+      strings.headerCategory,
       strings.headerReceiptFile,
     ];
 
@@ -440,8 +499,13 @@ class ExportService {
     sheet.cell(CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: rowIndex))
       .value = DoubleCellValue(expense.hkdAmount);
 
-    // 收據檔名（有收據則顯示檔名，無則顯示「-」）
+    // 分類（使用本地化名稱）
+    final categoryName = strings.getCategoryName(expense.category);
     sheet.cell(CellIndex.indexByColumnRow(columnIndex: 8, rowIndex: rowIndex))
+      .value = TextCellValue(categoryName);
+
+    // 收據檔名（有收據則顯示檔名，無則顯示「-」）
+    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 9, rowIndex: rowIndex))
       .value = TextCellValue(receiptFileName ?? '-');
   }
 

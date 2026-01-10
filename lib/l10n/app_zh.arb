@@ -101,6 +101,10 @@
   "rateSource_offline": "離線快取",
   "rateSource_default": "預設匯率",
   "rateSource_manual": "手動輸入",
+  "rateSource_auto_short": "即時",
+  "rateSource_offline_short": "離線",
+  "rateSource_default_short": "預設",
+  "rateSource_manual_short": "手動",
   "monthSummary_totalExpense": "總支出",
   "monthSummary_count": "筆數",
   "monthSummary_countSuffix": " 筆",
@@ -517,5 +521,89 @@
     }
   },
   "settings_googleConnected": "已連接 Google 帳號",
-  "settings_googleDisconnected": "已斷開 Google 帳號"
+  "settings_googleDisconnected": "已斷開 Google 帳號",
+  "category_label": "分類（選填）",
+  "category_meals": "餐飲",
+  "category_transport": "交通",
+  "category_accommodation": "住宿",
+  "category_officeSupplies": "辦公用品",
+  "category_communication": "通訊",
+  "category_entertainment": "娛樂",
+  "category_medical": "醫療",
+  "category_other": "其他",
+  "category_statistics": "分類統計",
+  "category_uncategorized": "未分類",
+  "excel_header_category": "分類",
+  "semantic_category_prefix": "分類",
+  "semantic_expenseItem": "支出項目：{description}",
+  "@semantic_expenseItem": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_amount": "金額：{amount}",
+  "@semantic_amount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_originalAmount": "原始金額：{amount}",
+  "@semantic_originalAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_date": "日期：{date}",
+  "@semantic_date": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_rateSource": "匯率來源：{source}",
+  "@semantic_rateSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "semantic_hasReceipt": "有收據圖片",
+  "semantic_tapForDetails": "點擊查看詳情",
+  "semantic_swipeToDelete": "向左滑動刪除",
+  "validation_amountRequired": "請輸入金額",
+  "validation_amountTooSmall": "金額不能小於 {min}",
+  "@validation_amountTooSmall": {
+    "placeholders": {
+      "min": {
+        "type": "num"
+      }
+    }
+  },
+  "validation_amountTooLarge": "金額不能大於 {max}",
+  "@validation_amountTooLarge": {
+    "placeholders": {
+      "max": {
+        "type": "num"
+      }
+    }
+  },
+  "validation_exchangeRateLabel": "匯率",
+  "validation_exchangeRateHint": "1 {currency} = ? HKD",
+  "@validation_exchangeRateHint": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "validation_exchangeRateRequired": "請輸入匯率",
+  "validation_exchangeRateInvalid": "請輸入有效匯率"
 }

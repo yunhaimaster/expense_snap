@@ -236,6 +236,18 @@ class SEn extends S {
   String get rateSource_manual => 'Manual Input';
 
   @override
+  String get rateSource_auto_short => 'Live';
+
+  @override
+  String get rateSource_offline_short => 'Cached';
+
+  @override
+  String get rateSource_default_short => 'Default';
+
+  @override
+  String get rateSource_manual_short => 'Manual';
+
+  @override
   String get monthSummary_totalExpense => 'Total Expense';
 
   @override
@@ -913,4 +925,105 @@ class SEn extends S {
 
   @override
   String get settings_googleDisconnected => 'Google account disconnected';
+
+  @override
+  String get category_label => 'Category (Optional)';
+
+  @override
+  String get category_meals => 'Meals';
+
+  @override
+  String get category_transport => 'Transport';
+
+  @override
+  String get category_accommodation => 'Accommodation';
+
+  @override
+  String get category_officeSupplies => 'Office Supplies';
+
+  @override
+  String get category_communication => 'Communication';
+
+  @override
+  String get category_entertainment => 'Entertainment';
+
+  @override
+  String get category_medical => 'Medical';
+
+  @override
+  String get category_other => 'Other';
+
+  @override
+  String get category_statistics => 'Category Statistics';
+
+  @override
+  String get category_uncategorized => 'Uncategorized';
+
+  @override
+  String get excel_header_category => 'Category';
+
+  @override
+  String get semantic_category_prefix => 'Category';
+
+  @override
+  String semantic_expenseItem(String description) {
+    return 'Expense item: $description';
+  }
+
+  @override
+  String semantic_amount(String amount) {
+    return 'Amount: $amount';
+  }
+
+  @override
+  String semantic_originalAmount(String amount) {
+    return 'Original amount: $amount';
+  }
+
+  @override
+  String semantic_date(String date) {
+    return 'Date: $date';
+  }
+
+  @override
+  String semantic_rateSource(String source) {
+    return 'Rate source: $source';
+  }
+
+  @override
+  String get semantic_hasReceipt => 'Has receipt image';
+
+  @override
+  String get semantic_tapForDetails => 'Tap to view details';
+
+  @override
+  String get semantic_swipeToDelete => 'Swipe left to delete';
+
+  @override
+  String get validation_amountRequired => 'Please enter an amount';
+
+  @override
+  String validation_amountTooSmall(num min) {
+    return 'Amount cannot be less than $min';
+  }
+
+  @override
+  String validation_amountTooLarge(num max) {
+    return 'Amount cannot exceed $max';
+  }
+
+  @override
+  String get validation_exchangeRateLabel => 'Exchange Rate';
+
+  @override
+  String validation_exchangeRateHint(String currency) {
+    return '1 $currency = ? HKD';
+  }
+
+  @override
+  String get validation_exchangeRateRequired => 'Please enter exchange rate';
+
+  @override
+  String get validation_exchangeRateInvalid =>
+      'Please enter a valid exchange rate';
 }

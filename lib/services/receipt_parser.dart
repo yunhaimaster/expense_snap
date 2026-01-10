@@ -1,5 +1,8 @@
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
+import '../core/constants/expense_category.dart';
+import 'category_suggester.dart';
+
 /// 收據解析結果
 class ReceiptParseResult {
   const ReceiptParseResult({
@@ -7,6 +10,7 @@ class ReceiptParseResult {
     this.amountCents,
     this.description,
     this.date,
+    this.suggestedCategory,
     this.confidence = 0.0,
     this.debugInfo,
   });
@@ -23,6 +27,9 @@ class ReceiptParseResult {
   /// 識別到的日期
   final DateTime? date;
 
+  /// 根據描述建議的分類
+  final ExpenseCategory? suggestedCategory;
+
   /// 整體信心分數 0-1
   final double confidence;
 
@@ -31,12 +38,17 @@ class ReceiptParseResult {
 
   /// 是否有識別到任何資訊
   bool get hasData =>
-      currency != null || amountCents != null || description != null || date != null;
+      currency != null ||
+      amountCents != null ||
+      description != null ||
+      date != null ||
+      suggestedCategory != null;
 
   @override
   String toString() {
     return 'ReceiptParseResult(currency: $currency, amountCents: $amountCents, '
-        'description: $description, date: $date, confidence: ${confidence.toStringAsFixed(2)})';
+        'description: $description, date: $date, suggestedCategory: $suggestedCategory, '
+        'confidence: ${confidence.toStringAsFixed(2)})';
   }
 }
 
@@ -44,10 +56,16 @@ class ReceiptParseResult {
 ///
 /// 負責解析 OCR 文字，提取結構化資料
 class ReceiptParser {
-  ReceiptParser({required this.defaultCurrency});
+  ReceiptParser({
+    required this.defaultCurrency,
+    CategorySuggester? categorySuggester,
+  }) : _categorySuggester = categorySuggester ?? CategorySuggester();
 
   /// 用戶預設幣別（fallback）
   final String defaultCurrency;
+
+  /// 分類建議服務
+  final CategorySuggester _categorySuggester;
 
   /// 解析 OCR 結果
   ReceiptParseResult parse(RecognizedText text) {
@@ -60,6 +78,9 @@ class ReceiptParser {
     final amountResult = AmountExtractor.extract(text);
     final description = DescriptionExtractor.extract(text);
     final date = DateExtractor.extract(text);
+
+    // 根據描述建議分類
+    final suggestedCategory = _categorySuggester.suggestFromText(description);
 
     // 計算整體信心分數
     double confidence = 0.0;
@@ -89,6 +110,7 @@ class ReceiptParser {
       amountCents: amountResult?.cents,
       description: description,
       date: date,
+      suggestedCategory: suggestedCategory,
       confidence: avgConfidence,
     );
   }

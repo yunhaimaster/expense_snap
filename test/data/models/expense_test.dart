@@ -1,4 +1,5 @@
 import 'package:expense_snap/core/constants/currency_constants.dart';
+import 'package:expense_snap/core/constants/expense_category.dart';
 import 'package:expense_snap/data/models/expense.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,6 +19,7 @@ void main() {
         exchangeRateSource: ExchangeRateSource.auto,
         hkdAmountCents: 10944, // 109.44 (100.50 * 1.089)
         description: '午餐',
+        category: ExpenseCategory.meals,
         receiptImagePath: '/path/to/image.jpg',
         thumbnailPath: '/path/to/thumb.jpg',
         isDeleted: false,
@@ -98,6 +100,49 @@ void main() {
       });
     });
 
+    group('Category', () {
+      test('should store category correctly', () {
+        expect(expense.category, equals(ExpenseCategory.meals));
+      });
+
+      test('should allow null category', () {
+        final noCategory = Expense(
+          id: 3,
+          date: testDate,
+          originalAmountCents: 5000,
+          originalCurrency: 'HKD',
+          exchangeRate: 1000000,
+          exchangeRateSource: ExchangeRateSource.auto,
+          hkdAmountCents: 5000,
+          description: '無分類支出',
+          category: null,
+          receiptImagePath: null,
+          thumbnailPath: null,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+        expect(noCategory.category, isNull);
+      });
+
+      test('should update category via copyWith', () {
+        final updated = expense.copyWith(category: ExpenseCategory.transport);
+        expect(updated.category, equals(ExpenseCategory.transport));
+      });
+
+      test('should clear category via copyWith with clearCategory flag', () {
+        final cleared = expense.copyWith(clearCategory: true);
+        expect(cleared.category, isNull);
+      });
+
+      test('clearCategory should take precedence over category parameter', () {
+        final cleared = expense.copyWith(
+          category: ExpenseCategory.entertainment,
+          clearCategory: true,
+        );
+        expect(cleared.category, isNull);
+      });
+    });
+
     group('Serialization', () {
       test('should convert to map correctly', () {
         final map = expense.toMap();
@@ -109,7 +154,14 @@ void main() {
         expect(map['exchange_rate_source'], equals('auto'));
         expect(map['hkd_amount'], equals(10944));
         expect(map['description'], equals('午餐'));
+        expect(map['category'], equals('meals'));
         expect(map['is_deleted'], equals(0));
+      });
+
+      test('should serialize null category correctly', () {
+        final noCategory = expense.copyWith(clearCategory: true);
+        final map = noCategory.toMap();
+        expect(map['category'], isNull);
       });
 
       test('should parse from map correctly', () {
@@ -122,6 +174,7 @@ void main() {
           'exchange_rate_source': 'offline',
           'hkd_amount': 39000,
           'description': '訂閱服務',
+          'category': 'communication',
           'receipt_image_path': null,
           'thumbnail_path': null,
           'is_deleted': 0,
@@ -137,7 +190,31 @@ void main() {
         expect(parsed.originalCurrency, equals('USD'));
         expect(parsed.exchangeRateSource, equals(ExchangeRateSource.offline));
         expect(parsed.description, equals('訂閱服務'));
+        expect(parsed.category, equals(ExpenseCategory.communication));
         expect(parsed.hasReceipt, isFalse);
+      });
+
+      test('should parse null category from map', () {
+        final map = {
+          'id': 3,
+          'date': '2025-01-20T00:00:00.000Z',
+          'original_amount': 5000,
+          'original_currency': 'HKD',
+          'exchange_rate': 1000000,
+          'exchange_rate_source': 'auto',
+          'hkd_amount': 5000,
+          'description': '無分類',
+          'category': null,
+          'receipt_image_path': null,
+          'thumbnail_path': null,
+          'is_deleted': 0,
+          'deleted_at': null,
+          'created_at': '2025-01-20T10:00:00.000Z',
+          'updated_at': '2025-01-20T10:00:00.000Z',
+        };
+
+        final parsed = Expense.fromMap(map);
+        expect(parsed.category, isNull);
       });
 
       test('should handle is_deleted flag in serialization', () {
@@ -168,6 +245,7 @@ void main() {
         expect(copied.id, equals(expense.id));
         expect(copied.description, equals(expense.description));
         expect(copied.originalAmountCents, equals(expense.originalAmountCents));
+        expect(copied.category, equals(expense.category));
       });
     });
 
@@ -184,6 +262,39 @@ void main() {
         final expense2 = expense.copyWith(description: '不同描述');
 
         expect(expense1.hashCode, equals(expense2.hashCode));
+      });
+
+      test('should include category in equality when no id', () {
+        final now = DateTime.now();
+        final expense1 = Expense(
+          id: null,
+          date: testDate,
+          originalAmountCents: 5000,
+          originalCurrency: 'HKD',
+          exchangeRate: 1000000,
+          exchangeRateSource: ExchangeRateSource.auto,
+          hkdAmountCents: 5000,
+          description: '測試',
+          category: ExpenseCategory.meals,
+          createdAt: now,
+          updatedAt: now,
+        );
+        final expense2 = Expense(
+          id: null,
+          date: testDate,
+          originalAmountCents: 5000,
+          originalCurrency: 'HKD',
+          exchangeRate: 1000000,
+          exchangeRateSource: ExchangeRateSource.auto,
+          hkdAmountCents: 5000,
+          description: '測試',
+          category: ExpenseCategory.transport,
+          createdAt: now,
+          updatedAt: now,
+        );
+
+        // 分類不同，應不相等
+        expect(expense1, isNot(equals(expense2)));
       });
     });
   });

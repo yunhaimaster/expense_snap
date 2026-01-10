@@ -13,7 +13,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const String _databaseName = 'expense_snap.db';
-  static const int _databaseVersion = 1;
+  static const int _databaseVersion = 2; // v1→v2: 新增 category 欄位
 
   Database? _database;
   Completer<Database>? _initCompleter;
@@ -86,7 +86,7 @@ class DatabaseHelper {
   Future<void> _onCreate(Database db, int version) async {
     AppLogger.database('Creating database tables (version $version)');
 
-    // 建立 expenses 表
+    // 建立 expenses 表（含 category 欄位）
     await db.execute('''
       CREATE TABLE expenses (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -97,6 +97,7 @@ class DatabaseHelper {
         exchange_rate_source TEXT NOT NULL,
         hkd_amount INTEGER NOT NULL,
         description TEXT NOT NULL,
+        category TEXT,
         receipt_image_path TEXT,
         thumbnail_path TEXT,
         is_deleted INTEGER NOT NULL DEFAULT 0,
@@ -123,6 +124,14 @@ class DatabaseHelper {
     // 複合索引：優化描述自動完成查詢
     await db.execute('''
       CREATE INDEX idx_expenses_deleted_description ON expenses (is_deleted, description)
+    ''');
+    // 分類索引：支援未來按分類篩選
+    await db.execute('''
+      CREATE INDEX idx_expenses_category ON expenses (category)
+    ''');
+    // 複合索引：優化常見查詢（軟刪除篩選 + 分類）
+    await db.execute('''
+      CREATE INDEX idx_expenses_deleted_category ON expenses (is_deleted, category)
     ''');
 
     // 建立 exchange_rate_cache 表
@@ -168,10 +177,25 @@ class DatabaseHelper {
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     AppLogger.database('Upgrading database from v$oldVersion to v$newVersion');
 
-    // 未來版本升級邏輯
-    // if (oldVersion < 2) {
-    //   await db.execute('ALTER TABLE expenses ADD COLUMN category TEXT');
-    // }
+    // v1 → v2: 新增 category 欄位和索引
+    if (oldVersion < 2) {
+      AppLogger.database('Migration v1→v2: Adding category column');
+
+      // 新增 category 欄位（nullable，無需遷移現有資料）
+      await db.execute('ALTER TABLE expenses ADD COLUMN category TEXT');
+
+      // 新增分類索引（使用 IF NOT EXISTS 提高容錯性）
+      await db.execute('''
+        CREATE INDEX IF NOT EXISTS idx_expenses_category ON expenses (category)
+      ''');
+
+      // 新增複合索引（軟刪除 + 分類）
+      await db.execute('''
+        CREATE INDEX IF NOT EXISTS idx_expenses_deleted_category ON expenses (is_deleted, category)
+      ''');
+
+      AppLogger.database('Migration v1→v2 completed');
+    }
   }
 
   /// 關閉資料庫

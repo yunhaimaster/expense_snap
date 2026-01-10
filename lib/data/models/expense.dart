@@ -1,4 +1,5 @@
 import '../../core/constants/currency_constants.dart';
+import '../../core/constants/expense_category.dart';
 import '../../core/utils/formatters.dart';
 
 /// 支出記錄 Model
@@ -15,6 +16,7 @@ class Expense {
     required this.exchangeRateSource,
     required this.hkdAmountCents,
     required this.description,
+    this.category,
     this.receiptImagePath,
     this.thumbnailPath,
     this.isDeleted = false,
@@ -46,6 +48,9 @@ class Expense {
 
   /// 描述
   final String description;
+
+  /// 支出分類（nullable，選填）
+  final ExpenseCategory? category;
 
   /// 原圖路徑
   final String? receiptImagePath;
@@ -107,6 +112,7 @@ class Expense {
       ),
       hkdAmountCents: map['hkd_amount'] as int,
       description: map['description'] as String,
+      category: ExpenseCategoryExtension.fromString(map['category'] as String?),
       receiptImagePath: map['receipt_image_path'] as String?,
       thumbnailPath: map['thumbnail_path'] as String?,
       isDeleted: (map['is_deleted'] as int) == 1,
@@ -129,6 +135,7 @@ class Expense {
       'exchange_rate_source': exchangeRateSource.value,
       'hkd_amount': hkdAmountCents,
       'description': description,
+      'category': category?.name,
       'receipt_image_path': receiptImagePath,
       'thumbnail_path': thumbnailPath,
       'is_deleted': isDeleted ? 1 : 0,
@@ -141,6 +148,8 @@ class Expense {
   }
 
   /// 複製並修改
+  ///
+  /// 使用 [clearCategory] 來清除分類（設為 null）
   Expense copyWith({
     int? id,
     DateTime? date,
@@ -150,6 +159,8 @@ class Expense {
     ExchangeRateSource? exchangeRateSource,
     int? hkdAmountCents,
     String? description,
+    ExpenseCategory? category,
+    bool clearCategory = false,
     String? receiptImagePath,
     String? thumbnailPath,
     bool? isDeleted,
@@ -166,6 +177,7 @@ class Expense {
       exchangeRateSource: exchangeRateSource ?? this.exchangeRateSource,
       hkdAmountCents: hkdAmountCents ?? this.hkdAmountCents,
       description: description ?? this.description,
+      category: clearCategory ? null : (category ?? this.category),
       receiptImagePath: receiptImagePath ?? this.receiptImagePath,
       thumbnailPath: thumbnailPath ?? this.thumbnailPath,
       isDeleted: isDeleted ?? this.isDeleted,
@@ -191,6 +203,7 @@ class Expense {
           originalAmountCents == other.originalAmountCents &&
           originalCurrency == other.originalCurrency &&
           description == other.description &&
+          category == other.category &&
           createdAt == other.createdAt;
     }
 
@@ -204,13 +217,14 @@ class Expense {
     if (id != null) return id.hashCode;
 
     // 沒有 id 時，用多欄位組合
-    return Object.hash(date, originalAmountCents, originalCurrency, description, createdAt);
+    return Object.hash(
+        date, originalAmountCents, originalCurrency, description, category, createdAt);
   }
 
   @override
   String toString() {
     return 'Expense(id: $id, date: $date, amount: $formattedOriginalAmount, '
-        'description: $description, isDeleted: $isDeleted)';
+        'description: $description, category: $category, isDeleted: $isDeleted)';
   }
 }
 

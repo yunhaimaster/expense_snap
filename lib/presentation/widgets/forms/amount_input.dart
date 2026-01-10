@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/constants/validation_rules.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// 金額輸入組件
 ///
@@ -30,6 +31,7 @@ class AmountInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     return TextFormField(
       controller: controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -48,28 +50,28 @@ class AmountInput extends StatelessWidget {
           ),
       textAlign: TextAlign.end,
       onChanged: onChanged,
-      validator: validator ?? _defaultValidator,
+      validator: validator ?? (value) => _defaultValidator(value, l10n),
       enabled: enabled,
       autofocus: autofocus,
     );
   }
 
-  String? _defaultValidator(String? value) {
+  String? _defaultValidator(String? value, S l10n) {
     if (value == null || value.isEmpty) {
-      return '請輸入金額';
+      return l10n.validation_amountRequired;
     }
 
     final amount = double.tryParse(value);
     if (amount == null) {
-      return '請輸入有效金額';
+      return l10n.addExpense_invalidAmount;
     }
 
     if (amount < ValidationRules.minAmount) {
-      return '金額不能小於 ${ValidationRules.minAmount}';
+      return l10n.validation_amountTooSmall(ValidationRules.minAmount);
     }
 
     if (amount > ValidationRules.maxAmount) {
-      return '金額不能大於 ${ValidationRules.maxAmount}';
+      return l10n.validation_amountTooLarge(ValidationRules.maxAmount);
     }
 
     return null;
@@ -138,6 +140,7 @@ class ExchangeRateInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
     return TextFormField(
       controller: controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -145,18 +148,18 @@ class ExchangeRateInput extends StatelessWidget {
         FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,6}')),
       ],
       decoration: InputDecoration(
-        labelText: '匯率',
-        helperText: '1 $fromCurrency = ? HKD',
+        labelText: l10n.validation_exchangeRateLabel,
+        helperText: l10n.validation_exchangeRateHint(fromCurrency),
         prefixIcon: const Icon(Icons.currency_exchange),
       ),
       onChanged: onChanged,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return '請輸入匯率';
+          return l10n.validation_exchangeRateRequired;
         }
         final rate = double.tryParse(value);
         if (rate == null || rate <= 0) {
-          return '請輸入有效匯率';
+          return l10n.validation_exchangeRateInvalid;
         }
         return null;
       },

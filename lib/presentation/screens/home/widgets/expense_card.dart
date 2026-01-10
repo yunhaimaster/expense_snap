@@ -4,10 +4,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/currency_constants.dart';
+import '../../../../core/constants/expense_category.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/animation_utils.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../data/models/expense.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../widgets/common/category_badge.dart';
 
 /// 支出卡片組件
 ///
@@ -25,41 +28,57 @@ class ExpenseCard extends StatelessWidget {
   final VoidCallback? onDismissed;
 
   /// 建立語意描述（供螢幕閱讀器使用）
-  String _buildSemanticLabel() {
+  String _buildSemanticLabel(S l10n) {
     final buffer = StringBuffer();
-    buffer.write('支出項目：${expense.description}。');
-    buffer.write('金額：${expense.formattedHkdAmount}。');
+    buffer.write('${l10n.semantic_expenseItem(expense.description)} ');
+    if (expense.category != null) {
+      final categoryName = expense.category!.getLocalizedName(l10n);
+      buffer.write('${l10n.semantic_category_prefix}：$categoryName。');
+    }
+    buffer.write('${l10n.semantic_amount(expense.formattedHkdAmount)} ');
     if (expense.originalCurrency != 'HKD') {
-      buffer.write('原始金額：${expense.formattedOriginalAmount}。');
+      buffer.write('${l10n.semantic_originalAmount(expense.formattedOriginalAmount)} ');
     }
-    buffer.write('日期：${Formatters.formatDate(expense.date)}。');
-    buffer.write('匯率來源：${_getRateSourceLabel()}。');
+    buffer.write('${l10n.semantic_date(Formatters.formatDate(expense.date))} ');
+    buffer.write('${l10n.semantic_rateSource(_getRateSourceLabel(l10n))} ');
     if (expense.hasReceipt) {
-      buffer.write('有收據圖片。');
+      buffer.write('${l10n.semantic_hasReceipt}。');
     }
-    buffer.write('點擊查看詳情');
+    buffer.write(l10n.semantic_tapForDetails);
     if (onDismissed != null) {
-      buffer.write('，向左滑動刪除');
+      buffer.write('，${l10n.semantic_swipeToDelete}');
     }
     return buffer.toString();
   }
 
   /// 取得匯率來源文字標籤
-  String _getRateSourceLabel() {
+  String _getRateSourceLabel(S l10n) {
     return switch (expense.exchangeRateSource) {
-      ExchangeRateSource.auto => '即時匯率',
-      ExchangeRateSource.offline => '離線快取',
-      ExchangeRateSource.defaultRate => '預設匯率',
-      ExchangeRateSource.manual => '手動輸入',
+      ExchangeRateSource.auto => l10n.rateSource_auto,
+      ExchangeRateSource.offline => l10n.rateSource_offline,
+      ExchangeRateSource.defaultRate => l10n.rateSource_default,
+      ExchangeRateSource.manual => l10n.rateSource_manual,
+    };
+  }
+
+  /// 取得簡短匯率來源標籤（用於 badge 顯示）
+  String _getRateSourceShortLabel(S l10n) {
+    return switch (expense.exchangeRateSource) {
+      ExchangeRateSource.auto => l10n.rateSource_auto_short,
+      ExchangeRateSource.offline => l10n.rateSource_offline_short,
+      ExchangeRateSource.defaultRate => l10n.rateSource_default_short,
+      ExchangeRateSource.manual => l10n.rateSource_manual_short,
     };
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = S.of(context);
+
     // RepaintBoundary 減少列表滾動時的重繪範圍
     Widget card = RepaintBoundary(
       child: Semantics(
-      label: _buildSemanticLabel(),
+      label: _buildSemanticLabel(l10n),
       button: true,
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -91,7 +110,7 @@ class ExpenseCard extends StatelessWidget {
 
                         const SizedBox(height: 4),
 
-                        // 日期和匯率來源
+                        // 日期、分類、匯率來源
                         Row(
                           children: [
                             Text(
@@ -99,7 +118,15 @@ class ExpenseCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             const SizedBox(width: 8),
-                            _buildRateSourceBadge(context),
+                            _buildRateSourceBadge(context, l10n),
+                            // 分類標籤
+                            if (expense.category != null) ...[
+                              const SizedBox(width: 8),
+                              CategoryBadge(
+                                category: expense.category!,
+                                compact: true,
+                              ),
+                            ],
                           ],
                         ),
                       ],
@@ -165,7 +192,7 @@ class ExpenseCard extends StatelessWidget {
           ),
         ),
         confirmDismiss: (_) async {
-          return await _showDeleteConfirmation(context);
+          return await _showDeleteConfirmation(context, l10n);
         },
         onDismissed: (_) => onDismissed!(),
         child: card,
@@ -271,31 +298,28 @@ class ExpenseCard extends StatelessWidget {
   }
 
   /// 建立匯率來源標籤
-  Widget _buildRateSourceBadge(BuildContext context) {
+  Widget _buildRateSourceBadge(BuildContext context, S l10n) {
     // 根據主題選擇顏色
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final (icon, color, label) = switch (expense.exchangeRateSource) {
+    final (icon, color) = switch (expense.exchangeRateSource) {
       ExchangeRateSource.auto => (
           Icons.check_circle,
           isDark ? AppColors.dark.rateAuto : AppColors.rateAuto,
-          '即時'
         ),
       ExchangeRateSource.offline => (
           Icons.offline_bolt,
           isDark ? AppColors.dark.rateOffline : AppColors.rateOffline,
-          '離線'
         ),
       ExchangeRateSource.defaultRate => (
           Icons.warning,
           isDark ? AppColors.dark.rateDefault : AppColors.rateDefault,
-          '預設'
         ),
       ExchangeRateSource.manual => (
           Icons.edit,
           isDark ? AppColors.dark.rateManual : AppColors.rateManual,
-          '手動'
         ),
     };
+    final label = _getRateSourceShortLabel(l10n);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -322,19 +346,19 @@ class ExpenseCard extends StatelessWidget {
   }
 
   /// 顯示刪除確認對話框
-  Future<bool> _showDeleteConfirmation(BuildContext context) async {
+  Future<bool> _showDeleteConfirmation(BuildContext context, S l10n) async {
     // 觸覺回饋 - 滑動到位
     unawaited(AnimationUtils.mediumImpact());
 
     return await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('確認刪除'),
-            content: const Text('確定要刪除這筆支出嗎？\n刪除後可在「已刪除項目」中還原。'),
+            title: Text(l10n.expenseDetail_confirmDelete),
+            content: Text(l10n.expenseDetail_confirmDeleteMessage),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('取消'),
+                child: Text(l10n.common_cancel),
               ),
               TextButton(
                 onPressed: () {
@@ -345,7 +369,7 @@ class ExpenseCard extends StatelessWidget {
                 style: TextButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.error,
                 ),
-                child: const Text('刪除'),
+                child: Text(l10n.common_delete),
               ),
             ],
           ),

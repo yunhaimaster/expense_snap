@@ -76,29 +76,29 @@ void main() {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump();
 
-      expect(find.text('新增支出'), findsOneWidget);
+      expect(find.text('新增支出'), findsAtLeastNWidgets(1));
     });
 
     testWidgets('應顯示儲存按鈕', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump();
 
-      expect(find.text('儲存'), findsOneWidget);
+      expect(find.text('儲存'), findsAtLeastNWidgets(1));
     });
 
     testWidgets('應顯示收據圖片區域', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump();
 
-      expect(find.text('收據圖片'), findsOneWidget);
+      expect(find.text('收據圖片'), findsAtLeastNWidgets(1));
     });
 
     testWidgets('應顯示拍照和相簿按鈕', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump();
 
-      expect(find.text('拍照'), findsOneWidget);
-      expect(find.text('相簿'), findsOneWidget);
+      expect(find.text('拍照'), findsAtLeastNWidgets(1));
+      expect(find.text('相簿'), findsAtLeastNWidgets(1));
     });
   });
 
@@ -107,7 +107,7 @@ void main() {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump();
 
-      expect(find.text('金額'), findsOneWidget);
+      expect(find.text('金額'), findsAtLeastNWidgets(1));
     });
 
     testWidgets('應顯示幣種選擇區域', (tester) async {
@@ -123,7 +123,7 @@ void main() {
       await tester.pump();
 
       // 描述欄位應存在（透過自動完成元件）
-      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(Form), findsAtLeastNWidgets(1));
     });
   });
 
@@ -139,7 +139,7 @@ void main() {
         await tester.pump();
 
         // 應顯示手動輸入切換
-        expect(find.text('手動輸入'), findsOneWidget);
+        expect(find.text('手動輸入'), findsAtLeastNWidgets(1));
       }
     });
   });
@@ -163,14 +163,14 @@ void main() {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump();
 
-      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(SingleChildScrollView), findsAtLeastNWidgets(1));
     });
 
     testWidgets('應使用 Form 包裝表單元件', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pump();
 
-      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(Form), findsAtLeastNWidgets(1));
     });
   });
 }

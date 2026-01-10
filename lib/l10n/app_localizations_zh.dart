@@ -234,6 +234,18 @@ class SZh extends S {
   String get rateSource_manual => '手動輸入';
 
   @override
+  String get rateSource_auto_short => '即時';
+
+  @override
+  String get rateSource_offline_short => '離線';
+
+  @override
+  String get rateSource_default_short => '預設';
+
+  @override
+  String get rateSource_manual_short => '手動';
+
+  @override
   String get monthSummary_totalExpense => '總支出';
 
   @override
@@ -899,4 +911,104 @@ class SZh extends S {
 
   @override
   String get settings_googleDisconnected => '已斷開 Google 帳號';
+
+  @override
+  String get category_label => '分類（選填）';
+
+  @override
+  String get category_meals => '餐飲';
+
+  @override
+  String get category_transport => '交通';
+
+  @override
+  String get category_accommodation => '住宿';
+
+  @override
+  String get category_officeSupplies => '辦公用品';
+
+  @override
+  String get category_communication => '通訊';
+
+  @override
+  String get category_entertainment => '娛樂';
+
+  @override
+  String get category_medical => '醫療';
+
+  @override
+  String get category_other => '其他';
+
+  @override
+  String get category_statistics => '分類統計';
+
+  @override
+  String get category_uncategorized => '未分類';
+
+  @override
+  String get excel_header_category => '分類';
+
+  @override
+  String get semantic_category_prefix => '分類';
+
+  @override
+  String semantic_expenseItem(String description) {
+    return '支出項目：$description';
+  }
+
+  @override
+  String semantic_amount(String amount) {
+    return '金額：$amount';
+  }
+
+  @override
+  String semantic_originalAmount(String amount) {
+    return '原始金額：$amount';
+  }
+
+  @override
+  String semantic_date(String date) {
+    return '日期：$date';
+  }
+
+  @override
+  String semantic_rateSource(String source) {
+    return '匯率來源：$source';
+  }
+
+  @override
+  String get semantic_hasReceipt => '有收據圖片';
+
+  @override
+  String get semantic_tapForDetails => '點擊查看詳情';
+
+  @override
+  String get semantic_swipeToDelete => '向左滑動刪除';
+
+  @override
+  String get validation_amountRequired => '請輸入金額';
+
+  @override
+  String validation_amountTooSmall(num min) {
+    return '金額不能小於 $min';
+  }
+
+  @override
+  String validation_amountTooLarge(num max) {
+    return '金額不能大於 $max';
+  }
+
+  @override
+  String get validation_exchangeRateLabel => '匯率';
+
+  @override
+  String validation_exchangeRateHint(String currency) {
+    return '1 $currency = ? HKD';
+  }
+
+  @override
+  String get validation_exchangeRateRequired => '請輸入匯率';
+
+  @override
+  String get validation_exchangeRateInvalid => '請輸入有效匯率';
 }

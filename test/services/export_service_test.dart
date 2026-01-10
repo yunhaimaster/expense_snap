@@ -25,6 +25,16 @@ ExportStrings createTestExportStrings({int year = 2025, int month = 1}) {
     rateSourceOffline: '離線快取',
     rateSourceDefault: '預設',
     rateSourceManual: '手動',
+    headerCategory: '分類',
+    categoryUncategorized: '未分類',
+    categoryMeals: '餐飲',
+    categoryTransport: '交通',
+    categoryAccommodation: '住宿',
+    categoryOfficeSupplies: '辦公用品',
+    categoryCommunication: '通訊',
+    categoryEntertainment: '娛樂',
+    categoryMedical: '醫療',
+    categoryOther: '其他',
   );
 }
 

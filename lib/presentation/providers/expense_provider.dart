@@ -5,6 +5,7 @@ import '../../core/constants/currency_constants.dart';
 import '../../core/errors/app_exception.dart';
 import '../../core/errors/result.dart';
 import '../../core/utils/app_logger.dart';
+import '../../core/constants/expense_category.dart';
 import '../../data/models/expense.dart';
 import '../../domain/repositories/expense_repository.dart';
 import '../../services/image_service.dart';
@@ -184,6 +185,7 @@ class ExpenseProvider extends ChangeNotifier {
     required int hkdAmountCents,
     required String description,
     String? imagePath,
+    ExpenseCategory? category,
   }) async {
     final now = DateTime.now();
     final expense = Expense(
@@ -196,6 +198,7 @@ class ExpenseProvider extends ChangeNotifier {
       description: description,
       createdAt: now,
       updatedAt: now,
+      category: category,
     );
 
     final result = await _repository.addExpense(
