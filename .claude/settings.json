@@ -38,8 +38,8 @@
       {
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Before completing: If Dart/Flutter files were modified, remind user to run `flutter analyze && flutter test` if not already done."
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git diff --name-only 2>/dev/null | grep -q '\\.dart$' && echo '⚠️ Dart 檔案已修改，建議執行: flutter analyze && flutter test' || exit 0"
           }
         ]
       }

@@ -41,9 +41,15 @@ void main() {
       });
     });
 
-    group('duplicate detection window', () {
-      test('window is 24 hours', () {
-        expect(SmartPromptService.duplicateWindowHours, 24);
+    group('duplicate detection', () {
+      test('window is 48 hours', () {
+        // 延長至 48 小時以涵蓋隔天同筆支出
+        expect(SmartPromptService.duplicateWindowHours, 48);
+      });
+
+      test('similarity threshold is 0.6', () {
+        // 使用 Levenshtein 編輯距離，0.6 相似度門檻
+        expect(SmartPromptService.similarityThreshold, 0.6);
       });
     });
   });

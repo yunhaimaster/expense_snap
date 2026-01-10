@@ -23,13 +23,13 @@ import '../core/utils/path_validator.dart';
 class ImageService {
   ImageService({
     ImagePicker? picker,
-    this.processingTimeout = const Duration(seconds: 5),
+    this.processingTimeout = AppConstants.imageProcessingTimeout,
   }) : _picker = picker ?? ImagePicker();
 
   final ImagePicker _picker;
   static const _uuid = Uuid();
 
-  /// 圖片處理超時時間（預設 5 秒）
+  /// 圖片處理超時時間
   final Duration processingTimeout;
 
   /// 從相機拍照
@@ -102,7 +102,7 @@ class ImageService {
 
       // 生成檔名
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final uniqueId = _uuid.v4().substring(0, 8);
+      final uniqueId = _uuid.v4().substring(0, AppConstants.shortUuidLength);
       final monthFolder = _formatMonthFolder(expenseDate);
 
       final fullFileName = '${timestamp}_$uniqueId${AppConstants.fullImageSuffix}';

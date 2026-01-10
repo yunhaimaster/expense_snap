@@ -39,7 +39,7 @@ class NetworkException extends AppException {
       );
 }
 
-/// 儲存相關異常
+/// 儲存相關異常（高層抽象，用於業務邏輯）
 class StorageException extends AppException {
   const StorageException(super.message, {super.code});
 
@@ -62,6 +62,38 @@ class StorageException extends AppException {
   /// 路徑不安全（目錄遍歷攻擊）
   factory StorageException.unsafePath(String path) =>
       StorageException('不安全的路徑: $path', code: 'UNSAFE_PATH');
+}
+
+/// 檔案系統異常（低層操作，用於 IO 錯誤）
+class FileSystemException extends AppException {
+  const FileSystemException(super.message, {super.code, this.path});
+
+  /// 相關檔案路徑
+  final String? path;
+
+  /// 目錄建立失敗
+  factory FileSystemException.directoryCreateFailed(String path) =>
+      FileSystemException('無法建立目錄: $path', code: 'DIR_CREATE_FAILED', path: path);
+
+  /// 檔案複製失敗
+  factory FileSystemException.copyFailed(String path) =>
+      FileSystemException('檔案複製失敗: $path', code: 'COPY_FAILED', path: path);
+
+  /// 檔案刪除失敗
+  factory FileSystemException.deleteFailed(String path) =>
+      FileSystemException('檔案刪除失敗: $path', code: 'DELETE_FAILED', path: path);
+
+  /// 檔案移動失敗
+  factory FileSystemException.moveFailed(String path) =>
+      FileSystemException('檔案移動失敗: $path', code: 'MOVE_FAILED', path: path);
+
+  /// 權限拒絕
+  factory FileSystemException.permissionDenied(String path) =>
+      FileSystemException('權限拒絕: $path', code: 'PERMISSION_DENIED', path: path);
+
+  /// 磁碟已滿
+  factory FileSystemException.diskFull() =>
+      const FileSystemException('磁碟空間已滿', code: 'DISK_FULL');
 }
 
 /// 資料庫相關異常
@@ -91,6 +123,31 @@ class DatabaseException extends AppException {
   /// 刪除失敗
   factory DatabaseException.deleteFailed(String reason) =>
       DatabaseException('刪除失敗: $reason', code: 'DELETE_FAILED');
+}
+
+/// 同步相關異常（雲端備份、資料同步等）
+class SyncException extends AppException {
+  const SyncException(super.message, {super.code});
+
+  /// 同步衝突
+  factory SyncException.conflict(String resource) =>
+      SyncException('同步衝突: $resource', code: 'SYNC_CONFLICT');
+
+  /// 遠端版本更新
+  factory SyncException.remoteChanged() =>
+      const SyncException('遠端資料已變更', code: 'REMOTE_CHANGED');
+
+  /// 本地版本過舊
+  factory SyncException.localOutdated() =>
+      const SyncException('本地資料版本過舊', code: 'LOCAL_OUTDATED');
+
+  /// 同步失敗
+  factory SyncException.failed(String reason) =>
+      SyncException('同步失敗: $reason', code: 'SYNC_FAILED');
+
+  /// 同步被中斷
+  factory SyncException.interrupted() =>
+      const SyncException('同步被中斷', code: 'SYNC_INTERRUPTED');
 }
 
 /// 驗證相關異常

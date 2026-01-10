@@ -1,5 +1,7 @@
 import '../../data/datasources/local/database_helper.dart';
 import '../../data/models/expense.dart';
+import '../constants/app_constants.dart';
+import '../utils/string_utils.dart';
 
 /// 智慧提示服務
 ///
@@ -11,11 +13,14 @@ class SmartPromptService {
 
   final _db = DatabaseHelper.instance;
 
-  /// 大金額門檻（以港幣分計）- 1000 HKD
-  static const int largeAmountThreshold = 100000;
+  /// 大金額門檻（以港幣分計）- 使用集中管理的常數
+  static const int largeAmountThreshold = AppConstants.largeAmountThresholdCents;
 
-  /// 重複偵測時間窗口（小時）
-  static const int duplicateWindowHours = 24;
+  /// 重複偵測時間窗口（小時）- 延長至 48 小時以涵蓋隔天同筆支出
+  static const int duplicateWindowHours = 48;
+
+  /// 描述相似度門檻（0.0-1.0），使用 Levenshtein 編輯距離
+  static const double similarityThreshold = 0.6;
 
   /// 檢查是否為大金額
   bool isLargeAmount(int hkdAmountCents) {
@@ -24,7 +29,9 @@ class SmartPromptService {
 
   /// 檢查是否有重複支出
   ///
-  /// 條件：24 小時內相同金額且描述相似的支出
+  /// 條件：過去 48 小時內相同金額且描述相似的支出
+  /// 使用 Levenshtein 編輯距離計算描述相似度
+  /// 注意：只檢查過去的支出，避免與未來日期的支出誤匹配
   Future<Expense?> findDuplicateExpense({
     required int hkdAmountCents,
     required String description,
@@ -32,9 +39,10 @@ class SmartPromptService {
   }) async {
     final db = await _db.database;
 
-    // 計算時間範圍
-    final startTime = date.subtract(const Duration(hours: duplicateWindowHours));
-    final endTime = date.add(const Duration(hours: duplicateWindowHours));
+    // 計算時間範圍（只往前看，不檢查未來的支出）
+    final startTime =
+        date.subtract(const Duration(hours: duplicateWindowHours));
+    final endTime = date; // 只檢查到當前日期，不包含未來
 
     // 查詢相同金額且時間接近的支出
     final result = await db.query(
@@ -67,20 +75,22 @@ class SmartPromptService {
   }
 
   /// 檢查描述是否相似
+  ///
+  /// 使用 Levenshtein 編輯距離計算相似度，
+  /// 同時保留原有的包含檢查和共同字數檢查作為快速路徑
   bool _isSimilarDescription(String desc1, String desc2) {
-    // 簡單相似度檢查：忽略空白後比較
-    final normalized1 = desc1.trim().toLowerCase();
-    final normalized2 = desc2.trim().toLowerCase();
+    final normalized1 = StringUtils.normalize(desc1);
+    final normalized2 = StringUtils.normalize(desc2);
 
     // 任一描述為空則不視為相似（避免誤判）
     if (normalized1.isEmpty || normalized2.isEmpty) {
       return false;
     }
 
-    // 完全相同
+    // 快速路徑：完全相同
     if (normalized1 == normalized2) return true;
 
-    // 一個包含另一個（需要至少 2 字元才比較）
+    // 快速路徑：一個包含另一個（需要至少 2 字元才比較）
     if (normalized1.length >= 2 &&
         normalized2.length >= 2 &&
         (normalized1.contains(normalized2) ||
@@ -88,11 +98,16 @@ class SmartPromptService {
       return true;
     }
 
-    // 計算共同字數比例
+    // 使用 Levenshtein 編輯距離計算相似度
+    final similarity = StringUtils.similarityRatio(normalized1, normalized2);
+    if (similarity >= similarityThreshold) {
+      return true;
+    }
+
+    // 備用：計算共同字數比例（適用於多字詞描述）
     final words1 = normalized1.split(RegExp(r'\s+'));
     final words2 = normalized2.split(RegExp(r'\s+'));
 
-    // 過濾空字串
     final validWords1 = words1.where((w) => w.isNotEmpty).toList();
     final validWords2 = words2.where((w) => w.isNotEmpty).toList();
 
@@ -100,10 +115,10 @@ class SmartPromptService {
       return false;
     }
 
-    final commonWords =
-        validWords1.where(validWords2.contains).length;
-    final maxWords =
-        validWords1.length > validWords2.length ? validWords1.length : validWords2.length;
+    final commonWords = validWords1.where(validWords2.contains).length;
+    final maxWords = validWords1.length > validWords2.length
+        ? validWords1.length
+        : validWords2.length;
 
     // 超過 50% 共同字則視為相似
     return maxWords > 0 && commonWords / maxWords > 0.5;

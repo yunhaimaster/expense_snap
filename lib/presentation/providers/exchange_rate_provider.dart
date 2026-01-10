@@ -17,6 +17,9 @@ class ExchangeRateProvider extends ChangeNotifier {
   /// 匯率資訊快取（幣種 → 資訊）
   final Map<String, ExchangeRateInfo> _rates = {};
 
+  // 是否已 dispose
+  bool _disposed = false;
+
   /// 是否正在載入
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -62,7 +65,7 @@ class ExchangeRateProvider extends ChangeNotifier {
 
     _isLoading = true;
     _error = null;
-    notifyListeners();
+    _safeNotifyListeners();
 
     try {
       final result = await _repository.getRate(currency);
@@ -70,7 +73,8 @@ class ExchangeRateProvider extends ChangeNotifier {
       return result.fold(
         onFailure: (error) {
           _error = error;
-          AppLogger.warning('Failed to load rate for $currency: ${error.message}');
+          AppLogger.warning(
+              'Failed to load rate for $currency: ${error.message}');
           return null;
         },
         onSuccess: (info) {
@@ -80,7 +84,7 @@ class ExchangeRateProvider extends ChangeNotifier {
       );
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
@@ -88,7 +92,7 @@ class ExchangeRateProvider extends ChangeNotifier {
   Future<void> loadAllRates() async {
     _isLoading = true;
     _error = null;
-    notifyListeners();
+    _safeNotifyListeners();
 
     try {
       final result = await _repository.getAllRates();
@@ -105,29 +109,29 @@ class ExchangeRateProvider extends ChangeNotifier {
       );
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
   /// 強制重新整理所有匯率
   ///
-  /// 受 30 秒冷卻限制
-  Future<bool> refreshRates() async {
-    if (!canRefresh) {
+  /// [forceRefresh] 如果為 true，則繞過 30 秒冷卻限制（用於長按刷新）
+  Future<bool> refreshRates({bool forceRefresh = false}) async {
+    if (!forceRefresh && !canRefresh) {
       _error = NetworkException(
         '請稍候 $secondsUntilRefresh 秒後再試',
         code: 'COOLDOWN',
       );
-      notifyListeners();
+      _safeNotifyListeners();
       return false;
     }
 
     _isLoading = true;
     _error = null;
-    notifyListeners();
+    _safeNotifyListeners();
 
     try {
-      final result = await _repository.refreshRates();
+      final result = await _repository.refreshRates(forceRefresh: forceRefresh);
 
       return result.fold(
         onFailure: (error) {
@@ -138,18 +142,42 @@ class ExchangeRateProvider extends ChangeNotifier {
         onSuccess: (ratesMap) {
           _rates.clear();
           _rates.addAll(ratesMap);
+          if (forceRefresh) {
+            AppLogger.info('Exchange rates force refreshed successfully');
+          }
           return true;
         },
       );
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
+  }
+
+  /// 清除匯率快取
+  Future<void> invalidateCache() async {
+    await _repository.invalidateCache();
+    _rates.clear();
+    _safeNotifyListeners();
   }
 
   /// 清除錯誤
   void clearError() {
     _error = null;
-    notifyListeners();
+    _safeNotifyListeners();
+  }
+
+  /// 安全的 notifyListeners（防止 dispose 後呼叫）
+  void _safeNotifyListeners() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    AppLogger.debug('ExchangeRateProvider disposed');
+    super.dispose();
   }
 }

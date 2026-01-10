@@ -26,6 +26,9 @@ class LocaleProvider extends ChangeNotifier {
   Locale? _locale;
   bool _isLoaded = false;
 
+  // 是否已 dispose
+  bool _disposed = false;
+
   /// 當前語言設定
   ///
   /// null 表示跟隨系統
@@ -73,7 +76,7 @@ class LocaleProvider extends ChangeNotifier {
     }
 
     _isLoaded = true;
-    notifyListeners();
+    _safeNotifyListeners();
   }
 
   /// 設定語言
@@ -91,7 +94,7 @@ class LocaleProvider extends ChangeNotifier {
     }
 
     _locale = locale;
-    notifyListeners();
+    _safeNotifyListeners();
 
     // 持久化儲存
     try {
@@ -118,5 +121,19 @@ class LocaleProvider extends ChangeNotifier {
       return _locale == null;
     }
     return _locale?.languageCode == code;
+  }
+
+  /// 安全的 notifyListeners（防止 dispose 後呼叫）
+  void _safeNotifyListeners() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    AppLogger.debug('LocaleProvider disposed');
+    super.dispose();
   }
 }

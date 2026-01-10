@@ -2,6 +2,17 @@ import '../constants/validation_rules.dart';
 import '../errors/app_exception.dart';
 import '../errors/result.dart';
 
+/// 驗證結果，包含值和可選的警告訊息
+class ValidationResult<T> {
+  final T value;
+  final String? warning;
+
+  const ValidationResult(this.value, {this.warning});
+
+  /// 是否有警告
+  bool get hasWarning => warning != null;
+}
+
 /// 輸入驗證工具類別
 class Validators {
   Validators._();
@@ -45,6 +56,49 @@ class Validators {
     // 例如：'123.45' -> 12345, '100' -> 10000
     final cents = _parseAmountToCents(cleanValue);
     return Result.success(cents);
+  }
+
+  /// 驗證金額（含警告）
+  ///
+  /// 返回以「分」為單位的整數金額，如果小數位數超過 2 位會截斷並附帶警告
+  static Result<ValidationResult<int>> validateAmountWithWarning(
+    String? value, {
+    String fieldName = '金額',
+  }) {
+    if (value == null || value.isEmpty) {
+      return Result.failure(ValidationException.required(fieldName));
+    }
+
+    final cleanValue = value.replaceAll(',', '');
+    final amount = double.tryParse(cleanValue);
+
+    if (amount == null) {
+      return Result.failure(ValidationException.invalidFormat(fieldName));
+    }
+
+    if (amount < ValidationRules.minAmount ||
+        amount > ValidationRules.maxAmount) {
+      return Result.failure(ValidationException.outOfRange(
+        fieldName,
+        ValidationRules.minAmount,
+        ValidationRules.maxAmount,
+      ));
+    }
+
+    // 檢查小數位數
+    final decimalPart = cleanValue.contains('.')
+        ? cleanValue.split('.')[1]
+        : '';
+
+    String? warning;
+    if (decimalPart.length > ValidationRules.maxDecimalPlaces) {
+      // 只是警告，不是錯誤，會截斷到 2 位
+      warning = '$fieldName 小數部分已截斷至 ${ValidationRules.maxDecimalPlaces} 位';
+    }
+
+    // 使用字串解析轉換為分，避免浮點誤差
+    final cents = _parseAmountToCents(cleanValue);
+    return Result.success(ValidationResult(cents, warning: warning));
   }
 
   /// 安全地將金額字串轉換為分（避免浮點誤差）
@@ -127,15 +181,21 @@ class Validators {
   }
 
   /// 驗證日期
+  ///
+  /// 使用日期比較（忽略時間），確保日期不超過今天
   static Result<DateTime> validateDate(DateTime? value, {String fieldName = '日期'}) {
     if (value == null) {
       return Result.failure(ValidationException.required(fieldName));
     }
 
     final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day, 23, 59, 59);
+    // 使用 start-of-next-day 比較，確保今天任何時間都有效
+    final startOfTomorrow = DateTime(now.year, now.month, now.day + 1);
 
-    if (value.isAfter(today)) {
+    // 將輸入值標準化到當天開始（忽略時間部分）
+    final inputDate = DateTime(value.year, value.month, value.day);
+
+    if (!inputDate.isBefore(startOfTomorrow)) {
       return Result.failure(ValidationException.invalidDate(fieldName));
     }
 

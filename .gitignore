@@ -82,3 +82,4 @@ openspec/changes/*/local/
 
 # Serena MCP local config
 .serena/
+CLAUDE.local.md

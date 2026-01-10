@@ -11,6 +11,7 @@ import '../../providers/exchange_rate_provider.dart';
 /// 匯率顯示與控制元件
 ///
 /// 顯示當前匯率、來源指示器、重新整理按鈕
+/// 支援長按強制刷新（繞過冷卻時間）
 class ExchangeRateDisplay extends StatefulWidget {
   const ExchangeRateDisplay({
     super.key,
@@ -75,24 +76,39 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
     }
   }
 
-  Future<void> _refreshRate() async {
+  Future<void> _refreshRate({bool forceRefresh = false}) async {
     final provider = context.read<ExchangeRateProvider>();
 
-    if (!provider.canRefresh) {
+    if (!forceRefresh && !provider.canRefresh) {
       _startCooldownTimer(provider.secondsUntilRefresh);
       return;
     }
 
-    final success = await provider.refreshRates();
+    final success = await provider.refreshRates(forceRefresh: forceRefresh);
 
     if (success && mounted) {
       final info = provider.getRate(widget.currency);
       if (info != null) {
         widget.onRateChanged(info.rateToHkd, info.source);
       }
-    } else if (!provider.canRefresh) {
+      // 強制刷新成功時顯示提示
+      if (forceRefresh) {
+        _showForceRefreshSuccess();
+      }
+    } else if (!forceRefresh && !provider.canRefresh) {
       _startCooldownTimer(provider.secondsUntilRefresh);
     }
+  }
+
+  void _showForceRefreshSuccess() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('匯率已強制更新'),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   void _startCooldownTimer(int seconds) {
@@ -149,7 +165,8 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
     );
   }
 
-  Widget _buildRateDisplay(ExchangeRateInfo? info, ExchangeRateProvider provider) {
+  Widget _buildRateDisplay(
+      ExchangeRateInfo? info, ExchangeRateProvider provider) {
     final rate = info?.formattedRate ?? '--';
     final source = info?.source ?? ExchangeRateSource.defaultRate;
     final fetchedAt = info?.formattedFetchedAt;
@@ -207,38 +224,44 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
     final isOnCooldown = _cooldownSeconds > 0;
     final isLoading = provider.isLoading;
 
-    return InkWell(
-      onTap: (isOnCooldown || isLoading) ? null : _refreshRate,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        child: isLoading
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.refresh,
-                    size: 20,
-                    color: isOnCooldown
-                        ? AppColors.textTertiary
-                        : AppColors.primary,
-                  ),
-                  if (isOnCooldown) ...[
-                    const SizedBox(width: 4),
-                    Text(
-                      '${_cooldownSeconds}s',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textTertiary,
-                          ),
+    return Tooltip(
+      message: isOnCooldown ? '長按可強制刷新' : '點擊刷新匯率',
+      child: GestureDetector(
+        onTap: isLoading ? null : _refreshRate,
+        onLongPress: isLoading ? null : () => _refreshRate(forceRefresh: true),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: isLoading
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.refresh,
+                      size: 20,
+                      color: isOnCooldown
+                          ? AppColors.textTertiary
+                          : AppColors.primary,
                     ),
+                    if (isOnCooldown) ...[
+                      const SizedBox(width: 4),
+                      Text(
+                        '${_cooldownSeconds}s',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.textTertiary,
+                            ),
+                      ),
+                    ],
                   ],
-                ],
-              ),
+                ),
+        ),
       ),
     );
   }

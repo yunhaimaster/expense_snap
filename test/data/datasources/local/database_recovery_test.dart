@@ -115,6 +115,8 @@ void main() {
           ExportException() => 'export',
           ImageException() => 'image',
           OcrException() => 'ocr',
+          FileSystemException() => 'filesystem',
+          SyncException() => 'sync',
         };
         expect(result.isNotEmpty, isTrue);
       }

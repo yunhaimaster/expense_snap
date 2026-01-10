@@ -75,12 +75,6 @@ class ServiceLocator {
     return _expenseRepository;
   }
 
-  /// 支出 Repository（實作，用於需要直接存取實作的場景）
-  ExpenseRepository get expenseRepositoryImpl {
-    _ensureInitialized();
-    return _expenseRepository;
-  }
-
   /// 匯率 Repository
   ExchangeRateRepository get exchangeRateRepository {
     _ensureInitialized();

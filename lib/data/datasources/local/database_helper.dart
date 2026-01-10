@@ -394,6 +394,13 @@ class DatabaseHelper {
     AppLogger.database('Upsert exchange rate cache', table: 'exchange_rate_cache');
   }
 
+  /// 清除所有匯率快取（用於強制刷新）
+  Future<void> clearExchangeRateCache() async {
+    final db = await database;
+    await db.delete('exchange_rate_cache');
+    AppLogger.database('Cleared exchange rate cache', table: 'exchange_rate_cache');
+  }
+
   // ============ Backup Status ============
 
   /// 取得備份狀態

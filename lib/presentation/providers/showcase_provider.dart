@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/services/showcase_service.dart';
+import '../../core/utils/app_logger.dart';
 
 /// Showcase 提示狀態管理
 ///
@@ -12,6 +13,9 @@ class ShowcaseProvider extends ChangeNotifier {
   bool _swipeShowcaseComplete = true;
   bool _exportShowcaseComplete = true;
   bool _initialized = false;
+
+  // 是否已 dispose
+  bool _disposed = false;
 
   bool get fabShowcaseComplete => _fabShowcaseComplete;
   bool get swipeShowcaseComplete => _swipeShowcaseComplete;
@@ -33,62 +37,108 @@ class ShowcaseProvider extends ChangeNotifier {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    // 並行載入所有 showcase 狀態
-    final results = await Future.wait([
-      _service.isShowcaseComplete(ShowcaseService.fabShowcase),
-      _service.isShowcaseComplete(ShowcaseService.swipeDeleteShowcase),
-      _service.isShowcaseComplete(ShowcaseService.exportShowcase),
-    ]);
+    try {
+      // 並行載入所有 showcase 狀態
+      final results = await Future.wait([
+        _service.isShowcaseComplete(ShowcaseService.fabShowcase),
+        _service.isShowcaseComplete(ShowcaseService.swipeDeleteShowcase),
+        _service.isShowcaseComplete(ShowcaseService.exportShowcase),
+      ]);
 
-    _fabShowcaseComplete = results[0];
-    _swipeShowcaseComplete = results[1];
-    _exportShowcaseComplete = results[2];
+      // 檢查是否已 dispose，避免在異步操作後更新已銷毀的 provider
+      if (_disposed) return;
 
-    _initialized = true;
-    notifyListeners();
+      _fabShowcaseComplete = results[0];
+      _swipeShowcaseComplete = results[1];
+      _exportShowcaseComplete = results[2];
+
+      _initialized = true;
+      _safeNotifyListeners();
+    } catch (e) {
+      AppLogger.warning('Failed to initialize showcase state: $e');
+    }
   }
 
   /// 標記 FAB 提示完成
   Future<void> completeFabShowcase() async {
     if (_fabShowcaseComplete) return;
 
-    await _service.markShowcaseComplete(ShowcaseService.fabShowcase);
-    _fabShowcaseComplete = true;
-    notifyListeners();
+    try {
+      await _service.markShowcaseComplete(ShowcaseService.fabShowcase);
+      if (_disposed) return;
+      _fabShowcaseComplete = true;
+      _safeNotifyListeners();
+    } catch (e) {
+      AppLogger.warning('Failed to complete FAB showcase: $e');
+    }
   }
 
   /// 標記滑動刪除提示完成
   Future<void> completeSwipeShowcase() async {
     if (_swipeShowcaseComplete) return;
 
-    await _service.markShowcaseComplete(ShowcaseService.swipeDeleteShowcase);
-    _swipeShowcaseComplete = true;
-    notifyListeners();
+    try {
+      await _service.markShowcaseComplete(ShowcaseService.swipeDeleteShowcase);
+      if (_disposed) return;
+      _swipeShowcaseComplete = true;
+      _safeNotifyListeners();
+    } catch (e) {
+      AppLogger.warning('Failed to complete swipe showcase: $e');
+    }
   }
 
   /// 標記匯出提示完成
   Future<void> completeExportShowcase() async {
     if (_exportShowcaseComplete) return;
 
-    await _service.markShowcaseComplete(ShowcaseService.exportShowcase);
-    _exportShowcaseComplete = true;
-    notifyListeners();
+    try {
+      await _service.markShowcaseComplete(ShowcaseService.exportShowcase);
+      if (_disposed) return;
+      _exportShowcaseComplete = true;
+      _safeNotifyListeners();
+    } catch (e) {
+      AppLogger.warning('Failed to complete export showcase: $e');
+    }
   }
 
   /// 檢查是否應顯示匯出提示（5 筆以上支出）
   Future<bool> checkExportShowcaseReady() async {
     if (_exportShowcaseComplete) return false;
 
-    final count = await _service.getExpenseCount();
-    return count >= 5;
+    try {
+      final count = await _service.getExpenseCount();
+      return count >= 5;
+    } catch (e) {
+      AppLogger.warning('Failed to check export showcase ready: $e');
+      return false;
+    }
   }
 
   /// 重置所有提示（開發用）
   Future<void> resetAll() async {
-    await _service.resetAllShowcases();
-    _fabShowcaseComplete = false;
-    _swipeShowcaseComplete = false;
-    _exportShowcaseComplete = false;
-    notifyListeners();
+    try {
+      await _service.resetAllShowcases();
+      if (_disposed) return;
+      _fabShowcaseComplete = false;
+      _swipeShowcaseComplete = false;
+      _exportShowcaseComplete = false;
+      _safeNotifyListeners();
+    } catch (e) {
+      AppLogger.warning('Failed to reset showcases: $e');
+    }
+  }
+
+  /// 安全的 notifyListeners（防止 dispose 後呼叫）
+  void _safeNotifyListeners() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    AppLogger.debug('ShowcaseProvider disposed');
+    super.dispose();
   }
 }

@@ -33,6 +33,9 @@ class ThemeProvider extends ChangeNotifier {
   bool _reduceMotion = false;
   bool _isLoading = true;
 
+  // 是否已 dispose
+  bool _disposed = false;
+
   // ============ Getters ============
 
   /// 當前主題模式
@@ -81,7 +84,7 @@ class ThemeProvider extends ChangeNotifier {
     if (_themeMode == mode) return;
 
     _themeMode = mode;
-    notifyListeners();
+    _safeNotifyListeners();
 
     await _saveThemeMode(mode);
   }
@@ -91,7 +94,7 @@ class ThemeProvider extends ChangeNotifier {
     if (_reduceMotion == value) return;
 
     _reduceMotion = value;
-    notifyListeners();
+    _safeNotifyListeners();
 
     await _saveReduceMotion(value);
   }
@@ -120,11 +123,11 @@ class ThemeProvider extends ChangeNotifier {
       _reduceMotion = reduceMotionStr == 'true';
 
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     } catch (e) {
       AppLogger.warning('Failed to load theme settings: $e');
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
@@ -157,5 +160,19 @@ class ThemeProvider extends ChangeNotifier {
       default:
         return AppThemeMode.system;
     }
+  }
+
+  /// 安全的 notifyListeners（防止 dispose 後呼叫）
+  void _safeNotifyListeners() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    AppLogger.debug('ThemeProvider disposed');
+    super.dispose();
   }
 }

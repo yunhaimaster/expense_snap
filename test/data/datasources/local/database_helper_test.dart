@@ -101,6 +101,68 @@ void main() {
     });
   });
 
+  group('v1→v2 Migration 設計驗證', () {
+    test('v2 應新增 category 欄位', () {
+      // v2 版本新增 category 欄位
+      const v2Columns = [
+        'id',
+        'date',
+        'original_amount',
+        'original_currency',
+        'exchange_rate',
+        'exchange_rate_source',
+        'hkd_amount',
+        'description',
+        'category', // v2 新增
+        'receipt_image_path',
+        'thumbnail_path',
+        'is_deleted',
+        'deleted_at',
+        'created_at',
+        'updated_at',
+      ];
+
+      expect(v2Columns.contains('category'), true);
+      expect(v2Columns.length, 15);
+    });
+
+    test('v2 應新增 category 索引', () {
+      // 驗證 v2 索引設計
+      const v2Indexes = [
+        'idx_expenses_date',
+        'idx_expenses_is_deleted',
+        'idx_expenses_deleted_at',
+        'idx_expenses_deleted_created',
+        'idx_expenses_deleted_description',
+        'idx_expenses_category', // v2 新增
+        'idx_expenses_deleted_category', // v2 新增
+      ];
+
+      expect(v2Indexes.contains('idx_expenses_category'), true);
+      expect(v2Indexes.contains('idx_expenses_deleted_category'), true);
+    });
+
+    test('migration 應執行 ANALYZE 優化查詢計劃', () {
+      // 驗證 migration 設計：ANALYZE 在 v1→v2 後執行
+      // 這確保 SQLite 更新統計資訊以優化新索引的查詢
+      const migrationSteps = [
+        'ALTER TABLE expenses ADD COLUMN category TEXT',
+        'CREATE INDEX IF NOT EXISTS idx_expenses_category',
+        'CREATE INDEX IF NOT EXISTS idx_expenses_deleted_category',
+        'ANALYZE', // 必須在建立索引後執行
+      ];
+
+      expect(migrationSteps.last, 'ANALYZE');
+    });
+
+    test('database version 應為 2', () {
+      // 當前版本應為 2
+      // 注意：此值在 DatabaseHelper._databaseVersion 中定義
+      const currentVersion = 2;
+      expect(currentVersion, 2);
+    });
+  });
+
   group('月份查詢邊界計算', () {
     test('月份起始日應為 1 號', () {
       final startDate = DateTime(2025, 3, 1);

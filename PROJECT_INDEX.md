@@ -1,12 +1,12 @@
 # Project Index: Expense Snap
 
-Generated: 2026-01-06
+Generated: 2026-01-10
 
 ## Overview
 
 **員工報銷收據記錄 App** - Flutter 應用程式，支援即時拍照記錄支出、多幣種自動轉換、月結匯出 Excel 報銷單
 
-- **Version**: 1.1.0
+- **Version**: 1.2.0
 - **SDK**: Flutter 3.10.4+
 - **Architecture**: Clean Architecture + Provider
 - **Language**: Dart, 繁體中文 / English UI (i18n)
@@ -23,9 +23,9 @@ lib/
 │   ├── di/                      # 依賴注入 (ServiceLocator)
 │   ├── errors/                  # 錯誤處理 (Result, AppException)
 │   ├── router/                  # 路由配置
-│   ├── services/                # 核心服務
+│   ├── services/                # 核心服務 (Breadcrumb)
 │   ├── theme/                   # 主題配置
-│   └── utils/                   # 工具類
+│   └── utils/                   # 工具類 (AppLogger, Validators)
 ├── l10n/                        # 國際化 (i18n)
 │   ├── app_zh.arb               # 繁體中文 (source of truth)
 │   └── app_en.arb               # English
@@ -114,9 +114,9 @@ test/
 ├── core/                        # 核心邏輯測試
 │   ├── errors/                  # Result, AppException
 │   ├── router/                  # 頁面轉場
-│   ├── services/                # SmartPrompt
+│   ├── services/                # SmartPrompt, Breadcrumb
 │   ├── theme/                   # 深色主題
-│   └── utils/                   # Formatters, Validators, LRU Cache
+│   └── utils/                   # Formatters, Validators, Logger, LRU Cache
 ├── data/                        # 資料層測試
 │   ├── datasources/             # API, Database
 │   ├── models/                  # Expense model
@@ -135,7 +135,7 @@ test/
     └── semantics_test.dart
 ```
 
-**Total tests**: 656+ (不含 mocks)
+**Total tests**: 1059 (不含 mocks)
 
 ---
 

@@ -232,6 +232,66 @@ void main() {
       });
     });
 
+    group('forceRefresh', () {
+      test('forceRefresh 繞過冷卻期', () async {
+        // Arrange - 先成功一次進入冷卻期
+        final newRates = {'CNY': 1100000, 'USD': 7850000};
+        when(mockApi.fetchRates())
+            .thenAnswer((_) async => Result.success(newRates));
+        when(mockDb.upsertExchangeRateCache(any)).thenAnswer((_) async {});
+
+        await repository.refreshRates(); // 進入冷卻期
+        expect(repository.canRefresh, false);
+
+        // Act - 使用 forceRefresh
+        final result = await repository.refreshRates(forceRefresh: true);
+
+        // Assert - 應該成功
+        expect(result.isSuccess, true);
+        // API 被呼叫兩次
+        verify(mockApi.fetchRates()).called(2);
+      });
+
+      test('forceRefresh 失敗時正確傳遞錯誤', () async {
+        // Arrange
+        when(mockApi.fetchRates())
+            .thenAnswer((_) async => Result.failure(NetworkException.timeout()));
+
+        // Act
+        final result = await repository.refreshRates(forceRefresh: true);
+
+        // Assert
+        expect(result.isFailure, true);
+        result.fold(
+          onFailure: (e) {
+            expect(e, isA<NetworkException>());
+          },
+          onSuccess: (_) => fail('Should fail'),
+        );
+      });
+    });
+
+    group('invalidateCache', () {
+      test('清除快取後可立即重新整理', () async {
+        // Arrange - 先成功一次進入冷卻期
+        final newRates = {'CNY': 1100000};
+        when(mockApi.fetchRates())
+            .thenAnswer((_) async => Result.success(newRates));
+        when(mockDb.upsertExchangeRateCache(any)).thenAnswer((_) async {});
+        when(mockDb.clearExchangeRateCache()).thenAnswer((_) async {});
+
+        await repository.refreshRates();
+        expect(repository.canRefresh, false);
+
+        // Act
+        await repository.invalidateCache();
+
+        // Assert
+        expect(repository.canRefresh, true);
+        verify(mockDb.clearExchangeRateCache()).called(1);
+      });
+    });
+
     group('canRefresh', () {
       test('初始狀態可以重新整理', () {
         expect(repository.canRefresh, true);

@@ -155,15 +155,21 @@ class ExchangeRateRepository {
 
   /// 強制重新整理匯率（忽略快取）
   ///
-  /// 受 30 秒冷卻限制
-  Future<Result<Map<String, ExchangeRateInfo>>> refreshRates() async {
-    if (!canRefresh) {
+  /// [forceRefresh] 如果為 true，則繞過 30 秒冷卻限制（用於長按刷新）
+  Future<Result<Map<String, ExchangeRateInfo>>> refreshRates({
+    bool forceRefresh = false,
+  }) async {
+    if (!forceRefresh && !canRefresh) {
       return Result.failure(
         NetworkException(
           '請稍候 $secondsUntilRefresh 秒後再試',
           code: 'COOLDOWN',
         ),
       );
+    }
+
+    if (forceRefresh) {
+      AppLogger.info('Force refresh requested, bypassing cooldown');
     }
 
     final apiResult = await _api.fetchRates();
@@ -193,6 +199,17 @@ class ExchangeRateRepository {
     }
 
     return Result.success(infoMap);
+  }
+
+  /// 清除快取（測試用或手動清除）
+  Future<void> invalidateCache() async {
+    try {
+      await _db.clearExchangeRateCache();
+      _lastRefreshTime = null;
+      AppLogger.info('Exchange rate cache invalidated');
+    } catch (e) {
+      AppLogger.error('Failed to invalidate cache', error: e);
+    }
   }
 
   /// 取得所有支援幣種的匯率

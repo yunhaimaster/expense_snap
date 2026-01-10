@@ -11,7 +11,6 @@ import 'core/theme/app_theme.dart';
 import 'core/utils/app_logger.dart';
 import 'data/repositories/backup_repository.dart';
 import 'data/repositories/exchange_rate_repository.dart';
-import 'data/repositories/expense_repository.dart';
 import 'domain/repositories/expense_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/providers/connectivity_provider.dart';
@@ -51,9 +50,9 @@ void main() async {
     // 初始化背景任務
     await _initializeWorkManager();
 
-    // 從 ServiceLocator 取得已初始化的服務和 Repositories
+    // 從 ServiceLocator 取得已初始化的服務和 Repositories（使用介面）
     final imageService = sl.imageService;
-    final expenseRepository = sl.expenseRepositoryImpl;
+    final expenseRepository = sl.expenseRepository;
     final exchangeRateRepository = sl.exchangeRateRepository;
     final backupRepository = sl.backupRepository;
 
@@ -139,7 +138,7 @@ Future<void> _initializeWorkManager() async {
 
 /// 啟動時執行清理（如果距離上次清理超過 7 天）
 Future<void> _performStartupCleanup(
-  ExpenseRepository repository,
+  IExpenseRepository repository,
   ImageService imageService,
 ) async {
   try {
@@ -188,7 +187,7 @@ class ExpenseSnapApp extends StatelessWidget {
   });
 
   final bool needsOnboarding;
-  final ExpenseRepository expenseRepository;
+  final IExpenseRepository expenseRepository;
   final ImageService imageService;
   final ExchangeRateRepository exchangeRateRepository;
   final BackupRepository backupRepository;

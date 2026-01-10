@@ -17,6 +17,9 @@ class ConnectivityProvider extends ChangeNotifier {
   final Connectivity _connectivity;
   StreamSubscription<List<ConnectivityResult>>? _subscription;
 
+  // 是否已 dispose
+  bool _disposed = false;
+
   /// 當前是否有網絡連線
   bool _isConnected = true;
   bool get isConnected => _isConnected;
@@ -64,7 +67,7 @@ class ConnectivityProvider extends ChangeNotifier {
       AppLogger.info(
         'Connectivity changed: ${_isConnected ? 'Online' : 'Offline'}',
       );
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
@@ -80,9 +83,18 @@ class ConnectivityProvider extends ChangeNotifier {
     }
   }
 
+  /// 安全的 notifyListeners（防止 dispose 後呼叫）
+  void _safeNotifyListeners() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
+
   @override
   void dispose() {
+    _disposed = true;
     _subscription?.cancel();
+    AppLogger.debug('ConnectivityProvider disposed');
     super.dispose();
   }
 }

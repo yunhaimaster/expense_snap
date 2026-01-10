@@ -40,9 +40,58 @@
 flutter analyze && flutter test
 ```
 
-## Cross-session Context
-- `.serena/memories/` - 歷史 session 記錄
-- `.serena/memories/project-context.md` - 專案背景
+## When to Use What
+
+### Skills vs Agents vs Commands
+
+| Type | Trigger | Context | Use When |
+|------|---------|---------|----------|
+| **Skills** | Auto by Claude | Main thread | General guidance needed |
+| **Agents** | Explicit dispatch | Isolated | Deep analysis, multi-file |
+| **Commands** | User types `/cmd` | Main thread | Specific task, structured output |
+
+### Review Tools (Consolidated Guide)
+
+| Scenario | Tool | Why |
+|----------|------|-----|
+| "Review this file" | `/review path` | User-invoked, structured output |
+| "Review these changes before commit" | `/review --staged` | User-invoked, pre-commit check |
+| Deep architecture review | `code-reviewer` agent | Isolated context, uses Opus |
+| Auto-guidance while coding | `flutter-review` skill | Auto-triggered, inline tips |
+
+**Rule of thumb:** User says "review" → `/review`. Claude autonomously reviewing → skill. Need isolation → agent.
+
+### Test Tools (Consolidated Guide)
+
+| Scenario | Tool | Why |
+|----------|------|-----|
+| "Run tests" | `/test` or `test-runner` agent | User-invoked |
+| "Generate tests for X" | `test-gen` skill | Auto-triggered when writing code |
+| "Fix failing tests" | `test-runner` agent | Iterative fix loop |
+
+### Performance Tools (Consolidated Guide)
+
+| Scenario | Tool | Why |
+|----------|------|-----|
+| Quick perf check | `/perf` command | User-invoked, fast |
+| Deep analysis | `perf-analyzer` agent | Isolated, thorough |
+
+### Other Tools
+
+| Task | Tool |
+|------|------|
+| Fix analyze warnings | `flutter-fixer` agent |
+| i18n validation | `i18n-checker` agent |
+| Debug issues | `debug-flutter` skill (auto) |
+| Pattern guidance | `flutter-patterns` skill (auto) |
+
+## Memory Sources
+
+| Source | Purpose | Update Frequency |
+|--------|---------|------------------|
+| `PROJECT_INDEX.md` | Codebase structure (canonical) | When architecture changes |
+| `.serena/memories/project-context.md` | Current project status | Each session |
+| `.serena/memories/session-*.md` | Historical session notes | Auto-created |
 
 ---
 
