@@ -4,6 +4,7 @@ import '../../data/repositories/backup_repository.dart';
 import '../../data/repositories/exchange_rate_repository.dart';
 import '../../data/repositories/expense_repository.dart';
 import '../../domain/repositories/expense_repository.dart';
+import '../../services/image_cleanup_service.dart';
 import '../../services/image_service.dart';
 import '../../services/ocr_service.dart';
 import '../utils/app_logger.dart';
@@ -29,6 +30,7 @@ class ServiceLocator {
   // 應用服務
   late ImageService _imageService;
   OcrService? _ocrService; // 延遲初始化，只在使用時建立
+  late ImageCleanupService _imageCleanupService;
 
   // Repositories
   late ExpenseRepository _expenseRepository;
@@ -59,6 +61,12 @@ class ServiceLocator {
   OcrService get ocrService {
     _ensureInitialized();
     return _ocrService ??= OcrService();
+  }
+
+  /// 圖片清理服務
+  ImageCleanupService get imageCleanupService {
+    _ensureInitialized();
+    return _imageCleanupService;
   }
 
   /// 支出 Repository（介面）
@@ -107,6 +115,7 @@ class ServiceLocator {
 
     // 初始化應用服務
     _imageService = ImageService();
+    _imageCleanupService = ImageCleanupService(_databaseHelper);
     // OcrService 採用延遲初始化，不在此處建立
 
     // 初始化 Repositories（依賴注入）
