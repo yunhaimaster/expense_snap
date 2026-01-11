@@ -76,6 +76,32 @@ flutter analyze && flutter test
 | Quick perf check | `/perf` command | User-invoked, fast |
 | Deep analysis | `perf-analyzer` agent | Isolated, thorough |
 
+### Code Simplification (Consolidated Guide)
+
+**Workflow:** Review → Identify Complexity → Simplify
+
+| Scenario | Tool | Why |
+|----------|------|-----|
+| After `/review` flags complexity | `/code-simplifier` on flagged areas | Targeted cleanup |
+| After `code-reviewer` agent runs | Auto-suggest simplification | Chain with deep review |
+| Major refactoring complete | `/code-simplifier` pass | Catch accidental complexity |
+| Explicit cleanup of old code | `/code-simplifier path/to/file` | Override default scope |
+
+**Rule of thumb:** Review first, simplify flagged areas. Default targets recently modified code only.
+
+**Integration Pattern:**
+```
+/review path/to/file
+  ↓ (if complexity flagged)
+/code-simplifier path/to/file
+  ↓
+Verify → Commit
+```
+
+**When NOT to simplify:**
+- Quick hotfixes (ship first, simplify later)
+- Code you didn't modify (unless explicitly requested)
+
 ### Other Tools
 
 | Task | Tool |
@@ -84,6 +110,7 @@ flutter analyze && flutter test
 | i18n validation | `i18n-checker` agent |
 | Debug issues | `debug-flutter` skill (auto) |
 | Pattern guidance | `flutter-patterns` skill (auto) |
+| Simplify code | `/code-simplifier` (post-review) |
 
 ## Memory Sources
 
