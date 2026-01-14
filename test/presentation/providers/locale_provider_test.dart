@@ -9,14 +9,26 @@ import 'package:expense_snap/presentation/providers/locale_provider.dart';
 /// 這裡測試枚舉、靜態常數和純邏輯
 void main() {
   group('LocaleProvider 靜態常數', () {
-    test('supportedLocales 應包含中文和英文', () {
-      expect(LocaleProvider.supportedLocales.length, 2);
+    test('supportedLocales 應包含所有 6 種語言', () {
+      expect(LocaleProvider.supportedLocales.length, 6);
       expect(
         LocaleProvider.supportedLocales.any((l) => l.languageCode == 'zh'),
         true,
       );
       expect(
         LocaleProvider.supportedLocales.any((l) => l.languageCode == 'en'),
+        true,
+      );
+      expect(
+        LocaleProvider.supportedLocales.any((l) => l.languageCode == 'ja'),
+        true,
+      );
+      expect(
+        LocaleProvider.supportedLocales.any((l) => l.languageCode == 'ko'),
+        true,
+      );
+      expect(
+        LocaleProvider.supportedLocales.any((l) => l.languageCode == 'es'),
         true,
       );
     });
@@ -109,18 +121,21 @@ void main() {
 
   group('語言代碼驗證', () {
     test('支援的語言代碼應在 supportedLocales 中', () {
-      final supportedCodes =
-          LocaleProvider.supportedLocales.map((l) => l.languageCode).toList();
+      final supportedCodes = LocaleProvider.supportedLocales
+          .map((l) => l.languageCode)
+          .toList();
       expect(supportedCodes, contains('zh'));
       expect(supportedCodes, contains('en'));
     });
 
     test('不支援的語言代碼不在 supportedLocales 中', () {
-      final supportedCodes =
-          LocaleProvider.supportedLocales.map((l) => l.languageCode).toList();
-      expect(supportedCodes.contains('ja'), false);
-      expect(supportedCodes.contains('ko'), false);
+      final supportedCodes = LocaleProvider.supportedLocales
+          .map((l) => l.languageCode)
+          .toList();
+      // 這些語言不在支援列表中
       expect(supportedCodes.contains('fr'), false);
+      expect(supportedCodes.contains('de'), false);
+      expect(supportedCodes.contains('ru'), false);
     });
   });
 

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/app_logger.dart';
@@ -9,6 +12,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../data/models/expense.dart';
 import '../../../domain/repositories/expense_repository.dart';
 import '../../../services/export_service.dart';
+import '../../providers/showcase_provider.dart';
 import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/common/skeleton.dart';
@@ -39,12 +43,38 @@ class _ExportScreenState extends State<ExportScreen> {
   late final ExportService _exportService;
   String _userName = AppConstants.defaultUserName;
 
+  // Showcase 相關
+  final GlobalKey _exportShowcaseKey = GlobalKey();
+  BuildContext? _showcaseContext;
+  Timer? _showcaseDelayTimer;
+
   @override
   void initState() {
     super.initState();
     _exportService = ExportService();
     _loadPreview();
     _loadUserName();
+    _checkExportShowcase();
+  }
+
+  /// 檢查是否應顯示匯出 Showcase
+  void _checkExportShowcase() {
+    // 延遲以確保 widget 建構完成（使用 Timer 以便 dispose 時取消）
+    _showcaseDelayTimer = Timer(const Duration(milliseconds: 500), () async {
+      if (!mounted) return;
+
+      final provider = context.read<ShowcaseProvider>();
+      if (!provider.shouldShowExportShowcase) return;
+
+      final ready = await provider.checkExportShowcaseReady();
+      if (!ready || !mounted) return;
+
+      // 啟動 showcase
+      final showcaseContext = _showcaseContext;
+      if (showcaseContext != null && showcaseContext.mounted) {
+        ShowCaseWidget.of(showcaseContext).startShowCase([_exportShowcaseKey]);
+      }
+    });
   }
 
   @override
@@ -54,6 +84,13 @@ class _ExportScreenState extends State<ExportScreen> {
     if (widget.refreshTrigger != oldWidget.refreshTrigger) {
       _loadPreview();
     }
+  }
+
+  @override
+  void dispose() {
+    _showcaseDelayTimer?.cancel();
+    _showcaseContext = null; // 清除 context 參照避免記憶體洩漏
+    super.dispose();
   }
 
   /// 載入使用者名稱
@@ -93,13 +130,21 @@ class _ExportScreenState extends State<ExportScreen> {
 
       if (mounted) {
         setState(() {
-          _expenses = expensesResult.isSuccess ? expensesResult.getOrThrow() : [];
-          _summary = summaryResult.isSuccess ? summaryResult.getOrThrow() : null;
+          _expenses = expensesResult.isSuccess
+              ? expensesResult.getOrThrow()
+              : [];
+          _summary = summaryResult.isSuccess
+              ? summaryResult.getOrThrow()
+              : null;
           _isLoadingPreview = false;
         });
       }
     } catch (e) {
-      AppLogger.warning('Failed to load export preview', error: e, tag: 'Export');
+      AppLogger.warning(
+        'Failed to load export preview',
+        error: e,
+        tag: 'Export',
+      );
       if (mounted) {
         setState(() {
           _expenses = [];
@@ -122,7 +167,11 @@ class _ExportScreenState extends State<ExportScreen> {
     final l10n = S.of(context);
 
     // 建立本地化字串（在 context 有效時建立）
-    final exportStrings = ExportStrings.fromL10n(l10n, year: year, month: month);
+    final exportStrings = ExportStrings.fromL10n(
+      l10n,
+      year: year,
+      month: month,
+    );
 
     setState(() {
       _isExporting = true;
@@ -171,16 +220,26 @@ class _ExportScreenState extends State<ExportScreen> {
 
         if (mounted) {
           if (shareResult.isSuccess) {
-            _showSuccessSnackBar(S.of(context).export_success(exportResult.formattedFileSize));
+            _showSuccessSnackBar(
+              S.of(context).export_success(exportResult.formattedFileSize),
+            );
           }
           // 分享被取消時不顯示訊息
         }
       } else {
         final error = result.errorOrNull;
-        _showErrorSnackBar(S.of(context).export_failed(error?.message ?? S.of(context).error_unknown));
+        _showErrorSnackBar(
+          S
+              .of(context)
+              .export_failed(error?.message ?? S.of(context).error_unknown),
+        );
       }
     } catch (e) {
-      AppLogger.error('Export ZIP failed unexpectedly', error: e, tag: 'Export');
+      AppLogger.error(
+        'Export ZIP failed unexpectedly',
+        error: e,
+        tag: 'Export',
+      );
       if (mounted) {
         _showErrorSnackBar(S.of(context).export_failed('$e'));
       }
@@ -225,6 +284,22 @@ class _ExportScreenState extends State<ExportScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return ShowCaseWidget(
+      onComplete: (index, key) {
+        if (!mounted) return;
+        if (key == _exportShowcaseKey) {
+          context.read<ShowcaseProvider>().completeExportShowcase();
+        }
+      },
+      builder: (showcaseContext) {
+        _showcaseContext = showcaseContext;
+        return _buildContent();
+      },
+    );
+  }
+
+  /// 建立畫面內容
+  Widget _buildContent() {
     return LoadingOverlay(
       isLoading: _isExporting,
       message: _exportMessage,
@@ -270,24 +345,33 @@ class _ExportScreenState extends State<ExportScreen> {
                 LinearProgressIndicator(
                   value: _exportProgress,
                   backgroundColor: AppColors.divider,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    AppColors.primary,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   '${(_exportProgress * 100).toInt()}%',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
+                    color: AppColors.textSecondary,
+                  ),
                 ),
                 const SizedBox(height: 16),
               ],
 
               // 匯出按鈕（Excel + 收據）
-              ElevatedButton.icon(
-                onPressed: _expenses.isEmpty || _isExporting ? null : _exportZip,
-                icon: const Icon(Icons.folder_zip),
-                label: Text(S.of(context).export_excelWithReceipts),
+              Showcase(
+                key: _exportShowcaseKey,
+                title: S.of(context).showcase_exportTitle,
+                description: S.of(context).showcase_exportDesc,
+                child: ElevatedButton.icon(
+                  onPressed: _expenses.isEmpty || _isExporting
+                      ? null
+                      : _exportZip,
+                  icon: const Icon(Icons.folder_zip),
+                  label: Text(S.of(context).export_excelWithReceipts),
+                ),
               ),
             ],
           ),
@@ -348,8 +432,8 @@ class _ExportScreenState extends State<ExportScreen> {
             Text(
               l10n.export_yearMonth(_selectedYear, _selectedMonth),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                fontWeight: FontWeight.bold,
+              ),
             ),
 
             const SizedBox(height: 16),
@@ -358,7 +442,9 @@ class _ExportScreenState extends State<ExportScreen> {
             _buildStatRow(
               icon: Icons.receipt_long,
               label: l10n.export_expenseCount,
-              value: l10n.export_countUnit(_summary?.totalCount ?? _expenses.length),
+              value: l10n.export_countUnit(
+                _summary?.totalCount ?? _expenses.length,
+              ),
             ),
 
             const SizedBox(height: 8),
@@ -384,8 +470,8 @@ class _ExportScreenState extends State<ExportScreen> {
             Text(
               l10n.export_hint,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textTertiary,
-                  ),
+                color: AppColors.textTertiary,
+              ),
             ),
           ],
         ),
@@ -407,16 +493,16 @@ class _ExportScreenState extends State<ExportScreen> {
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-              ),
+            color: AppColors.textSecondary,
+          ),
         ),
         const Spacer(),
         Text(
           value,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: valueColor ?? AppColors.textPrimary,
-              ),
+            fontWeight: FontWeight.w600,
+            color: valueColor ?? AppColors.textPrimary,
+          ),
         ),
       ],
     );

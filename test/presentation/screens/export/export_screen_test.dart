@@ -9,6 +9,7 @@ import 'package:expense_snap/core/constants/currency_constants.dart';
 import 'package:expense_snap/core/errors/result.dart';
 import 'package:expense_snap/data/models/expense.dart';
 import 'package:expense_snap/domain/repositories/expense_repository.dart';
+import 'package:expense_snap/presentation/providers/showcase_provider.dart';
 import 'package:expense_snap/presentation/screens/export/export_screen.dart';
 
 @GenerateMocks([IExpenseRepository])
@@ -48,17 +49,21 @@ void main() {
     mockRepository = MockIExpenseRepository();
 
     // 預設 stub - 返回空列表
-    when(mockRepository.getExpensesByMonth(
-      year: anyNamed('year'),
-      month: anyNamed('month'),
-      limit: anyNamed('limit'),
-      offset: anyNamed('offset'),
-    )).thenAnswer((_) async => Result.success(<Expense>[]));
+    when(
+      mockRepository.getExpensesByMonth(
+        year: anyNamed('year'),
+        month: anyNamed('month'),
+        limit: anyNamed('limit'),
+        offset: anyNamed('offset'),
+      ),
+    ).thenAnswer((_) async => Result.success(<Expense>[]));
 
-    when(mockRepository.getMonthSummary(
-      year: anyNamed('year'),
-      month: anyNamed('month'),
-    )).thenAnswer((_) async => Result.success(testSummary));
+    when(
+      mockRepository.getMonthSummary(
+        year: anyNamed('year'),
+        month: anyNamed('month'),
+      ),
+    ).thenAnswer((_) async => Result.success(testSummary));
   });
 
   // 設定測試用的螢幕大小（避免 overflow）
@@ -72,6 +77,7 @@ void main() {
     return MultiProvider(
       providers: [
         Provider<IExpenseRepository>.value(value: mockRepository),
+        ChangeNotifierProvider(create: (_) => ShowcaseProvider()),
       ],
       child: const MaterialApp(
         locale: Locale('zh'),
@@ -134,12 +140,14 @@ void main() {
   group('ExportScreen 有資料狀態', () {
     setUp(() {
       // 設定有資料的回應
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => Result.success([testExpense]));
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async => Result.success([testExpense]));
     });
 
     testWidgets('有資料時應顯示預覽卡片', (tester) async {

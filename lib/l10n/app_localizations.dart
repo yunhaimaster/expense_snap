@@ -6,6 +6,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_ja.dart';
+import 'app_localizations_ko.dart';
 import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
@@ -94,7 +97,11 @@ abstract class S {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
+    Locale('es'),
+    Locale('ja'),
+    Locale('ko'),
     Locale('zh'),
+    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
   ];
 
   /// No description provided for @appTitle.
@@ -270,6 +277,18 @@ abstract class S {
   /// In zh, this message translates to:
   /// **'向左滑動可以刪除支出記錄'**
   String get showcase_swipeDeleteDesc;
+
+  /// No description provided for @showcase_exportTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'匯出報表'**
+  String get showcase_exportTitle;
+
+  /// No description provided for @showcase_exportDesc.
+  ///
+  /// In zh, this message translates to:
+  /// **'點擊此處匯出 Excel 與收據圖片'**
+  String get showcase_exportDesc;
 
   /// No description provided for @addExpense_title.
   ///
@@ -931,11 +950,29 @@ abstract class S {
   /// **'隱私權政策'**
   String get settings_privacyPolicy;
 
+  /// No description provided for @settings_termsOfService.
+  ///
+  /// In zh, this message translates to:
+  /// **'服務條款'**
+  String get settings_termsOfService;
+
   /// No description provided for @settings_feedback.
   ///
   /// In zh, this message translates to:
   /// **'意見回饋'**
   String get settings_feedback;
+
+  /// No description provided for @legal_privacyContent.
+  ///
+  /// In zh, this message translates to:
+  /// **'隱私權政策\n\n最後更新日期：2026年1月\n\n1. 資料收集\n我們收集的資料僅限於您主動輸入的支出記錄、收據圖片和個人設定。\n\n2. 資料儲存\n所有資料儲存於您的裝置本地。如您選擇使用雲端備份功能，資料將同步至您的 Google 雲端硬碟帳戶。\n\n3. 資料使用\n我們不會將您的資料用於廣告或分享給第三方。\n\n4. 資料刪除\n您可隨時刪除應用程式中的所有資料。已刪除的項目會保留 30 天後自動永久刪除。\n\n5. 聯絡方式\n如有任何隱私相關問題，請透過應用程式內的意見回饋功能聯繫我們。'**
+  String get legal_privacyContent;
+
+  /// No description provided for @legal_termsContent.
+  ///
+  /// In zh, this message translates to:
+  /// **'服務條款\n\n最後更新日期：2026年1月\n\n1. 服務說明\n支出易是一款個人支出記錄應用程式，協助您追蹤和管理日常支出。\n\n2. 使用條款\n使用本應用程式即表示您同意遵守這些條款。\n\n3. 責任限制\n本應用程式按「現狀」提供，我們不對資料遺失或任何間接損失負責。\n\n4. 智慧財產權\n應用程式的所有內容和功能均受著作權保護。\n\n5. 條款修改\n我們保留隨時修改這些條款的權利。繼續使用即表示接受修改後的條款。'**
+  String get legal_termsContent;
 
   /// No description provided for @settings_signInGoogle.
   ///
@@ -1956,17 +1993,35 @@ class _SDelegate extends LocalizationsDelegate<S> {
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'zh'].contains(locale.languageCode);
+      <String>['en', 'es', 'ja', 'ko', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_SDelegate old) => false;
 }
 
 S lookupS(Locale locale) {
+  // Lookup logic when language+script codes are specified.
+  switch (locale.languageCode) {
+    case 'zh':
+      {
+        switch (locale.scriptCode) {
+          case 'Hans':
+            return SZhHans();
+        }
+        break;
+      }
+  }
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en':
       return SEn();
+    case 'es':
+      return SEs();
+    case 'ja':
+      return SJa();
+    case 'ko':
+      return SKo();
     case 'zh':
       return SZh();
   }

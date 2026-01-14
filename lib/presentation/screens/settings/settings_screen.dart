@@ -72,16 +72,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ListTile(
                             leading: const Icon(Icons.palette_outlined),
                             title: Text(S.of(context).settings_theme),
-                            subtitle: Text(_getThemeModeLabel(context, themeProvider.themeMode)),
+                            subtitle: Text(
+                              _getThemeModeLabel(
+                                context,
+                                themeProvider.themeMode,
+                              ),
+                            ),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () => _showThemeModeDialog(themeProvider),
                           ),
                           SwitchListTile(
                             secondary: const Icon(Icons.animation_outlined),
                             title: Text(S.of(context).settings_reduceMotion),
-                            subtitle: Text(S.of(context).settings_reduceMotionDesc),
+                            subtitle: Text(
+                              S.of(context).settings_reduceMotionDesc,
+                            ),
                             value: themeProvider.reduceMotion,
-                            onChanged: (value) => themeProvider.setReduceMotion(value),
+                            onChanged: (value) =>
+                                themeProvider.setReduceMotion(value),
                           ),
                         ],
                       );
@@ -171,7 +179,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ListTile(
                     leading: const Icon(Icons.info_outline),
                     title: Text(S.of(context).settings_version),
-                    subtitle: const Text('${AppConstants.appName} v${AppConstants.appVersion}'),
+                    subtitle: const Text(
+                      '${AppConstants.appName} v${AppConstants.appVersion}',
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.privacy_tip_outlined),
+                    title: Text(S.of(context).settings_privacyPolicy),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).pushNamed(
+                      AppRouter.privacyPolicy,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.description_outlined),
+                    title: Text(S.of(context).settings_termsOfService),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).pushNamed(
+                      AppRouter.termsOfService,
+                    ),
                   ),
                 ],
               ),
@@ -205,33 +231,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (dialogContext) => SimpleDialog(
         title: Text(s.settings_language),
         children: [
+          // 跟隨系統選項（使用 i18n 顯示名稱）
           _LanguageOption(
             code: 'system',
-            title: S.of(context).settings_languageSystem,
+            title: s.settings_languageSystem,
             isSelected: localeProvider.isSelected('system'),
             onTap: () {
               localeProvider.setLocaleByCode('system');
               Navigator.of(dialogContext).pop();
             },
           ),
-          _LanguageOption(
-            code: 'zh',
-            title: '繁體中文',
-            isSelected: localeProvider.isSelected('zh'),
-            onTap: () {
-              localeProvider.setLocaleByCode('zh');
-              Navigator.of(dialogContext).pop();
-            },
-          ),
-          _LanguageOption(
-            code: 'en',
-            title: 'English',
-            isSelected: localeProvider.isSelected('en'),
-            onTap: () {
-              localeProvider.setLocaleByCode('en');
-              Navigator.of(dialogContext).pop();
-            },
-          ),
+          // 動態生成其他語言選項
+          ...LocaleProvider.localeNames.entries
+              .where((e) => e.key != 'system')
+              .map(
+                (e) => _LanguageOption(
+                  code: e.key,
+                  title: e.value,
+                  isSelected: localeProvider.isSelected(e.key),
+                  onTap: () {
+                    localeProvider.setLocaleByCode(e.key);
+                    Navigator.of(dialogContext).pop();
+                  },
+                ),
+              ),
         ],
       ),
     );
@@ -296,7 +319,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Text(S.of(context).common_cancel),
             ),
             ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(controller.text.trim()),
+              onPressed: () =>
+                  Navigator.of(context).pop(controller.text.trim()),
               child: Text(S.of(context).common_save),
             ),
           ],
@@ -406,7 +430,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // 顯示備份選擇對話框
     final selectedBackup = await showDialog<BackupInfo>(
       context: context,
-      builder: (context) => _RestoreBackupDialog(backups: provider.cloudBackups),
+      builder: (context) =>
+          _RestoreBackupDialog(backups: provider.cloudBackups),
     );
 
     if (selectedBackup == null || !mounted) return;
@@ -416,7 +441,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(S.of(context).settings_confirmRestoreTitle),
-        content: Text(S.of(context).settings_confirmRestoreDesc(selectedBackup.fileName)),
+        content: Text(
+          S.of(context).settings_confirmRestoreDesc(selectedBackup.fileName),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -482,9 +509,9 @@ class _SectionHeader extends StatelessWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.bold,
-            ),
+          color: AppColors.primary,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -502,7 +529,9 @@ class _GoogleAccountTile extends StatelessWidget {
       return ListTile(
         leading: const Icon(Icons.cloud_done, color: AppColors.success),
         title: Text(S.of(context).settings_googleDrive),
-        subtitle: Text(provider.backupStatus.googleEmail ?? S.of(context).settings_connected),
+        subtitle: Text(
+          provider.backupStatus.googleEmail ?? S.of(context).settings_connected,
+        ),
         trailing: TextButton(
           onPressed: provider.isOperationInProgress
               ? null
@@ -539,7 +568,9 @@ class _GoogleAccountTile extends StatelessWidget {
         if (error.code != 'CANCELLED') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(S.of(context).settings_connectFailed(error.message)),
+              content: Text(
+                S.of(context).settings_connectFailed(error.message),
+              ),
               backgroundColor: AppColors.error,
             ),
           );
@@ -588,7 +619,9 @@ class _GoogleAccountTile extends StatelessWidget {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(S.of(context).settings_disconnectFailed(error.message)),
+            content: Text(
+              S.of(context).settings_disconnectFailed(error.message),
+            ),
             backgroundColor: AppColors.error,
           ),
         );

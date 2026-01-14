@@ -8,6 +8,7 @@ import 'package:expense_snap/core/constants/currency_constants.dart';
 import 'package:expense_snap/core/errors/result.dart';
 import 'package:expense_snap/data/models/expense.dart';
 import 'package:expense_snap/domain/repositories/expense_repository.dart';
+import 'package:expense_snap/presentation/providers/showcase_provider.dart';
 import 'package:expense_snap/presentation/screens/export/export_screen.dart';
 
 import 'export_screen_test.mocks.dart';
@@ -20,30 +21,37 @@ void main() {
 
   /// 建立指定數量的測試費用
   List<Expense> createTestExpenses(int count) {
-    return List.generate(count, (i) => Expense(
-      id: i + 1,
-      date: DateTime.now().subtract(Duration(days: i % 30)),
-      originalAmountCents: 1000 + (i * 10),
-      originalCurrency: 'HKD',
-      exchangeRate: 1000000,
-      exchangeRateSource: ExchangeRateSource.auto,
-      hkdAmountCents: 1000 + (i * 10),
-      description: '測試支出 #$i',
-      receiptImagePath: i % 3 == 0 ? '/path/to/image_$i.jpg' : null,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ));
+    return List.generate(
+      count,
+      (i) => Expense(
+        id: i + 1,
+        date: DateTime.now().subtract(Duration(days: i % 30)),
+        originalAmountCents: 1000 + (i * 10),
+        originalCurrency: 'HKD',
+        exchangeRate: 1000000,
+        exchangeRateSource: ExchangeRateSource.auto,
+        hkdAmountCents: 1000 + (i * 10),
+        description: '測試支出 #$i',
+        receiptImagePath: i % 3 == 0 ? '/path/to/image_$i.jpg' : null,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
+    );
   }
 
   setUpAll(() {
     // 註冊 dummy values
     provideDummy<Result<List<Expense>>>(Result.success(<Expense>[]));
-    provideDummy<Result<MonthSummary>>(Result.success(MonthSummary(
-      year: DateTime.now().year,
-      month: DateTime.now().month,
-      totalHkdAmountCents: 0,
-      totalCount: 0,
-    )));
+    provideDummy<Result<MonthSummary>>(
+      Result.success(
+        MonthSummary(
+          year: DateTime.now().year,
+          month: DateTime.now().month,
+          totalHkdAmountCents: 0,
+          totalCount: 0,
+        ),
+      ),
+    );
   });
 
   setUp(() {
@@ -59,6 +67,7 @@ void main() {
     return MultiProvider(
       providers: [
         Provider<IExpenseRepository>.value(value: mockRepository),
+        ChangeNotifierProvider(create: (_) => ShowcaseProvider()),
       ],
       child: const MaterialApp(
         locale: Locale('zh'),
@@ -77,21 +86,28 @@ void main() {
       final summary = MonthSummary(
         year: DateTime.now().year,
         month: DateTime.now().month,
-        totalHkdAmountCents: expenses.fold(0, (sum, e) => sum + e.hkdAmountCents),
+        totalHkdAmountCents: expenses.fold(
+          0,
+          (sum, e) => sum + e.hkdAmountCents,
+        ),
         totalCount: expenses.length,
       );
 
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => Result.success(expenses));
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async => Result.success(expenses));
 
-      when(mockRepository.getMonthSummary(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-      )).thenAnswer((_) async => Result.success(summary));
+      when(
+        mockRepository.getMonthSummary(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+        ),
+      ).thenAnswer((_) async => Result.success(summary));
 
       await tester.pumpWidget(buildTestWidget(tester));
       await tester.pumpAndSettle();
@@ -107,21 +123,28 @@ void main() {
       final summary = MonthSummary(
         year: DateTime.now().year,
         month: DateTime.now().month,
-        totalHkdAmountCents: expenses.fold(0, (sum, e) => sum + e.hkdAmountCents),
+        totalHkdAmountCents: expenses.fold(
+          0,
+          (sum, e) => sum + e.hkdAmountCents,
+        ),
         totalCount: expenses.length,
       );
 
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => Result.success(expenses));
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async => Result.success(expenses));
 
-      when(mockRepository.getMonthSummary(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-      )).thenAnswer((_) async => Result.success(summary));
+      when(
+        mockRepository.getMonthSummary(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+        ),
+      ).thenAnswer((_) async => Result.success(summary));
 
       await tester.pumpWidget(buildTestWidget(tester));
       await tester.pumpAndSettle();
@@ -137,21 +160,28 @@ void main() {
       final summary = MonthSummary(
         year: DateTime.now().year,
         month: DateTime.now().month,
-        totalHkdAmountCents: expenses.fold(0, (sum, e) => sum + e.hkdAmountCents),
+        totalHkdAmountCents: expenses.fold(
+          0,
+          (sum, e) => sum + e.hkdAmountCents,
+        ),
         totalCount: expenses.length,
       );
 
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => Result.success(expenses));
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async => Result.success(expenses));
 
-      when(mockRepository.getMonthSummary(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-      )).thenAnswer((_) async => Result.success(summary));
+      when(
+        mockRepository.getMonthSummary(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+        ),
+      ).thenAnswer((_) async => Result.success(summary));
 
       await tester.pumpWidget(buildTestWidget(tester));
       await tester.pumpAndSettle();
@@ -170,17 +200,21 @@ void main() {
         totalCount: 0,
       );
 
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => Result.success(<Expense>[]));
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async => Result.success(<Expense>[]));
 
-      when(mockRepository.getMonthSummary(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-      )).thenAnswer((_) async => Result.success(summary));
+      when(
+        mockRepository.getMonthSummary(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+        ),
+      ).thenAnswer((_) async => Result.success(summary));
 
       await tester.pumpWidget(buildTestWidget(tester));
       await tester.pumpAndSettle();
@@ -197,25 +231,33 @@ void main() {
       final expenses = createTestExpenses(500);
 
       // 模擬延遲載入
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async {
         await Future.delayed(const Duration(milliseconds: 100));
         return Result.success(expenses);
       });
 
-      when(mockRepository.getMonthSummary(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-      )).thenAnswer((_) async => Result.success(MonthSummary(
-        year: DateTime.now().year,
-        month: DateTime.now().month,
-        totalHkdAmountCents: 500000,
-        totalCount: 500,
-      )));
+      when(
+        mockRepository.getMonthSummary(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+        ),
+      ).thenAnswer(
+        (_) async => Result.success(
+          MonthSummary(
+            year: DateTime.now().year,
+            month: DateTime.now().month,
+            totalHkdAmountCents: 500000,
+            totalCount: 500,
+          ),
+        ),
+      );
 
       await tester.pumpWidget(buildTestWidget(tester));
 
@@ -236,22 +278,30 @@ void main() {
 
       final expenses = createTestExpenses(100);
 
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => Result.success(expenses));
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async => Result.success(expenses));
 
-      when(mockRepository.getMonthSummary(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-      )).thenAnswer((_) async => Result.success(MonthSummary(
-        year: DateTime.now().year,
-        month: DateTime.now().month,
-        totalHkdAmountCents: 100000,
-        totalCount: 100,
-      )));
+      when(
+        mockRepository.getMonthSummary(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+        ),
+      ).thenAnswer(
+        (_) async => Result.success(
+          MonthSummary(
+            year: DateTime.now().year,
+            month: DateTime.now().month,
+            totalHkdAmountCents: 100000,
+            totalCount: 100,
+          ),
+        ),
+      );
 
       await tester.pumpWidget(buildTestWidget(tester));
       await tester.pumpAndSettle();

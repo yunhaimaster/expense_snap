@@ -30,6 +30,13 @@
             "type": "command",
             "command": "fp=$(echo $TOOL_INPUT | jq -r '.file_path // .filePath // empty'); [ -z \"$fp\" ] && exit 0; [[ \"$fp\" == *.dart ]] && dart format \"$fp\" 2>/dev/null; exit 0",
             "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "fp=$(echo $TOOL_INPUT | jq -r '.file_path // .filePath // empty'); [ -z \"$fp\" ] && exit 0; [[ \"$fp\" == *.dart ]] || exit 0; cd \"$CLAUDE_PROJECT_DIR\" && flutter analyze --no-fatal-infos 2>&1 | grep -E '(error|warning)' | head -5 && echo '⚠️ 請修復分析問題' || exit 0",
+            "timeout": 30000,
+            "once": true,
+            "statusMessage": "Running flutter analyze..."
           }
         ]
       }

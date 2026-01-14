@@ -4,9 +4,9 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for English (`en`).
-class SEn extends S {
-  SEn([String locale = 'en']) : super(locale);
+/// The translations for Korean (`ko`).
+class SKo extends S {
+  SKo([String locale = 'ko']) : super(locale);
 
   @override
   String get appTitle => 'Expense Snap';

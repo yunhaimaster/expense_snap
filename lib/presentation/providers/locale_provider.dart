@@ -19,7 +19,11 @@ class LocaleProvider extends ChangeNotifier {
   /// 語言代碼對應的顯示名稱
   static const Map<String, String> localeNames = {
     'zh': '繁體中文',
+    'zh_Hans': '简体中文',
     'en': 'English',
+    'ja': '日本語',
+    'ko': '한국어',
+    'es': 'Español',
     'system': '跟隨系統',
   };
 
@@ -38,10 +42,16 @@ class LocaleProvider extends ChangeNotifier {
   bool get isLoaded => _isLoaded;
 
   /// 當前使用的語言代碼（用於 UI 顯示）
-  String get currentLocaleCode => _locale?.languageCode ?? 'system';
+  String get currentLocaleCode {
+    if (_locale == null) return 'system';
+    // 簡體中文使用 scriptCode 區分
+    if (_locale!.scriptCode == 'Hans') return 'zh_Hans';
+    return _locale!.languageCode;
+  }
 
   /// 當前語言名稱（用於 UI 顯示）
-  String get currentLocaleName => localeNames[currentLocaleCode] ?? currentLocaleCode;
+  String get currentLocaleName =>
+      localeNames[currentLocaleCode] ?? currentLocaleCode;
 
   /// 實際解析後的 Locale（考慮系統設定）
   Locale get resolvedLocale {
@@ -50,11 +60,28 @@ class LocaleProvider extends ChangeNotifier {
     }
     // 跟隨系統時，使用系統 locale
     final systemLocale = PlatformDispatcher.instance.locale;
-    // 檢查系統 locale 是否在支援列表中
-    if (supportedLocales.any((l) => l.languageCode == systemLocale.languageCode)) {
-      return Locale(systemLocale.languageCode);
+
+    // 優先精確匹配（包含 scriptCode，如 zh_Hans）
+    final exactMatch = supportedLocales.cast<Locale?>().firstWhere(
+      (l) =>
+          l!.languageCode == systemLocale.languageCode &&
+          l.scriptCode == systemLocale.scriptCode,
+      orElse: () => null,
+    );
+    if (exactMatch != null) {
+      return exactMatch;
     }
-    // 不支援的系統語言，使用預設（中文）
+
+    // 次要匹配：僅 languageCode
+    final languageMatch = supportedLocales.cast<Locale?>().firstWhere(
+      (l) => l!.languageCode == systemLocale.languageCode,
+      orElse: () => null,
+    );
+    if (languageMatch != null) {
+      return languageMatch;
+    }
+
+    // 不支援的系統語言，使用預設（繁體中文）
     return const Locale('zh');
   }
 
@@ -64,9 +91,19 @@ class LocaleProvider extends ChangeNotifier {
 
     try {
       final savedLocale = await sl.databaseHelper.getSetting('app_locale');
-      if (savedLocale != null && savedLocale.isNotEmpty && savedLocale != 'system') {
-        // 驗證是支援的語言
-        if (supportedLocales.any((l) => l.languageCode == savedLocale)) {
+      if (savedLocale != null &&
+          savedLocale.isNotEmpty &&
+          savedLocale != 'system') {
+        // 簡體中文特殊處理
+        if (savedLocale == 'zh_Hans') {
+          _locale = const Locale.fromSubtags(
+            languageCode: 'zh',
+            scriptCode: 'Hans',
+          );
+        } else if (supportedLocales.any(
+          (l) => l.languageCode == savedLocale,
+        )) {
+          // 驗證是支援的語言
           _locale = Locale(savedLocale);
         }
       }
@@ -87,10 +124,17 @@ class LocaleProvider extends ChangeNotifier {
   Future<void> setLocale(Locale? locale) async {
     if (_locale == locale) return;
 
-    // 驗證是支援的語言
-    if (locale != null && !supportedLocales.any((l) => l.languageCode == locale.languageCode)) {
-      AppLogger.warning('Unsupported locale: $locale');
-      return;
+    // 驗證是支援的語言（需精確匹配 languageCode 和 scriptCode）
+    if (locale != null) {
+      final isSupported = supportedLocales.any(
+        (l) =>
+            l.languageCode == locale.languageCode &&
+            l.scriptCode == locale.scriptCode,
+      );
+      if (!isSupported) {
+        AppLogger.warning('Unsupported locale: $locale');
+        return;
+      }
     }
 
     _locale = locale;
@@ -98,7 +142,14 @@ class LocaleProvider extends ChangeNotifier {
 
     // 持久化儲存
     try {
-      final value = locale?.languageCode ?? 'system';
+      String value;
+      if (locale == null) {
+        value = 'system';
+      } else if (locale.scriptCode == 'Hans') {
+        value = 'zh_Hans';
+      } else {
+        value = locale.languageCode;
+      }
       await sl.databaseHelper.setSetting('app_locale', value);
       AppLogger.info('Locale saved: $value');
     } catch (e) {
@@ -110,6 +161,11 @@ class LocaleProvider extends ChangeNotifier {
   Future<void> setLocaleByCode(String code) async {
     if (code == 'system') {
       await setLocale(null);
+    } else if (code == 'zh_Hans') {
+      // 簡體中文使用 scriptCode
+      await setLocale(
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+      );
     } else {
       await setLocale(Locale(code));
     }
@@ -120,7 +176,10 @@ class LocaleProvider extends ChangeNotifier {
     if (code == 'system') {
       return _locale == null;
     }
-    return _locale?.languageCode == code;
+    if (code == 'zh_Hans') {
+      return _locale?.scriptCode == 'Hans';
+    }
+    return _locale?.languageCode == code && _locale?.scriptCode == null;
   }
 
   /// 安全的 notifyListeners（防止 dispose 後呼叫）

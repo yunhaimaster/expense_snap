@@ -46,9 +46,47 @@ flutter analyze && flutter test
 
 | Type | Trigger | Context | Use When |
 |------|---------|---------|----------|
-| **Skills** | Auto by Claude | Main thread | General guidance needed |
-| **Agents** | Explicit dispatch | Isolated | Deep analysis, multi-file |
-| **Commands** | User types `/cmd` | Main thread | Specific task, structured output |
+| **Skills** | Auto by Claude | Main thread | Guidance principles, patterns |
+| **Agents** | Explicit dispatch | Isolated | Deep analysis, multi-file tasks |
+| **Commands** | User types `/cmd` | Main thread | Structured output, specific action |
+
+**Key Distinction:**
+- **Skills** = *HOW* to do things (principles, patterns, guidelines)
+- **Agents** = *DO* isolated work (returns summary to main thread)
+- **Commands** = *RUN* specific task with structured output
+
+### Proactive Skill Triggers (AUTO-INVOKE)
+
+| User Intent | Skill to Invoke FIRST |
+|-------------|----------------------|
+| "Add/create/build X" | `brainstorming` |
+| "Fix/debug/broken" | `systematic-debugging` |
+| "Write tests" | `test-driven-development` |
+| Multi-step task | `writing-plans` |
+| 2+ independent tasks | `dispatching-parallel-agents` |
+| About to say "done" | `verification-before-completion` |
+| Flutter widget work | `flutter-patterns` |
+| Flutter bug | `debug-flutter` |
+
+### Proactive Agent Dispatch (AUTO-DISPATCH)
+
+| After This | Dispatch Agent |
+|------------|----------------|
+| Major implementation complete | `code-reviewer` |
+| Code changes with warnings | `flutter-fixer` |
+| Before commit | `test-runner` |
+| Performance concern | `perf-analyzer` |
+| ARB file changes | `i18n-checker` |
+
+### Code Intelligence Tools
+
+| Tool | Purpose | When to Use |
+|------|---------|-------------|
+| **Serena MCP** | Symbol search, find refs, semantic edits | Exploring code relationships, refactoring |
+| **Dart LSP** | Real-time diagnostics, go-to-def | After edits, type checking |
+| **flutter analyze** | Static analysis | Pre-commit, CI |
+
+**Best Practice:** Use Serena for exploration, LSP for live feedback, analyze for validation.
 
 ### Review Tools (Consolidated Guide)
 
@@ -119,6 +157,32 @@ Verify → Commit
 | `PROJECT_INDEX.md` | Codebase structure (canonical) | When architecture changes |
 | `.serena/memories/project-context.md` | Current project status | Each session |
 | `.serena/memories/session-*.md` | Historical session notes | Auto-created |
+
+## Tooling Ecosystem
+
+### MCP Servers (Active)
+| Server | Purpose | Priority |
+|--------|---------|----------|
+| **serena** | 語義化程式碼分析 | 高 - 核心工具 |
+| **context7** | Library docs lookup | 高 |
+| **github** | GitHub 操作 | 中 |
+| **sequential-thinking** | 複雜推理 | 低 - 按需 |
+
+### Plugins (Enabled)
+| Plugin | Purpose |
+|--------|---------|
+| **superpowers** | 工作流技能 |
+| **commit-commands** | Git helpers |
+| **code-simplifier** | 程式碼簡化 |
+| **dart-lsp** | Dart 語言服務 |
+
+### Hooks (Project-level)
+| Hook | Trigger | Action |
+|------|---------|--------|
+| PreToolUse:Edit | Before edit | Check file was read |
+| PostToolUse:Read | After read | Cache file path |
+| PostToolUse:Edit | After edit | `dart format` + `flutter analyze` (once) |
+| Stop | Session end | Remind to run analyze/test |
 
 ---
 

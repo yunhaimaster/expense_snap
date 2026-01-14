@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../presentation/screens/add_expense/add_expense_screen.dart';
 import '../../presentation/screens/deleted_items/deleted_items_screen.dart';
 import '../../presentation/screens/expense_detail/expense_detail_screen.dart';
+import '../../presentation/screens/legal/privacy_policy_screen.dart';
+import '../../presentation/screens/legal/terms_of_service_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_screen.dart';
 import '../../presentation/screens/shell/app_shell.dart';
 import 'page_transitions.dart';
@@ -19,6 +21,8 @@ class AppRouter {
   static const String export = '/export';
   static const String settings = '/settings';
   static const String deletedItems = '/deleted-items';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String termsOfService = '/terms-of-service';
 
   /// 生成路由
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -69,6 +73,20 @@ class AppRouter {
         // 已刪除項目從右滑入
         return SlidePageRoute(
           page: const DeletedItemsScreen(),
+          settings: settings,
+        );
+
+      case privacyPolicy:
+        // 隱私權政策從右滑入
+        return SlidePageRoute(
+          page: const PrivacyPolicyScreen(),
+          settings: settings,
+        );
+
+      case termsOfService:
+        // 服務條款從右滑入
+        return SlidePageRoute(
+          page: const TermsOfServiceScreen(),
           settings: settings,
         );
 
