@@ -12,284 +12,286 @@ class SEs extends S {
   String get appTitle => 'Expense Snap';
 
   @override
-  String get common_save => 'Save';
+  String get common_save => 'Guardar';
 
   @override
-  String get common_cancel => 'Cancel';
+  String get common_cancel => 'Cancelar';
 
   @override
-  String get common_delete => 'Delete';
+  String get common_delete => 'Eliminar';
 
   @override
-  String get common_edit => 'Edit';
+  String get common_edit => 'Editar';
 
   @override
-  String get common_retry => 'Retry';
+  String get common_retry => 'Reintentar';
 
   @override
-  String get common_confirm => 'Confirm';
+  String get common_confirm => 'Confirmar';
 
   @override
-  String get common_back => 'Back';
+  String get common_back => 'Volver';
 
   @override
-  String get common_skip => 'Skip';
+  String get common_skip => 'Omitir';
 
   @override
-  String get common_next => 'Next';
+  String get common_next => 'Siguiente';
 
   @override
-  String get common_done => 'Done';
+  String get common_done => 'Hecho';
 
   @override
-  String get common_close => 'Close';
+  String get common_close => 'Cerrar';
 
   @override
-  String get common_restore => 'Restore';
+  String get common_restore => 'Restaurar';
 
   @override
-  String get common_clear => 'Clear';
+  String get common_clear => 'Limpiar';
 
   @override
-  String get common_share => 'Share';
+  String get common_share => 'Compartir';
 
   @override
-  String get common_loading => 'Loading...';
+  String get common_loading => 'Cargando...';
 
   @override
-  String get common_saving => 'Saving...';
+  String get common_saving => 'Guardando...';
 
   @override
-  String get common_processing => 'Processing...';
+  String get common_processing => 'Procesando...';
 
   @override
-  String get nav_home => 'Home';
+  String get nav_home => 'Inicio';
 
   @override
-  String get nav_export => 'Export';
+  String get nav_export => 'Exportar';
 
   @override
-  String get nav_settings => 'Settings';
+  String get nav_settings => 'Ajustes';
 
   @override
-  String get home_addExpense => 'Add Expense';
+  String get home_addExpense => 'Agregar gasto';
 
   @override
-  String get home_deleteSuccess => 'Expense deleted';
+  String get home_deleteSuccess => 'Gasto eliminado';
 
   @override
   String home_deleteFailed(String message) {
-    return 'Delete failed: $message';
+    return 'Error al eliminar: $message';
   }
 
   @override
-  String get home_undo => 'Undo';
+  String get home_undo => 'Deshacer';
 
   @override
-  String get showcase_addExpenseTitle => 'Add Expense';
+  String get showcase_addExpenseTitle => 'Agregar gasto';
 
   @override
   String get showcase_addExpenseDesc =>
-      'Tap here to take a photo and record your expense';
+      'Toca aquí para tomar una foto y registrar tu gasto';
 
   @override
-  String get showcase_swipeDeleteTitle => 'Swipe to Delete';
+  String get showcase_swipeDeleteTitle => 'Deslizar para eliminar';
 
   @override
-  String get showcase_swipeDeleteDesc => 'Swipe left to delete an expense';
+  String get showcase_swipeDeleteDesc =>
+      'Desliza hacia la izquierda para eliminar un gasto';
 
   @override
-  String get showcase_exportTitle => 'Export Report';
+  String get showcase_exportTitle => 'Exportar informe';
 
   @override
-  String get showcase_exportDesc => 'Tap here to export Excel and receipts';
+  String get showcase_exportDesc => 'Toca aquí para exportar Excel y recibos';
 
   @override
-  String get addExpense_title => 'Add Expense';
+  String get addExpense_title => 'Agregar gasto';
 
   @override
-  String get addExpense_receiptImage => 'Receipt Image';
+  String get addExpense_receiptImage => 'Imagen del recibo';
 
   @override
-  String get addExpense_camera => 'Camera';
+  String get addExpense_camera => 'Cámara';
 
   @override
-  String get addExpense_gallery => 'Gallery';
+  String get addExpense_gallery => 'Galería';
 
   @override
-  String get addExpense_amount => 'Amount';
+  String get addExpense_amount => 'Monto';
 
   @override
-  String get addExpense_description => 'Description';
+  String get addExpense_description => 'Descripción';
 
   @override
-  String get addExpense_descriptionHint => 'Enter description...';
+  String get addExpense_descriptionHint => 'Ingrese una descripción...';
 
   @override
-  String get addExpense_date => 'Date';
+  String get addExpense_date => 'Fecha';
 
   @override
-  String get addExpense_currency => 'Currency';
+  String get addExpense_currency => 'Moneda';
 
   @override
-  String get addExpense_exchangeRate => 'Exchange Rate';
+  String get addExpense_exchangeRate => 'Tipo de cambio';
 
   @override
-  String get addExpense_manualInput => 'Manual Input';
+  String get addExpense_manualInput => 'Entrada manual';
 
   @override
-  String get addExpense_ocrProcessing => 'Recognizing receipt...';
+  String get addExpense_ocrProcessing => 'Reconociendo recibo...';
 
   @override
-  String get addExpense_ocrSuccess => 'Receipt content recognized';
+  String get addExpense_ocrSuccess => 'Contenido del recibo reconocido';
 
   @override
   String get addExpense_ocrSuccessVerify =>
-      'Receipt content recognized, please verify';
+      'Contenido del recibo reconocido, por favor verifique';
 
   @override
-  String get addExpense_success => 'Expense added';
+  String get addExpense_success => 'Gasto agregado';
 
   @override
-  String get addExpense_invalidAmount => 'Please enter a valid amount';
+  String get addExpense_invalidAmount => 'Por favor ingrese un monto válido';
 
   @override
-  String get expenseDetail_title => 'Expense Details';
+  String get expenseDetail_title => 'Detalles del gasto';
 
   @override
-  String get expenseDetail_editTitle => 'Edit Expense';
+  String get expenseDetail_editTitle => 'Editar gasto';
 
   @override
-  String get expenseDetail_amount => 'Amount';
+  String get expenseDetail_amount => 'Monto';
 
   @override
-  String get expenseDetail_hkdAmount => 'HKD Amount';
+  String get expenseDetail_hkdAmount => 'Monto en HKD';
 
   @override
-  String get expenseDetail_exchangeRate => 'Exchange Rate';
+  String get expenseDetail_exchangeRate => 'Tipo de cambio';
 
   @override
-  String get expenseDetail_description => 'Description';
+  String get expenseDetail_description => 'Descripción';
 
   @override
-  String get expenseDetail_descriptionRequired => 'Please enter a description';
+  String get expenseDetail_descriptionRequired =>
+      'Por favor ingrese una descripción';
 
   @override
-  String get expenseDetail_date => 'Date';
+  String get expenseDetail_date => 'Fecha';
 
   @override
-  String get expenseDetail_createdAt => 'Created At';
+  String get expenseDetail_createdAt => 'Fecha de creación';
 
   @override
-  String get expenseDetail_replaceImage => 'Replace Image';
+  String get expenseDetail_replaceImage => 'Reemplazar imagen';
 
   @override
-  String get expenseDetail_imageLoadFailed => 'Image failed to load';
+  String get expenseDetail_imageLoadFailed => 'Error al cargar la imagen';
 
   @override
-  String get expenseDetail_noReceipt => 'No receipt image';
+  String get expenseDetail_noReceipt => 'Sin imagen de recibo';
 
   @override
-  String get expenseDetail_cancelEdit => 'Cancel Edit';
+  String get expenseDetail_cancelEdit => 'Cancelar edición';
 
   @override
-  String get expenseDetail_saved => 'Saved';
+  String get expenseDetail_saved => 'Guardado';
 
   @override
   String expenseDetail_saveFailed(String message) {
-    return 'Save failed: $message';
+    return 'Error al guardar: $message';
   }
 
   @override
-  String get expenseDetail_deleted => 'Deleted';
+  String get expenseDetail_deleted => 'Eliminado';
 
   @override
   String expenseDetail_deleteFailed(String message) {
-    return 'Delete failed: $message';
+    return 'Error al eliminar: $message';
   }
 
   @override
-  String get expenseDetail_confirmDelete => 'Confirm Delete';
+  String get expenseDetail_confirmDelete => 'Confirmar eliminación';
 
   @override
   String get expenseDetail_confirmDeleteMessage =>
-      'Are you sure you want to delete this expense?\nYou can restore it from Deleted Items.';
+      '¿Está seguro de que desea eliminar este gasto?\nPuede restaurarlo desde Elementos eliminados.';
 
   @override
-  String get expenseDetail_expenseNotFound => 'Expense not found';
+  String get expenseDetail_expenseNotFound => 'Gasto no encontrado';
 
   @override
-  String get expenseDetail_imageReplaceSuccess => 'Image replaced';
+  String get expenseDetail_imageReplaceSuccess => 'Imagen reemplazada';
 
   @override
   String expenseDetail_imageReplaceFailed(String message) {
-    return 'Replace image failed: $message';
+    return 'Error al reemplazar imagen: $message';
   }
 
   @override
-  String get expenseDetail_selectFromGallery => 'Select from Gallery';
+  String get expenseDetail_selectFromGallery => 'Seleccionar de la galería';
 
   @override
-  String get rateSource_auto => 'Live Rate';
+  String get rateSource_auto => 'Tasa en vivo';
 
   @override
-  String get rateSource_offline => 'Cached Rate';
+  String get rateSource_offline => 'Tasa en caché';
 
   @override
-  String get rateSource_default => 'Default Rate';
+  String get rateSource_default => 'Tasa predeterminada';
 
   @override
-  String get rateSource_manual => 'Manual Input';
+  String get rateSource_manual => 'Entrada manual';
 
   @override
-  String get rateSource_auto_short => 'Live';
+  String get rateSource_auto_short => 'En vivo';
 
   @override
-  String get rateSource_offline_short => 'Cached';
+  String get rateSource_offline_short => 'Caché';
 
   @override
-  String get rateSource_default_short => 'Default';
+  String get rateSource_default_short => 'Predeterminado';
 
   @override
   String get rateSource_manual_short => 'Manual';
 
   @override
-  String get monthSummary_totalExpense => 'Total Expense';
+  String get monthSummary_totalExpense => 'Gasto total';
 
   @override
-  String get monthSummary_count => 'Count';
+  String get monthSummary_count => 'Cantidad';
 
   @override
   String get monthSummary_countSuffix => '';
 
   @override
-  String get monthSummary_previousMonth => 'Previous Month';
+  String get monthSummary_previousMonth => 'Mes anterior';
 
   @override
-  String get monthSummary_nextMonth => 'Next Month';
+  String get monthSummary_nextMonth => 'Mes siguiente';
 
   @override
   String monthSummary_semanticLabel(String month, String amount, int count) {
-    return '$month summary. Total expense: HKD $amount. $count expenses.';
+    return 'Resumen de $month. Gasto total: HKD $amount. $count gastos.';
   }
 
   @override
-  String get monthSummary_isLatestMonth => 'Already at latest month';
+  String get monthSummary_isLatestMonth => 'Ya está en el mes más reciente';
 
   @override
-  String get export_title => 'Export Report';
+  String get export_title => 'Exportar informe';
 
   @override
-  String get export_preview => 'Preview';
+  String get export_preview => 'Vista previa';
 
   @override
-  String get export_expenseCount => 'Expense Count';
+  String get export_expenseCount => 'Cantidad de gastos';
 
   @override
-  String get export_totalHkd => 'HKD Total';
+  String get export_totalHkd => 'Total en HKD';
 
   @override
-  String get export_receiptCount => 'Receipt Images';
+  String get export_receiptCount => 'Imágenes de recibos';
 
   @override
   String export_countUnit(int count) {
@@ -302,14 +304,14 @@ class SEs extends S {
   }
 
   @override
-  String get export_excelWithReceipts => 'Export Excel + Receipts';
+  String get export_excelWithReceipts => 'Exportar Excel + Recibos';
 
   @override
-  String get export_noData => 'No Data';
+  String get export_noData => 'Sin datos';
 
   @override
   String export_noDataMessage(int year, int month) {
-    return 'No expenses recorded in $year/$month';
+    return 'No hay gastos registrados en $year/$month';
   }
 
   @override
@@ -318,481 +320,484 @@ class SEs extends S {
   }
 
   @override
-  String get export_hint => 'Exported Excel contains complete expense details';
+  String get export_hint =>
+      'El Excel exportado contiene detalles completos de gastos';
 
   @override
-  String get export_packing => 'Packing...';
+  String get export_packing => 'Empaquetando...';
 
   @override
-  String get export_generatingExcel => 'Generating Excel...';
+  String get export_generatingExcel => 'Generando Excel...';
 
   @override
-  String get export_packingReceipts => 'Packing receipt images...';
+  String get export_packingReceipts => 'Empaquetando imágenes de recibos...';
 
   @override
-  String get export_compressing => 'Compressing...';
+  String get export_compressing => 'Comprimiendo...';
 
   @override
-  String get export_preparingShare => 'Preparing to share...';
+  String get export_preparingShare => 'Preparando para compartir...';
 
   @override
   String export_success(String size) {
-    return 'Export successful ($size)';
+    return 'Exportación exitosa ($size)';
   }
 
   @override
   String export_failed(String message) {
-    return 'Export failed: $message';
+    return 'Error en la exportación: $message';
   }
 
   @override
   String export_sheetName(int year, int month) {
-    return '$year/$month Expense Report';
+    return 'Informe de gastos $year/$month';
   }
 
   @override
-  String get export_shareSubject => 'Expense Snap Report';
+  String get export_shareSubject => 'Informe de Expense Snap';
 
   @override
   String get export_headerIndex => 'No.';
 
   @override
-  String get export_headerDate => 'Date';
+  String get export_headerDate => 'Fecha';
 
   @override
-  String get export_headerDescription => 'Description';
+  String get export_headerDescription => 'Descripción';
 
   @override
-  String get export_headerOriginalAmount => 'Original Amount';
+  String get export_headerOriginalAmount => 'Monto original';
 
   @override
-  String get export_headerOriginalCurrency => 'Currency';
+  String get export_headerOriginalCurrency => 'Moneda';
 
   @override
-  String get export_headerExchangeRate => 'Exchange Rate';
+  String get export_headerExchangeRate => 'Tipo de cambio';
 
   @override
-  String get export_headerRateSource => 'Rate Source';
+  String get export_headerRateSource => 'Fuente de tasa';
 
   @override
-  String get export_headerHkdAmount => 'HKD Amount';
+  String get export_headerHkdAmount => 'Monto en HKD';
 
   @override
-  String get export_headerReceiptFile => 'Receipt';
+  String get export_headerReceiptFile => 'Recibo';
 
   @override
   String get export_headerTotal => 'Total';
 
   @override
-  String get export_rateSourceAuto => 'Auto';
+  String get export_rateSourceAuto => 'Automático';
 
   @override
-  String get export_rateSourceOffline => 'Offline Cache';
+  String get export_rateSourceOffline => 'Caché sin conexión';
 
   @override
-  String get export_rateSourceDefault => 'Default';
+  String get export_rateSourceDefault => 'Predeterminado';
 
   @override
   String get export_rateSourceManual => 'Manual';
 
   @override
   String export_fileName(int year, String month) {
-    return 'Expense_Report_${year}_$month';
+    return 'Informe_gastos_${year}_$month';
   }
 
   @override
-  String get settings_title => 'Settings';
+  String get settings_title => 'Ajustes';
 
   @override
   String get settings_general => 'General';
 
   @override
-  String get settings_userName => 'Username';
+  String get settings_userName => 'Nombre de usuario';
 
   @override
-  String get settings_userNameHint => 'Used for report title';
+  String get settings_userNameHint => 'Usado para el título del informe';
 
   @override
-  String get settings_language => 'Language';
+  String get settings_language => 'Idioma';
 
   @override
-  String get settings_theme => 'Theme';
+  String get settings_theme => 'Tema';
 
   @override
-  String get settings_themeLight => 'Light';
+  String get settings_themeLight => 'Claro';
 
   @override
-  String get settings_themeDark => 'Dark';
+  String get settings_themeDark => 'Oscuro';
 
   @override
-  String get settings_themeSystem => 'System';
+  String get settings_themeSystem => 'Sistema';
 
   @override
-  String get settings_data => 'Data Management';
+  String get settings_data => 'Gestión de datos';
 
   @override
-  String get settings_backup => 'Cloud Backup';
+  String get settings_backup => 'Copia de seguridad en la nube';
 
   @override
-  String get settings_backupDesc => 'Backup to Google Drive';
+  String get settings_backupDesc => 'Copia de seguridad en Google Drive';
 
   @override
-  String get settings_restore => 'Restore Backup';
+  String get settings_restore => 'Restaurar copia';
 
   @override
-  String get settings_restoreDesc => 'Restore from Google Drive';
+  String get settings_restoreDesc => 'Restaurar desde Google Drive';
 
   @override
-  String get settings_deletedItems => 'Deleted Items';
+  String get settings_deletedItems => 'Elementos eliminados';
 
   @override
-  String get settings_deletedItemsDesc => 'View or restore deleted expenses';
+  String get settings_deletedItemsDesc => 'Ver o restaurar gastos eliminados';
 
   @override
-  String get settings_clearCache => 'Clear Temp Files';
+  String get settings_clearCache => 'Limpiar archivos temporales';
 
   @override
-  String get settings_about => 'About';
+  String get settings_about => 'Acerca de';
 
   @override
-  String get settings_version => 'Version';
+  String get settings_version => 'Versión';
 
   @override
-  String get settings_privacyPolicy => 'Privacy Policy';
+  String get settings_privacyPolicy => 'Política de privacidad';
 
   @override
-  String get settings_termsOfService => 'Terms of Service';
+  String get settings_termsOfService => 'Términos de servicio';
 
   @override
-  String get settings_feedback => 'Feedback';
+  String get settings_feedback => 'Comentarios';
 
   @override
   String get legal_privacyContent =>
-      'Privacy Policy\n\nLast updated: January 2026\n\n1. Data Collection\nWe only collect data that you voluntarily enter, including expense records, receipt images, and personal settings.\n\n2. Data Storage\nAll data is stored locally on your device. If you choose to use the cloud backup feature, data will sync to your Google Drive account.\n\n3. Data Usage\nWe do not use your data for advertising or share it with third parties.\n\n4. Data Deletion\nYou can delete all data in the app at any time. Deleted items are kept for 30 days before permanent deletion.\n\n5. Contact\nFor any privacy-related questions, please contact us through the feedback feature in the app.';
+      'Política de privacidad\n\nÚltima actualización: Enero 2026\n\n1. Recopilación de datos\nSolo recopilamos los datos que usted ingresa voluntariamente, incluyendo registros de gastos, imágenes de recibos y configuraciones personales.\n\n2. Almacenamiento de datos\nTodos los datos se almacenan localmente en su dispositivo. Si elige usar la función de copia de seguridad en la nube, los datos se sincronizarán con su cuenta de Google Drive.\n\n3. Uso de datos\nNo utilizamos sus datos para publicidad ni los compartimos con terceros.\n\n4. Eliminación de datos\nPuede eliminar todos los datos en la aplicación en cualquier momento. Los elementos eliminados se mantienen durante 30 días antes de su eliminación permanente.\n\n5. Contacto\nPara cualquier pregunta relacionada con la privacidad, contáctenos a través de la función de comentarios en la aplicación.';
 
   @override
   String get legal_termsContent =>
-      'Terms of Service\n\nLast updated: January 2026\n\n1. Service Description\nExpense Snap is a personal expense tracking app that helps you record and manage daily expenses.\n\n2. Terms of Use\nBy using this app, you agree to comply with these terms.\n\n3. Limitation of Liability\nThis app is provided \"as is\". We are not responsible for data loss or any indirect damages.\n\n4. Intellectual Property\nAll content and features of the app are protected by copyright.\n\n5. Terms Modification\nWe reserve the right to modify these terms at any time. Continued use indicates acceptance of the modified terms.';
+      'Términos de servicio\n\nÚltima actualización: Enero 2026\n\n1. Descripción del servicio\nExpense Snap es una aplicación de seguimiento de gastos personales que le ayuda a registrar y gestionar sus gastos diarios.\n\n2. Condiciones de uso\nAl usar esta aplicación, acepta cumplir con estos términos.\n\n3. Limitación de responsabilidad\nEsta aplicación se proporciona \"tal cual\". No somos responsables por la pérdida de datos ni por daños indirectos.\n\n4. Propiedad intelectual\nTodo el contenido y las funciones de la aplicación están protegidos por derechos de autor.\n\n5. Modificación de términos\nNos reservamos el derecho de modificar estos términos en cualquier momento. El uso continuado indica la aceptación de los términos modificados.';
 
   @override
-  String get settings_signInGoogle => 'Sign in with Google';
+  String get settings_signInGoogle => 'Iniciar sesión con Google';
 
   @override
-  String get settings_signOutGoogle => 'Sign out';
+  String get settings_signOutGoogle => 'Cerrar sesión';
 
   @override
   String settings_signedInAs(String email) {
-    return 'Signed in as: $email';
+    return 'Conectado como: $email';
   }
 
   @override
-  String get settings_backupSuccess => 'Backup successful';
+  String get settings_backupSuccess => 'Copia de seguridad exitosa';
 
   @override
   String settings_backupFailed(String message) {
-    return 'Backup failed: $message';
+    return 'Error en la copia de seguridad: $message';
   }
 
   @override
-  String get settings_restoreSuccess => 'Restore successful';
+  String get settings_restoreSuccess => 'Restauración exitosa';
 
   @override
   String settings_restoreFailed(String message) {
-    return 'Restore failed: $message';
+    return 'Error en la restauración: $message';
   }
 
   @override
-  String get settings_cacheCleared => 'Cache cleared';
+  String get settings_cacheCleared => 'Caché limpiado';
 
   @override
-  String get settings_noBackupFound => 'No backup found';
+  String get settings_noBackupFound => 'No se encontró copia de seguridad';
 
   @override
-  String get settings_confirmRestore => 'Confirm Restore';
+  String get settings_confirmRestore => 'Confirmar restauración';
 
   @override
   String get settings_confirmRestoreMessage =>
-      'Restore will overwrite current data. Continue?';
+      'La restauración sobrescribirá los datos actuales. ¿Continuar?';
 
   @override
   String settings_lastBackup(String date) {
-    return 'Last backup: $date';
+    return 'Última copia: $date';
   }
 
   @override
-  String get deletedItems_title => 'Deleted Items';
+  String get deletedItems_title => 'Elementos eliminados';
 
   @override
-  String get deletedItems_clearAll => 'Clear All';
+  String get deletedItems_clearAll => 'Limpiar todo';
 
   @override
   String deletedItems_daysRemaining(int days) {
-    return '$days days until auto-delete';
+    return '$days días hasta eliminación automática';
   }
 
   @override
-  String get deletedItems_soonDeleted => 'Will be deleted soon';
+  String get deletedItems_soonDeleted => 'Se eliminará pronto';
 
   @override
-  String get deletedItems_restored => 'Restored';
+  String get deletedItems_restored => 'Restaurado';
 
   @override
   String deletedItems_restoreFailed(String message) {
-    return 'Restore failed: $message';
+    return 'Error al restaurar: $message';
   }
 
   @override
-  String get deletedItems_permanentDelete => 'Delete Permanently';
+  String get deletedItems_permanentDelete => 'Eliminar permanentemente';
 
   @override
   String get deletedItems_permanentDeleteConfirm =>
-      'This cannot be undone. Delete permanently?';
+      'Esta acción no se puede deshacer. ¿Eliminar permanentemente?';
 
   @override
-  String get deletedItems_permanentDeleted => 'Permanently deleted';
+  String get deletedItems_permanentDeleted => 'Eliminado permanentemente';
 
   @override
   String deletedItems_permanentDeleteFailed(String message) {
-    return 'Delete failed: $message';
+    return 'Error al eliminar: $message';
   }
 
   @override
-  String get deletedItems_clearAllTitle => 'Clear All';
+  String get deletedItems_clearAllTitle => 'Limpiar todo';
 
   @override
   String deletedItems_clearAllConfirm(int count) {
-    return 'Permanently delete all $count items?\nThis cannot be undone.';
+    return '¿Eliminar permanentemente los $count elementos?\nEsta acción no se puede deshacer.';
   }
 
   @override
-  String get deletedItems_clearAllButton => 'Delete All';
+  String get deletedItems_clearAllButton => 'Eliminar todo';
 
   @override
   String deletedItems_clearedCount(int count) {
-    return 'Deleted $count items';
+    return '$count elementos eliminados';
   }
 
   @override
   String deletedItems_loadFailed(String message) {
-    return 'Load failed: $message';
+    return 'Error al cargar: $message';
   }
 
   @override
-  String get onboarding_skip => 'Skip';
+  String get onboarding_skip => 'Omitir';
 
   @override
-  String get onboarding_next => 'Next';
+  String get onboarding_next => 'Siguiente';
 
   @override
-  String get onboarding_start => 'Get Started';
+  String get onboarding_start => 'Comenzar';
 
   @override
-  String get onboarding_page1Title => 'Snap Your Receipts';
+  String get onboarding_page1Title => 'Captura tus recibos';
 
   @override
   String get onboarding_page1Desc =>
-      'Take photos of receipts instantly\nNever lose a receipt again';
+      'Toma fotos de recibos al instante\nNunca más pierdas un recibo';
 
   @override
-  String get onboarding_page2Title => 'Multi-Currency Support';
+  String get onboarding_page2Title => 'Soporte multimoneda';
 
   @override
   String get onboarding_page2Desc =>
-      'Supports HKD, CNY, USD\nAuto-fetches live exchange rates';
+      'Compatible con HKD, CNY, USD\nObtiene tipos de cambio en tiempo real';
 
   @override
-  String get onboarding_page3Title => 'One-Click Export';
+  String get onboarding_page3Title => 'Exportación con un clic';
 
   @override
   String get onboarding_page3Desc =>
-      'Export Excel + receipt images\nEasy expense reporting';
+      'Exporta Excel + imágenes de recibos\nInformes de gastos fáciles';
 
   @override
-  String get onboarding_nameLabel => 'Your Name (Optional)';
+  String get onboarding_nameLabel => 'Su nombre (Opcional)';
 
   @override
-  String get onboarding_nameHint => 'Used for report title';
+  String get onboarding_nameHint => 'Usado para el título del informe';
 
   @override
-  String get onboarding_nameTooLong => 'Name cannot exceed 50 characters';
+  String get onboarding_nameTooLong =>
+      'El nombre no puede exceder 50 caracteres';
 
   @override
   String get connectivity_offlineMode =>
-      'Offline Mode - Exchange rates may be outdated';
+      'Modo sin conexión - Los tipos de cambio pueden estar desactualizados';
 
   @override
-  String get dialog_duplicateTitle => 'Possible Duplicate';
+  String get dialog_duplicateTitle => 'Posible duplicado';
 
   @override
-  String get dialog_duplicateMessage => 'Similar expense found:';
+  String get dialog_duplicateMessage => 'Se encontró un gasto similar:';
 
   @override
-  String get dialog_duplicateConfirm => 'Continue adding?';
+  String get dialog_duplicateConfirm => '¿Continuar agregando?';
 
   @override
-  String get dialog_duplicateContinue => 'Add Anyway';
+  String get dialog_duplicateContinue => 'Agregar de todos modos';
 
   @override
-  String get dialog_largeAmountTitle => 'Large Amount';
+  String get dialog_largeAmountTitle => 'Monto grande';
 
   @override
-  String get dialog_largeAmountMessage => 'You are recording a large expense:';
+  String get dialog_largeAmountMessage => 'Está registrando un gasto grande:';
 
   @override
-  String get dialog_largeAmountConfirm => 'Is the amount correct?';
+  String get dialog_largeAmountConfirm => '¿Es correcto el monto?';
 
   @override
-  String get dialog_largeAmountBack => 'Go Back';
+  String get dialog_largeAmountBack => 'Volver';
 
   @override
-  String get dialog_largeAmountOk => 'Confirm';
+  String get dialog_largeAmountOk => 'Confirmar';
 
   @override
-  String get dialog_monthEndTitle => 'Month End Reminder';
+  String get dialog_monthEndTitle => 'Recordatorio de fin de mes';
 
   @override
-  String get dialog_monthEndMessage => 'Month is ending soon!';
+  String get dialog_monthEndMessage => '¡El mes está por terminar!';
 
   @override
   String dialog_monthEndExpenseCount(int count) {
-    return 'You have $count expenses this month';
+    return 'Tiene $count gastos este mes';
   }
 
   @override
   String get dialog_monthEndSuggestion =>
-      'Consider exporting your expense report.';
+      'Considere exportar su informe de gastos.';
 
   @override
-  String get dialog_later => 'Later';
+  String get dialog_later => 'Más tarde';
 
   @override
-  String get dialog_goExport => 'Export Now';
+  String get dialog_goExport => 'Exportar ahora';
 
   @override
-  String get emptyState_noExpenses => 'No Expenses';
+  String get emptyState_noExpenses => 'Sin gastos';
 
   @override
   String get emptyState_noExpensesHint =>
-      'Tap the button below to add your first expense';
+      'Toque el botón de abajo para agregar su primer gasto';
 
   @override
-  String get emptyState_noDeletedItems => 'No Deleted Items';
+  String get emptyState_noDeletedItems => 'Sin elementos eliminados';
 
   @override
   String get emptyState_noDeletedItemsHint =>
-      'Deleted expenses are kept for 30 days';
+      'Los gastos eliminados se mantienen durante 30 días';
 
   @override
-  String get emptyState_error => 'Load Failed';
+  String get emptyState_error => 'Error al cargar';
 
   @override
-  String get emptyState_offline => 'No Internet Connection';
+  String get emptyState_offline => 'Sin conexión a Internet';
 
   @override
-  String get emptyState_offlineHint => 'Please check your network settings';
+  String get emptyState_offlineHint =>
+      'Por favor verifique su configuración de red';
 
   @override
-  String get emptyState_exportSuccess => 'Export Successful';
+  String get emptyState_exportSuccess => 'Exportación exitosa';
 
   @override
-  String get emptyState_exportSuccessHint => 'File is ready';
+  String get emptyState_exportSuccessHint => 'El archivo está listo';
 
   @override
   String get excel_header_index => 'No.';
 
   @override
-  String get excel_header_date => 'Date';
+  String get excel_header_date => 'Fecha';
 
   @override
-  String get excel_header_description => 'Description';
+  String get excel_header_description => 'Descripción';
 
   @override
-  String get excel_header_originalAmount => 'Original Amount';
+  String get excel_header_originalAmount => 'Monto original';
 
   @override
-  String get excel_header_originalCurrency => 'Currency';
+  String get excel_header_originalCurrency => 'Moneda';
 
   @override
-  String get excel_header_exchangeRate => 'Exchange Rate';
+  String get excel_header_exchangeRate => 'Tipo de cambio';
 
   @override
-  String get excel_header_rateSource => 'Rate Source';
+  String get excel_header_rateSource => 'Fuente de tasa';
 
   @override
-  String get excel_header_hkdAmount => 'HKD Amount';
+  String get excel_header_hkdAmount => 'Monto en HKD';
 
   @override
-  String get excel_header_receiptFile => 'Receipt File';
+  String get excel_header_receiptFile => 'Archivo de recibo';
 
   @override
   String get excel_total => 'Total';
 
   @override
   String excel_sheetName(int year, int month) {
-    return 'Expenses_${year}_$month';
+    return 'Gastos_${year}_$month';
   }
 
   @override
   String excel_fileName(int year, String month) {
-    return 'Expenses_${year}_$month';
+    return 'Gastos_${year}_$month';
   }
 
   @override
-  String get excel_shareSubject => 'Expense Snap Report';
+  String get excel_shareSubject => 'Informe de Expense Snap';
 
   @override
-  String get excel_rateSourceAuto => 'Auto';
+  String get excel_rateSourceAuto => 'Automático';
 
   @override
-  String get excel_rateSourceOffline => 'Cached';
+  String get excel_rateSourceOffline => 'Caché';
 
   @override
-  String get excel_rateSourceDefault => 'Default';
+  String get excel_rateSourceDefault => 'Predeterminado';
 
   @override
   String get excel_rateSourceManual => 'Manual';
 
   @override
-  String get error_unknown => 'Unknown error occurred';
+  String get error_unknown => 'Ocurrió un error desconocido';
 
   @override
-  String get error_networkError => 'Network connection error';
+  String get error_networkError => 'Error de conexión de red';
 
   @override
-  String get error_serverError => 'Server error';
+  String get error_serverError => 'Error del servidor';
 
   @override
-  String get error_storageError => 'Storage error';
+  String get error_storageError => 'Error de almacenamiento';
 
   @override
-  String get error_permissionDenied => 'Permission denied';
+  String get error_permissionDenied => 'Permiso denegado';
 
   @override
-  String get error_fileNotFound => 'File not found';
+  String get error_fileNotFound => 'Archivo no encontrado';
 
   @override
-  String get error_invalidData => 'Invalid data format';
+  String get error_invalidData => 'Formato de datos no válido';
 
   @override
-  String get error_exportNoData => 'No data to export';
+  String get error_exportNoData => 'No hay datos para exportar';
 
   @override
-  String get error_invalidMonth => 'Month must be between 1 and 12';
+  String get error_invalidMonth => 'El mes debe estar entre 1 y 12';
 
   @override
-  String get error_invalidYear => 'Year must be between 2000 and 2100';
+  String get error_invalidYear => 'El año debe estar entre 2000 y 2100';
 
   @override
-  String get error_excelGenerationFailed => 'Failed to generate Excel file';
+  String get error_excelGenerationFailed => 'Error al generar archivo Excel';
 
   @override
-  String get error_zipFailed => 'Failed to compress file';
+  String get error_zipFailed => 'Error al comprimir archivo';
 
   @override
-  String get error_shareFailed => 'Share failed';
+  String get error_shareFailed => 'Error al compartir';
 
   @override
-  String get error_cleanupFailed => 'Failed to clean up temp files';
+  String get error_cleanupFailed => 'Error al limpiar archivos temporales';
 
   @override
   String get format_date => 'yyyy/MM/dd';
@@ -816,221 +821,222 @@ class SEs extends S {
   String get currency_USD => 'USD';
 
   @override
-  String get datePicker_selectDate => 'Select Date';
+  String get datePicker_selectDate => 'Seleccionar fecha';
 
   @override
-  String get datePicker_selectMonth => 'Select Month';
+  String get datePicker_selectMonth => 'Seleccionar mes';
 
   @override
-  String get settings_profile => 'Profile';
+  String get settings_profile => 'Perfil';
 
   @override
-  String get settings_appearance => 'Appearance';
+  String get settings_appearance => 'Apariencia';
 
   @override
-  String get settings_reduceMotion => 'Reduce Motion';
+  String get settings_reduceMotion => 'Reducir movimiento';
 
   @override
   String get settings_reduceMotionDesc =>
-      'Reduce animations for motion sensitivity';
+      'Reduce las animaciones para sensibilidad al movimiento';
 
   @override
-  String get settings_storageUsage => 'Storage Usage';
+  String get settings_storageUsage => 'Uso de almacenamiento';
 
   @override
-  String get settings_clearCacheDesc => 'Free up export and backup cache space';
+  String get settings_clearCacheDesc =>
+      'Liberar espacio de caché de exportación y copia de seguridad';
 
   @override
-  String get settings_cloudBackup => 'Cloud Backup';
+  String get settings_cloudBackup => 'Copia de seguridad en la nube';
 
   @override
   String get settings_googleDrive => 'Google Drive';
 
   @override
-  String get settings_lastBackupTime => 'Last Backup';
+  String get settings_lastBackupTime => 'Última copia';
 
   @override
-  String get settings_backupNow => 'Backup Now';
+  String get settings_backupNow => 'Hacer copia ahora';
 
   @override
   String get settings_backupNowDesc =>
-      'Backup database and receipts to Google Drive';
+      'Respaldar base de datos y recibos en Google Drive';
 
   @override
-  String get settings_restoreBackupTitle => 'Restore Backup';
+  String get settings_restoreBackupTitle => 'Restaurar copia';
 
   @override
-  String get settings_restoreBackupDesc => 'Restore from Google Drive';
+  String get settings_restoreBackupDesc => 'Restaurar desde Google Drive';
 
   @override
-  String get settings_selectBackup => 'Select Backup';
+  String get settings_selectBackup => 'Seleccionar copia';
 
   @override
-  String get settings_connect => 'Connect';
+  String get settings_connect => 'Conectar';
 
   @override
-  String get settings_disconnect => 'Disconnect';
+  String get settings_disconnect => 'Desconectar';
 
   @override
-  String get settings_connected => 'Connected';
+  String get settings_connected => 'Conectado';
 
   @override
-  String get settings_notConnected => 'Not connected';
+  String get settings_notConnected => 'No conectado';
 
   @override
-  String get settings_languageSystem => 'Follow System';
+  String get settings_languageSystem => 'Seguir sistema';
 
   @override
-  String get settings_selectTheme => 'Select Theme';
+  String get settings_selectTheme => 'Seleccionar tema';
 
   @override
-  String get settings_editName => 'Edit Name';
+  String get settings_editName => 'Editar nombre';
 
   @override
-  String get settings_nameLabel => 'Name';
+  String get settings_nameLabel => 'Nombre';
 
   @override
-  String get settings_nameHint => 'Used for expense report title';
+  String get settings_nameHint => 'Usado para el título del informe de gastos';
 
   @override
-  String get settings_saved => 'Saved';
+  String get settings_saved => 'Guardado';
 
   @override
   String settings_cleanupFailed(String message) {
-    return 'Cleanup failed: $message';
+    return 'Error en la limpieza: $message';
   }
 
   @override
   String settings_cleanedFiles(int count) {
-    return 'Cleaned $count temp files';
+    return '$count archivos temporales limpiados';
   }
 
   @override
-  String get settings_backupToCloud => 'Backup to Cloud';
+  String get settings_backupToCloud => 'Hacer copia en la nube';
 
   @override
   String get settings_backupConfirmMessage =>
-      'This will backup all expenses and receipts to Google Drive.\n\nContinue?';
+      'Esto respaldará todos los gastos y recibos en Google Drive.\n\n¿Continuar?';
 
   @override
-  String get settings_confirmRestoreTitle => 'Confirm Restore';
+  String get settings_confirmRestoreTitle => 'Confirmar restauración';
 
   @override
   String settings_confirmRestoreDesc(String fileName) {
-    return 'This will replace all current data with \"$fileName\".\n\nThis cannot be undone. Continue?';
+    return 'Esto reemplazará todos los datos actuales con \"$fileName\".\n\nEsta acción no se puede deshacer. ¿Continuar?';
   }
 
   @override
-  String get settings_disconnectTitle => 'Disconnect Google Account';
+  String get settings_disconnectTitle => 'Desconectar cuenta de Google';
 
   @override
   String get settings_disconnectConfirm =>
-      'Cloud backup will be unavailable after disconnecting.\n\nDisconnect?';
+      'La copia de seguridad en la nube no estará disponible después de desconectar.\n\n¿Desconectar?';
 
   @override
   String settings_connectFailed(String message) {
-    return 'Connection failed: $message';
+    return 'Error de conexión: $message';
   }
 
   @override
   String settings_disconnectFailed(String message) {
-    return 'Disconnect failed: $message';
+    return 'Error al desconectar: $message';
   }
 
   @override
-  String get settings_googleConnected => 'Google account connected';
+  String get settings_googleConnected => 'Cuenta de Google conectada';
 
   @override
-  String get settings_googleDisconnected => 'Google account disconnected';
+  String get settings_googleDisconnected => 'Cuenta de Google desconectada';
 
   @override
-  String get category_label => 'Category (Optional)';
+  String get category_label => 'Categoría (Opcional)';
 
   @override
-  String get category_meals => 'Meals';
+  String get category_meals => 'Comidas';
 
   @override
-  String get category_transport => 'Transport';
+  String get category_transport => 'Transporte';
 
   @override
-  String get category_accommodation => 'Accommodation';
+  String get category_accommodation => 'Alojamiento';
 
   @override
-  String get category_officeSupplies => 'Office Supplies';
+  String get category_officeSupplies => 'Material de oficina';
 
   @override
-  String get category_communication => 'Communication';
+  String get category_communication => 'Comunicación';
 
   @override
-  String get category_entertainment => 'Entertainment';
+  String get category_entertainment => 'Entretenimiento';
 
   @override
-  String get category_medical => 'Medical';
+  String get category_medical => 'Médico';
 
   @override
-  String get category_other => 'Other';
+  String get category_other => 'Otro';
 
   @override
-  String get category_statistics => 'Category Statistics';
+  String get category_statistics => 'Estadísticas por categoría';
 
   @override
-  String get category_uncategorized => 'Uncategorized';
+  String get category_uncategorized => 'Sin categoría';
 
   @override
-  String get excel_header_category => 'Category';
+  String get excel_header_category => 'Categoría';
 
   @override
-  String get semantic_category_prefix => 'Category';
+  String get semantic_category_prefix => 'Categoría';
 
   @override
   String semantic_expenseItem(String description) {
-    return 'Expense item: $description';
+    return 'Elemento de gasto: $description';
   }
 
   @override
   String semantic_amount(String amount) {
-    return 'Amount: $amount';
+    return 'Monto: $amount';
   }
 
   @override
   String semantic_originalAmount(String amount) {
-    return 'Original amount: $amount';
+    return 'Monto original: $amount';
   }
 
   @override
   String semantic_date(String date) {
-    return 'Date: $date';
+    return 'Fecha: $date';
   }
 
   @override
   String semantic_rateSource(String source) {
-    return 'Rate source: $source';
+    return 'Fuente de tasa: $source';
   }
 
   @override
-  String get semantic_hasReceipt => 'Has receipt image';
+  String get semantic_hasReceipt => 'Tiene imagen de recibo';
 
   @override
-  String get semantic_tapForDetails => 'Tap to view details';
+  String get semantic_tapForDetails => 'Toque para ver detalles';
 
   @override
-  String get semantic_swipeToDelete => 'Swipe left to delete';
+  String get semantic_swipeToDelete => 'Deslice a la izquierda para eliminar';
 
   @override
-  String get validation_amountRequired => 'Please enter an amount';
+  String get validation_amountRequired => 'Por favor ingrese un monto';
 
   @override
   String validation_amountTooSmall(num min) {
-    return 'Amount cannot be less than $min';
+    return 'El monto no puede ser menor que $min';
   }
 
   @override
   String validation_amountTooLarge(num max) {
-    return 'Amount cannot exceed $max';
+    return 'El monto no puede exceder $max';
   }
 
   @override
-  String get validation_exchangeRateLabel => 'Exchange Rate';
+  String get validation_exchangeRateLabel => 'Tipo de cambio';
 
   @override
   String validation_exchangeRateHint(String currency) {
@@ -1038,9 +1044,10 @@ class SEs extends S {
   }
 
   @override
-  String get validation_exchangeRateRequired => 'Please enter exchange rate';
+  String get validation_exchangeRateRequired =>
+      'Por favor ingrese el tipo de cambio';
 
   @override
   String get validation_exchangeRateInvalid =>
-      'Please enter a valid exchange rate';
+      'Por favor ingrese un tipo de cambio válido';
 }

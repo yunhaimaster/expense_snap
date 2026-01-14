@@ -1038,787 +1038,776 @@ class SZhHans extends SZh {
   String get appTitle => 'Expense Snap';
 
   @override
-  String get common_save => 'Save';
+  String get common_save => '保存';
 
   @override
-  String get common_cancel => 'Cancel';
+  String get common_cancel => '取消';
 
   @override
-  String get common_delete => 'Delete';
+  String get common_delete => '删除';
 
   @override
-  String get common_edit => 'Edit';
+  String get common_edit => '编辑';
 
   @override
-  String get common_retry => 'Retry';
+  String get common_retry => '重试';
 
   @override
-  String get common_confirm => 'Confirm';
+  String get common_confirm => '确认';
 
   @override
-  String get common_back => 'Back';
+  String get common_back => '返回';
 
   @override
-  String get common_skip => 'Skip';
+  String get common_skip => '跳过';
 
   @override
-  String get common_next => 'Next';
+  String get common_next => '下一步';
 
   @override
-  String get common_done => 'Done';
+  String get common_done => '完成';
 
   @override
-  String get common_close => 'Close';
+  String get common_close => '关闭';
 
   @override
-  String get common_restore => 'Restore';
+  String get common_restore => '恢复';
 
   @override
-  String get common_clear => 'Clear';
+  String get common_clear => '清空';
 
   @override
-  String get common_share => 'Share';
+  String get common_share => '分享';
 
   @override
-  String get common_loading => 'Loading...';
+  String get common_loading => '加载中...';
 
   @override
-  String get common_saving => 'Saving...';
+  String get common_saving => '保存中...';
 
   @override
-  String get common_processing => 'Processing...';
+  String get common_processing => '处理中...';
 
   @override
-  String get nav_home => 'Home';
+  String get nav_home => '首页';
 
   @override
-  String get nav_export => 'Export';
+  String get nav_export => '导出';
 
   @override
-  String get nav_settings => 'Settings';
+  String get nav_settings => '设置';
 
   @override
-  String get home_addExpense => 'Add Expense';
+  String get home_addExpense => '添加支出';
 
   @override
-  String get home_deleteSuccess => 'Expense deleted';
+  String get home_deleteSuccess => '已删除支出';
 
   @override
   String home_deleteFailed(String message) {
-    return 'Delete failed: $message';
+    return '删除失败: $message';
   }
 
   @override
-  String get home_undo => 'Undo';
+  String get home_undo => '撤销';
 
   @override
-  String get showcase_addExpenseTitle => 'Add Expense';
+  String get showcase_addExpenseTitle => '添加支出';
 
   @override
-  String get showcase_addExpenseDesc =>
-      'Tap here to take a photo and record your expense';
+  String get showcase_addExpenseDesc => '点击这里拍照记录您的支出';
 
   @override
-  String get showcase_swipeDeleteTitle => 'Swipe to Delete';
+  String get showcase_swipeDeleteTitle => '滑动删除';
 
   @override
-  String get showcase_swipeDeleteDesc => 'Swipe left to delete an expense';
+  String get showcase_swipeDeleteDesc => '向左滑动可以删除支出记录';
 
   @override
-  String get showcase_exportTitle => 'Export Report';
+  String get showcase_exportTitle => '导出报表';
 
   @override
-  String get showcase_exportDesc => 'Tap here to export Excel and receipts';
+  String get showcase_exportDesc => '点击此处导出 Excel 与收据图片';
 
   @override
-  String get addExpense_title => 'Add Expense';
+  String get addExpense_title => '添加支出';
 
   @override
-  String get addExpense_receiptImage => 'Receipt Image';
+  String get addExpense_receiptImage => '收据图片';
 
   @override
-  String get addExpense_camera => 'Camera';
+  String get addExpense_camera => '拍照';
 
   @override
-  String get addExpense_gallery => 'Gallery';
+  String get addExpense_gallery => '相册';
 
   @override
-  String get addExpense_amount => 'Amount';
+  String get addExpense_amount => '金额';
 
   @override
-  String get addExpense_description => 'Description';
+  String get addExpense_description => '描述';
 
   @override
-  String get addExpense_descriptionHint => 'Enter description...';
+  String get addExpense_descriptionHint => '输入描述...';
 
   @override
-  String get addExpense_date => 'Date';
+  String get addExpense_date => '日期';
 
   @override
-  String get addExpense_currency => 'Currency';
+  String get addExpense_currency => '币种';
 
   @override
-  String get addExpense_exchangeRate => 'Exchange Rate';
+  String get addExpense_exchangeRate => '汇率';
 
   @override
-  String get addExpense_manualInput => 'Manual Input';
+  String get addExpense_manualInput => '手动输入';
 
   @override
-  String get addExpense_ocrProcessing => 'Recognizing receipt...';
+  String get addExpense_ocrProcessing => '正在识别收据...';
 
   @override
-  String get addExpense_ocrSuccess => 'Receipt content recognized';
+  String get addExpense_ocrSuccess => '已自动识别收据内容';
 
   @override
-  String get addExpense_ocrSuccessVerify =>
-      'Receipt content recognized, please verify';
+  String get addExpense_ocrSuccessVerify => '已自动识别收据内容，请确认是否正确';
 
   @override
-  String get addExpense_success => 'Expense added';
+  String get addExpense_success => '支出已添加';
 
   @override
-  String get addExpense_invalidAmount => 'Please enter a valid amount';
+  String get addExpense_invalidAmount => '请输入有效金额';
 
   @override
-  String get expenseDetail_title => 'Expense Details';
+  String get expenseDetail_title => '支出详情';
 
   @override
-  String get expenseDetail_editTitle => 'Edit Expense';
+  String get expenseDetail_editTitle => '编辑支出';
 
   @override
-  String get expenseDetail_amount => 'Amount';
+  String get expenseDetail_amount => '金额';
 
   @override
-  String get expenseDetail_hkdAmount => 'HKD Amount';
+  String get expenseDetail_hkdAmount => '港币金额';
 
   @override
-  String get expenseDetail_exchangeRate => 'Exchange Rate';
+  String get expenseDetail_exchangeRate => '汇率';
 
   @override
-  String get expenseDetail_description => 'Description';
+  String get expenseDetail_description => '描述';
 
   @override
-  String get expenseDetail_descriptionRequired => 'Please enter a description';
+  String get expenseDetail_descriptionRequired => '请输入描述';
 
   @override
-  String get expenseDetail_date => 'Date';
+  String get expenseDetail_date => '日期';
 
   @override
-  String get expenseDetail_createdAt => 'Created At';
+  String get expenseDetail_createdAt => '创建时间';
 
   @override
-  String get expenseDetail_replaceImage => 'Replace Image';
+  String get expenseDetail_replaceImage => '更换图片';
 
   @override
-  String get expenseDetail_imageLoadFailed => 'Image failed to load';
+  String get expenseDetail_imageLoadFailed => '图片加载失败';
 
   @override
-  String get expenseDetail_noReceipt => 'No receipt image';
+  String get expenseDetail_noReceipt => '无收据图片';
 
   @override
-  String get expenseDetail_cancelEdit => 'Cancel Edit';
+  String get expenseDetail_cancelEdit => '取消编辑';
 
   @override
-  String get expenseDetail_saved => 'Saved';
+  String get expenseDetail_saved => '已保存';
 
   @override
   String expenseDetail_saveFailed(String message) {
-    return 'Save failed: $message';
+    return '保存失败: $message';
   }
 
   @override
-  String get expenseDetail_deleted => 'Deleted';
+  String get expenseDetail_deleted => '已删除';
 
   @override
   String expenseDetail_deleteFailed(String message) {
-    return 'Delete failed: $message';
+    return '删除失败: $message';
   }
 
   @override
-  String get expenseDetail_confirmDelete => 'Confirm Delete';
+  String get expenseDetail_confirmDelete => '确认删除';
 
   @override
   String get expenseDetail_confirmDeleteMessage =>
-      'Are you sure you want to delete this expense?\nYou can restore it from Deleted Items.';
+      '确定要删除这笔支出吗？\n删除后可在「已删除项目」中恢复。';
 
   @override
-  String get expenseDetail_expenseNotFound => 'Expense not found';
+  String get expenseDetail_expenseNotFound => '找不到支出记录';
 
   @override
-  String get expenseDetail_imageReplaceSuccess => 'Image replaced';
+  String get expenseDetail_imageReplaceSuccess => '图片已更换';
 
   @override
   String expenseDetail_imageReplaceFailed(String message) {
-    return 'Replace image failed: $message';
+    return '更换图片失败: $message';
   }
 
   @override
-  String get expenseDetail_selectFromGallery => 'Select from Gallery';
+  String get expenseDetail_selectFromGallery => '从相册选择';
 
   @override
-  String get rateSource_auto => 'Live Rate';
+  String get rateSource_auto => '实时汇率';
 
   @override
-  String get rateSource_offline => 'Cached Rate';
+  String get rateSource_offline => '离线缓存';
 
   @override
-  String get rateSource_default => 'Default Rate';
+  String get rateSource_default => '默认汇率';
 
   @override
-  String get rateSource_manual => 'Manual Input';
+  String get rateSource_manual => '手动输入';
 
   @override
-  String get rateSource_auto_short => 'Live';
+  String get rateSource_auto_short => '实时';
 
   @override
-  String get rateSource_offline_short => 'Cached';
+  String get rateSource_offline_short => '离线';
 
   @override
-  String get rateSource_default_short => 'Default';
+  String get rateSource_default_short => '默认';
 
   @override
-  String get rateSource_manual_short => 'Manual';
+  String get rateSource_manual_short => '手动';
 
   @override
-  String get monthSummary_totalExpense => 'Total Expense';
+  String get monthSummary_totalExpense => '总支出';
 
   @override
-  String get monthSummary_count => 'Count';
+  String get monthSummary_count => '笔数';
 
   @override
-  String get monthSummary_countSuffix => '';
+  String get monthSummary_countSuffix => ' 笔';
 
   @override
-  String get monthSummary_previousMonth => 'Previous Month';
+  String get monthSummary_previousMonth => '上个月';
 
   @override
-  String get monthSummary_nextMonth => 'Next Month';
+  String get monthSummary_nextMonth => '下个月';
 
   @override
   String monthSummary_semanticLabel(String month, String amount, int count) {
-    return '$month summary. Total expense: HKD $amount. $count expenses.';
+    return '$month月份摘要。总支出：港币 $amount 元。共 $count 笔支出。';
   }
 
   @override
-  String get monthSummary_isLatestMonth => 'Already at latest month';
+  String get monthSummary_isLatestMonth => '已是最新月份';
 
   @override
-  String get export_title => 'Export Report';
+  String get export_title => '导出报销单';
 
   @override
-  String get export_preview => 'Preview';
+  String get export_preview => '预览';
 
   @override
-  String get export_expenseCount => 'Expense Count';
+  String get export_expenseCount => '支出笔数';
 
   @override
-  String get export_totalHkd => 'HKD Total';
+  String get export_totalHkd => '港币总额';
 
   @override
-  String get export_receiptCount => 'Receipt Images';
+  String get export_receiptCount => '收据图片';
 
   @override
   String export_countUnit(int count) {
-    return '$count';
+    return '$count 笔';
   }
 
   @override
   String export_imageUnit(int count) {
-    return '$count';
+    return '$count 张';
   }
 
   @override
-  String get export_excelWithReceipts => 'Export Excel + Receipts';
+  String get export_excelWithReceipts => '导出 Excel + 收据';
 
   @override
-  String get export_noData => 'No Data';
+  String get export_noData => '没有数据';
 
   @override
   String export_noDataMessage(int year, int month) {
-    return 'No expenses recorded in $year/$month';
+    return '$year 年 $month 月没有支出记录';
   }
 
   @override
   String export_yearMonth(int year, int month) {
-    return '$year/$month';
+    return '$year 年 $month 月';
   }
 
   @override
-  String get export_hint => 'Exported Excel contains complete expense details';
+  String get export_hint => '导出的 Excel 包含完整支出明细';
 
   @override
-  String get export_packing => 'Packing...';
+  String get export_packing => '正在打包...';
 
   @override
-  String get export_generatingExcel => 'Generating Excel...';
+  String get export_generatingExcel => '正在生成 Excel...';
 
   @override
-  String get export_packingReceipts => 'Packing receipt images...';
+  String get export_packingReceipts => '正在打包收据图片...';
 
   @override
-  String get export_compressing => 'Compressing...';
+  String get export_compressing => '正在压缩...';
 
   @override
-  String get export_preparingShare => 'Preparing to share...';
+  String get export_preparingShare => '准备分享...';
 
   @override
   String export_success(String size) {
-    return 'Export successful ($size)';
+    return '导出成功 ($size)';
   }
 
   @override
   String export_failed(String message) {
-    return 'Export failed: $message';
+    return '导出失败: $message';
   }
 
   @override
   String export_sheetName(int year, int month) {
-    return '$year/$month Expense Report';
+    return '$year年$month月报销单';
   }
 
   @override
-  String get export_shareSubject => 'Expense Snap Report';
+  String get export_shareSubject => 'Expense Snap 报销单';
 
   @override
-  String get export_headerIndex => 'No.';
+  String get export_headerIndex => '序号';
 
   @override
-  String get export_headerDate => 'Date';
+  String get export_headerDate => '日期';
 
   @override
-  String get export_headerDescription => 'Description';
+  String get export_headerDescription => '描述';
 
   @override
-  String get export_headerOriginalAmount => 'Original Amount';
+  String get export_headerOriginalAmount => '原始金额';
 
   @override
-  String get export_headerOriginalCurrency => 'Currency';
+  String get export_headerOriginalCurrency => '原始币种';
 
   @override
-  String get export_headerExchangeRate => 'Exchange Rate';
+  String get export_headerExchangeRate => '汇率';
 
   @override
-  String get export_headerRateSource => 'Rate Source';
+  String get export_headerRateSource => '汇率来源';
 
   @override
-  String get export_headerHkdAmount => 'HKD Amount';
+  String get export_headerHkdAmount => '港币金额';
 
   @override
-  String get export_headerReceiptFile => 'Receipt';
+  String get export_headerReceiptFile => '收据文件名';
 
   @override
-  String get export_headerTotal => 'Total';
+  String get export_headerTotal => '合计';
 
   @override
-  String get export_rateSourceAuto => 'Auto';
+  String get export_rateSourceAuto => '自动';
 
   @override
-  String get export_rateSourceOffline => 'Offline Cache';
+  String get export_rateSourceOffline => '离线缓存';
 
   @override
-  String get export_rateSourceDefault => 'Default';
+  String get export_rateSourceDefault => '默认';
 
   @override
-  String get export_rateSourceManual => 'Manual';
+  String get export_rateSourceManual => '手动';
 
   @override
   String export_fileName(int year, String month) {
-    return 'Expense_Report_${year}_$month';
+    return '报销单_$year年$month月';
   }
 
   @override
-  String get settings_title => 'Settings';
+  String get settings_title => '设置';
 
   @override
-  String get settings_general => 'General';
+  String get settings_general => '通用';
 
   @override
-  String get settings_userName => 'Username';
+  String get settings_userName => '用户名';
 
   @override
-  String get settings_userNameHint => 'Used for report title';
+  String get settings_userNameHint => '用于报销单标题';
 
   @override
-  String get settings_language => 'Language';
+  String get settings_language => '语言';
 
   @override
-  String get settings_theme => 'Theme';
+  String get settings_theme => '主题';
 
   @override
-  String get settings_themeLight => 'Light';
+  String get settings_themeLight => '浅色';
 
   @override
-  String get settings_themeDark => 'Dark';
+  String get settings_themeDark => '深色';
 
   @override
-  String get settings_themeSystem => 'System';
+  String get settings_themeSystem => '跟随系统';
 
   @override
-  String get settings_data => 'Data Management';
+  String get settings_data => '数据管理';
 
   @override
-  String get settings_backup => 'Cloud Backup';
+  String get settings_backup => '云端备份';
 
   @override
-  String get settings_backupDesc => 'Backup to Google Drive';
+  String get settings_backupDesc => '备份至 Google 云端硬盘';
 
   @override
-  String get settings_restore => 'Restore Backup';
+  String get settings_restore => '恢复备份';
 
   @override
-  String get settings_restoreDesc => 'Restore from Google Drive';
+  String get settings_restoreDesc => '从 Google 云端硬盘恢复';
 
   @override
-  String get settings_deletedItems => 'Deleted Items';
+  String get settings_deletedItems => '已删除项目';
 
   @override
-  String get settings_deletedItemsDesc => 'View or restore deleted expenses';
+  String get settings_deletedItemsDesc => '查看或恢复已删除的支出';
 
   @override
-  String get settings_clearCache => 'Clear Temp Files';
+  String get settings_clearCache => '清理缓存文件';
 
   @override
-  String get settings_about => 'About';
+  String get settings_about => '关于';
 
   @override
-  String get settings_version => 'Version';
+  String get settings_version => '版本';
 
   @override
-  String get settings_privacyPolicy => 'Privacy Policy';
+  String get settings_privacyPolicy => '隐私政策';
 
   @override
-  String get settings_termsOfService => 'Terms of Service';
+  String get settings_termsOfService => '服务条款';
 
   @override
-  String get settings_feedback => 'Feedback';
+  String get settings_feedback => '意见反馈';
 
   @override
   String get legal_privacyContent =>
-      'Privacy Policy\n\nLast updated: January 2026\n\n1. Data Collection\nWe only collect data that you voluntarily enter, including expense records, receipt images, and personal settings.\n\n2. Data Storage\nAll data is stored locally on your device. If you choose to use the cloud backup feature, data will sync to your Google Drive account.\n\n3. Data Usage\nWe do not use your data for advertising or share it with third parties.\n\n4. Data Deletion\nYou can delete all data in the app at any time. Deleted items are kept for 30 days before permanent deletion.\n\n5. Contact\nFor any privacy-related questions, please contact us through the feedback feature in the app.';
+      '隐私政策\n\n最后更新日期：2026年1月\n\n1. 数据收集\n我们收集的数据仅限于您主动输入的支出记录、收据图片和个人设置。\n\n2. 数据存储\n所有数据存储于您的设备本地。如您选择使用云端备份功能，数据将同步至您的 Google 云端硬盘账户。\n\n3. 数据使用\n我们不会将您的数据用于广告或分享给第三方。\n\n4. 数据删除\n您可随时删除应用程序中的所有数据。已删除的项目会保留 30 天后自动永久删除。\n\n5. 联系方式\n如有任何隐私相关问题，请通过应用程序内的意见反馈功能联系我们。';
 
   @override
   String get legal_termsContent =>
-      'Terms of Service\n\nLast updated: January 2026\n\n1. Service Description\nExpense Snap is a personal expense tracking app that helps you record and manage daily expenses.\n\n2. Terms of Use\nBy using this app, you agree to comply with these terms.\n\n3. Limitation of Liability\nThis app is provided \"as is\". We are not responsible for data loss or any indirect damages.\n\n4. Intellectual Property\nAll content and features of the app are protected by copyright.\n\n5. Terms Modification\nWe reserve the right to modify these terms at any time. Continued use indicates acceptance of the modified terms.';
+      '服务条款\n\n最后更新日期：2026年1月\n\n1. 服务说明\n支出易是一款个人支出记录应用程序，帮助您追踪和管理日常支出。\n\n2. 使用条款\n使用本应用程序即表示您同意遵守这些条款。\n\n3. 责任限制\n本应用程序按「现状」提供，我们不对数据丢失或任何间接损失负责。\n\n4. 知识产权\n应用程序的所有内容和功能均受著作权保护。\n\n5. 条款修改\n我们保留随时修改这些条款的权利。继续使用即表示接受修改后的条款。';
 
   @override
-  String get settings_signInGoogle => 'Sign in with Google';
+  String get settings_signInGoogle => '登录 Google';
 
   @override
-  String get settings_signOutGoogle => 'Sign out';
+  String get settings_signOutGoogle => '退出 Google';
 
   @override
   String settings_signedInAs(String email) {
-    return 'Signed in as: $email';
+    return '已登录：$email';
   }
 
   @override
-  String get settings_backupSuccess => 'Backup successful';
+  String get settings_backupSuccess => '备份成功';
 
   @override
   String settings_backupFailed(String message) {
-    return 'Backup failed: $message';
+    return '备份失败: $message';
   }
 
   @override
-  String get settings_restoreSuccess => 'Restore successful';
+  String get settings_restoreSuccess => '恢复成功';
 
   @override
   String settings_restoreFailed(String message) {
-    return 'Restore failed: $message';
+    return '恢复失败: $message';
   }
 
   @override
-  String get settings_cacheCleared => 'Cache cleared';
+  String get settings_cacheCleared => '缓存已清除';
 
   @override
-  String get settings_noBackupFound => 'No backup found';
+  String get settings_noBackupFound => '找不到备份文件';
 
   @override
-  String get settings_confirmRestore => 'Confirm Restore';
+  String get settings_confirmRestore => '确认恢复';
 
   @override
-  String get settings_confirmRestoreMessage =>
-      'Restore will overwrite current data. Continue?';
+  String get settings_confirmRestoreMessage => '恢复会覆盖当前的数据，确定要继续吗？';
 
   @override
   String settings_lastBackup(String date) {
-    return 'Last backup: $date';
+    return '上次备份：$date';
   }
 
   @override
-  String get deletedItems_title => 'Deleted Items';
+  String get deletedItems_title => '已删除项目';
 
   @override
-  String get deletedItems_clearAll => 'Clear All';
+  String get deletedItems_clearAll => '清空';
 
   @override
   String deletedItems_daysRemaining(int days) {
-    return '$days days until auto-delete';
+    return '还有 $days 天自动删除';
   }
 
   @override
-  String get deletedItems_soonDeleted => 'Will be deleted soon';
+  String get deletedItems_soonDeleted => '即将自动删除';
 
   @override
-  String get deletedItems_restored => 'Restored';
+  String get deletedItems_restored => '已恢复';
 
   @override
   String deletedItems_restoreFailed(String message) {
-    return 'Restore failed: $message';
+    return '恢复失败: $message';
   }
 
   @override
-  String get deletedItems_permanentDelete => 'Delete Permanently';
+  String get deletedItems_permanentDelete => '永久删除';
 
   @override
-  String get deletedItems_permanentDeleteConfirm =>
-      'This cannot be undone. Delete permanently?';
+  String get deletedItems_permanentDeleteConfirm => '此操作无法恢复，确定要永久删除吗？';
 
   @override
-  String get deletedItems_permanentDeleted => 'Permanently deleted';
+  String get deletedItems_permanentDeleted => '已永久删除';
 
   @override
   String deletedItems_permanentDeleteFailed(String message) {
-    return 'Delete failed: $message';
+    return '删除失败: $message';
   }
 
   @override
-  String get deletedItems_clearAllTitle => 'Clear All';
+  String get deletedItems_clearAllTitle => '清空全部';
 
   @override
   String deletedItems_clearAllConfirm(int count) {
-    return 'Permanently delete all $count items?\nThis cannot be undone.';
+    return '确定要永久删除全部 $count 笔记录吗？\n此操作无法恢复。';
   }
 
   @override
-  String get deletedItems_clearAllButton => 'Delete All';
+  String get deletedItems_clearAllButton => '全部删除';
 
   @override
   String deletedItems_clearedCount(int count) {
-    return 'Deleted $count items';
+    return '已删除 $count 笔记录';
   }
 
   @override
   String deletedItems_loadFailed(String message) {
-    return 'Load failed: $message';
+    return '加载失败: $message';
   }
 
   @override
-  String get onboarding_skip => 'Skip';
+  String get onboarding_skip => '跳过';
 
   @override
-  String get onboarding_next => 'Next';
+  String get onboarding_next => '下一步';
 
   @override
-  String get onboarding_start => 'Get Started';
+  String get onboarding_start => '开始使用';
 
   @override
-  String get onboarding_page1Title => 'Snap Your Receipts';
+  String get onboarding_page1Title => '拍照记录支出';
 
   @override
-  String get onboarding_page1Desc =>
-      'Take photos of receipts instantly\nNever lose a receipt again';
+  String get onboarding_page1Desc => '随手拍摄收据，即时记录每笔支出\n再也不怕遗失收据';
 
   @override
-  String get onboarding_page2Title => 'Multi-Currency Support';
+  String get onboarding_page2Title => '多币种自动转换';
 
   @override
-  String get onboarding_page2Desc =>
-      'Supports HKD, CNY, USD\nAuto-fetches live exchange rates';
+  String get onboarding_page2Desc => '支持 HKD、CNY、USD\n系统自动获取实时汇率';
 
   @override
-  String get onboarding_page3Title => 'One-Click Export';
+  String get onboarding_page3Title => '一键导出报销单';
 
   @override
-  String get onboarding_page3Desc =>
-      'Export Excel + receipt images\nEasy expense reporting';
+  String get onboarding_page3Desc => '月结时一键导出 Excel + 收据图片\n轻松完成报销';
 
   @override
-  String get onboarding_nameLabel => 'Your Name (Optional)';
+  String get onboarding_nameLabel => '您的名字（选填）';
 
   @override
-  String get onboarding_nameHint => 'Used for report title';
+  String get onboarding_nameHint => '用于报销单标题';
 
   @override
-  String get onboarding_nameTooLong => 'Name cannot exceed 50 characters';
+  String get onboarding_nameTooLong => '名字不能超过 50 个字';
 
   @override
-  String get connectivity_offlineMode =>
-      'Offline Mode - Exchange rates may be outdated';
+  String get connectivity_offlineMode => '离线模式 - 汇率可能不是最新';
 
   @override
-  String get dialog_duplicateTitle => 'Possible Duplicate';
+  String get dialog_duplicateTitle => '可能重复';
 
   @override
-  String get dialog_duplicateMessage => 'Similar expense found:';
+  String get dialog_duplicateMessage => '发现相似的支出记录：';
 
   @override
-  String get dialog_duplicateConfirm => 'Continue adding?';
+  String get dialog_duplicateConfirm => '确定要继续添加吗？';
 
   @override
-  String get dialog_duplicateContinue => 'Add Anyway';
+  String get dialog_duplicateContinue => '继续添加';
 
   @override
-  String get dialog_largeAmountTitle => 'Large Amount';
+  String get dialog_largeAmountTitle => '大金额确认';
 
   @override
-  String get dialog_largeAmountMessage => 'You are recording a large expense:';
+  String get dialog_largeAmountMessage => '您即将记录一笔大金额支出：';
 
   @override
-  String get dialog_largeAmountConfirm => 'Is the amount correct?';
+  String get dialog_largeAmountConfirm => '请确认金额是否正确？';
 
   @override
-  String get dialog_largeAmountBack => 'Go Back';
+  String get dialog_largeAmountBack => '返回修改';
 
   @override
-  String get dialog_largeAmountOk => 'Confirm';
+  String get dialog_largeAmountOk => '确认正确';
 
   @override
-  String get dialog_monthEndTitle => 'Month End Reminder';
+  String get dialog_monthEndTitle => '月底提醒';
 
   @override
-  String get dialog_monthEndMessage => 'Month is ending soon!';
+  String get dialog_monthEndMessage => '本月即将结束！';
 
   @override
   String dialog_monthEndExpenseCount(int count) {
-    return 'You have $count expenses this month';
+    return '您本月共有 $count 笔支出记录';
   }
 
   @override
-  String get dialog_monthEndSuggestion =>
-      'Consider exporting your expense report.';
+  String get dialog_monthEndSuggestion => '建议您导出报销单，以便月结报销。';
 
   @override
-  String get dialog_later => 'Later';
+  String get dialog_later => '稍后';
 
   @override
-  String get dialog_goExport => 'Export Now';
+  String get dialog_goExport => '去导出';
 
   @override
-  String get emptyState_noExpenses => 'No Expenses';
+  String get emptyState_noExpenses => '暂无支出记录';
 
   @override
-  String get emptyState_noExpensesHint =>
-      'Tap the button below to add your first expense';
+  String get emptyState_noExpensesHint => '点击右下角按钮添加第一笔支出';
 
   @override
-  String get emptyState_noDeletedItems => 'No Deleted Items';
+  String get emptyState_noDeletedItems => '没有已删除的项目';
 
   @override
-  String get emptyState_noDeletedItemsHint =>
-      'Deleted expenses are kept for 30 days';
+  String get emptyState_noDeletedItemsHint => '删除的支出会在这里保留 30 天';
 
   @override
-  String get emptyState_error => 'Load Failed';
+  String get emptyState_error => '加载失败';
 
   @override
-  String get emptyState_offline => 'No Internet Connection';
+  String get emptyState_offline => '无网络连接';
 
   @override
-  String get emptyState_offlineHint => 'Please check your network settings';
+  String get emptyState_offlineHint => '请检查您的网络设置';
 
   @override
-  String get emptyState_exportSuccess => 'Export Successful';
+  String get emptyState_exportSuccess => '导出成功';
 
   @override
-  String get emptyState_exportSuccessHint => 'File is ready';
+  String get emptyState_exportSuccessHint => '文件已准备就绪';
 
   @override
-  String get excel_header_index => 'No.';
+  String get excel_header_index => '序号';
 
   @override
-  String get excel_header_date => 'Date';
+  String get excel_header_date => '日期';
 
   @override
-  String get excel_header_description => 'Description';
+  String get excel_header_description => '描述';
 
   @override
-  String get excel_header_originalAmount => 'Original Amount';
+  String get excel_header_originalAmount => '原始金额';
 
   @override
-  String get excel_header_originalCurrency => 'Currency';
+  String get excel_header_originalCurrency => '原始币种';
 
   @override
-  String get excel_header_exchangeRate => 'Exchange Rate';
+  String get excel_header_exchangeRate => '汇率';
 
   @override
-  String get excel_header_rateSource => 'Rate Source';
+  String get excel_header_rateSource => '汇率来源';
 
   @override
-  String get excel_header_hkdAmount => 'HKD Amount';
+  String get excel_header_hkdAmount => '港币金额';
 
   @override
-  String get excel_header_receiptFile => 'Receipt File';
+  String get excel_header_receiptFile => '收据文件名';
 
   @override
-  String get excel_total => 'Total';
+  String get excel_total => '合计';
 
   @override
   String excel_sheetName(int year, int month) {
-    return 'Expenses_${year}_$month';
+    return '$year年$month月报销单';
   }
 
   @override
   String excel_fileName(int year, String month) {
-    return 'Expenses_${year}_$month';
+    return '报销单_$year年$month月';
   }
 
   @override
-  String get excel_shareSubject => 'Expense Snap Report';
+  String get excel_shareSubject => 'Expense Snap 报销单';
 
   @override
-  String get excel_rateSourceAuto => 'Auto';
+  String get excel_rateSourceAuto => '自动';
 
   @override
-  String get excel_rateSourceOffline => 'Cached';
+  String get excel_rateSourceOffline => '离线缓存';
 
   @override
-  String get excel_rateSourceDefault => 'Default';
+  String get excel_rateSourceDefault => '默认';
 
   @override
-  String get excel_rateSourceManual => 'Manual';
+  String get excel_rateSourceManual => '手动';
 
   @override
-  String get error_unknown => 'Unknown error occurred';
+  String get error_unknown => '发生未知错误';
 
   @override
-  String get error_networkError => 'Network connection error';
+  String get error_networkError => '网络连接错误';
 
   @override
-  String get error_serverError => 'Server error';
+  String get error_serverError => '服务器错误';
 
   @override
-  String get error_storageError => 'Storage error';
+  String get error_storageError => '存储空间错误';
 
   @override
-  String get error_permissionDenied => 'Permission denied';
+  String get error_permissionDenied => '权限被拒绝';
 
   @override
-  String get error_fileNotFound => 'File not found';
+  String get error_fileNotFound => '文件不存在';
 
   @override
-  String get error_invalidData => 'Invalid data format';
+  String get error_invalidData => '数据格式错误';
 
   @override
-  String get error_exportNoData => 'No data to export';
+  String get error_exportNoData => '没有数据可导出';
 
   @override
-  String get error_invalidMonth => 'Month must be between 1 and 12';
+  String get error_invalidMonth => '月份必须介于 1 到 12 之间';
 
   @override
-  String get error_invalidYear => 'Year must be between 2000 and 2100';
+  String get error_invalidYear => '年份必须介于 2000 到 2100 之间';
 
   @override
-  String get error_excelGenerationFailed => 'Failed to generate Excel file';
+  String get error_excelGenerationFailed => '无法生成 Excel 文件';
 
   @override
-  String get error_zipFailed => 'Failed to compress file';
+  String get error_zipFailed => '无法压缩文件';
 
   @override
-  String get error_shareFailed => 'Share failed';
+  String get error_shareFailed => '分享失败';
 
   @override
-  String get error_cleanupFailed => 'Failed to clean up temp files';
+  String get error_cleanupFailed => '清理缓存文件失败';
 
   @override
   String get format_date => 'yyyy/MM/dd';
@@ -1827,236 +1816,233 @@ class SZhHans extends SZh {
   String get format_dateTime => 'yyyy/MM/dd HH:mm';
 
   @override
-  String get format_month => 'MMM yyyy';
+  String get format_month => 'yyyy年M月';
 
   @override
   String get format_currency => '#,##0.00';
 
   @override
-  String get currency_HKD => 'HKD';
+  String get currency_HKD => '港币';
 
   @override
-  String get currency_CNY => 'CNY';
+  String get currency_CNY => '人民币';
 
   @override
-  String get currency_USD => 'USD';
+  String get currency_USD => '美元';
 
   @override
-  String get datePicker_selectDate => 'Select Date';
+  String get datePicker_selectDate => '选择日期';
 
   @override
-  String get datePicker_selectMonth => 'Select Month';
+  String get datePicker_selectMonth => '选择月份';
 
   @override
-  String get settings_profile => 'Profile';
+  String get settings_profile => '个人资料';
 
   @override
-  String get settings_appearance => 'Appearance';
+  String get settings_appearance => '外观';
 
   @override
-  String get settings_reduceMotion => 'Reduce Motion';
+  String get settings_reduceMotion => '减少动画';
 
   @override
-  String get settings_reduceMotionDesc =>
-      'Reduce animations for motion sensitivity';
+  String get settings_reduceMotionDesc => '减少动态效果，适合晕动症患者';
 
   @override
-  String get settings_storageUsage => 'Storage Usage';
+  String get settings_storageUsage => '本地存储使用量';
 
   @override
-  String get settings_clearCacheDesc => 'Free up export and backup cache space';
+  String get settings_clearCacheDesc => '释放导出和备份缓存空间';
 
   @override
-  String get settings_cloudBackup => 'Cloud Backup';
+  String get settings_cloudBackup => '云端备份';
 
   @override
-  String get settings_googleDrive => 'Google Drive';
+  String get settings_googleDrive => 'Google 云端硬盘';
 
   @override
-  String get settings_lastBackupTime => 'Last Backup';
+  String get settings_lastBackupTime => '上次备份';
 
   @override
-  String get settings_backupNow => 'Backup Now';
+  String get settings_backupNow => '立即备份';
 
   @override
-  String get settings_backupNowDesc =>
-      'Backup database and receipts to Google Drive';
+  String get settings_backupNowDesc => '备份数据库和收据到 Google 云端硬盘';
 
   @override
-  String get settings_restoreBackupTitle => 'Restore Backup';
+  String get settings_restoreBackupTitle => '恢复备份';
 
   @override
-  String get settings_restoreBackupDesc => 'Restore from Google Drive';
+  String get settings_restoreBackupDesc => '从 Google 云端硬盘恢复';
 
   @override
-  String get settings_selectBackup => 'Select Backup';
+  String get settings_selectBackup => '选择备份';
 
   @override
-  String get settings_connect => 'Connect';
+  String get settings_connect => '连接';
 
   @override
-  String get settings_disconnect => 'Disconnect';
+  String get settings_disconnect => '断开';
 
   @override
-  String get settings_connected => 'Connected';
+  String get settings_connected => '已连接';
 
   @override
-  String get settings_notConnected => 'Not connected';
+  String get settings_notConnected => '尚未连接';
 
   @override
-  String get settings_languageSystem => 'Follow System';
+  String get settings_languageSystem => '跟随系统';
 
   @override
-  String get settings_selectTheme => 'Select Theme';
+  String get settings_selectTheme => '选择主题';
 
   @override
-  String get settings_editName => 'Edit Name';
+  String get settings_editName => '编辑姓名';
 
   @override
-  String get settings_nameLabel => 'Name';
+  String get settings_nameLabel => '姓名';
 
   @override
-  String get settings_nameHint => 'Used for expense report title';
+  String get settings_nameHint => '用于报销单标题';
 
   @override
-  String get settings_saved => 'Saved';
+  String get settings_saved => '已保存';
 
   @override
   String settings_cleanupFailed(String message) {
-    return 'Cleanup failed: $message';
+    return '清理失败: $message';
   }
 
   @override
   String settings_cleanedFiles(int count) {
-    return 'Cleaned $count temp files';
+    return '已清理 $count 个缓存文件';
   }
 
   @override
-  String get settings_backupToCloud => 'Backup to Cloud';
+  String get settings_backupToCloud => '备份到云端';
 
   @override
   String get settings_backupConfirmMessage =>
-      'This will backup all expenses and receipts to Google Drive.\n\nContinue?';
+      '这将备份所有支出记录和收据图片到 Google 云端硬盘。\n\n继续？';
 
   @override
-  String get settings_confirmRestoreTitle => 'Confirm Restore';
+  String get settings_confirmRestoreTitle => '确认恢复';
 
   @override
   String settings_confirmRestoreDesc(String fileName) {
-    return 'This will replace all current data with \"$fileName\".\n\nThis cannot be undone. Continue?';
+    return '这将使用「$fileName」替换当前所有数据。\n\n此操作无法恢复，确定要继续吗？';
   }
 
   @override
-  String get settings_disconnectTitle => 'Disconnect Google Account';
+  String get settings_disconnectTitle => '断开 Google 账号';
 
   @override
-  String get settings_disconnectConfirm =>
-      'Cloud backup will be unavailable after disconnecting.\n\nDisconnect?';
+  String get settings_disconnectConfirm => '断开后将无法使用云端备份功能。\n\n确定要断开吗？';
 
   @override
   String settings_connectFailed(String message) {
-    return 'Connection failed: $message';
+    return '连接失败: $message';
   }
 
   @override
   String settings_disconnectFailed(String message) {
-    return 'Disconnect failed: $message';
+    return '断开失败: $message';
   }
 
   @override
-  String get settings_googleConnected => 'Google account connected';
+  String get settings_googleConnected => '已连接 Google 账号';
 
   @override
-  String get settings_googleDisconnected => 'Google account disconnected';
+  String get settings_googleDisconnected => '已断开 Google 账号';
 
   @override
-  String get category_label => 'Category (Optional)';
+  String get category_label => '分类（选填）';
 
   @override
-  String get category_meals => 'Meals';
+  String get category_meals => '餐饮';
 
   @override
-  String get category_transport => 'Transport';
+  String get category_transport => '交通';
 
   @override
-  String get category_accommodation => 'Accommodation';
+  String get category_accommodation => '住宿';
 
   @override
-  String get category_officeSupplies => 'Office Supplies';
+  String get category_officeSupplies => '办公用品';
 
   @override
-  String get category_communication => 'Communication';
+  String get category_communication => '通讯';
 
   @override
-  String get category_entertainment => 'Entertainment';
+  String get category_entertainment => '娱乐';
 
   @override
-  String get category_medical => 'Medical';
+  String get category_medical => '医疗';
 
   @override
-  String get category_other => 'Other';
+  String get category_other => '其他';
 
   @override
-  String get category_statistics => 'Category Statistics';
+  String get category_statistics => '分类统计';
 
   @override
-  String get category_uncategorized => 'Uncategorized';
+  String get category_uncategorized => '未分类';
 
   @override
-  String get excel_header_category => 'Category';
+  String get excel_header_category => '分类';
 
   @override
-  String get semantic_category_prefix => 'Category';
+  String get semantic_category_prefix => '分类';
 
   @override
   String semantic_expenseItem(String description) {
-    return 'Expense item: $description';
+    return '支出项目：$description';
   }
 
   @override
   String semantic_amount(String amount) {
-    return 'Amount: $amount';
+    return '金额：$amount';
   }
 
   @override
   String semantic_originalAmount(String amount) {
-    return 'Original amount: $amount';
+    return '原始金额：$amount';
   }
 
   @override
   String semantic_date(String date) {
-    return 'Date: $date';
+    return '日期：$date';
   }
 
   @override
   String semantic_rateSource(String source) {
-    return 'Rate source: $source';
+    return '汇率来源：$source';
   }
 
   @override
-  String get semantic_hasReceipt => 'Has receipt image';
+  String get semantic_hasReceipt => '有收据图片';
 
   @override
-  String get semantic_tapForDetails => 'Tap to view details';
+  String get semantic_tapForDetails => '点击查看详情';
 
   @override
-  String get semantic_swipeToDelete => 'Swipe left to delete';
+  String get semantic_swipeToDelete => '向左滑动删除';
 
   @override
-  String get validation_amountRequired => 'Please enter an amount';
+  String get validation_amountRequired => '请输入金额';
 
   @override
   String validation_amountTooSmall(num min) {
-    return 'Amount cannot be less than $min';
+    return '金额不能小于 $min';
   }
 
   @override
   String validation_amountTooLarge(num max) {
-    return 'Amount cannot exceed $max';
+    return '金额不能大于 $max';
   }
 
   @override
-  String get validation_exchangeRateLabel => 'Exchange Rate';
+  String get validation_exchangeRateLabel => '汇率';
 
   @override
   String validation_exchangeRateHint(String currency) {
@@ -2064,9 +2050,8 @@ class SZhHans extends SZh {
   }
 
   @override
-  String get validation_exchangeRateRequired => 'Please enter exchange rate';
+  String get validation_exchangeRateRequired => '请输入汇率';
 
   @override
-  String get validation_exchangeRateInvalid =>
-      'Please enter a valid exchange rate';
+  String get validation_exchangeRateInvalid => '请输入有效汇率';
 }

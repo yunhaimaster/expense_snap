@@ -2,29 +2,29 @@
   "@@locale": "ko",
   "@@context": "ExpenseSnap Localization",
   "appTitle": "Expense Snap",
-  "common_save": "Save",
-  "common_cancel": "Cancel",
-  "common_delete": "Delete",
-  "common_edit": "Edit",
-  "common_retry": "Retry",
-  "common_confirm": "Confirm",
-  "common_back": "Back",
-  "common_skip": "Skip",
-  "common_next": "Next",
-  "common_done": "Done",
-  "common_close": "Close",
-  "common_restore": "Restore",
-  "common_clear": "Clear",
-  "common_share": "Share",
-  "common_loading": "Loading...",
-  "common_saving": "Saving...",
-  "common_processing": "Processing...",
-  "nav_home": "Home",
-  "nav_export": "Export",
-  "nav_settings": "Settings",
-  "home_addExpense": "Add Expense",
-  "home_deleteSuccess": "Expense deleted",
-  "home_deleteFailed": "Delete failed: {message}",
+  "common_save": "저장",
+  "common_cancel": "취소",
+  "common_delete": "삭제",
+  "common_edit": "편집",
+  "common_retry": "재시도",
+  "common_confirm": "확인",
+  "common_back": "뒤로",
+  "common_skip": "건너뛰기",
+  "common_next": "다음",
+  "common_done": "완료",
+  "common_close": "닫기",
+  "common_restore": "복원",
+  "common_clear": "지우기",
+  "common_share": "공유",
+  "common_loading": "로딩 중...",
+  "common_saving": "저장 중...",
+  "common_processing": "처리 중...",
+  "nav_home": "홈",
+  "nav_export": "내보내기",
+  "nav_settings": "설정",
+  "home_addExpense": "지출 추가",
+  "home_deleteSuccess": "지출이 삭제되었습니다",
+  "home_deleteFailed": "삭제 실패: {message}",
   "@home_deleteFailed": {
     "placeholders": {
       "message": {
@@ -32,44 +32,44 @@
       }
     }
   },
-  "home_undo": "Undo",
-  "showcase_addExpenseTitle": "Add Expense",
-  "showcase_addExpenseDesc": "Tap here to take a photo and record your expense",
-  "showcase_swipeDeleteTitle": "Swipe to Delete",
-  "showcase_swipeDeleteDesc": "Swipe left to delete an expense",
-  "showcase_exportTitle": "Export Report",
-  "showcase_exportDesc": "Tap here to export Excel and receipts",
-  "addExpense_title": "Add Expense",
-  "addExpense_receiptImage": "Receipt Image",
-  "addExpense_camera": "Camera",
-  "addExpense_gallery": "Gallery",
-  "addExpense_amount": "Amount",
-  "addExpense_description": "Description",
-  "addExpense_descriptionHint": "Enter description...",
-  "addExpense_date": "Date",
-  "addExpense_currency": "Currency",
-  "addExpense_exchangeRate": "Exchange Rate",
-  "addExpense_manualInput": "Manual Input",
-  "addExpense_ocrProcessing": "Recognizing receipt...",
-  "addExpense_ocrSuccess": "Receipt content recognized",
-  "addExpense_ocrSuccessVerify": "Receipt content recognized, please verify",
-  "addExpense_success": "Expense added",
-  "addExpense_invalidAmount": "Please enter a valid amount",
-  "expenseDetail_title": "Expense Details",
-  "expenseDetail_editTitle": "Edit Expense",
-  "expenseDetail_amount": "Amount",
-  "expenseDetail_hkdAmount": "HKD Amount",
-  "expenseDetail_exchangeRate": "Exchange Rate",
-  "expenseDetail_description": "Description",
-  "expenseDetail_descriptionRequired": "Please enter a description",
-  "expenseDetail_date": "Date",
-  "expenseDetail_createdAt": "Created At",
-  "expenseDetail_replaceImage": "Replace Image",
-  "expenseDetail_imageLoadFailed": "Image failed to load",
-  "expenseDetail_noReceipt": "No receipt image",
-  "expenseDetail_cancelEdit": "Cancel Edit",
-  "expenseDetail_saved": "Saved",
-  "expenseDetail_saveFailed": "Save failed: {message}",
+  "home_undo": "실행 취소",
+  "showcase_addExpenseTitle": "지출 추가",
+  "showcase_addExpenseDesc": "여기를 탭하여 사진을 찍고 지출을 기록하세요",
+  "showcase_swipeDeleteTitle": "스와이프하여 삭제",
+  "showcase_swipeDeleteDesc": "왼쪽으로 스와이프하면 지출을 삭제할 수 있습니다",
+  "showcase_exportTitle": "보고서 내보내기",
+  "showcase_exportDesc": "여기를 탭하여 Excel과 영수증을 내보내세요",
+  "addExpense_title": "지출 추가",
+  "addExpense_receiptImage": "영수증 이미지",
+  "addExpense_camera": "카메라",
+  "addExpense_gallery": "갤러리",
+  "addExpense_amount": "금액",
+  "addExpense_description": "설명",
+  "addExpense_descriptionHint": "설명을 입력하세요...",
+  "addExpense_date": "날짜",
+  "addExpense_currency": "통화",
+  "addExpense_exchangeRate": "환율",
+  "addExpense_manualInput": "수동 입력",
+  "addExpense_ocrProcessing": "영수증 인식 중...",
+  "addExpense_ocrSuccess": "영수증 내용을 인식했습니다",
+  "addExpense_ocrSuccessVerify": "영수증 내용을 인식했습니다. 확인해 주세요",
+  "addExpense_success": "지출이 추가되었습니다",
+  "addExpense_invalidAmount": "유효한 금액을 입력하세요",
+  "expenseDetail_title": "지출 상세",
+  "expenseDetail_editTitle": "지출 편집",
+  "expenseDetail_amount": "금액",
+  "expenseDetail_hkdAmount": "HKD 금액",
+  "expenseDetail_exchangeRate": "환율",
+  "expenseDetail_description": "설명",
+  "expenseDetail_descriptionRequired": "설명을 입력하세요",
+  "expenseDetail_date": "날짜",
+  "expenseDetail_createdAt": "생성일",
+  "expenseDetail_replaceImage": "이미지 변경",
+  "expenseDetail_imageLoadFailed": "이미지 로드 실패",
+  "expenseDetail_noReceipt": "영수증 이미지 없음",
+  "expenseDetail_cancelEdit": "편집 취소",
+  "expenseDetail_saved": "저장되었습니다",
+  "expenseDetail_saveFailed": "저장 실패: {message}",
   "@expenseDetail_saveFailed": {
     "placeholders": {
       "message": {
@@ -77,8 +77,8 @@
       }
     }
   },
-  "expenseDetail_deleted": "Deleted",
-  "expenseDetail_deleteFailed": "Delete failed: {message}",
+  "expenseDetail_deleted": "삭제되었습니다",
+  "expenseDetail_deleteFailed": "삭제 실패: {message}",
   "@expenseDetail_deleteFailed": {
     "placeholders": {
       "message": {
@@ -86,11 +86,11 @@
       }
     }
   },
-  "expenseDetail_confirmDelete": "Confirm Delete",
-  "expenseDetail_confirmDeleteMessage": "Are you sure you want to delete this expense?\nYou can restore it from Deleted Items.",
-  "expenseDetail_expenseNotFound": "Expense not found",
-  "expenseDetail_imageReplaceSuccess": "Image replaced",
-  "expenseDetail_imageReplaceFailed": "Replace image failed: {message}",
+  "expenseDetail_confirmDelete": "삭제 확인",
+  "expenseDetail_confirmDeleteMessage": "이 지출을 삭제하시겠습니까?\n삭제된 항목에서 복원할 수 있습니다.",
+  "expenseDetail_expenseNotFound": "지출을 찾을 수 없습니다",
+  "expenseDetail_imageReplaceSuccess": "이미지가 변경되었습니다",
+  "expenseDetail_imageReplaceFailed": "이미지 변경 실패: {message}",
   "@expenseDetail_imageReplaceFailed": {
     "placeholders": {
       "message": {
@@ -98,21 +98,21 @@
       }
     }
   },
-  "expenseDetail_selectFromGallery": "Select from Gallery",
-  "rateSource_auto": "Live Rate",
-  "rateSource_offline": "Cached Rate",
-  "rateSource_default": "Default Rate",
-  "rateSource_manual": "Manual Input",
-  "rateSource_auto_short": "Live",
-  "rateSource_offline_short": "Cached",
-  "rateSource_default_short": "Default",
-  "rateSource_manual_short": "Manual",
-  "monthSummary_totalExpense": "Total Expense",
-  "monthSummary_count": "Count",
-  "monthSummary_countSuffix": "",
-  "monthSummary_previousMonth": "Previous Month",
-  "monthSummary_nextMonth": "Next Month",
-  "monthSummary_semanticLabel": "{month} summary. Total expense: HKD {amount}. {count} expenses.",
+  "expenseDetail_selectFromGallery": "갤러리에서 선택",
+  "rateSource_auto": "실시간 환율",
+  "rateSource_offline": "캐시된 환율",
+  "rateSource_default": "기본 환율",
+  "rateSource_manual": "수동 입력",
+  "rateSource_auto_short": "실시간",
+  "rateSource_offline_short": "캐시",
+  "rateSource_default_short": "기본",
+  "rateSource_manual_short": "수동",
+  "monthSummary_totalExpense": "총 지출",
+  "monthSummary_count": "건수",
+  "monthSummary_countSuffix": "건",
+  "monthSummary_previousMonth": "이전 달",
+  "monthSummary_nextMonth": "다음 달",
+  "monthSummary_semanticLabel": "{month} 요약. 총 지출: HKD {amount}. {count}건의 지출.",
   "@monthSummary_semanticLabel": {
     "placeholders": {
       "month": {
@@ -126,13 +126,13 @@
       }
     }
   },
-  "monthSummary_isLatestMonth": "Already at latest month",
-  "export_title": "Export Report",
-  "export_preview": "Preview",
-  "export_expenseCount": "Expense Count",
-  "export_totalHkd": "HKD Total",
-  "export_receiptCount": "Receipt Images",
-  "export_countUnit": "{count}",
+  "monthSummary_isLatestMonth": "최신 월입니다",
+  "export_title": "보고서 내보내기",
+  "export_preview": "미리보기",
+  "export_expenseCount": "지출 건수",
+  "export_totalHkd": "HKD 합계",
+  "export_receiptCount": "영수증 이미지",
+  "export_countUnit": "{count}건",
   "@export_countUnit": {
     "placeholders": {
       "count": {
@@ -140,7 +140,7 @@
       }
     }
   },
-  "export_imageUnit": "{count}",
+  "export_imageUnit": "{count}장",
   "@export_imageUnit": {
     "placeholders": {
       "count": {
@@ -148,9 +148,9 @@
       }
     }
   },
-  "export_excelWithReceipts": "Export Excel + Receipts",
-  "export_noData": "No Data",
-  "export_noDataMessage": "No expenses recorded in {year}/{month}",
+  "export_excelWithReceipts": "Excel + 영수증 내보내기",
+  "export_noData": "데이터 없음",
+  "export_noDataMessage": "{year}년 {month}월 지출 기록이 없습니다",
   "@export_noDataMessage": {
     "placeholders": {
       "year": {
@@ -161,7 +161,7 @@
       }
     }
   },
-  "export_yearMonth": "{year}/{month}",
+  "export_yearMonth": "{year}년 {month}월",
   "@export_yearMonth": {
     "placeholders": {
       "year": {
@@ -172,13 +172,13 @@
       }
     }
   },
-  "export_hint": "Exported Excel contains complete expense details",
-  "export_packing": "Packing...",
-  "export_generatingExcel": "Generating Excel...",
-  "export_packingReceipts": "Packing receipt images...",
-  "export_compressing": "Compressing...",
-  "export_preparingShare": "Preparing to share...",
-  "export_success": "Export successful ({size})",
+  "export_hint": "내보낸 Excel에는 전체 지출 내역이 포함됩니다",
+  "export_packing": "패키징 중...",
+  "export_generatingExcel": "Excel 생성 중...",
+  "export_packingReceipts": "영수증 이미지 패키징 중...",
+  "export_compressing": "압축 중...",
+  "export_preparingShare": "공유 준비 중...",
+  "export_success": "내보내기 성공 ({size})",
   "@export_success": {
     "placeholders": {
       "size": {
@@ -186,7 +186,7 @@
       }
     }
   },
-  "export_failed": "Export failed: {message}",
+  "export_failed": "내보내기 실패: {message}",
   "@export_failed": {
     "placeholders": {
       "message": {
@@ -194,7 +194,7 @@
       }
     }
   },
-  "export_sheetName": "{year}/{month} Expense Report",
+  "export_sheetName": "{year}년 {month}월 경비 보고서",
   "@export_sheetName": {
     "placeholders": {
       "year": {
@@ -205,22 +205,22 @@
       }
     }
   },
-  "export_shareSubject": "Expense Snap Report",
-  "export_headerIndex": "No.",
-  "export_headerDate": "Date",
-  "export_headerDescription": "Description",
-  "export_headerOriginalAmount": "Original Amount",
-  "export_headerOriginalCurrency": "Currency",
-  "export_headerExchangeRate": "Exchange Rate",
-  "export_headerRateSource": "Rate Source",
-  "export_headerHkdAmount": "HKD Amount",
-  "export_headerReceiptFile": "Receipt",
-  "export_headerTotal": "Total",
-  "export_rateSourceAuto": "Auto",
-  "export_rateSourceOffline": "Offline Cache",
-  "export_rateSourceDefault": "Default",
-  "export_rateSourceManual": "Manual",
-  "export_fileName": "Expense_Report_{year}_{month}",
+  "export_shareSubject": "Expense Snap 보고서",
+  "export_headerIndex": "번호",
+  "export_headerDate": "날짜",
+  "export_headerDescription": "설명",
+  "export_headerOriginalAmount": "원래 금액",
+  "export_headerOriginalCurrency": "통화",
+  "export_headerExchangeRate": "환율",
+  "export_headerRateSource": "환율 출처",
+  "export_headerHkdAmount": "HKD 금액",
+  "export_headerReceiptFile": "영수증",
+  "export_headerTotal": "합계",
+  "export_rateSourceAuto": "자동",
+  "export_rateSourceOffline": "오프라인 캐시",
+  "export_rateSourceDefault": "기본",
+  "export_rateSourceManual": "수동",
+  "export_fileName": "경비보고서_{year}년{month}월",
   "@export_fileName": {
     "placeholders": {
       "year": {
@@ -231,33 +231,33 @@
       }
     }
   },
-  "settings_title": "Settings",
-  "settings_general": "General",
-  "settings_userName": "Username",
-  "settings_userNameHint": "Used for report title",
-  "settings_language": "Language",
-  "settings_theme": "Theme",
-  "settings_themeLight": "Light",
-  "settings_themeDark": "Dark",
-  "settings_themeSystem": "System",
-  "settings_data": "Data Management",
-  "settings_backup": "Cloud Backup",
-  "settings_backupDesc": "Backup to Google Drive",
-  "settings_restore": "Restore Backup",
-  "settings_restoreDesc": "Restore from Google Drive",
-  "settings_deletedItems": "Deleted Items",
-  "settings_deletedItemsDesc": "View or restore deleted expenses",
-  "settings_clearCache": "Clear Temp Files",
-  "settings_about": "About",
-  "settings_version": "Version",
-  "settings_privacyPolicy": "Privacy Policy",
-  "settings_termsOfService": "Terms of Service",
-  "settings_feedback": "Feedback",
-  "legal_privacyContent": "Privacy Policy\n\nLast updated: January 2026\n\n1. Data Collection\nWe only collect data that you voluntarily enter, including expense records, receipt images, and personal settings.\n\n2. Data Storage\nAll data is stored locally on your device. If you choose to use the cloud backup feature, data will sync to your Google Drive account.\n\n3. Data Usage\nWe do not use your data for advertising or share it with third parties.\n\n4. Data Deletion\nYou can delete all data in the app at any time. Deleted items are kept for 30 days before permanent deletion.\n\n5. Contact\nFor any privacy-related questions, please contact us through the feedback feature in the app.",
-  "legal_termsContent": "Terms of Service\n\nLast updated: January 2026\n\n1. Service Description\nExpense Snap is a personal expense tracking app that helps you record and manage daily expenses.\n\n2. Terms of Use\nBy using this app, you agree to comply with these terms.\n\n3. Limitation of Liability\nThis app is provided \"as is\". We are not responsible for data loss or any indirect damages.\n\n4. Intellectual Property\nAll content and features of the app are protected by copyright.\n\n5. Terms Modification\nWe reserve the right to modify these terms at any time. Continued use indicates acceptance of the modified terms.",
-  "settings_signInGoogle": "Sign in with Google",
-  "settings_signOutGoogle": "Sign out",
-  "settings_signedInAs": "Signed in as: {email}",
+  "settings_title": "설정",
+  "settings_general": "일반",
+  "settings_userName": "사용자 이름",
+  "settings_userNameHint": "보고서 제목에 사용됩니다",
+  "settings_language": "언어",
+  "settings_theme": "테마",
+  "settings_themeLight": "라이트",
+  "settings_themeDark": "다크",
+  "settings_themeSystem": "시스템 설정",
+  "settings_data": "데이터 관리",
+  "settings_backup": "클라우드 백업",
+  "settings_backupDesc": "Google 드라이브에 백업",
+  "settings_restore": "백업 복원",
+  "settings_restoreDesc": "Google 드라이브에서 복원",
+  "settings_deletedItems": "삭제된 항목",
+  "settings_deletedItemsDesc": "삭제된 지출 보기 또는 복원",
+  "settings_clearCache": "임시 파일 삭제",
+  "settings_about": "정보",
+  "settings_version": "버전",
+  "settings_privacyPolicy": "개인정보 보호정책",
+  "settings_termsOfService": "서비스 약관",
+  "settings_feedback": "피드백",
+  "legal_privacyContent": "개인정보 보호정책\n\n최종 업데이트: 2026년 1월\n\n1. 데이터 수집\n본 앱은 사용자가 입력한 지출 기록, 영수증 이미지, 개인 설정만 수집합니다.\n\n2. 데이터 저장\n모든 데이터는 사용자의 기기에 로컬로 저장됩니다. 클라우드 백업 기능을 사용하는 경우 데이터는 사용자의 Google 드라이브 계정에 동기화됩니다.\n\n3. 데이터 사용\n본 앱은 사용자의 데이터를 광고에 사용하거나 제3자와 공유하지 않습니다.\n\n4. 데이터 삭제\n앱 내의 모든 데이터는 언제든지 삭제할 수 있습니다. 삭제된 항목은 30일 후 영구 삭제됩니다.\n\n5. 문의\n개인정보 관련 질문은 앱 내 피드백 기능을 통해 문의해 주세요.",
+  "legal_termsContent": "서비스 약관\n\n최종 업데이트: 2026년 1월\n\n1. 서비스 설명\nExpense Snap은 일상 지출을 기록하고 관리할 수 있는 개인 경비 추적 앱입니다.\n\n2. 이용 약관\n본 앱을 사용함으로써 이 약관에 동의하는 것으로 간주됩니다.\n\n3. 책임 제한\n본 앱은 \"있는 그대로\" 제공됩니다. 데이터 손실이나 기타 간접적 손해에 대해 당사는 책임지지 않습니다.\n\n4. 지적 재산권\n본 앱의 모든 콘텐츠와 기능은 저작권으로 보호됩니다.\n\n5. 약관 변경\n당사는 언제든지 이 약관을 변경할 권리가 있습니다. 계속 사용하면 변경된 약관에 동의하는 것으로 간주됩니다.",
+  "settings_signInGoogle": "Google로 로그인",
+  "settings_signOutGoogle": "로그아웃",
+  "settings_signedInAs": "로그인됨: {email}",
   "@settings_signedInAs": {
     "placeholders": {
       "email": {
@@ -265,8 +265,8 @@
       }
     }
   },
-  "settings_backupSuccess": "Backup successful",
-  "settings_backupFailed": "Backup failed: {message}",
+  "settings_backupSuccess": "백업 성공",
+  "settings_backupFailed": "백업 실패: {message}",
   "@settings_backupFailed": {
     "placeholders": {
       "message": {
@@ -274,8 +274,8 @@
       }
     }
   },
-  "settings_restoreSuccess": "Restore successful",
-  "settings_restoreFailed": "Restore failed: {message}",
+  "settings_restoreSuccess": "복원 성공",
+  "settings_restoreFailed": "복원 실패: {message}",
   "@settings_restoreFailed": {
     "placeholders": {
       "message": {
@@ -283,11 +283,11 @@
       }
     }
   },
-  "settings_cacheCleared": "Cache cleared",
-  "settings_noBackupFound": "No backup found",
-  "settings_confirmRestore": "Confirm Restore",
-  "settings_confirmRestoreMessage": "Restore will overwrite current data. Continue?",
-  "settings_lastBackup": "Last backup: {date}",
+  "settings_cacheCleared": "캐시가 삭제되었습니다",
+  "settings_noBackupFound": "백업을 찾을 수 없습니다",
+  "settings_confirmRestore": "복원 확인",
+  "settings_confirmRestoreMessage": "복원하면 현재 데이터가 덮어씌워집니다. 계속하시겠습니까?",
+  "settings_lastBackup": "마지막 백업: {date}",
   "@settings_lastBackup": {
     "placeholders": {
       "date": {
@@ -295,9 +295,9 @@
       }
     }
   },
-  "deletedItems_title": "Deleted Items",
-  "deletedItems_clearAll": "Clear All",
-  "deletedItems_daysRemaining": "{days} days until auto-delete",
+  "deletedItems_title": "삭제된 항목",
+  "deletedItems_clearAll": "모두 지우기",
+  "deletedItems_daysRemaining": "{days}일 후 자동 삭제",
   "@deletedItems_daysRemaining": {
     "placeholders": {
       "days": {
@@ -305,9 +305,9 @@
       }
     }
   },
-  "deletedItems_soonDeleted": "Will be deleted soon",
-  "deletedItems_restored": "Restored",
-  "deletedItems_restoreFailed": "Restore failed: {message}",
+  "deletedItems_soonDeleted": "곧 삭제됩니다",
+  "deletedItems_restored": "복원되었습니다",
+  "deletedItems_restoreFailed": "복원 실패: {message}",
   "@deletedItems_restoreFailed": {
     "placeholders": {
       "message": {
@@ -315,10 +315,10 @@
       }
     }
   },
-  "deletedItems_permanentDelete": "Delete Permanently",
-  "deletedItems_permanentDeleteConfirm": "This cannot be undone. Delete permanently?",
-  "deletedItems_permanentDeleted": "Permanently deleted",
-  "deletedItems_permanentDeleteFailed": "Delete failed: {message}",
+  "deletedItems_permanentDelete": "영구 삭제",
+  "deletedItems_permanentDeleteConfirm": "이 작업은 취소할 수 없습니다. 영구 삭제하시겠습니까?",
+  "deletedItems_permanentDeleted": "영구 삭제되었습니다",
+  "deletedItems_permanentDeleteFailed": "삭제 실패: {message}",
   "@deletedItems_permanentDeleteFailed": {
     "placeholders": {
       "message": {
@@ -326,8 +326,8 @@
       }
     }
   },
-  "deletedItems_clearAllTitle": "Clear All",
-  "deletedItems_clearAllConfirm": "Permanently delete all {count} items?\nThis cannot be undone.",
+  "deletedItems_clearAllTitle": "모두 지우기",
+  "deletedItems_clearAllConfirm": "{count}개 항목을 모두 영구 삭제하시겠습니까?\n이 작업은 취소할 수 없습니다.",
   "@deletedItems_clearAllConfirm": {
     "placeholders": {
       "count": {
@@ -335,8 +335,8 @@
       }
     }
   },
-  "deletedItems_clearAllButton": "Delete All",
-  "deletedItems_clearedCount": "Deleted {count} items",
+  "deletedItems_clearAllButton": "모두 삭제",
+  "deletedItems_clearedCount": "{count}개 항목이 삭제되었습니다",
   "@deletedItems_clearedCount": {
     "placeholders": {
       "count": {
@@ -344,7 +344,7 @@
       }
     }
   },
-  "deletedItems_loadFailed": "Load failed: {message}",
+  "deletedItems_loadFailed": "로드 실패: {message}",
   "@deletedItems_loadFailed": {
     "placeholders": {
       "message": {
@@ -352,31 +352,31 @@
       }
     }
   },
-  "onboarding_skip": "Skip",
-  "onboarding_next": "Next",
-  "onboarding_start": "Get Started",
-  "onboarding_page1Title": "Snap Your Receipts",
-  "onboarding_page1Desc": "Take photos of receipts instantly\nNever lose a receipt again",
-  "onboarding_page2Title": "Multi-Currency Support",
-  "onboarding_page2Desc": "Supports HKD, CNY, USD\nAuto-fetches live exchange rates",
-  "onboarding_page3Title": "One-Click Export",
-  "onboarding_page3Desc": "Export Excel + receipt images\nEasy expense reporting",
-  "onboarding_nameLabel": "Your Name (Optional)",
-  "onboarding_nameHint": "Used for report title",
-  "onboarding_nameTooLong": "Name cannot exceed 50 characters",
-  "connectivity_offlineMode": "Offline Mode - Exchange rates may be outdated",
-  "dialog_duplicateTitle": "Possible Duplicate",
-  "dialog_duplicateMessage": "Similar expense found:",
-  "dialog_duplicateConfirm": "Continue adding?",
-  "dialog_duplicateContinue": "Add Anyway",
-  "dialog_largeAmountTitle": "Large Amount",
-  "dialog_largeAmountMessage": "You are recording a large expense:",
-  "dialog_largeAmountConfirm": "Is the amount correct?",
-  "dialog_largeAmountBack": "Go Back",
-  "dialog_largeAmountOk": "Confirm",
-  "dialog_monthEndTitle": "Month End Reminder",
-  "dialog_monthEndMessage": "Month is ending soon!",
-  "dialog_monthEndExpenseCount": "You have {count} expenses this month",
+  "onboarding_skip": "건너뛰기",
+  "onboarding_next": "다음",
+  "onboarding_start": "시작하기",
+  "onboarding_page1Title": "영수증 촬영",
+  "onboarding_page1Desc": "영수증을 바로 촬영하여 지출을 기록하세요\n영수증을 다시는 잃어버리지 마세요",
+  "onboarding_page2Title": "다중 통화 지원",
+  "onboarding_page2Desc": "HKD, CNY, USD 지원\n실시간 환율 자동 적용",
+  "onboarding_page3Title": "원클릭 내보내기",
+  "onboarding_page3Desc": "Excel + 영수증 이미지 내보내기\n간편한 경비 정산",
+  "onboarding_nameLabel": "이름 (선택사항)",
+  "onboarding_nameHint": "보고서 제목에 사용됩니다",
+  "onboarding_nameTooLong": "이름은 50자를 초과할 수 없습니다",
+  "connectivity_offlineMode": "오프라인 모드 - 환율이 최신이 아닐 수 있습니다",
+  "dialog_duplicateTitle": "중복 가능성",
+  "dialog_duplicateMessage": "유사한 지출이 발견되었습니다:",
+  "dialog_duplicateConfirm": "계속 추가하시겠습니까?",
+  "dialog_duplicateContinue": "계속 추가",
+  "dialog_largeAmountTitle": "대금액 확인",
+  "dialog_largeAmountMessage": "대금액 지출을 기록하려고 합니다:",
+  "dialog_largeAmountConfirm": "금액이 맞습니까?",
+  "dialog_largeAmountBack": "뒤로",
+  "dialog_largeAmountOk": "확인",
+  "dialog_monthEndTitle": "월말 알림",
+  "dialog_monthEndMessage": "이번 달이 곧 끝납니다!",
+  "dialog_monthEndExpenseCount": "이번 달 {count}건의 지출이 있습니다",
   "@dialog_monthEndExpenseCount": {
     "placeholders": {
       "count": {
@@ -384,29 +384,29 @@
       }
     }
   },
-  "dialog_monthEndSuggestion": "Consider exporting your expense report.",
-  "dialog_later": "Later",
-  "dialog_goExport": "Export Now",
-  "emptyState_noExpenses": "No Expenses",
-  "emptyState_noExpensesHint": "Tap the button below to add your first expense",
-  "emptyState_noDeletedItems": "No Deleted Items",
-  "emptyState_noDeletedItemsHint": "Deleted expenses are kept for 30 days",
-  "emptyState_error": "Load Failed",
-  "emptyState_offline": "No Internet Connection",
-  "emptyState_offlineHint": "Please check your network settings",
-  "emptyState_exportSuccess": "Export Successful",
-  "emptyState_exportSuccessHint": "File is ready",
-  "excel_header_index": "No.",
-  "excel_header_date": "Date",
-  "excel_header_description": "Description",
-  "excel_header_originalAmount": "Original Amount",
-  "excel_header_originalCurrency": "Currency",
-  "excel_header_exchangeRate": "Exchange Rate",
-  "excel_header_rateSource": "Rate Source",
-  "excel_header_hkdAmount": "HKD Amount",
-  "excel_header_receiptFile": "Receipt File",
-  "excel_total": "Total",
-  "excel_sheetName": "Expenses_{year}_{month}",
+  "dialog_monthEndSuggestion": "경비 보고서를 내보내는 것을 권장합니다.",
+  "dialog_later": "나중에",
+  "dialog_goExport": "내보내기로 이동",
+  "emptyState_noExpenses": "지출 없음",
+  "emptyState_noExpensesHint": "아래 버튼을 탭하여 첫 번째 지출을 추가하세요",
+  "emptyState_noDeletedItems": "삭제된 항목 없음",
+  "emptyState_noDeletedItemsHint": "삭제된 지출은 30일간 보관됩니다",
+  "emptyState_error": "로드 실패",
+  "emptyState_offline": "인터넷 연결 없음",
+  "emptyState_offlineHint": "네트워크 설정을 확인하세요",
+  "emptyState_exportSuccess": "내보내기 성공",
+  "emptyState_exportSuccessHint": "파일이 준비되었습니다",
+  "excel_header_index": "번호",
+  "excel_header_date": "날짜",
+  "excel_header_description": "설명",
+  "excel_header_originalAmount": "원래 금액",
+  "excel_header_originalCurrency": "통화",
+  "excel_header_exchangeRate": "환율",
+  "excel_header_rateSource": "환율 출처",
+  "excel_header_hkdAmount": "HKD 금액",
+  "excel_header_receiptFile": "영수증 파일",
+  "excel_total": "합계",
+  "excel_sheetName": "지출_{year}년{month}월",
   "@excel_sheetName": {
     "placeholders": {
       "year": {
@@ -417,7 +417,7 @@
       }
     }
   },
-  "excel_fileName": "Expenses_{year}_{month}",
+  "excel_fileName": "지출_{year}년{month}월",
   "@excel_fileName": {
     "placeholders": {
       "year": {
@@ -428,59 +428,59 @@
       }
     }
   },
-  "excel_shareSubject": "Expense Snap Report",
-  "excel_rateSourceAuto": "Auto",
-  "excel_rateSourceOffline": "Cached",
-  "excel_rateSourceDefault": "Default",
-  "excel_rateSourceManual": "Manual",
-  "error_unknown": "Unknown error occurred",
-  "error_networkError": "Network connection error",
-  "error_serverError": "Server error",
-  "error_storageError": "Storage error",
-  "error_permissionDenied": "Permission denied",
-  "error_fileNotFound": "File not found",
-  "error_invalidData": "Invalid data format",
-  "error_exportNoData": "No data to export",
-  "error_invalidMonth": "Month must be between 1 and 12",
-  "error_invalidYear": "Year must be between 2000 and 2100",
-  "error_excelGenerationFailed": "Failed to generate Excel file",
-  "error_zipFailed": "Failed to compress file",
-  "error_shareFailed": "Share failed",
-  "error_cleanupFailed": "Failed to clean up temp files",
+  "excel_shareSubject": "Expense Snap 보고서",
+  "excel_rateSourceAuto": "자동",
+  "excel_rateSourceOffline": "캐시",
+  "excel_rateSourceDefault": "기본",
+  "excel_rateSourceManual": "수동",
+  "error_unknown": "알 수 없는 오류가 발생했습니다",
+  "error_networkError": "네트워크 연결 오류",
+  "error_serverError": "서버 오류",
+  "error_storageError": "저장 공간 오류",
+  "error_permissionDenied": "권한이 거부되었습니다",
+  "error_fileNotFound": "파일을 찾을 수 없습니다",
+  "error_invalidData": "잘못된 데이터 형식",
+  "error_exportNoData": "내보낼 데이터가 없습니다",
+  "error_invalidMonth": "월은 1에서 12 사이여야 합니다",
+  "error_invalidYear": "연도는 2000에서 2100 사이여야 합니다",
+  "error_excelGenerationFailed": "Excel 파일 생성 실패",
+  "error_zipFailed": "파일 압축 실패",
+  "error_shareFailed": "공유 실패",
+  "error_cleanupFailed": "임시 파일 삭제 실패",
   "format_date": "yyyy/MM/dd",
   "format_dateTime": "yyyy/MM/dd HH:mm",
-  "format_month": "MMM yyyy",
+  "format_month": "yyyy년 M월",
   "format_currency": "#,##0.00",
-  "currency_HKD": "HKD",
-  "currency_CNY": "CNY",
-  "currency_USD": "USD",
-  "datePicker_selectDate": "Select Date",
-  "datePicker_selectMonth": "Select Month",
-  "settings_profile": "Profile",
-  "settings_appearance": "Appearance",
-  "settings_reduceMotion": "Reduce Motion",
-  "settings_reduceMotionDesc": "Reduce animations for motion sensitivity",
-  "settings_storageUsage": "Storage Usage",
-  "settings_clearCacheDesc": "Free up export and backup cache space",
-  "settings_cloudBackup": "Cloud Backup",
-  "settings_googleDrive": "Google Drive",
-  "settings_lastBackupTime": "Last Backup",
-  "settings_backupNow": "Backup Now",
-  "settings_backupNowDesc": "Backup database and receipts to Google Drive",
-  "settings_restoreBackupTitle": "Restore Backup",
-  "settings_restoreBackupDesc": "Restore from Google Drive",
-  "settings_selectBackup": "Select Backup",
-  "settings_connect": "Connect",
-  "settings_disconnect": "Disconnect",
-  "settings_connected": "Connected",
-  "settings_notConnected": "Not connected",
-  "settings_languageSystem": "Follow System",
-  "settings_selectTheme": "Select Theme",
-  "settings_editName": "Edit Name",
-  "settings_nameLabel": "Name",
-  "settings_nameHint": "Used for expense report title",
-  "settings_saved": "Saved",
-  "settings_cleanupFailed": "Cleanup failed: {message}",
+  "currency_HKD": "홍콩 달러",
+  "currency_CNY": "위안",
+  "currency_USD": "미국 달러",
+  "datePicker_selectDate": "날짜 선택",
+  "datePicker_selectMonth": "월 선택",
+  "settings_profile": "프로필",
+  "settings_appearance": "외관",
+  "settings_reduceMotion": "모션 줄이기",
+  "settings_reduceMotionDesc": "움직임에 민감한 분들을 위해 애니메이션을 줄입니다",
+  "settings_storageUsage": "저장 공간 사용량",
+  "settings_clearCacheDesc": "내보내기 및 백업 캐시 공간 확보",
+  "settings_cloudBackup": "클라우드 백업",
+  "settings_googleDrive": "Google 드라이브",
+  "settings_lastBackupTime": "마지막 백업",
+  "settings_backupNow": "지금 백업",
+  "settings_backupNowDesc": "데이터베이스와 영수증을 Google 드라이브에 백업",
+  "settings_restoreBackupTitle": "백업 복원",
+  "settings_restoreBackupDesc": "Google 드라이브에서 복원",
+  "settings_selectBackup": "백업 선택",
+  "settings_connect": "연결",
+  "settings_disconnect": "연결 해제",
+  "settings_connected": "연결됨",
+  "settings_notConnected": "연결되지 않음",
+  "settings_languageSystem": "시스템 설정",
+  "settings_selectTheme": "테마 선택",
+  "settings_editName": "이름 편집",
+  "settings_nameLabel": "이름",
+  "settings_nameHint": "경비 보고서 제목에 사용됩니다",
+  "settings_saved": "저장되었습니다",
+  "settings_cleanupFailed": "정리 실패: {message}",
   "@settings_cleanupFailed": {
     "placeholders": {
       "message": {
@@ -488,7 +488,7 @@
       }
     }
   },
-  "settings_cleanedFiles": "Cleaned {count} temp files",
+  "settings_cleanedFiles": "{count}개의 임시 파일이 삭제되었습니다",
   "@settings_cleanedFiles": {
     "placeholders": {
       "count": {
@@ -496,10 +496,10 @@
       }
     }
   },
-  "settings_backupToCloud": "Backup to Cloud",
-  "settings_backupConfirmMessage": "This will backup all expenses and receipts to Google Drive.\n\nContinue?",
-  "settings_confirmRestoreTitle": "Confirm Restore",
-  "settings_confirmRestoreDesc": "This will replace all current data with \"{fileName}\".\n\nThis cannot be undone. Continue?",
+  "settings_backupToCloud": "클라우드에 백업",
+  "settings_backupConfirmMessage": "모든 지출과 영수증을 Google 드라이브에 백업합니다.\n\n계속하시겠습니까?",
+  "settings_confirmRestoreTitle": "복원 확인",
+  "settings_confirmRestoreDesc": "현재 모든 데이터가 \"{fileName}\"(으)로 교체됩니다.\n\n이 작업은 취소할 수 없습니다. 계속하시겠습니까?",
   "@settings_confirmRestoreDesc": {
     "placeholders": {
       "fileName": {
@@ -507,9 +507,9 @@
       }
     }
   },
-  "settings_disconnectTitle": "Disconnect Google Account",
-  "settings_disconnectConfirm": "Cloud backup will be unavailable after disconnecting.\n\nDisconnect?",
-  "settings_connectFailed": "Connection failed: {message}",
+  "settings_disconnectTitle": "Google 계정 연결 해제",
+  "settings_disconnectConfirm": "연결 해제 후 클라우드 백업을 사용할 수 없습니다.\n\n연결을 해제하시겠습니까?",
+  "settings_connectFailed": "연결 실패: {message}",
   "@settings_connectFailed": {
     "placeholders": {
       "message": {
@@ -517,7 +517,7 @@
       }
     }
   },
-  "settings_disconnectFailed": "Disconnect failed: {message}",
+  "settings_disconnectFailed": "연결 해제 실패: {message}",
   "@settings_disconnectFailed": {
     "placeholders": {
       "message": {
@@ -525,22 +525,22 @@
       }
     }
   },
-  "settings_googleConnected": "Google account connected",
-  "settings_googleDisconnected": "Google account disconnected",
-  "category_label": "Category (Optional)",
-  "category_meals": "Meals",
-  "category_transport": "Transport",
-  "category_accommodation": "Accommodation",
-  "category_officeSupplies": "Office Supplies",
-  "category_communication": "Communication",
-  "category_entertainment": "Entertainment",
-  "category_medical": "Medical",
-  "category_other": "Other",
-  "category_statistics": "Category Statistics",
-  "category_uncategorized": "Uncategorized",
-  "excel_header_category": "Category",
-  "semantic_category_prefix": "Category",
-  "semantic_expenseItem": "Expense item: {description}",
+  "settings_googleConnected": "Google 계정에 연결되었습니다",
+  "settings_googleDisconnected": "Google 계정 연결이 해제되었습니다",
+  "category_label": "카테고리 (선택사항)",
+  "category_meals": "식사",
+  "category_transport": "교통",
+  "category_accommodation": "숙박",
+  "category_officeSupplies": "사무용품",
+  "category_communication": "통신",
+  "category_entertainment": "오락",
+  "category_medical": "의료",
+  "category_other": "기타",
+  "category_statistics": "카테고리 통계",
+  "category_uncategorized": "미분류",
+  "excel_header_category": "카테고리",
+  "semantic_category_prefix": "카테고리",
+  "semantic_expenseItem": "지출 항목: {description}",
   "@semantic_expenseItem": {
     "placeholders": {
       "description": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "semantic_amount": "Amount: {amount}",
+  "semantic_amount": "금액: {amount}",
   "@semantic_amount": {
     "placeholders": {
       "amount": {
@@ -556,7 +556,7 @@
       }
     }
   },
-  "semantic_originalAmount": "Original amount: {amount}",
+  "semantic_originalAmount": "원래 금액: {amount}",
   "@semantic_originalAmount": {
     "placeholders": {
       "amount": {
@@ -564,7 +564,7 @@
       }
     }
   },
-  "semantic_date": "Date: {date}",
+  "semantic_date": "날짜: {date}",
   "@semantic_date": {
     "placeholders": {
       "date": {
@@ -572,7 +572,7 @@
       }
     }
   },
-  "semantic_rateSource": "Rate source: {source}",
+  "semantic_rateSource": "환율 출처: {source}",
   "@semantic_rateSource": {
     "placeholders": {
       "source": {
@@ -580,11 +580,11 @@
       }
     }
   },
-  "semantic_hasReceipt": "Has receipt image",
-  "semantic_tapForDetails": "Tap to view details",
-  "semantic_swipeToDelete": "Swipe left to delete",
-  "validation_amountRequired": "Please enter an amount",
-  "validation_amountTooSmall": "Amount cannot be less than {min}",
+  "semantic_hasReceipt": "영수증 이미지 있음",
+  "semantic_tapForDetails": "탭하여 상세 보기",
+  "semantic_swipeToDelete": "왼쪽으로 스와이프하여 삭제",
+  "validation_amountRequired": "금액을 입력하세요",
+  "validation_amountTooSmall": "금액은 {min} 이상이어야 합니다",
   "@validation_amountTooSmall": {
     "placeholders": {
       "min": {
@@ -592,7 +592,7 @@
       }
     }
   },
-  "validation_amountTooLarge": "Amount cannot exceed {max}",
+  "validation_amountTooLarge": "금액은 {max}를 초과할 수 없습니다",
   "@validation_amountTooLarge": {
     "placeholders": {
       "max": {
@@ -600,7 +600,7 @@
       }
     }
   },
-  "validation_exchangeRateLabel": "Exchange Rate",
+  "validation_exchangeRateLabel": "환율",
   "validation_exchangeRateHint": "1 {currency} = ? HKD",
   "@validation_exchangeRateHint": {
     "placeholders": {
@@ -609,6 +609,6 @@
       }
     }
   },
-  "validation_exchangeRateRequired": "Please enter exchange rate",
-  "validation_exchangeRateInvalid": "Please enter a valid exchange rate"
+  "validation_exchangeRateRequired": "환율을 입력하세요",
+  "validation_exchangeRateInvalid": "유효한 환율을 입력하세요"
 }

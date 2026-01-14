@@ -2,29 +2,29 @@
   "@@locale": "es",
   "@@context": "ExpenseSnap Localization",
   "appTitle": "Expense Snap",
-  "common_save": "Save",
-  "common_cancel": "Cancel",
-  "common_delete": "Delete",
-  "common_edit": "Edit",
-  "common_retry": "Retry",
-  "common_confirm": "Confirm",
-  "common_back": "Back",
-  "common_skip": "Skip",
-  "common_next": "Next",
-  "common_done": "Done",
-  "common_close": "Close",
-  "common_restore": "Restore",
-  "common_clear": "Clear",
-  "common_share": "Share",
-  "common_loading": "Loading...",
-  "common_saving": "Saving...",
-  "common_processing": "Processing...",
-  "nav_home": "Home",
-  "nav_export": "Export",
-  "nav_settings": "Settings",
-  "home_addExpense": "Add Expense",
-  "home_deleteSuccess": "Expense deleted",
-  "home_deleteFailed": "Delete failed: {message}",
+  "common_save": "Guardar",
+  "common_cancel": "Cancelar",
+  "common_delete": "Eliminar",
+  "common_edit": "Editar",
+  "common_retry": "Reintentar",
+  "common_confirm": "Confirmar",
+  "common_back": "Volver",
+  "common_skip": "Omitir",
+  "common_next": "Siguiente",
+  "common_done": "Hecho",
+  "common_close": "Cerrar",
+  "common_restore": "Restaurar",
+  "common_clear": "Limpiar",
+  "common_share": "Compartir",
+  "common_loading": "Cargando...",
+  "common_saving": "Guardando...",
+  "common_processing": "Procesando...",
+  "nav_home": "Inicio",
+  "nav_export": "Exportar",
+  "nav_settings": "Ajustes",
+  "home_addExpense": "Agregar gasto",
+  "home_deleteSuccess": "Gasto eliminado",
+  "home_deleteFailed": "Error al eliminar: {message}",
   "@home_deleteFailed": {
     "placeholders": {
       "message": {
@@ -32,44 +32,44 @@
       }
     }
   },
-  "home_undo": "Undo",
-  "showcase_addExpenseTitle": "Add Expense",
-  "showcase_addExpenseDesc": "Tap here to take a photo and record your expense",
-  "showcase_swipeDeleteTitle": "Swipe to Delete",
-  "showcase_swipeDeleteDesc": "Swipe left to delete an expense",
-  "showcase_exportTitle": "Export Report",
-  "showcase_exportDesc": "Tap here to export Excel and receipts",
-  "addExpense_title": "Add Expense",
-  "addExpense_receiptImage": "Receipt Image",
-  "addExpense_camera": "Camera",
-  "addExpense_gallery": "Gallery",
-  "addExpense_amount": "Amount",
-  "addExpense_description": "Description",
-  "addExpense_descriptionHint": "Enter description...",
-  "addExpense_date": "Date",
-  "addExpense_currency": "Currency",
-  "addExpense_exchangeRate": "Exchange Rate",
-  "addExpense_manualInput": "Manual Input",
-  "addExpense_ocrProcessing": "Recognizing receipt...",
-  "addExpense_ocrSuccess": "Receipt content recognized",
-  "addExpense_ocrSuccessVerify": "Receipt content recognized, please verify",
-  "addExpense_success": "Expense added",
-  "addExpense_invalidAmount": "Please enter a valid amount",
-  "expenseDetail_title": "Expense Details",
-  "expenseDetail_editTitle": "Edit Expense",
-  "expenseDetail_amount": "Amount",
-  "expenseDetail_hkdAmount": "HKD Amount",
-  "expenseDetail_exchangeRate": "Exchange Rate",
-  "expenseDetail_description": "Description",
-  "expenseDetail_descriptionRequired": "Please enter a description",
-  "expenseDetail_date": "Date",
-  "expenseDetail_createdAt": "Created At",
-  "expenseDetail_replaceImage": "Replace Image",
-  "expenseDetail_imageLoadFailed": "Image failed to load",
-  "expenseDetail_noReceipt": "No receipt image",
-  "expenseDetail_cancelEdit": "Cancel Edit",
-  "expenseDetail_saved": "Saved",
-  "expenseDetail_saveFailed": "Save failed: {message}",
+  "home_undo": "Deshacer",
+  "showcase_addExpenseTitle": "Agregar gasto",
+  "showcase_addExpenseDesc": "Toca aquí para tomar una foto y registrar tu gasto",
+  "showcase_swipeDeleteTitle": "Deslizar para eliminar",
+  "showcase_swipeDeleteDesc": "Desliza hacia la izquierda para eliminar un gasto",
+  "showcase_exportTitle": "Exportar informe",
+  "showcase_exportDesc": "Toca aquí para exportar Excel y recibos",
+  "addExpense_title": "Agregar gasto",
+  "addExpense_receiptImage": "Imagen del recibo",
+  "addExpense_camera": "Cámara",
+  "addExpense_gallery": "Galería",
+  "addExpense_amount": "Monto",
+  "addExpense_description": "Descripción",
+  "addExpense_descriptionHint": "Ingrese una descripción...",
+  "addExpense_date": "Fecha",
+  "addExpense_currency": "Moneda",
+  "addExpense_exchangeRate": "Tipo de cambio",
+  "addExpense_manualInput": "Entrada manual",
+  "addExpense_ocrProcessing": "Reconociendo recibo...",
+  "addExpense_ocrSuccess": "Contenido del recibo reconocido",
+  "addExpense_ocrSuccessVerify": "Contenido del recibo reconocido, por favor verifique",
+  "addExpense_success": "Gasto agregado",
+  "addExpense_invalidAmount": "Por favor ingrese un monto válido",
+  "expenseDetail_title": "Detalles del gasto",
+  "expenseDetail_editTitle": "Editar gasto",
+  "expenseDetail_amount": "Monto",
+  "expenseDetail_hkdAmount": "Monto en HKD",
+  "expenseDetail_exchangeRate": "Tipo de cambio",
+  "expenseDetail_description": "Descripción",
+  "expenseDetail_descriptionRequired": "Por favor ingrese una descripción",
+  "expenseDetail_date": "Fecha",
+  "expenseDetail_createdAt": "Fecha de creación",
+  "expenseDetail_replaceImage": "Reemplazar imagen",
+  "expenseDetail_imageLoadFailed": "Error al cargar la imagen",
+  "expenseDetail_noReceipt": "Sin imagen de recibo",
+  "expenseDetail_cancelEdit": "Cancelar edición",
+  "expenseDetail_saved": "Guardado",
+  "expenseDetail_saveFailed": "Error al guardar: {message}",
   "@expenseDetail_saveFailed": {
     "placeholders": {
       "message": {
@@ -77,8 +77,8 @@
       }
     }
   },
-  "expenseDetail_deleted": "Deleted",
-  "expenseDetail_deleteFailed": "Delete failed: {message}",
+  "expenseDetail_deleted": "Eliminado",
+  "expenseDetail_deleteFailed": "Error al eliminar: {message}",
   "@expenseDetail_deleteFailed": {
     "placeholders": {
       "message": {
@@ -86,11 +86,11 @@
       }
     }
   },
-  "expenseDetail_confirmDelete": "Confirm Delete",
-  "expenseDetail_confirmDeleteMessage": "Are you sure you want to delete this expense?\nYou can restore it from Deleted Items.",
-  "expenseDetail_expenseNotFound": "Expense not found",
-  "expenseDetail_imageReplaceSuccess": "Image replaced",
-  "expenseDetail_imageReplaceFailed": "Replace image failed: {message}",
+  "expenseDetail_confirmDelete": "Confirmar eliminación",
+  "expenseDetail_confirmDeleteMessage": "¿Está seguro de que desea eliminar este gasto?\nPuede restaurarlo desde Elementos eliminados.",
+  "expenseDetail_expenseNotFound": "Gasto no encontrado",
+  "expenseDetail_imageReplaceSuccess": "Imagen reemplazada",
+  "expenseDetail_imageReplaceFailed": "Error al reemplazar imagen: {message}",
   "@expenseDetail_imageReplaceFailed": {
     "placeholders": {
       "message": {
@@ -98,21 +98,21 @@
       }
     }
   },
-  "expenseDetail_selectFromGallery": "Select from Gallery",
-  "rateSource_auto": "Live Rate",
-  "rateSource_offline": "Cached Rate",
-  "rateSource_default": "Default Rate",
-  "rateSource_manual": "Manual Input",
-  "rateSource_auto_short": "Live",
-  "rateSource_offline_short": "Cached",
-  "rateSource_default_short": "Default",
+  "expenseDetail_selectFromGallery": "Seleccionar de la galería",
+  "rateSource_auto": "Tasa en vivo",
+  "rateSource_offline": "Tasa en caché",
+  "rateSource_default": "Tasa predeterminada",
+  "rateSource_manual": "Entrada manual",
+  "rateSource_auto_short": "En vivo",
+  "rateSource_offline_short": "Caché",
+  "rateSource_default_short": "Predeterminado",
   "rateSource_manual_short": "Manual",
-  "monthSummary_totalExpense": "Total Expense",
-  "monthSummary_count": "Count",
+  "monthSummary_totalExpense": "Gasto total",
+  "monthSummary_count": "Cantidad",
   "monthSummary_countSuffix": "",
-  "monthSummary_previousMonth": "Previous Month",
-  "monthSummary_nextMonth": "Next Month",
-  "monthSummary_semanticLabel": "{month} summary. Total expense: HKD {amount}. {count} expenses.",
+  "monthSummary_previousMonth": "Mes anterior",
+  "monthSummary_nextMonth": "Mes siguiente",
+  "monthSummary_semanticLabel": "Resumen de {month}. Gasto total: HKD {amount}. {count} gastos.",
   "@monthSummary_semanticLabel": {
     "placeholders": {
       "month": {
@@ -126,12 +126,12 @@
       }
     }
   },
-  "monthSummary_isLatestMonth": "Already at latest month",
-  "export_title": "Export Report",
-  "export_preview": "Preview",
-  "export_expenseCount": "Expense Count",
-  "export_totalHkd": "HKD Total",
-  "export_receiptCount": "Receipt Images",
+  "monthSummary_isLatestMonth": "Ya está en el mes más reciente",
+  "export_title": "Exportar informe",
+  "export_preview": "Vista previa",
+  "export_expenseCount": "Cantidad de gastos",
+  "export_totalHkd": "Total en HKD",
+  "export_receiptCount": "Imágenes de recibos",
   "export_countUnit": "{count}",
   "@export_countUnit": {
     "placeholders": {
@@ -148,9 +148,9 @@
       }
     }
   },
-  "export_excelWithReceipts": "Export Excel + Receipts",
-  "export_noData": "No Data",
-  "export_noDataMessage": "No expenses recorded in {year}/{month}",
+  "export_excelWithReceipts": "Exportar Excel + Recibos",
+  "export_noData": "Sin datos",
+  "export_noDataMessage": "No hay gastos registrados en {year}/{month}",
   "@export_noDataMessage": {
     "placeholders": {
       "year": {
@@ -172,13 +172,13 @@
       }
     }
   },
-  "export_hint": "Exported Excel contains complete expense details",
-  "export_packing": "Packing...",
-  "export_generatingExcel": "Generating Excel...",
-  "export_packingReceipts": "Packing receipt images...",
-  "export_compressing": "Compressing...",
-  "export_preparingShare": "Preparing to share...",
-  "export_success": "Export successful ({size})",
+  "export_hint": "El Excel exportado contiene detalles completos de gastos",
+  "export_packing": "Empaquetando...",
+  "export_generatingExcel": "Generando Excel...",
+  "export_packingReceipts": "Empaquetando imágenes de recibos...",
+  "export_compressing": "Comprimiendo...",
+  "export_preparingShare": "Preparando para compartir...",
+  "export_success": "Exportación exitosa ({size})",
   "@export_success": {
     "placeholders": {
       "size": {
@@ -186,7 +186,7 @@
       }
     }
   },
-  "export_failed": "Export failed: {message}",
+  "export_failed": "Error en la exportación: {message}",
   "@export_failed": {
     "placeholders": {
       "message": {
@@ -194,7 +194,7 @@
       }
     }
   },
-  "export_sheetName": "{year}/{month} Expense Report",
+  "export_sheetName": "Informe de gastos {year}/{month}",
   "@export_sheetName": {
     "placeholders": {
       "year": {
@@ -205,22 +205,22 @@
       }
     }
   },
-  "export_shareSubject": "Expense Snap Report",
+  "export_shareSubject": "Informe de Expense Snap",
   "export_headerIndex": "No.",
-  "export_headerDate": "Date",
-  "export_headerDescription": "Description",
-  "export_headerOriginalAmount": "Original Amount",
-  "export_headerOriginalCurrency": "Currency",
-  "export_headerExchangeRate": "Exchange Rate",
-  "export_headerRateSource": "Rate Source",
-  "export_headerHkdAmount": "HKD Amount",
-  "export_headerReceiptFile": "Receipt",
+  "export_headerDate": "Fecha",
+  "export_headerDescription": "Descripción",
+  "export_headerOriginalAmount": "Monto original",
+  "export_headerOriginalCurrency": "Moneda",
+  "export_headerExchangeRate": "Tipo de cambio",
+  "export_headerRateSource": "Fuente de tasa",
+  "export_headerHkdAmount": "Monto en HKD",
+  "export_headerReceiptFile": "Recibo",
   "export_headerTotal": "Total",
-  "export_rateSourceAuto": "Auto",
-  "export_rateSourceOffline": "Offline Cache",
-  "export_rateSourceDefault": "Default",
+  "export_rateSourceAuto": "Automático",
+  "export_rateSourceOffline": "Caché sin conexión",
+  "export_rateSourceDefault": "Predeterminado",
   "export_rateSourceManual": "Manual",
-  "export_fileName": "Expense_Report_{year}_{month}",
+  "export_fileName": "Informe_gastos_{year}_{month}",
   "@export_fileName": {
     "placeholders": {
       "year": {
@@ -231,33 +231,33 @@
       }
     }
   },
-  "settings_title": "Settings",
+  "settings_title": "Ajustes",
   "settings_general": "General",
-  "settings_userName": "Username",
-  "settings_userNameHint": "Used for report title",
-  "settings_language": "Language",
-  "settings_theme": "Theme",
-  "settings_themeLight": "Light",
-  "settings_themeDark": "Dark",
-  "settings_themeSystem": "System",
-  "settings_data": "Data Management",
-  "settings_backup": "Cloud Backup",
-  "settings_backupDesc": "Backup to Google Drive",
-  "settings_restore": "Restore Backup",
-  "settings_restoreDesc": "Restore from Google Drive",
-  "settings_deletedItems": "Deleted Items",
-  "settings_deletedItemsDesc": "View or restore deleted expenses",
-  "settings_clearCache": "Clear Temp Files",
-  "settings_about": "About",
-  "settings_version": "Version",
-  "settings_privacyPolicy": "Privacy Policy",
-  "settings_termsOfService": "Terms of Service",
-  "settings_feedback": "Feedback",
-  "legal_privacyContent": "Privacy Policy\n\nLast updated: January 2026\n\n1. Data Collection\nWe only collect data that you voluntarily enter, including expense records, receipt images, and personal settings.\n\n2. Data Storage\nAll data is stored locally on your device. If you choose to use the cloud backup feature, data will sync to your Google Drive account.\n\n3. Data Usage\nWe do not use your data for advertising or share it with third parties.\n\n4. Data Deletion\nYou can delete all data in the app at any time. Deleted items are kept for 30 days before permanent deletion.\n\n5. Contact\nFor any privacy-related questions, please contact us through the feedback feature in the app.",
-  "legal_termsContent": "Terms of Service\n\nLast updated: January 2026\n\n1. Service Description\nExpense Snap is a personal expense tracking app that helps you record and manage daily expenses.\n\n2. Terms of Use\nBy using this app, you agree to comply with these terms.\n\n3. Limitation of Liability\nThis app is provided \"as is\". We are not responsible for data loss or any indirect damages.\n\n4. Intellectual Property\nAll content and features of the app are protected by copyright.\n\n5. Terms Modification\nWe reserve the right to modify these terms at any time. Continued use indicates acceptance of the modified terms.",
-  "settings_signInGoogle": "Sign in with Google",
-  "settings_signOutGoogle": "Sign out",
-  "settings_signedInAs": "Signed in as: {email}",
+  "settings_userName": "Nombre de usuario",
+  "settings_userNameHint": "Usado para el título del informe",
+  "settings_language": "Idioma",
+  "settings_theme": "Tema",
+  "settings_themeLight": "Claro",
+  "settings_themeDark": "Oscuro",
+  "settings_themeSystem": "Sistema",
+  "settings_data": "Gestión de datos",
+  "settings_backup": "Copia de seguridad en la nube",
+  "settings_backupDesc": "Copia de seguridad en Google Drive",
+  "settings_restore": "Restaurar copia",
+  "settings_restoreDesc": "Restaurar desde Google Drive",
+  "settings_deletedItems": "Elementos eliminados",
+  "settings_deletedItemsDesc": "Ver o restaurar gastos eliminados",
+  "settings_clearCache": "Limpiar archivos temporales",
+  "settings_about": "Acerca de",
+  "settings_version": "Versión",
+  "settings_privacyPolicy": "Política de privacidad",
+  "settings_termsOfService": "Términos de servicio",
+  "settings_feedback": "Comentarios",
+  "legal_privacyContent": "Política de privacidad\n\nÚltima actualización: Enero 2026\n\n1. Recopilación de datos\nSolo recopilamos los datos que usted ingresa voluntariamente, incluyendo registros de gastos, imágenes de recibos y configuraciones personales.\n\n2. Almacenamiento de datos\nTodos los datos se almacenan localmente en su dispositivo. Si elige usar la función de copia de seguridad en la nube, los datos se sincronizarán con su cuenta de Google Drive.\n\n3. Uso de datos\nNo utilizamos sus datos para publicidad ni los compartimos con terceros.\n\n4. Eliminación de datos\nPuede eliminar todos los datos en la aplicación en cualquier momento. Los elementos eliminados se mantienen durante 30 días antes de su eliminación permanente.\n\n5. Contacto\nPara cualquier pregunta relacionada con la privacidad, contáctenos a través de la función de comentarios en la aplicación.",
+  "legal_termsContent": "Términos de servicio\n\nÚltima actualización: Enero 2026\n\n1. Descripción del servicio\nExpense Snap es una aplicación de seguimiento de gastos personales que le ayuda a registrar y gestionar sus gastos diarios.\n\n2. Condiciones de uso\nAl usar esta aplicación, acepta cumplir con estos términos.\n\n3. Limitación de responsabilidad\nEsta aplicación se proporciona \"tal cual\". No somos responsables por la pérdida de datos ni por daños indirectos.\n\n4. Propiedad intelectual\nTodo el contenido y las funciones de la aplicación están protegidos por derechos de autor.\n\n5. Modificación de términos\nNos reservamos el derecho de modificar estos términos en cualquier momento. El uso continuado indica la aceptación de los términos modificados.",
+  "settings_signInGoogle": "Iniciar sesión con Google",
+  "settings_signOutGoogle": "Cerrar sesión",
+  "settings_signedInAs": "Conectado como: {email}",
   "@settings_signedInAs": {
     "placeholders": {
       "email": {
@@ -265,8 +265,8 @@
       }
     }
   },
-  "settings_backupSuccess": "Backup successful",
-  "settings_backupFailed": "Backup failed: {message}",
+  "settings_backupSuccess": "Copia de seguridad exitosa",
+  "settings_backupFailed": "Error en la copia de seguridad: {message}",
   "@settings_backupFailed": {
     "placeholders": {
       "message": {
@@ -274,8 +274,8 @@
       }
     }
   },
-  "settings_restoreSuccess": "Restore successful",
-  "settings_restoreFailed": "Restore failed: {message}",
+  "settings_restoreSuccess": "Restauración exitosa",
+  "settings_restoreFailed": "Error en la restauración: {message}",
   "@settings_restoreFailed": {
     "placeholders": {
       "message": {
@@ -283,11 +283,11 @@
       }
     }
   },
-  "settings_cacheCleared": "Cache cleared",
-  "settings_noBackupFound": "No backup found",
-  "settings_confirmRestore": "Confirm Restore",
-  "settings_confirmRestoreMessage": "Restore will overwrite current data. Continue?",
-  "settings_lastBackup": "Last backup: {date}",
+  "settings_cacheCleared": "Caché limpiado",
+  "settings_noBackupFound": "No se encontró copia de seguridad",
+  "settings_confirmRestore": "Confirmar restauración",
+  "settings_confirmRestoreMessage": "La restauración sobrescribirá los datos actuales. ¿Continuar?",
+  "settings_lastBackup": "Última copia: {date}",
   "@settings_lastBackup": {
     "placeholders": {
       "date": {
@@ -295,9 +295,9 @@
       }
     }
   },
-  "deletedItems_title": "Deleted Items",
-  "deletedItems_clearAll": "Clear All",
-  "deletedItems_daysRemaining": "{days} days until auto-delete",
+  "deletedItems_title": "Elementos eliminados",
+  "deletedItems_clearAll": "Limpiar todo",
+  "deletedItems_daysRemaining": "{days} días hasta eliminación automática",
   "@deletedItems_daysRemaining": {
     "placeholders": {
       "days": {
@@ -305,9 +305,9 @@
       }
     }
   },
-  "deletedItems_soonDeleted": "Will be deleted soon",
-  "deletedItems_restored": "Restored",
-  "deletedItems_restoreFailed": "Restore failed: {message}",
+  "deletedItems_soonDeleted": "Se eliminará pronto",
+  "deletedItems_restored": "Restaurado",
+  "deletedItems_restoreFailed": "Error al restaurar: {message}",
   "@deletedItems_restoreFailed": {
     "placeholders": {
       "message": {
@@ -315,10 +315,10 @@
       }
     }
   },
-  "deletedItems_permanentDelete": "Delete Permanently",
-  "deletedItems_permanentDeleteConfirm": "This cannot be undone. Delete permanently?",
-  "deletedItems_permanentDeleted": "Permanently deleted",
-  "deletedItems_permanentDeleteFailed": "Delete failed: {message}",
+  "deletedItems_permanentDelete": "Eliminar permanentemente",
+  "deletedItems_permanentDeleteConfirm": "Esta acción no se puede deshacer. ¿Eliminar permanentemente?",
+  "deletedItems_permanentDeleted": "Eliminado permanentemente",
+  "deletedItems_permanentDeleteFailed": "Error al eliminar: {message}",
   "@deletedItems_permanentDeleteFailed": {
     "placeholders": {
       "message": {
@@ -326,8 +326,8 @@
       }
     }
   },
-  "deletedItems_clearAllTitle": "Clear All",
-  "deletedItems_clearAllConfirm": "Permanently delete all {count} items?\nThis cannot be undone.",
+  "deletedItems_clearAllTitle": "Limpiar todo",
+  "deletedItems_clearAllConfirm": "¿Eliminar permanentemente los {count} elementos?\nEsta acción no se puede deshacer.",
   "@deletedItems_clearAllConfirm": {
     "placeholders": {
       "count": {
@@ -335,8 +335,8 @@
       }
     }
   },
-  "deletedItems_clearAllButton": "Delete All",
-  "deletedItems_clearedCount": "Deleted {count} items",
+  "deletedItems_clearAllButton": "Eliminar todo",
+  "deletedItems_clearedCount": "{count} elementos eliminados",
   "@deletedItems_clearedCount": {
     "placeholders": {
       "count": {
@@ -344,7 +344,7 @@
       }
     }
   },
-  "deletedItems_loadFailed": "Load failed: {message}",
+  "deletedItems_loadFailed": "Error al cargar: {message}",
   "@deletedItems_loadFailed": {
     "placeholders": {
       "message": {
@@ -352,31 +352,31 @@
       }
     }
   },
-  "onboarding_skip": "Skip",
-  "onboarding_next": "Next",
-  "onboarding_start": "Get Started",
-  "onboarding_page1Title": "Snap Your Receipts",
-  "onboarding_page1Desc": "Take photos of receipts instantly\nNever lose a receipt again",
-  "onboarding_page2Title": "Multi-Currency Support",
-  "onboarding_page2Desc": "Supports HKD, CNY, USD\nAuto-fetches live exchange rates",
-  "onboarding_page3Title": "One-Click Export",
-  "onboarding_page3Desc": "Export Excel + receipt images\nEasy expense reporting",
-  "onboarding_nameLabel": "Your Name (Optional)",
-  "onboarding_nameHint": "Used for report title",
-  "onboarding_nameTooLong": "Name cannot exceed 50 characters",
-  "connectivity_offlineMode": "Offline Mode - Exchange rates may be outdated",
-  "dialog_duplicateTitle": "Possible Duplicate",
-  "dialog_duplicateMessage": "Similar expense found:",
-  "dialog_duplicateConfirm": "Continue adding?",
-  "dialog_duplicateContinue": "Add Anyway",
-  "dialog_largeAmountTitle": "Large Amount",
-  "dialog_largeAmountMessage": "You are recording a large expense:",
-  "dialog_largeAmountConfirm": "Is the amount correct?",
-  "dialog_largeAmountBack": "Go Back",
-  "dialog_largeAmountOk": "Confirm",
-  "dialog_monthEndTitle": "Month End Reminder",
-  "dialog_monthEndMessage": "Month is ending soon!",
-  "dialog_monthEndExpenseCount": "You have {count} expenses this month",
+  "onboarding_skip": "Omitir",
+  "onboarding_next": "Siguiente",
+  "onboarding_start": "Comenzar",
+  "onboarding_page1Title": "Captura tus recibos",
+  "onboarding_page1Desc": "Toma fotos de recibos al instante\nNunca más pierdas un recibo",
+  "onboarding_page2Title": "Soporte multimoneda",
+  "onboarding_page2Desc": "Compatible con HKD, CNY, USD\nObtiene tipos de cambio en tiempo real",
+  "onboarding_page3Title": "Exportación con un clic",
+  "onboarding_page3Desc": "Exporta Excel + imágenes de recibos\nInformes de gastos fáciles",
+  "onboarding_nameLabel": "Su nombre (Opcional)",
+  "onboarding_nameHint": "Usado para el título del informe",
+  "onboarding_nameTooLong": "El nombre no puede exceder 50 caracteres",
+  "connectivity_offlineMode": "Modo sin conexión - Los tipos de cambio pueden estar desactualizados",
+  "dialog_duplicateTitle": "Posible duplicado",
+  "dialog_duplicateMessage": "Se encontró un gasto similar:",
+  "dialog_duplicateConfirm": "¿Continuar agregando?",
+  "dialog_duplicateContinue": "Agregar de todos modos",
+  "dialog_largeAmountTitle": "Monto grande",
+  "dialog_largeAmountMessage": "Está registrando un gasto grande:",
+  "dialog_largeAmountConfirm": "¿Es correcto el monto?",
+  "dialog_largeAmountBack": "Volver",
+  "dialog_largeAmountOk": "Confirmar",
+  "dialog_monthEndTitle": "Recordatorio de fin de mes",
+  "dialog_monthEndMessage": "¡El mes está por terminar!",
+  "dialog_monthEndExpenseCount": "Tiene {count} gastos este mes",
   "@dialog_monthEndExpenseCount": {
     "placeholders": {
       "count": {
@@ -384,29 +384,29 @@
       }
     }
   },
-  "dialog_monthEndSuggestion": "Consider exporting your expense report.",
-  "dialog_later": "Later",
-  "dialog_goExport": "Export Now",
-  "emptyState_noExpenses": "No Expenses",
-  "emptyState_noExpensesHint": "Tap the button below to add your first expense",
-  "emptyState_noDeletedItems": "No Deleted Items",
-  "emptyState_noDeletedItemsHint": "Deleted expenses are kept for 30 days",
-  "emptyState_error": "Load Failed",
-  "emptyState_offline": "No Internet Connection",
-  "emptyState_offlineHint": "Please check your network settings",
-  "emptyState_exportSuccess": "Export Successful",
-  "emptyState_exportSuccessHint": "File is ready",
+  "dialog_monthEndSuggestion": "Considere exportar su informe de gastos.",
+  "dialog_later": "Más tarde",
+  "dialog_goExport": "Exportar ahora",
+  "emptyState_noExpenses": "Sin gastos",
+  "emptyState_noExpensesHint": "Toque el botón de abajo para agregar su primer gasto",
+  "emptyState_noDeletedItems": "Sin elementos eliminados",
+  "emptyState_noDeletedItemsHint": "Los gastos eliminados se mantienen durante 30 días",
+  "emptyState_error": "Error al cargar",
+  "emptyState_offline": "Sin conexión a Internet",
+  "emptyState_offlineHint": "Por favor verifique su configuración de red",
+  "emptyState_exportSuccess": "Exportación exitosa",
+  "emptyState_exportSuccessHint": "El archivo está listo",
   "excel_header_index": "No.",
-  "excel_header_date": "Date",
-  "excel_header_description": "Description",
-  "excel_header_originalAmount": "Original Amount",
-  "excel_header_originalCurrency": "Currency",
-  "excel_header_exchangeRate": "Exchange Rate",
-  "excel_header_rateSource": "Rate Source",
-  "excel_header_hkdAmount": "HKD Amount",
-  "excel_header_receiptFile": "Receipt File",
+  "excel_header_date": "Fecha",
+  "excel_header_description": "Descripción",
+  "excel_header_originalAmount": "Monto original",
+  "excel_header_originalCurrency": "Moneda",
+  "excel_header_exchangeRate": "Tipo de cambio",
+  "excel_header_rateSource": "Fuente de tasa",
+  "excel_header_hkdAmount": "Monto en HKD",
+  "excel_header_receiptFile": "Archivo de recibo",
   "excel_total": "Total",
-  "excel_sheetName": "Expenses_{year}_{month}",
+  "excel_sheetName": "Gastos_{year}_{month}",
   "@excel_sheetName": {
     "placeholders": {
       "year": {
@@ -417,7 +417,7 @@
       }
     }
   },
-  "excel_fileName": "Expenses_{year}_{month}",
+  "excel_fileName": "Gastos_{year}_{month}",
   "@excel_fileName": {
     "placeholders": {
       "year": {
@@ -428,25 +428,25 @@
       }
     }
   },
-  "excel_shareSubject": "Expense Snap Report",
-  "excel_rateSourceAuto": "Auto",
-  "excel_rateSourceOffline": "Cached",
-  "excel_rateSourceDefault": "Default",
+  "excel_shareSubject": "Informe de Expense Snap",
+  "excel_rateSourceAuto": "Automático",
+  "excel_rateSourceOffline": "Caché",
+  "excel_rateSourceDefault": "Predeterminado",
   "excel_rateSourceManual": "Manual",
-  "error_unknown": "Unknown error occurred",
-  "error_networkError": "Network connection error",
-  "error_serverError": "Server error",
-  "error_storageError": "Storage error",
-  "error_permissionDenied": "Permission denied",
-  "error_fileNotFound": "File not found",
-  "error_invalidData": "Invalid data format",
-  "error_exportNoData": "No data to export",
-  "error_invalidMonth": "Month must be between 1 and 12",
-  "error_invalidYear": "Year must be between 2000 and 2100",
-  "error_excelGenerationFailed": "Failed to generate Excel file",
-  "error_zipFailed": "Failed to compress file",
-  "error_shareFailed": "Share failed",
-  "error_cleanupFailed": "Failed to clean up temp files",
+  "error_unknown": "Ocurrió un error desconocido",
+  "error_networkError": "Error de conexión de red",
+  "error_serverError": "Error del servidor",
+  "error_storageError": "Error de almacenamiento",
+  "error_permissionDenied": "Permiso denegado",
+  "error_fileNotFound": "Archivo no encontrado",
+  "error_invalidData": "Formato de datos no válido",
+  "error_exportNoData": "No hay datos para exportar",
+  "error_invalidMonth": "El mes debe estar entre 1 y 12",
+  "error_invalidYear": "El año debe estar entre 2000 y 2100",
+  "error_excelGenerationFailed": "Error al generar archivo Excel",
+  "error_zipFailed": "Error al comprimir archivo",
+  "error_shareFailed": "Error al compartir",
+  "error_cleanupFailed": "Error al limpiar archivos temporales",
   "format_date": "yyyy/MM/dd",
   "format_dateTime": "yyyy/MM/dd HH:mm",
   "format_month": "MMM yyyy",
@@ -454,33 +454,33 @@
   "currency_HKD": "HKD",
   "currency_CNY": "CNY",
   "currency_USD": "USD",
-  "datePicker_selectDate": "Select Date",
-  "datePicker_selectMonth": "Select Month",
-  "settings_profile": "Profile",
-  "settings_appearance": "Appearance",
-  "settings_reduceMotion": "Reduce Motion",
-  "settings_reduceMotionDesc": "Reduce animations for motion sensitivity",
-  "settings_storageUsage": "Storage Usage",
-  "settings_clearCacheDesc": "Free up export and backup cache space",
-  "settings_cloudBackup": "Cloud Backup",
+  "datePicker_selectDate": "Seleccionar fecha",
+  "datePicker_selectMonth": "Seleccionar mes",
+  "settings_profile": "Perfil",
+  "settings_appearance": "Apariencia",
+  "settings_reduceMotion": "Reducir movimiento",
+  "settings_reduceMotionDesc": "Reduce las animaciones para sensibilidad al movimiento",
+  "settings_storageUsage": "Uso de almacenamiento",
+  "settings_clearCacheDesc": "Liberar espacio de caché de exportación y copia de seguridad",
+  "settings_cloudBackup": "Copia de seguridad en la nube",
   "settings_googleDrive": "Google Drive",
-  "settings_lastBackupTime": "Last Backup",
-  "settings_backupNow": "Backup Now",
-  "settings_backupNowDesc": "Backup database and receipts to Google Drive",
-  "settings_restoreBackupTitle": "Restore Backup",
-  "settings_restoreBackupDesc": "Restore from Google Drive",
-  "settings_selectBackup": "Select Backup",
-  "settings_connect": "Connect",
-  "settings_disconnect": "Disconnect",
-  "settings_connected": "Connected",
-  "settings_notConnected": "Not connected",
-  "settings_languageSystem": "Follow System",
-  "settings_selectTheme": "Select Theme",
-  "settings_editName": "Edit Name",
-  "settings_nameLabel": "Name",
-  "settings_nameHint": "Used for expense report title",
-  "settings_saved": "Saved",
-  "settings_cleanupFailed": "Cleanup failed: {message}",
+  "settings_lastBackupTime": "Última copia",
+  "settings_backupNow": "Hacer copia ahora",
+  "settings_backupNowDesc": "Respaldar base de datos y recibos en Google Drive",
+  "settings_restoreBackupTitle": "Restaurar copia",
+  "settings_restoreBackupDesc": "Restaurar desde Google Drive",
+  "settings_selectBackup": "Seleccionar copia",
+  "settings_connect": "Conectar",
+  "settings_disconnect": "Desconectar",
+  "settings_connected": "Conectado",
+  "settings_notConnected": "No conectado",
+  "settings_languageSystem": "Seguir sistema",
+  "settings_selectTheme": "Seleccionar tema",
+  "settings_editName": "Editar nombre",
+  "settings_nameLabel": "Nombre",
+  "settings_nameHint": "Usado para el título del informe de gastos",
+  "settings_saved": "Guardado",
+  "settings_cleanupFailed": "Error en la limpieza: {message}",
   "@settings_cleanupFailed": {
     "placeholders": {
       "message": {
@@ -488,7 +488,7 @@
       }
     }
   },
-  "settings_cleanedFiles": "Cleaned {count} temp files",
+  "settings_cleanedFiles": "{count} archivos temporales limpiados",
   "@settings_cleanedFiles": {
     "placeholders": {
       "count": {
@@ -496,10 +496,10 @@
       }
     }
   },
-  "settings_backupToCloud": "Backup to Cloud",
-  "settings_backupConfirmMessage": "This will backup all expenses and receipts to Google Drive.\n\nContinue?",
-  "settings_confirmRestoreTitle": "Confirm Restore",
-  "settings_confirmRestoreDesc": "This will replace all current data with \"{fileName}\".\n\nThis cannot be undone. Continue?",
+  "settings_backupToCloud": "Hacer copia en la nube",
+  "settings_backupConfirmMessage": "Esto respaldará todos los gastos y recibos en Google Drive.\n\n¿Continuar?",
+  "settings_confirmRestoreTitle": "Confirmar restauración",
+  "settings_confirmRestoreDesc": "Esto reemplazará todos los datos actuales con \"{fileName}\".\n\nEsta acción no se puede deshacer. ¿Continuar?",
   "@settings_confirmRestoreDesc": {
     "placeholders": {
       "fileName": {
@@ -507,9 +507,9 @@
       }
     }
   },
-  "settings_disconnectTitle": "Disconnect Google Account",
-  "settings_disconnectConfirm": "Cloud backup will be unavailable after disconnecting.\n\nDisconnect?",
-  "settings_connectFailed": "Connection failed: {message}",
+  "settings_disconnectTitle": "Desconectar cuenta de Google",
+  "settings_disconnectConfirm": "La copia de seguridad en la nube no estará disponible después de desconectar.\n\n¿Desconectar?",
+  "settings_connectFailed": "Error de conexión: {message}",
   "@settings_connectFailed": {
     "placeholders": {
       "message": {
@@ -517,7 +517,7 @@
       }
     }
   },
-  "settings_disconnectFailed": "Disconnect failed: {message}",
+  "settings_disconnectFailed": "Error al desconectar: {message}",
   "@settings_disconnectFailed": {
     "placeholders": {
       "message": {
@@ -525,22 +525,22 @@
       }
     }
   },
-  "settings_googleConnected": "Google account connected",
-  "settings_googleDisconnected": "Google account disconnected",
-  "category_label": "Category (Optional)",
-  "category_meals": "Meals",
-  "category_transport": "Transport",
-  "category_accommodation": "Accommodation",
-  "category_officeSupplies": "Office Supplies",
-  "category_communication": "Communication",
-  "category_entertainment": "Entertainment",
-  "category_medical": "Medical",
-  "category_other": "Other",
-  "category_statistics": "Category Statistics",
-  "category_uncategorized": "Uncategorized",
-  "excel_header_category": "Category",
-  "semantic_category_prefix": "Category",
-  "semantic_expenseItem": "Expense item: {description}",
+  "settings_googleConnected": "Cuenta de Google conectada",
+  "settings_googleDisconnected": "Cuenta de Google desconectada",
+  "category_label": "Categoría (Opcional)",
+  "category_meals": "Comidas",
+  "category_transport": "Transporte",
+  "category_accommodation": "Alojamiento",
+  "category_officeSupplies": "Material de oficina",
+  "category_communication": "Comunicación",
+  "category_entertainment": "Entretenimiento",
+  "category_medical": "Médico",
+  "category_other": "Otro",
+  "category_statistics": "Estadísticas por categoría",
+  "category_uncategorized": "Sin categoría",
+  "excel_header_category": "Categoría",
+  "semantic_category_prefix": "Categoría",
+  "semantic_expenseItem": "Elemento de gasto: {description}",
   "@semantic_expenseItem": {
     "placeholders": {
       "description": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "semantic_amount": "Amount: {amount}",
+  "semantic_amount": "Monto: {amount}",
   "@semantic_amount": {
     "placeholders": {
       "amount": {
@@ -556,7 +556,7 @@
       }
     }
   },
-  "semantic_originalAmount": "Original amount: {amount}",
+  "semantic_originalAmount": "Monto original: {amount}",
   "@semantic_originalAmount": {
     "placeholders": {
       "amount": {
@@ -564,7 +564,7 @@
       }
     }
   },
-  "semantic_date": "Date: {date}",
+  "semantic_date": "Fecha: {date}",
   "@semantic_date": {
     "placeholders": {
       "date": {
@@ -572,7 +572,7 @@
       }
     }
   },
-  "semantic_rateSource": "Rate source: {source}",
+  "semantic_rateSource": "Fuente de tasa: {source}",
   "@semantic_rateSource": {
     "placeholders": {
       "source": {
@@ -580,11 +580,11 @@
       }
     }
   },
-  "semantic_hasReceipt": "Has receipt image",
-  "semantic_tapForDetails": "Tap to view details",
-  "semantic_swipeToDelete": "Swipe left to delete",
-  "validation_amountRequired": "Please enter an amount",
-  "validation_amountTooSmall": "Amount cannot be less than {min}",
+  "semantic_hasReceipt": "Tiene imagen de recibo",
+  "semantic_tapForDetails": "Toque para ver detalles",
+  "semantic_swipeToDelete": "Deslice a la izquierda para eliminar",
+  "validation_amountRequired": "Por favor ingrese un monto",
+  "validation_amountTooSmall": "El monto no puede ser menor que {min}",
   "@validation_amountTooSmall": {
     "placeholders": {
       "min": {
@@ -592,7 +592,7 @@
       }
     }
   },
-  "validation_amountTooLarge": "Amount cannot exceed {max}",
+  "validation_amountTooLarge": "El monto no puede exceder {max}",
   "@validation_amountTooLarge": {
     "placeholders": {
       "max": {
@@ -600,7 +600,7 @@
       }
     }
   },
-  "validation_exchangeRateLabel": "Exchange Rate",
+  "validation_exchangeRateLabel": "Tipo de cambio",
   "validation_exchangeRateHint": "1 {currency} = ? HKD",
   "@validation_exchangeRateHint": {
     "placeholders": {
@@ -609,6 +609,6 @@
       }
     }
   },
-  "validation_exchangeRateRequired": "Please enter exchange rate",
-  "validation_exchangeRateInvalid": "Please enter a valid exchange rate"
+  "validation_exchangeRateRequired": "Por favor ingrese el tipo de cambio",
+  "validation_exchangeRateInvalid": "Por favor ingrese un tipo de cambio válido"
 }

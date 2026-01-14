@@ -1,15 +1,15 @@
 # Project Index: Expense Snap
 
-Generated: 2026-01-10
+Generated: 2026-01-14
 
 ## Overview
 
 **員工報銷收據記錄 App** - Flutter 應用程式，支援即時拍照記錄支出、多幣種自動轉換、月結匯出 Excel 報銷單
 
-- **Version**: 1.2.0
+- **Version**: 1.2.1
 - **SDK**: Flutter 3.10.4+
 - **Architecture**: Clean Architecture + Provider
-- **Language**: Dart, 繁體中文 / English UI (i18n)
+- **Language**: Dart, 6 languages (zh/zh_Hans/en/ja/ko/es)
 
 ---
 
@@ -26,9 +26,13 @@ lib/
 │   ├── services/                # 核心服務 (Breadcrumb)
 │   ├── theme/                   # 主題配置
 │   └── utils/                   # 工具類 (AppLogger, Validators)
-├── l10n/                        # 國際化 (i18n)
+├── l10n/                        # 國際化 (i18n) - 6 languages
 │   ├── app_zh.arb               # 繁體中文 (source of truth)
-│   └── app_en.arb               # English
+│   ├── app_zh_Hans.arb          # 简体中文
+│   ├── app_en.arb               # English
+│   ├── app_ja.arb               # 日本語
+│   ├── app_ko.arb               # 한국어
+│   └── app_es.arb               # Español
 ├── data/                        # 資料層
 │   ├── datasources/
 │   │   ├── local/               # SQLite, SecureStorage
@@ -81,7 +85,7 @@ lib/
 - `connectivity_provider.dart` - 網路狀態
 - `theme_provider.dart` - 主題切換
 - `showcase_provider.dart` - 功能發現提示
-- `locale_provider.dart` - 語言設定 (zh/en/system)
+- `locale_provider.dart` - 語言設定 (6 locales + system)
 
 ### Screens (`lib/presentation/screens/`)
 - `home/` - 首頁支出列表

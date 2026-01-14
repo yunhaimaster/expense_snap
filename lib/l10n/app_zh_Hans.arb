@@ -2,29 +2,29 @@
   "@@locale": "zh_Hans",
   "@@context": "ExpenseSnap Localization",
   "appTitle": "Expense Snap",
-  "common_save": "Save",
-  "common_cancel": "Cancel",
-  "common_delete": "Delete",
-  "common_edit": "Edit",
-  "common_retry": "Retry",
-  "common_confirm": "Confirm",
-  "common_back": "Back",
-  "common_skip": "Skip",
-  "common_next": "Next",
-  "common_done": "Done",
-  "common_close": "Close",
-  "common_restore": "Restore",
-  "common_clear": "Clear",
-  "common_share": "Share",
-  "common_loading": "Loading...",
-  "common_saving": "Saving...",
-  "common_processing": "Processing...",
-  "nav_home": "Home",
-  "nav_export": "Export",
-  "nav_settings": "Settings",
-  "home_addExpense": "Add Expense",
-  "home_deleteSuccess": "Expense deleted",
-  "home_deleteFailed": "Delete failed: {message}",
+  "common_save": "保存",
+  "common_cancel": "取消",
+  "common_delete": "删除",
+  "common_edit": "编辑",
+  "common_retry": "重试",
+  "common_confirm": "确认",
+  "common_back": "返回",
+  "common_skip": "跳过",
+  "common_next": "下一步",
+  "common_done": "完成",
+  "common_close": "关闭",
+  "common_restore": "恢复",
+  "common_clear": "清空",
+  "common_share": "分享",
+  "common_loading": "加载中...",
+  "common_saving": "保存中...",
+  "common_processing": "处理中...",
+  "nav_home": "首页",
+  "nav_export": "导出",
+  "nav_settings": "设置",
+  "home_addExpense": "添加支出",
+  "home_deleteSuccess": "已删除支出",
+  "home_deleteFailed": "删除失败: {message}",
   "@home_deleteFailed": {
     "placeholders": {
       "message": {
@@ -32,44 +32,44 @@
       }
     }
   },
-  "home_undo": "Undo",
-  "showcase_addExpenseTitle": "Add Expense",
-  "showcase_addExpenseDesc": "Tap here to take a photo and record your expense",
-  "showcase_swipeDeleteTitle": "Swipe to Delete",
-  "showcase_swipeDeleteDesc": "Swipe left to delete an expense",
-  "showcase_exportTitle": "Export Report",
-  "showcase_exportDesc": "Tap here to export Excel and receipts",
-  "addExpense_title": "Add Expense",
-  "addExpense_receiptImage": "Receipt Image",
-  "addExpense_camera": "Camera",
-  "addExpense_gallery": "Gallery",
-  "addExpense_amount": "Amount",
-  "addExpense_description": "Description",
-  "addExpense_descriptionHint": "Enter description...",
-  "addExpense_date": "Date",
-  "addExpense_currency": "Currency",
-  "addExpense_exchangeRate": "Exchange Rate",
-  "addExpense_manualInput": "Manual Input",
-  "addExpense_ocrProcessing": "Recognizing receipt...",
-  "addExpense_ocrSuccess": "Receipt content recognized",
-  "addExpense_ocrSuccessVerify": "Receipt content recognized, please verify",
-  "addExpense_success": "Expense added",
-  "addExpense_invalidAmount": "Please enter a valid amount",
-  "expenseDetail_title": "Expense Details",
-  "expenseDetail_editTitle": "Edit Expense",
-  "expenseDetail_amount": "Amount",
-  "expenseDetail_hkdAmount": "HKD Amount",
-  "expenseDetail_exchangeRate": "Exchange Rate",
-  "expenseDetail_description": "Description",
-  "expenseDetail_descriptionRequired": "Please enter a description",
-  "expenseDetail_date": "Date",
-  "expenseDetail_createdAt": "Created At",
-  "expenseDetail_replaceImage": "Replace Image",
-  "expenseDetail_imageLoadFailed": "Image failed to load",
-  "expenseDetail_noReceipt": "No receipt image",
-  "expenseDetail_cancelEdit": "Cancel Edit",
-  "expenseDetail_saved": "Saved",
-  "expenseDetail_saveFailed": "Save failed: {message}",
+  "home_undo": "撤销",
+  "showcase_addExpenseTitle": "添加支出",
+  "showcase_addExpenseDesc": "点击这里拍照记录您的支出",
+  "showcase_swipeDeleteTitle": "滑动删除",
+  "showcase_swipeDeleteDesc": "向左滑动可以删除支出记录",
+  "showcase_exportTitle": "导出报表",
+  "showcase_exportDesc": "点击此处导出 Excel 与收据图片",
+  "addExpense_title": "添加支出",
+  "addExpense_receiptImage": "收据图片",
+  "addExpense_camera": "拍照",
+  "addExpense_gallery": "相册",
+  "addExpense_amount": "金额",
+  "addExpense_description": "描述",
+  "addExpense_descriptionHint": "输入描述...",
+  "addExpense_date": "日期",
+  "addExpense_currency": "币种",
+  "addExpense_exchangeRate": "汇率",
+  "addExpense_manualInput": "手动输入",
+  "addExpense_ocrProcessing": "正在识别收据...",
+  "addExpense_ocrSuccess": "已自动识别收据内容",
+  "addExpense_ocrSuccessVerify": "已自动识别收据内容，请确认是否正确",
+  "addExpense_success": "支出已添加",
+  "addExpense_invalidAmount": "请输入有效金额",
+  "expenseDetail_title": "支出详情",
+  "expenseDetail_editTitle": "编辑支出",
+  "expenseDetail_amount": "金额",
+  "expenseDetail_hkdAmount": "港币金额",
+  "expenseDetail_exchangeRate": "汇率",
+  "expenseDetail_description": "描述",
+  "expenseDetail_descriptionRequired": "请输入描述",
+  "expenseDetail_date": "日期",
+  "expenseDetail_createdAt": "创建时间",
+  "expenseDetail_replaceImage": "更换图片",
+  "expenseDetail_imageLoadFailed": "图片加载失败",
+  "expenseDetail_noReceipt": "无收据图片",
+  "expenseDetail_cancelEdit": "取消编辑",
+  "expenseDetail_saved": "已保存",
+  "expenseDetail_saveFailed": "保存失败: {message}",
   "@expenseDetail_saveFailed": {
     "placeholders": {
       "message": {
@@ -77,8 +77,8 @@
       }
     }
   },
-  "expenseDetail_deleted": "Deleted",
-  "expenseDetail_deleteFailed": "Delete failed: {message}",
+  "expenseDetail_deleted": "已删除",
+  "expenseDetail_deleteFailed": "删除失败: {message}",
   "@expenseDetail_deleteFailed": {
     "placeholders": {
       "message": {
@@ -86,11 +86,11 @@
       }
     }
   },
-  "expenseDetail_confirmDelete": "Confirm Delete",
-  "expenseDetail_confirmDeleteMessage": "Are you sure you want to delete this expense?\nYou can restore it from Deleted Items.",
-  "expenseDetail_expenseNotFound": "Expense not found",
-  "expenseDetail_imageReplaceSuccess": "Image replaced",
-  "expenseDetail_imageReplaceFailed": "Replace image failed: {message}",
+  "expenseDetail_confirmDelete": "确认删除",
+  "expenseDetail_confirmDeleteMessage": "确定要删除这笔支出吗？\n删除后可在「已删除项目」中恢复。",
+  "expenseDetail_expenseNotFound": "找不到支出记录",
+  "expenseDetail_imageReplaceSuccess": "图片已更换",
+  "expenseDetail_imageReplaceFailed": "更换图片失败: {message}",
   "@expenseDetail_imageReplaceFailed": {
     "placeholders": {
       "message": {
@@ -98,21 +98,21 @@
       }
     }
   },
-  "expenseDetail_selectFromGallery": "Select from Gallery",
-  "rateSource_auto": "Live Rate",
-  "rateSource_offline": "Cached Rate",
-  "rateSource_default": "Default Rate",
-  "rateSource_manual": "Manual Input",
-  "rateSource_auto_short": "Live",
-  "rateSource_offline_short": "Cached",
-  "rateSource_default_short": "Default",
-  "rateSource_manual_short": "Manual",
-  "monthSummary_totalExpense": "Total Expense",
-  "monthSummary_count": "Count",
-  "monthSummary_countSuffix": "",
-  "monthSummary_previousMonth": "Previous Month",
-  "monthSummary_nextMonth": "Next Month",
-  "monthSummary_semanticLabel": "{month} summary. Total expense: HKD {amount}. {count} expenses.",
+  "expenseDetail_selectFromGallery": "从相册选择",
+  "rateSource_auto": "实时汇率",
+  "rateSource_offline": "离线缓存",
+  "rateSource_default": "默认汇率",
+  "rateSource_manual": "手动输入",
+  "rateSource_auto_short": "实时",
+  "rateSource_offline_short": "离线",
+  "rateSource_default_short": "默认",
+  "rateSource_manual_short": "手动",
+  "monthSummary_totalExpense": "总支出",
+  "monthSummary_count": "笔数",
+  "monthSummary_countSuffix": " 笔",
+  "monthSummary_previousMonth": "上个月",
+  "monthSummary_nextMonth": "下个月",
+  "monthSummary_semanticLabel": "{month}月份摘要。总支出：港币 {amount} 元。共 {count} 笔支出。",
   "@monthSummary_semanticLabel": {
     "placeholders": {
       "month": {
@@ -126,13 +126,13 @@
       }
     }
   },
-  "monthSummary_isLatestMonth": "Already at latest month",
-  "export_title": "Export Report",
-  "export_preview": "Preview",
-  "export_expenseCount": "Expense Count",
-  "export_totalHkd": "HKD Total",
-  "export_receiptCount": "Receipt Images",
-  "export_countUnit": "{count}",
+  "monthSummary_isLatestMonth": "已是最新月份",
+  "export_title": "导出报销单",
+  "export_preview": "预览",
+  "export_expenseCount": "支出笔数",
+  "export_totalHkd": "港币总额",
+  "export_receiptCount": "收据图片",
+  "export_countUnit": "{count} 笔",
   "@export_countUnit": {
     "placeholders": {
       "count": {
@@ -140,7 +140,7 @@
       }
     }
   },
-  "export_imageUnit": "{count}",
+  "export_imageUnit": "{count} 张",
   "@export_imageUnit": {
     "placeholders": {
       "count": {
@@ -148,9 +148,9 @@
       }
     }
   },
-  "export_excelWithReceipts": "Export Excel + Receipts",
-  "export_noData": "No Data",
-  "export_noDataMessage": "No expenses recorded in {year}/{month}",
+  "export_excelWithReceipts": "导出 Excel + 收据",
+  "export_noData": "没有数据",
+  "export_noDataMessage": "{year} 年 {month} 月没有支出记录",
   "@export_noDataMessage": {
     "placeholders": {
       "year": {
@@ -161,7 +161,7 @@
       }
     }
   },
-  "export_yearMonth": "{year}/{month}",
+  "export_yearMonth": "{year} 年 {month} 月",
   "@export_yearMonth": {
     "placeholders": {
       "year": {
@@ -172,13 +172,13 @@
       }
     }
   },
-  "export_hint": "Exported Excel contains complete expense details",
-  "export_packing": "Packing...",
-  "export_generatingExcel": "Generating Excel...",
-  "export_packingReceipts": "Packing receipt images...",
-  "export_compressing": "Compressing...",
-  "export_preparingShare": "Preparing to share...",
-  "export_success": "Export successful ({size})",
+  "export_hint": "导出的 Excel 包含完整支出明细",
+  "export_packing": "正在打包...",
+  "export_generatingExcel": "正在生成 Excel...",
+  "export_packingReceipts": "正在打包收据图片...",
+  "export_compressing": "正在压缩...",
+  "export_preparingShare": "准备分享...",
+  "export_success": "导出成功 ({size})",
   "@export_success": {
     "placeholders": {
       "size": {
@@ -186,7 +186,7 @@
       }
     }
   },
-  "export_failed": "Export failed: {message}",
+  "export_failed": "导出失败: {message}",
   "@export_failed": {
     "placeholders": {
       "message": {
@@ -194,7 +194,7 @@
       }
     }
   },
-  "export_sheetName": "{year}/{month} Expense Report",
+  "export_sheetName": "{year}年{month}月报销单",
   "@export_sheetName": {
     "placeholders": {
       "year": {
@@ -205,22 +205,22 @@
       }
     }
   },
-  "export_shareSubject": "Expense Snap Report",
-  "export_headerIndex": "No.",
-  "export_headerDate": "Date",
-  "export_headerDescription": "Description",
-  "export_headerOriginalAmount": "Original Amount",
-  "export_headerOriginalCurrency": "Currency",
-  "export_headerExchangeRate": "Exchange Rate",
-  "export_headerRateSource": "Rate Source",
-  "export_headerHkdAmount": "HKD Amount",
-  "export_headerReceiptFile": "Receipt",
-  "export_headerTotal": "Total",
-  "export_rateSourceAuto": "Auto",
-  "export_rateSourceOffline": "Offline Cache",
-  "export_rateSourceDefault": "Default",
-  "export_rateSourceManual": "Manual",
-  "export_fileName": "Expense_Report_{year}_{month}",
+  "export_shareSubject": "Expense Snap 报销单",
+  "export_headerIndex": "序号",
+  "export_headerDate": "日期",
+  "export_headerDescription": "描述",
+  "export_headerOriginalAmount": "原始金额",
+  "export_headerOriginalCurrency": "原始币种",
+  "export_headerExchangeRate": "汇率",
+  "export_headerRateSource": "汇率来源",
+  "export_headerHkdAmount": "港币金额",
+  "export_headerReceiptFile": "收据文件名",
+  "export_headerTotal": "合计",
+  "export_rateSourceAuto": "自动",
+  "export_rateSourceOffline": "离线缓存",
+  "export_rateSourceDefault": "默认",
+  "export_rateSourceManual": "手动",
+  "export_fileName": "报销单_{year}年{month}月",
   "@export_fileName": {
     "placeholders": {
       "year": {
@@ -231,33 +231,33 @@
       }
     }
   },
-  "settings_title": "Settings",
-  "settings_general": "General",
-  "settings_userName": "Username",
-  "settings_userNameHint": "Used for report title",
-  "settings_language": "Language",
-  "settings_theme": "Theme",
-  "settings_themeLight": "Light",
-  "settings_themeDark": "Dark",
-  "settings_themeSystem": "System",
-  "settings_data": "Data Management",
-  "settings_backup": "Cloud Backup",
-  "settings_backupDesc": "Backup to Google Drive",
-  "settings_restore": "Restore Backup",
-  "settings_restoreDesc": "Restore from Google Drive",
-  "settings_deletedItems": "Deleted Items",
-  "settings_deletedItemsDesc": "View or restore deleted expenses",
-  "settings_clearCache": "Clear Temp Files",
-  "settings_about": "About",
-  "settings_version": "Version",
-  "settings_privacyPolicy": "Privacy Policy",
-  "settings_termsOfService": "Terms of Service",
-  "settings_feedback": "Feedback",
-  "legal_privacyContent": "Privacy Policy\n\nLast updated: January 2026\n\n1. Data Collection\nWe only collect data that you voluntarily enter, including expense records, receipt images, and personal settings.\n\n2. Data Storage\nAll data is stored locally on your device. If you choose to use the cloud backup feature, data will sync to your Google Drive account.\n\n3. Data Usage\nWe do not use your data for advertising or share it with third parties.\n\n4. Data Deletion\nYou can delete all data in the app at any time. Deleted items are kept for 30 days before permanent deletion.\n\n5. Contact\nFor any privacy-related questions, please contact us through the feedback feature in the app.",
-  "legal_termsContent": "Terms of Service\n\nLast updated: January 2026\n\n1. Service Description\nExpense Snap is a personal expense tracking app that helps you record and manage daily expenses.\n\n2. Terms of Use\nBy using this app, you agree to comply with these terms.\n\n3. Limitation of Liability\nThis app is provided \"as is\". We are not responsible for data loss or any indirect damages.\n\n4. Intellectual Property\nAll content and features of the app are protected by copyright.\n\n5. Terms Modification\nWe reserve the right to modify these terms at any time. Continued use indicates acceptance of the modified terms.",
-  "settings_signInGoogle": "Sign in with Google",
-  "settings_signOutGoogle": "Sign out",
-  "settings_signedInAs": "Signed in as: {email}",
+  "settings_title": "设置",
+  "settings_general": "通用",
+  "settings_userName": "用户名",
+  "settings_userNameHint": "用于报销单标题",
+  "settings_language": "语言",
+  "settings_theme": "主题",
+  "settings_themeLight": "浅色",
+  "settings_themeDark": "深色",
+  "settings_themeSystem": "跟随系统",
+  "settings_data": "数据管理",
+  "settings_backup": "云端备份",
+  "settings_backupDesc": "备份至 Google 云端硬盘",
+  "settings_restore": "恢复备份",
+  "settings_restoreDesc": "从 Google 云端硬盘恢复",
+  "settings_deletedItems": "已删除项目",
+  "settings_deletedItemsDesc": "查看或恢复已删除的支出",
+  "settings_clearCache": "清理缓存文件",
+  "settings_about": "关于",
+  "settings_version": "版本",
+  "settings_privacyPolicy": "隐私政策",
+  "settings_termsOfService": "服务条款",
+  "settings_feedback": "意见反馈",
+  "legal_privacyContent": "隐私政策\n\n最后更新日期：2026年1月\n\n1. 数据收集\n我们收集的数据仅限于您主动输入的支出记录、收据图片和个人设置。\n\n2. 数据存储\n所有数据存储于您的设备本地。如您选择使用云端备份功能，数据将同步至您的 Google 云端硬盘账户。\n\n3. 数据使用\n我们不会将您的数据用于广告或分享给第三方。\n\n4. 数据删除\n您可随时删除应用程序中的所有数据。已删除的项目会保留 30 天后自动永久删除。\n\n5. 联系方式\n如有任何隐私相关问题，请通过应用程序内的意见反馈功能联系我们。",
+  "legal_termsContent": "服务条款\n\n最后更新日期：2026年1月\n\n1. 服务说明\n支出易是一款个人支出记录应用程序，帮助您追踪和管理日常支出。\n\n2. 使用条款\n使用本应用程序即表示您同意遵守这些条款。\n\n3. 责任限制\n本应用程序按「现状」提供，我们不对数据丢失或任何间接损失负责。\n\n4. 知识产权\n应用程序的所有内容和功能均受著作权保护。\n\n5. 条款修改\n我们保留随时修改这些条款的权利。继续使用即表示接受修改后的条款。",
+  "settings_signInGoogle": "登录 Google",
+  "settings_signOutGoogle": "退出 Google",
+  "settings_signedInAs": "已登录：{email}",
   "@settings_signedInAs": {
     "placeholders": {
       "email": {
@@ -265,8 +265,8 @@
       }
     }
   },
-  "settings_backupSuccess": "Backup successful",
-  "settings_backupFailed": "Backup failed: {message}",
+  "settings_backupSuccess": "备份成功",
+  "settings_backupFailed": "备份失败: {message}",
   "@settings_backupFailed": {
     "placeholders": {
       "message": {
@@ -274,8 +274,8 @@
       }
     }
   },
-  "settings_restoreSuccess": "Restore successful",
-  "settings_restoreFailed": "Restore failed: {message}",
+  "settings_restoreSuccess": "恢复成功",
+  "settings_restoreFailed": "恢复失败: {message}",
   "@settings_restoreFailed": {
     "placeholders": {
       "message": {
@@ -283,11 +283,11 @@
       }
     }
   },
-  "settings_cacheCleared": "Cache cleared",
-  "settings_noBackupFound": "No backup found",
-  "settings_confirmRestore": "Confirm Restore",
-  "settings_confirmRestoreMessage": "Restore will overwrite current data. Continue?",
-  "settings_lastBackup": "Last backup: {date}",
+  "settings_cacheCleared": "缓存已清除",
+  "settings_noBackupFound": "找不到备份文件",
+  "settings_confirmRestore": "确认恢复",
+  "settings_confirmRestoreMessage": "恢复会覆盖当前的数据，确定要继续吗？",
+  "settings_lastBackup": "上次备份：{date}",
   "@settings_lastBackup": {
     "placeholders": {
       "date": {
@@ -295,9 +295,9 @@
       }
     }
   },
-  "deletedItems_title": "Deleted Items",
-  "deletedItems_clearAll": "Clear All",
-  "deletedItems_daysRemaining": "{days} days until auto-delete",
+  "deletedItems_title": "已删除项目",
+  "deletedItems_clearAll": "清空",
+  "deletedItems_daysRemaining": "还有 {days} 天自动删除",
   "@deletedItems_daysRemaining": {
     "placeholders": {
       "days": {
@@ -305,9 +305,9 @@
       }
     }
   },
-  "deletedItems_soonDeleted": "Will be deleted soon",
-  "deletedItems_restored": "Restored",
-  "deletedItems_restoreFailed": "Restore failed: {message}",
+  "deletedItems_soonDeleted": "即将自动删除",
+  "deletedItems_restored": "已恢复",
+  "deletedItems_restoreFailed": "恢复失败: {message}",
   "@deletedItems_restoreFailed": {
     "placeholders": {
       "message": {
@@ -315,10 +315,10 @@
       }
     }
   },
-  "deletedItems_permanentDelete": "Delete Permanently",
-  "deletedItems_permanentDeleteConfirm": "This cannot be undone. Delete permanently?",
-  "deletedItems_permanentDeleted": "Permanently deleted",
-  "deletedItems_permanentDeleteFailed": "Delete failed: {message}",
+  "deletedItems_permanentDelete": "永久删除",
+  "deletedItems_permanentDeleteConfirm": "此操作无法恢复，确定要永久删除吗？",
+  "deletedItems_permanentDeleted": "已永久删除",
+  "deletedItems_permanentDeleteFailed": "删除失败: {message}",
   "@deletedItems_permanentDeleteFailed": {
     "placeholders": {
       "message": {
@@ -326,8 +326,8 @@
       }
     }
   },
-  "deletedItems_clearAllTitle": "Clear All",
-  "deletedItems_clearAllConfirm": "Permanently delete all {count} items?\nThis cannot be undone.",
+  "deletedItems_clearAllTitle": "清空全部",
+  "deletedItems_clearAllConfirm": "确定要永久删除全部 {count} 笔记录吗？\n此操作无法恢复。",
   "@deletedItems_clearAllConfirm": {
     "placeholders": {
       "count": {
@@ -335,8 +335,8 @@
       }
     }
   },
-  "deletedItems_clearAllButton": "Delete All",
-  "deletedItems_clearedCount": "Deleted {count} items",
+  "deletedItems_clearAllButton": "全部删除",
+  "deletedItems_clearedCount": "已删除 {count} 笔记录",
   "@deletedItems_clearedCount": {
     "placeholders": {
       "count": {
@@ -344,7 +344,7 @@
       }
     }
   },
-  "deletedItems_loadFailed": "Load failed: {message}",
+  "deletedItems_loadFailed": "加载失败: {message}",
   "@deletedItems_loadFailed": {
     "placeholders": {
       "message": {
@@ -352,31 +352,31 @@
       }
     }
   },
-  "onboarding_skip": "Skip",
-  "onboarding_next": "Next",
-  "onboarding_start": "Get Started",
-  "onboarding_page1Title": "Snap Your Receipts",
-  "onboarding_page1Desc": "Take photos of receipts instantly\nNever lose a receipt again",
-  "onboarding_page2Title": "Multi-Currency Support",
-  "onboarding_page2Desc": "Supports HKD, CNY, USD\nAuto-fetches live exchange rates",
-  "onboarding_page3Title": "One-Click Export",
-  "onboarding_page3Desc": "Export Excel + receipt images\nEasy expense reporting",
-  "onboarding_nameLabel": "Your Name (Optional)",
-  "onboarding_nameHint": "Used for report title",
-  "onboarding_nameTooLong": "Name cannot exceed 50 characters",
-  "connectivity_offlineMode": "Offline Mode - Exchange rates may be outdated",
-  "dialog_duplicateTitle": "Possible Duplicate",
-  "dialog_duplicateMessage": "Similar expense found:",
-  "dialog_duplicateConfirm": "Continue adding?",
-  "dialog_duplicateContinue": "Add Anyway",
-  "dialog_largeAmountTitle": "Large Amount",
-  "dialog_largeAmountMessage": "You are recording a large expense:",
-  "dialog_largeAmountConfirm": "Is the amount correct?",
-  "dialog_largeAmountBack": "Go Back",
-  "dialog_largeAmountOk": "Confirm",
-  "dialog_monthEndTitle": "Month End Reminder",
-  "dialog_monthEndMessage": "Month is ending soon!",
-  "dialog_monthEndExpenseCount": "You have {count} expenses this month",
+  "onboarding_skip": "跳过",
+  "onboarding_next": "下一步",
+  "onboarding_start": "开始使用",
+  "onboarding_page1Title": "拍照记录支出",
+  "onboarding_page1Desc": "随手拍摄收据，即时记录每笔支出\n再也不怕遗失收据",
+  "onboarding_page2Title": "多币种自动转换",
+  "onboarding_page2Desc": "支持 HKD、CNY、USD\n系统自动获取实时汇率",
+  "onboarding_page3Title": "一键导出报销单",
+  "onboarding_page3Desc": "月结时一键导出 Excel + 收据图片\n轻松完成报销",
+  "onboarding_nameLabel": "您的名字（选填）",
+  "onboarding_nameHint": "用于报销单标题",
+  "onboarding_nameTooLong": "名字不能超过 50 个字",
+  "connectivity_offlineMode": "离线模式 - 汇率可能不是最新",
+  "dialog_duplicateTitle": "可能重复",
+  "dialog_duplicateMessage": "发现相似的支出记录：",
+  "dialog_duplicateConfirm": "确定要继续添加吗？",
+  "dialog_duplicateContinue": "继续添加",
+  "dialog_largeAmountTitle": "大金额确认",
+  "dialog_largeAmountMessage": "您即将记录一笔大金额支出：",
+  "dialog_largeAmountConfirm": "请确认金额是否正确？",
+  "dialog_largeAmountBack": "返回修改",
+  "dialog_largeAmountOk": "确认正确",
+  "dialog_monthEndTitle": "月底提醒",
+  "dialog_monthEndMessage": "本月即将结束！",
+  "dialog_monthEndExpenseCount": "您本月共有 {count} 笔支出记录",
   "@dialog_monthEndExpenseCount": {
     "placeholders": {
       "count": {
@@ -384,29 +384,29 @@
       }
     }
   },
-  "dialog_monthEndSuggestion": "Consider exporting your expense report.",
-  "dialog_later": "Later",
-  "dialog_goExport": "Export Now",
-  "emptyState_noExpenses": "No Expenses",
-  "emptyState_noExpensesHint": "Tap the button below to add your first expense",
-  "emptyState_noDeletedItems": "No Deleted Items",
-  "emptyState_noDeletedItemsHint": "Deleted expenses are kept for 30 days",
-  "emptyState_error": "Load Failed",
-  "emptyState_offline": "No Internet Connection",
-  "emptyState_offlineHint": "Please check your network settings",
-  "emptyState_exportSuccess": "Export Successful",
-  "emptyState_exportSuccessHint": "File is ready",
-  "excel_header_index": "No.",
-  "excel_header_date": "Date",
-  "excel_header_description": "Description",
-  "excel_header_originalAmount": "Original Amount",
-  "excel_header_originalCurrency": "Currency",
-  "excel_header_exchangeRate": "Exchange Rate",
-  "excel_header_rateSource": "Rate Source",
-  "excel_header_hkdAmount": "HKD Amount",
-  "excel_header_receiptFile": "Receipt File",
-  "excel_total": "Total",
-  "excel_sheetName": "Expenses_{year}_{month}",
+  "dialog_monthEndSuggestion": "建议您导出报销单，以便月结报销。",
+  "dialog_later": "稍后",
+  "dialog_goExport": "去导出",
+  "emptyState_noExpenses": "暂无支出记录",
+  "emptyState_noExpensesHint": "点击右下角按钮添加第一笔支出",
+  "emptyState_noDeletedItems": "没有已删除的项目",
+  "emptyState_noDeletedItemsHint": "删除的支出会在这里保留 30 天",
+  "emptyState_error": "加载失败",
+  "emptyState_offline": "无网络连接",
+  "emptyState_offlineHint": "请检查您的网络设置",
+  "emptyState_exportSuccess": "导出成功",
+  "emptyState_exportSuccessHint": "文件已准备就绪",
+  "excel_header_index": "序号",
+  "excel_header_date": "日期",
+  "excel_header_description": "描述",
+  "excel_header_originalAmount": "原始金额",
+  "excel_header_originalCurrency": "原始币种",
+  "excel_header_exchangeRate": "汇率",
+  "excel_header_rateSource": "汇率来源",
+  "excel_header_hkdAmount": "港币金额",
+  "excel_header_receiptFile": "收据文件名",
+  "excel_total": "合计",
+  "excel_sheetName": "{year}年{month}月报销单",
   "@excel_sheetName": {
     "placeholders": {
       "year": {
@@ -417,7 +417,7 @@
       }
     }
   },
-  "excel_fileName": "Expenses_{year}_{month}",
+  "excel_fileName": "报销单_{year}年{month}月",
   "@excel_fileName": {
     "placeholders": {
       "year": {
@@ -428,59 +428,59 @@
       }
     }
   },
-  "excel_shareSubject": "Expense Snap Report",
-  "excel_rateSourceAuto": "Auto",
-  "excel_rateSourceOffline": "Cached",
-  "excel_rateSourceDefault": "Default",
-  "excel_rateSourceManual": "Manual",
-  "error_unknown": "Unknown error occurred",
-  "error_networkError": "Network connection error",
-  "error_serverError": "Server error",
-  "error_storageError": "Storage error",
-  "error_permissionDenied": "Permission denied",
-  "error_fileNotFound": "File not found",
-  "error_invalidData": "Invalid data format",
-  "error_exportNoData": "No data to export",
-  "error_invalidMonth": "Month must be between 1 and 12",
-  "error_invalidYear": "Year must be between 2000 and 2100",
-  "error_excelGenerationFailed": "Failed to generate Excel file",
-  "error_zipFailed": "Failed to compress file",
-  "error_shareFailed": "Share failed",
-  "error_cleanupFailed": "Failed to clean up temp files",
+  "excel_shareSubject": "Expense Snap 报销单",
+  "excel_rateSourceAuto": "自动",
+  "excel_rateSourceOffline": "离线缓存",
+  "excel_rateSourceDefault": "默认",
+  "excel_rateSourceManual": "手动",
+  "error_unknown": "发生未知错误",
+  "error_networkError": "网络连接错误",
+  "error_serverError": "服务器错误",
+  "error_storageError": "存储空间错误",
+  "error_permissionDenied": "权限被拒绝",
+  "error_fileNotFound": "文件不存在",
+  "error_invalidData": "数据格式错误",
+  "error_exportNoData": "没有数据可导出",
+  "error_invalidMonth": "月份必须介于 1 到 12 之间",
+  "error_invalidYear": "年份必须介于 2000 到 2100 之间",
+  "error_excelGenerationFailed": "无法生成 Excel 文件",
+  "error_zipFailed": "无法压缩文件",
+  "error_shareFailed": "分享失败",
+  "error_cleanupFailed": "清理缓存文件失败",
   "format_date": "yyyy/MM/dd",
   "format_dateTime": "yyyy/MM/dd HH:mm",
-  "format_month": "MMM yyyy",
+  "format_month": "yyyy年M月",
   "format_currency": "#,##0.00",
-  "currency_HKD": "HKD",
-  "currency_CNY": "CNY",
-  "currency_USD": "USD",
-  "datePicker_selectDate": "Select Date",
-  "datePicker_selectMonth": "Select Month",
-  "settings_profile": "Profile",
-  "settings_appearance": "Appearance",
-  "settings_reduceMotion": "Reduce Motion",
-  "settings_reduceMotionDesc": "Reduce animations for motion sensitivity",
-  "settings_storageUsage": "Storage Usage",
-  "settings_clearCacheDesc": "Free up export and backup cache space",
-  "settings_cloudBackup": "Cloud Backup",
-  "settings_googleDrive": "Google Drive",
-  "settings_lastBackupTime": "Last Backup",
-  "settings_backupNow": "Backup Now",
-  "settings_backupNowDesc": "Backup database and receipts to Google Drive",
-  "settings_restoreBackupTitle": "Restore Backup",
-  "settings_restoreBackupDesc": "Restore from Google Drive",
-  "settings_selectBackup": "Select Backup",
-  "settings_connect": "Connect",
-  "settings_disconnect": "Disconnect",
-  "settings_connected": "Connected",
-  "settings_notConnected": "Not connected",
-  "settings_languageSystem": "Follow System",
-  "settings_selectTheme": "Select Theme",
-  "settings_editName": "Edit Name",
-  "settings_nameLabel": "Name",
-  "settings_nameHint": "Used for expense report title",
-  "settings_saved": "Saved",
-  "settings_cleanupFailed": "Cleanup failed: {message}",
+  "currency_HKD": "港币",
+  "currency_CNY": "人民币",
+  "currency_USD": "美元",
+  "datePicker_selectDate": "选择日期",
+  "datePicker_selectMonth": "选择月份",
+  "settings_profile": "个人资料",
+  "settings_appearance": "外观",
+  "settings_reduceMotion": "减少动画",
+  "settings_reduceMotionDesc": "减少动态效果，适合晕动症患者",
+  "settings_storageUsage": "本地存储使用量",
+  "settings_clearCacheDesc": "释放导出和备份缓存空间",
+  "settings_cloudBackup": "云端备份",
+  "settings_googleDrive": "Google 云端硬盘",
+  "settings_lastBackupTime": "上次备份",
+  "settings_backupNow": "立即备份",
+  "settings_backupNowDesc": "备份数据库和收据到 Google 云端硬盘",
+  "settings_restoreBackupTitle": "恢复备份",
+  "settings_restoreBackupDesc": "从 Google 云端硬盘恢复",
+  "settings_selectBackup": "选择备份",
+  "settings_connect": "连接",
+  "settings_disconnect": "断开",
+  "settings_connected": "已连接",
+  "settings_notConnected": "尚未连接",
+  "settings_languageSystem": "跟随系统",
+  "settings_selectTheme": "选择主题",
+  "settings_editName": "编辑姓名",
+  "settings_nameLabel": "姓名",
+  "settings_nameHint": "用于报销单标题",
+  "settings_saved": "已保存",
+  "settings_cleanupFailed": "清理失败: {message}",
   "@settings_cleanupFailed": {
     "placeholders": {
       "message": {
@@ -488,7 +488,7 @@
       }
     }
   },
-  "settings_cleanedFiles": "Cleaned {count} temp files",
+  "settings_cleanedFiles": "已清理 {count} 个缓存文件",
   "@settings_cleanedFiles": {
     "placeholders": {
       "count": {
@@ -496,10 +496,10 @@
       }
     }
   },
-  "settings_backupToCloud": "Backup to Cloud",
-  "settings_backupConfirmMessage": "This will backup all expenses and receipts to Google Drive.\n\nContinue?",
-  "settings_confirmRestoreTitle": "Confirm Restore",
-  "settings_confirmRestoreDesc": "This will replace all current data with \"{fileName}\".\n\nThis cannot be undone. Continue?",
+  "settings_backupToCloud": "备份到云端",
+  "settings_backupConfirmMessage": "这将备份所有支出记录和收据图片到 Google 云端硬盘。\n\n继续？",
+  "settings_confirmRestoreTitle": "确认恢复",
+  "settings_confirmRestoreDesc": "这将使用「{fileName}」替换当前所有数据。\n\n此操作无法恢复，确定要继续吗？",
   "@settings_confirmRestoreDesc": {
     "placeholders": {
       "fileName": {
@@ -507,9 +507,9 @@
       }
     }
   },
-  "settings_disconnectTitle": "Disconnect Google Account",
-  "settings_disconnectConfirm": "Cloud backup will be unavailable after disconnecting.\n\nDisconnect?",
-  "settings_connectFailed": "Connection failed: {message}",
+  "settings_disconnectTitle": "断开 Google 账号",
+  "settings_disconnectConfirm": "断开后将无法使用云端备份功能。\n\n确定要断开吗？",
+  "settings_connectFailed": "连接失败: {message}",
   "@settings_connectFailed": {
     "placeholders": {
       "message": {
@@ -517,7 +517,7 @@
       }
     }
   },
-  "settings_disconnectFailed": "Disconnect failed: {message}",
+  "settings_disconnectFailed": "断开失败: {message}",
   "@settings_disconnectFailed": {
     "placeholders": {
       "message": {
@@ -525,22 +525,22 @@
       }
     }
   },
-  "settings_googleConnected": "Google account connected",
-  "settings_googleDisconnected": "Google account disconnected",
-  "category_label": "Category (Optional)",
-  "category_meals": "Meals",
-  "category_transport": "Transport",
-  "category_accommodation": "Accommodation",
-  "category_officeSupplies": "Office Supplies",
-  "category_communication": "Communication",
-  "category_entertainment": "Entertainment",
-  "category_medical": "Medical",
-  "category_other": "Other",
-  "category_statistics": "Category Statistics",
-  "category_uncategorized": "Uncategorized",
-  "excel_header_category": "Category",
-  "semantic_category_prefix": "Category",
-  "semantic_expenseItem": "Expense item: {description}",
+  "settings_googleConnected": "已连接 Google 账号",
+  "settings_googleDisconnected": "已断开 Google 账号",
+  "category_label": "分类（选填）",
+  "category_meals": "餐饮",
+  "category_transport": "交通",
+  "category_accommodation": "住宿",
+  "category_officeSupplies": "办公用品",
+  "category_communication": "通讯",
+  "category_entertainment": "娱乐",
+  "category_medical": "医疗",
+  "category_other": "其他",
+  "category_statistics": "分类统计",
+  "category_uncategorized": "未分类",
+  "excel_header_category": "分类",
+  "semantic_category_prefix": "分类",
+  "semantic_expenseItem": "支出项目：{description}",
   "@semantic_expenseItem": {
     "placeholders": {
       "description": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "semantic_amount": "Amount: {amount}",
+  "semantic_amount": "金额：{amount}",
   "@semantic_amount": {
     "placeholders": {
       "amount": {
@@ -556,7 +556,7 @@
       }
     }
   },
-  "semantic_originalAmount": "Original amount: {amount}",
+  "semantic_originalAmount": "原始金额：{amount}",
   "@semantic_originalAmount": {
     "placeholders": {
       "amount": {
@@ -564,7 +564,7 @@
       }
     }
   },
-  "semantic_date": "Date: {date}",
+  "semantic_date": "日期：{date}",
   "@semantic_date": {
     "placeholders": {
       "date": {
@@ -572,7 +572,7 @@
       }
     }
   },
-  "semantic_rateSource": "Rate source: {source}",
+  "semantic_rateSource": "汇率来源：{source}",
   "@semantic_rateSource": {
     "placeholders": {
       "source": {
@@ -580,11 +580,11 @@
       }
     }
   },
-  "semantic_hasReceipt": "Has receipt image",
-  "semantic_tapForDetails": "Tap to view details",
-  "semantic_swipeToDelete": "Swipe left to delete",
-  "validation_amountRequired": "Please enter an amount",
-  "validation_amountTooSmall": "Amount cannot be less than {min}",
+  "semantic_hasReceipt": "有收据图片",
+  "semantic_tapForDetails": "点击查看详情",
+  "semantic_swipeToDelete": "向左滑动删除",
+  "validation_amountRequired": "请输入金额",
+  "validation_amountTooSmall": "金额不能小于 {min}",
   "@validation_amountTooSmall": {
     "placeholders": {
       "min": {
@@ -592,7 +592,7 @@
       }
     }
   },
-  "validation_amountTooLarge": "Amount cannot exceed {max}",
+  "validation_amountTooLarge": "金额不能大于 {max}",
   "@validation_amountTooLarge": {
     "placeholders": {
       "max": {
@@ -600,7 +600,7 @@
       }
     }
   },
-  "validation_exchangeRateLabel": "Exchange Rate",
+  "validation_exchangeRateLabel": "汇率",
   "validation_exchangeRateHint": "1 {currency} = ? HKD",
   "@validation_exchangeRateHint": {
     "placeholders": {
@@ -609,6 +609,6 @@
       }
     }
   },
-  "validation_exchangeRateRequired": "Please enter exchange rate",
-  "validation_exchangeRateInvalid": "Please enter a valid exchange rate"
+  "validation_exchangeRateRequired": "请输入汇率",
+  "validation_exchangeRateInvalid": "请输入有效汇率"
 }

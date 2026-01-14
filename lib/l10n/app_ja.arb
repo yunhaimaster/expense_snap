@@ -2,29 +2,29 @@
   "@@locale": "ja",
   "@@context": "ExpenseSnap Localization",
   "appTitle": "Expense Snap",
-  "common_save": "Save",
-  "common_cancel": "Cancel",
-  "common_delete": "Delete",
-  "common_edit": "Edit",
-  "common_retry": "Retry",
-  "common_confirm": "Confirm",
-  "common_back": "Back",
-  "common_skip": "Skip",
-  "common_next": "Next",
-  "common_done": "Done",
-  "common_close": "Close",
-  "common_restore": "Restore",
-  "common_clear": "Clear",
-  "common_share": "Share",
-  "common_loading": "Loading...",
-  "common_saving": "Saving...",
-  "common_processing": "Processing...",
-  "nav_home": "Home",
-  "nav_export": "Export",
-  "nav_settings": "Settings",
-  "home_addExpense": "Add Expense",
-  "home_deleteSuccess": "Expense deleted",
-  "home_deleteFailed": "Delete failed: {message}",
+  "common_save": "保存",
+  "common_cancel": "キャンセル",
+  "common_delete": "削除",
+  "common_edit": "編集",
+  "common_retry": "再試行",
+  "common_confirm": "確認",
+  "common_back": "戻る",
+  "common_skip": "スキップ",
+  "common_next": "次へ",
+  "common_done": "完了",
+  "common_close": "閉じる",
+  "common_restore": "復元",
+  "common_clear": "クリア",
+  "common_share": "共有",
+  "common_loading": "読み込み中...",
+  "common_saving": "保存中...",
+  "common_processing": "処理中...",
+  "nav_home": "ホーム",
+  "nav_export": "エクスポート",
+  "nav_settings": "設定",
+  "home_addExpense": "支出を追加",
+  "home_deleteSuccess": "支出を削除しました",
+  "home_deleteFailed": "削除に失敗しました: {message}",
   "@home_deleteFailed": {
     "placeholders": {
       "message": {
@@ -32,44 +32,44 @@
       }
     }
   },
-  "home_undo": "Undo",
-  "showcase_addExpenseTitle": "Add Expense",
-  "showcase_addExpenseDesc": "Tap here to take a photo and record your expense",
-  "showcase_swipeDeleteTitle": "Swipe to Delete",
-  "showcase_swipeDeleteDesc": "Swipe left to delete an expense",
-  "showcase_exportTitle": "Export Report",
-  "showcase_exportDesc": "Tap here to export Excel and receipts",
-  "addExpense_title": "Add Expense",
-  "addExpense_receiptImage": "Receipt Image",
-  "addExpense_camera": "Camera",
-  "addExpense_gallery": "Gallery",
-  "addExpense_amount": "Amount",
-  "addExpense_description": "Description",
-  "addExpense_descriptionHint": "Enter description...",
-  "addExpense_date": "Date",
-  "addExpense_currency": "Currency",
-  "addExpense_exchangeRate": "Exchange Rate",
-  "addExpense_manualInput": "Manual Input",
-  "addExpense_ocrProcessing": "Recognizing receipt...",
-  "addExpense_ocrSuccess": "Receipt content recognized",
-  "addExpense_ocrSuccessVerify": "Receipt content recognized, please verify",
-  "addExpense_success": "Expense added",
-  "addExpense_invalidAmount": "Please enter a valid amount",
-  "expenseDetail_title": "Expense Details",
-  "expenseDetail_editTitle": "Edit Expense",
-  "expenseDetail_amount": "Amount",
-  "expenseDetail_hkdAmount": "HKD Amount",
-  "expenseDetail_exchangeRate": "Exchange Rate",
-  "expenseDetail_description": "Description",
-  "expenseDetail_descriptionRequired": "Please enter a description",
-  "expenseDetail_date": "Date",
-  "expenseDetail_createdAt": "Created At",
-  "expenseDetail_replaceImage": "Replace Image",
-  "expenseDetail_imageLoadFailed": "Image failed to load",
-  "expenseDetail_noReceipt": "No receipt image",
-  "expenseDetail_cancelEdit": "Cancel Edit",
-  "expenseDetail_saved": "Saved",
-  "expenseDetail_saveFailed": "Save failed: {message}",
+  "home_undo": "元に戻す",
+  "showcase_addExpenseTitle": "支出を追加",
+  "showcase_addExpenseDesc": "ここをタップして写真を撮り、支出を記録します",
+  "showcase_swipeDeleteTitle": "スワイプで削除",
+  "showcase_swipeDeleteDesc": "左にスワイプすると支出を削除できます",
+  "showcase_exportTitle": "レポートをエクスポート",
+  "showcase_exportDesc": "ここをタップしてExcelとレシートをエクスポート",
+  "addExpense_title": "支出を追加",
+  "addExpense_receiptImage": "レシート画像",
+  "addExpense_camera": "カメラ",
+  "addExpense_gallery": "ギャラリー",
+  "addExpense_amount": "金額",
+  "addExpense_description": "説明",
+  "addExpense_descriptionHint": "説明を入力...",
+  "addExpense_date": "日付",
+  "addExpense_currency": "通貨",
+  "addExpense_exchangeRate": "為替レート",
+  "addExpense_manualInput": "手動入力",
+  "addExpense_ocrProcessing": "レシートを認識中...",
+  "addExpense_ocrSuccess": "レシート内容を認識しました",
+  "addExpense_ocrSuccessVerify": "レシート内容を認識しました。確認してください",
+  "addExpense_success": "支出を追加しました",
+  "addExpense_invalidAmount": "有効な金額を入力してください",
+  "expenseDetail_title": "支出詳細",
+  "expenseDetail_editTitle": "支出を編集",
+  "expenseDetail_amount": "金額",
+  "expenseDetail_hkdAmount": "HKD金額",
+  "expenseDetail_exchangeRate": "為替レート",
+  "expenseDetail_description": "説明",
+  "expenseDetail_descriptionRequired": "説明を入力してください",
+  "expenseDetail_date": "日付",
+  "expenseDetail_createdAt": "作成日時",
+  "expenseDetail_replaceImage": "画像を変更",
+  "expenseDetail_imageLoadFailed": "画像の読み込みに失敗しました",
+  "expenseDetail_noReceipt": "レシート画像なし",
+  "expenseDetail_cancelEdit": "編集をキャンセル",
+  "expenseDetail_saved": "保存しました",
+  "expenseDetail_saveFailed": "保存に失敗しました: {message}",
   "@expenseDetail_saveFailed": {
     "placeholders": {
       "message": {
@@ -77,8 +77,8 @@
       }
     }
   },
-  "expenseDetail_deleted": "Deleted",
-  "expenseDetail_deleteFailed": "Delete failed: {message}",
+  "expenseDetail_deleted": "削除しました",
+  "expenseDetail_deleteFailed": "削除に失敗しました: {message}",
   "@expenseDetail_deleteFailed": {
     "placeholders": {
       "message": {
@@ -86,11 +86,11 @@
       }
     }
   },
-  "expenseDetail_confirmDelete": "Confirm Delete",
-  "expenseDetail_confirmDeleteMessage": "Are you sure you want to delete this expense?\nYou can restore it from Deleted Items.",
-  "expenseDetail_expenseNotFound": "Expense not found",
-  "expenseDetail_imageReplaceSuccess": "Image replaced",
-  "expenseDetail_imageReplaceFailed": "Replace image failed: {message}",
+  "expenseDetail_confirmDelete": "削除の確認",
+  "expenseDetail_confirmDeleteMessage": "この支出を削除しますか？\n削除済みアイテムから復元できます。",
+  "expenseDetail_expenseNotFound": "支出が見つかりません",
+  "expenseDetail_imageReplaceSuccess": "画像を変更しました",
+  "expenseDetail_imageReplaceFailed": "画像の変更に失敗しました: {message}",
   "@expenseDetail_imageReplaceFailed": {
     "placeholders": {
       "message": {
@@ -98,21 +98,21 @@
       }
     }
   },
-  "expenseDetail_selectFromGallery": "Select from Gallery",
-  "rateSource_auto": "Live Rate",
-  "rateSource_offline": "Cached Rate",
-  "rateSource_default": "Default Rate",
-  "rateSource_manual": "Manual Input",
-  "rateSource_auto_short": "Live",
-  "rateSource_offline_short": "Cached",
-  "rateSource_default_short": "Default",
-  "rateSource_manual_short": "Manual",
-  "monthSummary_totalExpense": "Total Expense",
-  "monthSummary_count": "Count",
-  "monthSummary_countSuffix": "",
-  "monthSummary_previousMonth": "Previous Month",
-  "monthSummary_nextMonth": "Next Month",
-  "monthSummary_semanticLabel": "{month} summary. Total expense: HKD {amount}. {count} expenses.",
+  "expenseDetail_selectFromGallery": "ギャラリーから選択",
+  "rateSource_auto": "リアルタイムレート",
+  "rateSource_offline": "キャッシュされたレート",
+  "rateSource_default": "デフォルトレート",
+  "rateSource_manual": "手動入力",
+  "rateSource_auto_short": "リアルタイム",
+  "rateSource_offline_short": "キャッシュ",
+  "rateSource_default_short": "デフォルト",
+  "rateSource_manual_short": "手動",
+  "monthSummary_totalExpense": "合計支出",
+  "monthSummary_count": "件数",
+  "monthSummary_countSuffix": "件",
+  "monthSummary_previousMonth": "前月",
+  "monthSummary_nextMonth": "翌月",
+  "monthSummary_semanticLabel": "{month}の概要。合計支出：HKD {amount}。{count}件の支出。",
   "@monthSummary_semanticLabel": {
     "placeholders": {
       "month": {
@@ -126,13 +126,13 @@
       }
     }
   },
-  "monthSummary_isLatestMonth": "Already at latest month",
-  "export_title": "Export Report",
-  "export_preview": "Preview",
-  "export_expenseCount": "Expense Count",
-  "export_totalHkd": "HKD Total",
-  "export_receiptCount": "Receipt Images",
-  "export_countUnit": "{count}",
+  "monthSummary_isLatestMonth": "最新の月です",
+  "export_title": "レポートをエクスポート",
+  "export_preview": "プレビュー",
+  "export_expenseCount": "支出件数",
+  "export_totalHkd": "HKD合計",
+  "export_receiptCount": "レシート画像",
+  "export_countUnit": "{count}件",
   "@export_countUnit": {
     "placeholders": {
       "count": {
@@ -140,7 +140,7 @@
       }
     }
   },
-  "export_imageUnit": "{count}",
+  "export_imageUnit": "{count}枚",
   "@export_imageUnit": {
     "placeholders": {
       "count": {
@@ -148,9 +148,9 @@
       }
     }
   },
-  "export_excelWithReceipts": "Export Excel + Receipts",
-  "export_noData": "No Data",
-  "export_noDataMessage": "No expenses recorded in {year}/{month}",
+  "export_excelWithReceipts": "Excel + レシートをエクスポート",
+  "export_noData": "データなし",
+  "export_noDataMessage": "{year}年{month}月の支出記録はありません",
   "@export_noDataMessage": {
     "placeholders": {
       "year": {
@@ -161,7 +161,7 @@
       }
     }
   },
-  "export_yearMonth": "{year}/{month}",
+  "export_yearMonth": "{year}年{month}月",
   "@export_yearMonth": {
     "placeholders": {
       "year": {
@@ -172,13 +172,13 @@
       }
     }
   },
-  "export_hint": "Exported Excel contains complete expense details",
-  "export_packing": "Packing...",
-  "export_generatingExcel": "Generating Excel...",
-  "export_packingReceipts": "Packing receipt images...",
-  "export_compressing": "Compressing...",
-  "export_preparingShare": "Preparing to share...",
-  "export_success": "Export successful ({size})",
+  "export_hint": "エクスポートされたExcelには完全な支出明細が含まれます",
+  "export_packing": "パッキング中...",
+  "export_generatingExcel": "Excel生成中...",
+  "export_packingReceipts": "レシート画像をパッキング中...",
+  "export_compressing": "圧縮中...",
+  "export_preparingShare": "共有の準備中...",
+  "export_success": "エクスポート成功 ({size})",
   "@export_success": {
     "placeholders": {
       "size": {
@@ -186,7 +186,7 @@
       }
     }
   },
-  "export_failed": "Export failed: {message}",
+  "export_failed": "エクスポートに失敗しました: {message}",
   "@export_failed": {
     "placeholders": {
       "message": {
@@ -194,7 +194,7 @@
       }
     }
   },
-  "export_sheetName": "{year}/{month} Expense Report",
+  "export_sheetName": "{year}年{month}月経費精算書",
   "@export_sheetName": {
     "placeholders": {
       "year": {
@@ -205,22 +205,22 @@
       }
     }
   },
-  "export_shareSubject": "Expense Snap Report",
+  "export_shareSubject": "Expense Snap レポート",
   "export_headerIndex": "No.",
-  "export_headerDate": "Date",
-  "export_headerDescription": "Description",
-  "export_headerOriginalAmount": "Original Amount",
-  "export_headerOriginalCurrency": "Currency",
-  "export_headerExchangeRate": "Exchange Rate",
-  "export_headerRateSource": "Rate Source",
-  "export_headerHkdAmount": "HKD Amount",
-  "export_headerReceiptFile": "Receipt",
-  "export_headerTotal": "Total",
-  "export_rateSourceAuto": "Auto",
-  "export_rateSourceOffline": "Offline Cache",
-  "export_rateSourceDefault": "Default",
-  "export_rateSourceManual": "Manual",
-  "export_fileName": "Expense_Report_{year}_{month}",
+  "export_headerDate": "日付",
+  "export_headerDescription": "説明",
+  "export_headerOriginalAmount": "元の金額",
+  "export_headerOriginalCurrency": "通貨",
+  "export_headerExchangeRate": "為替レート",
+  "export_headerRateSource": "レート出典",
+  "export_headerHkdAmount": "HKD金額",
+  "export_headerReceiptFile": "レシート",
+  "export_headerTotal": "合計",
+  "export_rateSourceAuto": "自動",
+  "export_rateSourceOffline": "オフラインキャッシュ",
+  "export_rateSourceDefault": "デフォルト",
+  "export_rateSourceManual": "手動",
+  "export_fileName": "経費精算書_{year}年{month}月",
   "@export_fileName": {
     "placeholders": {
       "year": {
@@ -231,33 +231,33 @@
       }
     }
   },
-  "settings_title": "Settings",
-  "settings_general": "General",
-  "settings_userName": "Username",
-  "settings_userNameHint": "Used for report title",
-  "settings_language": "Language",
-  "settings_theme": "Theme",
-  "settings_themeLight": "Light",
-  "settings_themeDark": "Dark",
-  "settings_themeSystem": "System",
-  "settings_data": "Data Management",
-  "settings_backup": "Cloud Backup",
-  "settings_backupDesc": "Backup to Google Drive",
-  "settings_restore": "Restore Backup",
-  "settings_restoreDesc": "Restore from Google Drive",
-  "settings_deletedItems": "Deleted Items",
-  "settings_deletedItemsDesc": "View or restore deleted expenses",
-  "settings_clearCache": "Clear Temp Files",
-  "settings_about": "About",
-  "settings_version": "Version",
-  "settings_privacyPolicy": "Privacy Policy",
-  "settings_termsOfService": "Terms of Service",
-  "settings_feedback": "Feedback",
-  "legal_privacyContent": "Privacy Policy\n\nLast updated: January 2026\n\n1. Data Collection\nWe only collect data that you voluntarily enter, including expense records, receipt images, and personal settings.\n\n2. Data Storage\nAll data is stored locally on your device. If you choose to use the cloud backup feature, data will sync to your Google Drive account.\n\n3. Data Usage\nWe do not use your data for advertising or share it with third parties.\n\n4. Data Deletion\nYou can delete all data in the app at any time. Deleted items are kept for 30 days before permanent deletion.\n\n5. Contact\nFor any privacy-related questions, please contact us through the feedback feature in the app.",
-  "legal_termsContent": "Terms of Service\n\nLast updated: January 2026\n\n1. Service Description\nExpense Snap is a personal expense tracking app that helps you record and manage daily expenses.\n\n2. Terms of Use\nBy using this app, you agree to comply with these terms.\n\n3. Limitation of Liability\nThis app is provided \"as is\". We are not responsible for data loss or any indirect damages.\n\n4. Intellectual Property\nAll content and features of the app are protected by copyright.\n\n5. Terms Modification\nWe reserve the right to modify these terms at any time. Continued use indicates acceptance of the modified terms.",
-  "settings_signInGoogle": "Sign in with Google",
-  "settings_signOutGoogle": "Sign out",
-  "settings_signedInAs": "Signed in as: {email}",
+  "settings_title": "設定",
+  "settings_general": "一般",
+  "settings_userName": "ユーザー名",
+  "settings_userNameHint": "レポートのタイトルに使用",
+  "settings_language": "言語",
+  "settings_theme": "テーマ",
+  "settings_themeLight": "ライト",
+  "settings_themeDark": "ダーク",
+  "settings_themeSystem": "システム設定に従う",
+  "settings_data": "データ管理",
+  "settings_backup": "クラウドバックアップ",
+  "settings_backupDesc": "Google ドライブにバックアップ",
+  "settings_restore": "バックアップを復元",
+  "settings_restoreDesc": "Google ドライブから復元",
+  "settings_deletedItems": "削除済みアイテム",
+  "settings_deletedItemsDesc": "削除した支出を表示または復元",
+  "settings_clearCache": "一時ファイルを削除",
+  "settings_about": "アプリについて",
+  "settings_version": "バージョン",
+  "settings_privacyPolicy": "プライバシーポリシー",
+  "settings_termsOfService": "利用規約",
+  "settings_feedback": "フィードバック",
+  "legal_privacyContent": "プライバシーポリシー\n\n最終更新日：2026年1月\n\n1. データ収集\n当アプリは、お客様が入力した支出記録、レシート画像、個人設定のみを収集します。\n\n2. データ保存\nすべてのデータはお客様のデバイスにローカルで保存されます。クラウドバックアップ機能を使用する場合、データはお客様のGoogleドライブアカウントに同期されます。\n\n3. データ使用\n当アプリはお客様のデータを広告に使用したり、第三者と共有したりしません。\n\n4. データ削除\nアプリ内のすべてのデータはいつでも削除できます。削除されたアイテムは30日間保持された後、完全に削除されます。\n\n5. お問い合わせ\nプライバシーに関するご質問は、アプリ内のフィードバック機能からお問い合わせください。",
+  "legal_termsContent": "利用規約\n\n最終更新日：2026年1月\n\n1. サービス内容\nExpense Snapは、日々の支出を記録・管理するための個人向け経費追跡アプリです。\n\n2. 利用条件\n本アプリを使用することで、これらの規約に同意したものとみなされます。\n\n3. 責任の制限\n本アプリは「現状のまま」提供されます。データの損失やその他の間接的な損害について、当社は責任を負いません。\n\n4. 知的財産権\n本アプリのすべてのコンテンツと機能は著作権で保護されています。\n\n5. 規約の変更\n当社はいつでもこれらの規約を変更する権利を留保します。継続して使用することで、変更後の規約に同意したものとみなされます。",
+  "settings_signInGoogle": "Googleでサインイン",
+  "settings_signOutGoogle": "サインアウト",
+  "settings_signedInAs": "ログイン中：{email}",
   "@settings_signedInAs": {
     "placeholders": {
       "email": {
@@ -265,8 +265,8 @@
       }
     }
   },
-  "settings_backupSuccess": "Backup successful",
-  "settings_backupFailed": "Backup failed: {message}",
+  "settings_backupSuccess": "バックアップ成功",
+  "settings_backupFailed": "バックアップに失敗しました: {message}",
   "@settings_backupFailed": {
     "placeholders": {
       "message": {
@@ -274,8 +274,8 @@
       }
     }
   },
-  "settings_restoreSuccess": "Restore successful",
-  "settings_restoreFailed": "Restore failed: {message}",
+  "settings_restoreSuccess": "復元成功",
+  "settings_restoreFailed": "復元に失敗しました: {message}",
   "@settings_restoreFailed": {
     "placeholders": {
       "message": {
@@ -283,11 +283,11 @@
       }
     }
   },
-  "settings_cacheCleared": "Cache cleared",
-  "settings_noBackupFound": "No backup found",
-  "settings_confirmRestore": "Confirm Restore",
-  "settings_confirmRestoreMessage": "Restore will overwrite current data. Continue?",
-  "settings_lastBackup": "Last backup: {date}",
+  "settings_cacheCleared": "キャッシュを削除しました",
+  "settings_noBackupFound": "バックアップが見つかりません",
+  "settings_confirmRestore": "復元の確認",
+  "settings_confirmRestoreMessage": "復元すると現在のデータが上書きされます。続行しますか？",
+  "settings_lastBackup": "最終バックアップ：{date}",
   "@settings_lastBackup": {
     "placeholders": {
       "date": {
@@ -295,9 +295,9 @@
       }
     }
   },
-  "deletedItems_title": "Deleted Items",
-  "deletedItems_clearAll": "Clear All",
-  "deletedItems_daysRemaining": "{days} days until auto-delete",
+  "deletedItems_title": "削除済みアイテム",
+  "deletedItems_clearAll": "すべてクリア",
+  "deletedItems_daysRemaining": "あと{days}日で自動削除",
   "@deletedItems_daysRemaining": {
     "placeholders": {
       "days": {
@@ -305,9 +305,9 @@
       }
     }
   },
-  "deletedItems_soonDeleted": "Will be deleted soon",
-  "deletedItems_restored": "Restored",
-  "deletedItems_restoreFailed": "Restore failed: {message}",
+  "deletedItems_soonDeleted": "まもなく削除されます",
+  "deletedItems_restored": "復元しました",
+  "deletedItems_restoreFailed": "復元に失敗しました: {message}",
   "@deletedItems_restoreFailed": {
     "placeholders": {
       "message": {
@@ -315,10 +315,10 @@
       }
     }
   },
-  "deletedItems_permanentDelete": "Delete Permanently",
-  "deletedItems_permanentDeleteConfirm": "This cannot be undone. Delete permanently?",
-  "deletedItems_permanentDeleted": "Permanently deleted",
-  "deletedItems_permanentDeleteFailed": "Delete failed: {message}",
+  "deletedItems_permanentDelete": "完全に削除",
+  "deletedItems_permanentDeleteConfirm": "この操作は元に戻せません。完全に削除しますか？",
+  "deletedItems_permanentDeleted": "完全に削除しました",
+  "deletedItems_permanentDeleteFailed": "削除に失敗しました: {message}",
   "@deletedItems_permanentDeleteFailed": {
     "placeholders": {
       "message": {
@@ -326,8 +326,8 @@
       }
     }
   },
-  "deletedItems_clearAllTitle": "Clear All",
-  "deletedItems_clearAllConfirm": "Permanently delete all {count} items?\nThis cannot be undone.",
+  "deletedItems_clearAllTitle": "すべてクリア",
+  "deletedItems_clearAllConfirm": "{count}件すべてを完全に削除しますか？\nこの操作は元に戻せません。",
   "@deletedItems_clearAllConfirm": {
     "placeholders": {
       "count": {
@@ -335,8 +335,8 @@
       }
     }
   },
-  "deletedItems_clearAllButton": "Delete All",
-  "deletedItems_clearedCount": "Deleted {count} items",
+  "deletedItems_clearAllButton": "すべて削除",
+  "deletedItems_clearedCount": "{count}件削除しました",
   "@deletedItems_clearedCount": {
     "placeholders": {
       "count": {
@@ -344,7 +344,7 @@
       }
     }
   },
-  "deletedItems_loadFailed": "Load failed: {message}",
+  "deletedItems_loadFailed": "読み込みに失敗しました: {message}",
   "@deletedItems_loadFailed": {
     "placeholders": {
       "message": {
@@ -352,31 +352,31 @@
       }
     }
   },
-  "onboarding_skip": "Skip",
-  "onboarding_next": "Next",
-  "onboarding_start": "Get Started",
-  "onboarding_page1Title": "Snap Your Receipts",
-  "onboarding_page1Desc": "Take photos of receipts instantly\nNever lose a receipt again",
-  "onboarding_page2Title": "Multi-Currency Support",
-  "onboarding_page2Desc": "Supports HKD, CNY, USD\nAuto-fetches live exchange rates",
-  "onboarding_page3Title": "One-Click Export",
-  "onboarding_page3Desc": "Export Excel + receipt images\nEasy expense reporting",
-  "onboarding_nameLabel": "Your Name (Optional)",
-  "onboarding_nameHint": "Used for report title",
-  "onboarding_nameTooLong": "Name cannot exceed 50 characters",
-  "connectivity_offlineMode": "Offline Mode - Exchange rates may be outdated",
-  "dialog_duplicateTitle": "Possible Duplicate",
-  "dialog_duplicateMessage": "Similar expense found:",
-  "dialog_duplicateConfirm": "Continue adding?",
-  "dialog_duplicateContinue": "Add Anyway",
-  "dialog_largeAmountTitle": "Large Amount",
-  "dialog_largeAmountMessage": "You are recording a large expense:",
-  "dialog_largeAmountConfirm": "Is the amount correct?",
-  "dialog_largeAmountBack": "Go Back",
-  "dialog_largeAmountOk": "Confirm",
-  "dialog_monthEndTitle": "Month End Reminder",
-  "dialog_monthEndMessage": "Month is ending soon!",
-  "dialog_monthEndExpenseCount": "You have {count} expenses this month",
+  "onboarding_skip": "スキップ",
+  "onboarding_next": "次へ",
+  "onboarding_start": "始める",
+  "onboarding_page1Title": "レシートを撮影",
+  "onboarding_page1Desc": "レシートをすぐに撮影して支出を記録\nもうレシートを失くしません",
+  "onboarding_page2Title": "複数通貨対応",
+  "onboarding_page2Desc": "HKD、CNY、USDに対応\n為替レートを自動取得",
+  "onboarding_page3Title": "ワンクリックでエクスポート",
+  "onboarding_page3Desc": "Excel + レシート画像をエクスポート\n簡単に経費精算",
+  "onboarding_nameLabel": "お名前（任意）",
+  "onboarding_nameHint": "レポートのタイトルに使用",
+  "onboarding_nameTooLong": "名前は50文字以内にしてください",
+  "connectivity_offlineMode": "オフラインモード - 為替レートが最新でない可能性があります",
+  "dialog_duplicateTitle": "重複の可能性",
+  "dialog_duplicateMessage": "類似の支出が見つかりました：",
+  "dialog_duplicateConfirm": "追加を続けますか？",
+  "dialog_duplicateContinue": "追加する",
+  "dialog_largeAmountTitle": "高額支出",
+  "dialog_largeAmountMessage": "高額な支出を記録しようとしています：",
+  "dialog_largeAmountConfirm": "金額は正しいですか？",
+  "dialog_largeAmountBack": "戻る",
+  "dialog_largeAmountOk": "確認",
+  "dialog_monthEndTitle": "月末リマインダー",
+  "dialog_monthEndMessage": "今月もうすぐ終わります！",
+  "dialog_monthEndExpenseCount": "今月は{count}件の支出があります",
   "@dialog_monthEndExpenseCount": {
     "placeholders": {
       "count": {
@@ -384,29 +384,29 @@
       }
     }
   },
-  "dialog_monthEndSuggestion": "Consider exporting your expense report.",
-  "dialog_later": "Later",
-  "dialog_goExport": "Export Now",
-  "emptyState_noExpenses": "No Expenses",
-  "emptyState_noExpensesHint": "Tap the button below to add your first expense",
-  "emptyState_noDeletedItems": "No Deleted Items",
-  "emptyState_noDeletedItemsHint": "Deleted expenses are kept for 30 days",
-  "emptyState_error": "Load Failed",
-  "emptyState_offline": "No Internet Connection",
-  "emptyState_offlineHint": "Please check your network settings",
-  "emptyState_exportSuccess": "Export Successful",
-  "emptyState_exportSuccessHint": "File is ready",
+  "dialog_monthEndSuggestion": "経費レポートのエクスポートをお勧めします。",
+  "dialog_later": "後で",
+  "dialog_goExport": "エクスポートへ",
+  "emptyState_noExpenses": "支出なし",
+  "emptyState_noExpensesHint": "下のボタンをタップして最初の支出を追加",
+  "emptyState_noDeletedItems": "削除済みアイテムなし",
+  "emptyState_noDeletedItemsHint": "削除された支出は30日間保持されます",
+  "emptyState_error": "読み込みに失敗",
+  "emptyState_offline": "インターネット接続なし",
+  "emptyState_offlineHint": "ネットワーク設定を確認してください",
+  "emptyState_exportSuccess": "エクスポート成功",
+  "emptyState_exportSuccessHint": "ファイルの準備ができました",
   "excel_header_index": "No.",
-  "excel_header_date": "Date",
-  "excel_header_description": "Description",
-  "excel_header_originalAmount": "Original Amount",
-  "excel_header_originalCurrency": "Currency",
-  "excel_header_exchangeRate": "Exchange Rate",
-  "excel_header_rateSource": "Rate Source",
-  "excel_header_hkdAmount": "HKD Amount",
-  "excel_header_receiptFile": "Receipt File",
-  "excel_total": "Total",
-  "excel_sheetName": "Expenses_{year}_{month}",
+  "excel_header_date": "日付",
+  "excel_header_description": "説明",
+  "excel_header_originalAmount": "元の金額",
+  "excel_header_originalCurrency": "通貨",
+  "excel_header_exchangeRate": "為替レート",
+  "excel_header_rateSource": "レート出典",
+  "excel_header_hkdAmount": "HKD金額",
+  "excel_header_receiptFile": "レシートファイル",
+  "excel_total": "合計",
+  "excel_sheetName": "経費_{year}年{month}月",
   "@excel_sheetName": {
     "placeholders": {
       "year": {
@@ -417,7 +417,7 @@
       }
     }
   },
-  "excel_fileName": "Expenses_{year}_{month}",
+  "excel_fileName": "経費_{year}年{month}月",
   "@excel_fileName": {
     "placeholders": {
       "year": {
@@ -428,59 +428,59 @@
       }
     }
   },
-  "excel_shareSubject": "Expense Snap Report",
-  "excel_rateSourceAuto": "Auto",
-  "excel_rateSourceOffline": "Cached",
-  "excel_rateSourceDefault": "Default",
-  "excel_rateSourceManual": "Manual",
-  "error_unknown": "Unknown error occurred",
-  "error_networkError": "Network connection error",
-  "error_serverError": "Server error",
-  "error_storageError": "Storage error",
-  "error_permissionDenied": "Permission denied",
-  "error_fileNotFound": "File not found",
-  "error_invalidData": "Invalid data format",
-  "error_exportNoData": "No data to export",
-  "error_invalidMonth": "Month must be between 1 and 12",
-  "error_invalidYear": "Year must be between 2000 and 2100",
-  "error_excelGenerationFailed": "Failed to generate Excel file",
-  "error_zipFailed": "Failed to compress file",
-  "error_shareFailed": "Share failed",
-  "error_cleanupFailed": "Failed to clean up temp files",
+  "excel_shareSubject": "Expense Snap レポート",
+  "excel_rateSourceAuto": "自動",
+  "excel_rateSourceOffline": "キャッシュ",
+  "excel_rateSourceDefault": "デフォルト",
+  "excel_rateSourceManual": "手動",
+  "error_unknown": "不明なエラーが発生しました",
+  "error_networkError": "ネットワーク接続エラー",
+  "error_serverError": "サーバーエラー",
+  "error_storageError": "ストレージエラー",
+  "error_permissionDenied": "権限が拒否されました",
+  "error_fileNotFound": "ファイルが見つかりません",
+  "error_invalidData": "無効なデータ形式",
+  "error_exportNoData": "エクスポートするデータがありません",
+  "error_invalidMonth": "月は1から12の間で指定してください",
+  "error_invalidYear": "年は2000から2100の間で指定してください",
+  "error_excelGenerationFailed": "Excelファイルの生成に失敗しました",
+  "error_zipFailed": "ファイルの圧縮に失敗しました",
+  "error_shareFailed": "共有に失敗しました",
+  "error_cleanupFailed": "一時ファイルの削除に失敗しました",
   "format_date": "yyyy/MM/dd",
   "format_dateTime": "yyyy/MM/dd HH:mm",
-  "format_month": "MMM yyyy",
+  "format_month": "yyyy年M月",
   "format_currency": "#,##0.00",
-  "currency_HKD": "HKD",
-  "currency_CNY": "CNY",
-  "currency_USD": "USD",
-  "datePicker_selectDate": "Select Date",
-  "datePicker_selectMonth": "Select Month",
-  "settings_profile": "Profile",
-  "settings_appearance": "Appearance",
-  "settings_reduceMotion": "Reduce Motion",
-  "settings_reduceMotionDesc": "Reduce animations for motion sensitivity",
-  "settings_storageUsage": "Storage Usage",
-  "settings_clearCacheDesc": "Free up export and backup cache space",
-  "settings_cloudBackup": "Cloud Backup",
-  "settings_googleDrive": "Google Drive",
-  "settings_lastBackupTime": "Last Backup",
-  "settings_backupNow": "Backup Now",
-  "settings_backupNowDesc": "Backup database and receipts to Google Drive",
-  "settings_restoreBackupTitle": "Restore Backup",
-  "settings_restoreBackupDesc": "Restore from Google Drive",
-  "settings_selectBackup": "Select Backup",
-  "settings_connect": "Connect",
-  "settings_disconnect": "Disconnect",
-  "settings_connected": "Connected",
-  "settings_notConnected": "Not connected",
-  "settings_languageSystem": "Follow System",
-  "settings_selectTheme": "Select Theme",
-  "settings_editName": "Edit Name",
-  "settings_nameLabel": "Name",
-  "settings_nameHint": "Used for expense report title",
-  "settings_saved": "Saved",
-  "settings_cleanupFailed": "Cleanup failed: {message}",
+  "currency_HKD": "香港ドル",
+  "currency_CNY": "人民元",
+  "currency_USD": "米ドル",
+  "datePicker_selectDate": "日付を選択",
+  "datePicker_selectMonth": "月を選択",
+  "settings_profile": "プロフィール",
+  "settings_appearance": "外観",
+  "settings_reduceMotion": "モーションを減らす",
+  "settings_reduceMotionDesc": "アニメーションを減らします（動きに敏感な方向け）",
+  "settings_storageUsage": "ストレージ使用量",
+  "settings_clearCacheDesc": "エクスポートとバックアップのキャッシュを削除",
+  "settings_cloudBackup": "クラウドバックアップ",
+  "settings_googleDrive": "Google ドライブ",
+  "settings_lastBackupTime": "最終バックアップ",
+  "settings_backupNow": "今すぐバックアップ",
+  "settings_backupNowDesc": "データベースとレシートをGoogle ドライブにバックアップ",
+  "settings_restoreBackupTitle": "バックアップを復元",
+  "settings_restoreBackupDesc": "Google ドライブから復元",
+  "settings_selectBackup": "バックアップを選択",
+  "settings_connect": "接続",
+  "settings_disconnect": "切断",
+  "settings_connected": "接続済み",
+  "settings_notConnected": "未接続",
+  "settings_languageSystem": "システム設定に従う",
+  "settings_selectTheme": "テーマを選択",
+  "settings_editName": "名前を編集",
+  "settings_nameLabel": "名前",
+  "settings_nameHint": "経費レポートのタイトルに使用",
+  "settings_saved": "保存しました",
+  "settings_cleanupFailed": "クリーンアップに失敗しました: {message}",
   "@settings_cleanupFailed": {
     "placeholders": {
       "message": {
@@ -488,7 +488,7 @@
       }
     }
   },
-  "settings_cleanedFiles": "Cleaned {count} temp files",
+  "settings_cleanedFiles": "{count}個の一時ファイルを削除しました",
   "@settings_cleanedFiles": {
     "placeholders": {
       "count": {
@@ -496,10 +496,10 @@
       }
     }
   },
-  "settings_backupToCloud": "Backup to Cloud",
-  "settings_backupConfirmMessage": "This will backup all expenses and receipts to Google Drive.\n\nContinue?",
-  "settings_confirmRestoreTitle": "Confirm Restore",
-  "settings_confirmRestoreDesc": "This will replace all current data with \"{fileName}\".\n\nThis cannot be undone. Continue?",
+  "settings_backupToCloud": "クラウドにバックアップ",
+  "settings_backupConfirmMessage": "すべての支出とレシートをGoogle ドライブにバックアップします。\n\n続行しますか？",
+  "settings_confirmRestoreTitle": "復元の確認",
+  "settings_confirmRestoreDesc": "現在のすべてのデータが「{fileName}」で置き換えられます。\n\nこの操作は元に戻せません。続行しますか？",
   "@settings_confirmRestoreDesc": {
     "placeholders": {
       "fileName": {
@@ -507,9 +507,9 @@
       }
     }
   },
-  "settings_disconnectTitle": "Disconnect Google Account",
-  "settings_disconnectConfirm": "Cloud backup will be unavailable after disconnecting.\n\nDisconnect?",
-  "settings_connectFailed": "Connection failed: {message}",
+  "settings_disconnectTitle": "Googleアカウントを切断",
+  "settings_disconnectConfirm": "切断するとクラウドバックアップが使用できなくなります。\n\n切断しますか？",
+  "settings_connectFailed": "接続に失敗しました: {message}",
   "@settings_connectFailed": {
     "placeholders": {
       "message": {
@@ -517,7 +517,7 @@
       }
     }
   },
-  "settings_disconnectFailed": "Disconnect failed: {message}",
+  "settings_disconnectFailed": "切断に失敗しました: {message}",
   "@settings_disconnectFailed": {
     "placeholders": {
       "message": {
@@ -525,22 +525,22 @@
       }
     }
   },
-  "settings_googleConnected": "Google account connected",
-  "settings_googleDisconnected": "Google account disconnected",
-  "category_label": "Category (Optional)",
-  "category_meals": "Meals",
-  "category_transport": "Transport",
-  "category_accommodation": "Accommodation",
-  "category_officeSupplies": "Office Supplies",
-  "category_communication": "Communication",
-  "category_entertainment": "Entertainment",
-  "category_medical": "Medical",
-  "category_other": "Other",
-  "category_statistics": "Category Statistics",
-  "category_uncategorized": "Uncategorized",
-  "excel_header_category": "Category",
-  "semantic_category_prefix": "Category",
-  "semantic_expenseItem": "Expense item: {description}",
+  "settings_googleConnected": "Googleアカウントに接続しました",
+  "settings_googleDisconnected": "Googleアカウントを切断しました",
+  "category_label": "カテゴリ（任意）",
+  "category_meals": "食事",
+  "category_transport": "交通",
+  "category_accommodation": "宿泊",
+  "category_officeSupplies": "事務用品",
+  "category_communication": "通信",
+  "category_entertainment": "娯楽",
+  "category_medical": "医療",
+  "category_other": "その他",
+  "category_statistics": "カテゴリ統計",
+  "category_uncategorized": "未分類",
+  "excel_header_category": "カテゴリ",
+  "semantic_category_prefix": "カテゴリ",
+  "semantic_expenseItem": "支出項目：{description}",
   "@semantic_expenseItem": {
     "placeholders": {
       "description": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "semantic_amount": "Amount: {amount}",
+  "semantic_amount": "金額：{amount}",
   "@semantic_amount": {
     "placeholders": {
       "amount": {
@@ -556,7 +556,7 @@
       }
     }
   },
-  "semantic_originalAmount": "Original amount: {amount}",
+  "semantic_originalAmount": "元の金額：{amount}",
   "@semantic_originalAmount": {
     "placeholders": {
       "amount": {
@@ -564,7 +564,7 @@
       }
     }
   },
-  "semantic_date": "Date: {date}",
+  "semantic_date": "日付：{date}",
   "@semantic_date": {
     "placeholders": {
       "date": {
@@ -572,7 +572,7 @@
       }
     }
   },
-  "semantic_rateSource": "Rate source: {source}",
+  "semantic_rateSource": "レート出典：{source}",
   "@semantic_rateSource": {
     "placeholders": {
       "source": {
@@ -580,11 +580,11 @@
       }
     }
   },
-  "semantic_hasReceipt": "Has receipt image",
-  "semantic_tapForDetails": "Tap to view details",
-  "semantic_swipeToDelete": "Swipe left to delete",
-  "validation_amountRequired": "Please enter an amount",
-  "validation_amountTooSmall": "Amount cannot be less than {min}",
+  "semantic_hasReceipt": "レシート画像あり",
+  "semantic_tapForDetails": "タップして詳細を表示",
+  "semantic_swipeToDelete": "左にスワイプして削除",
+  "validation_amountRequired": "金額を入力してください",
+  "validation_amountTooSmall": "金額は{min}以上にしてください",
   "@validation_amountTooSmall": {
     "placeholders": {
       "min": {
@@ -592,7 +592,7 @@
       }
     }
   },
-  "validation_amountTooLarge": "Amount cannot exceed {max}",
+  "validation_amountTooLarge": "金額は{max}以下にしてください",
   "@validation_amountTooLarge": {
     "placeholders": {
       "max": {
@@ -600,7 +600,7 @@
       }
     }
   },
-  "validation_exchangeRateLabel": "Exchange Rate",
+  "validation_exchangeRateLabel": "為替レート",
   "validation_exchangeRateHint": "1 {currency} = ? HKD",
   "@validation_exchangeRateHint": {
     "placeholders": {
@@ -609,6 +609,6 @@
       }
     }
   },
-  "validation_exchangeRateRequired": "Please enter exchange rate",
-  "validation_exchangeRateInvalid": "Please enter a valid exchange rate"
+  "validation_exchangeRateRequired": "為替レートを入力してください",
+  "validation_exchangeRateInvalid": "有効な為替レートを入力してください"
 }
