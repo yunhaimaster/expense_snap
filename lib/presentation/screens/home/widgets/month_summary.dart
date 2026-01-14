@@ -40,14 +40,26 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
     widget.onNextMonth();
   }
 
+  /// 取得當前語言代碼（用於日期格式化）
+  String _getLocaleCode(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    // 處理簡體中文
+    if (locale.scriptCode == 'Hans') return 'zh_Hans';
+    return locale.languageCode;
+  }
+
   /// 建立語意描述
   String _buildSemanticLabel(BuildContext context) {
-    final totalAmount = (widget.summary.totalHkdAmountCents / 100).toStringAsFixed(2);
-    return S.of(context).monthSummary_semanticLabel(
-      widget.summary.formattedMonth,
-      totalAmount,
-      widget.summary.totalCount,
-    );
+    final localeCode = _getLocaleCode(context);
+    final totalAmount = (widget.summary.totalHkdAmountCents / 100)
+        .toStringAsFixed(2);
+    return S
+        .of(context)
+        .monthSummary_semanticLabel(
+          widget.summary.formattedMonth(locale: localeCode),
+          totalAmount,
+          widget.summary.totalCount,
+        );
   }
 
   @override
@@ -81,7 +93,9 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
                   // 月份標題使用 AnimatedSwitcher（支援減少動畫模式）
                   ExcludeSemantics(
                     child: AnimatedSwitcher(
-                      duration: reduceMotion ? Duration.zero : AnimationUtils.standard,
+                      duration: reduceMotion
+                          ? Duration.zero
+                          : AnimationUtils.standard,
                       switchInCurve: AnimationUtils.emphasized,
                       switchOutCurve: AnimationUtils.standardOut,
                       transitionBuilder: (child, animation) {
@@ -93,17 +107,17 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
                         // 根據滑動方向決定動畫
                         final offset = switch (_slideDirection) {
                           _SlideDirection.left => Tween<Offset>(
-                              begin: const Offset(1, 0),
-                              end: Offset.zero,
-                            ),
+                            begin: const Offset(1, 0),
+                            end: Offset.zero,
+                          ),
                           _SlideDirection.right => Tween<Offset>(
-                              begin: const Offset(-1, 0),
-                              end: Offset.zero,
-                            ),
+                            begin: const Offset(-1, 0),
+                            end: Offset.zero,
+                          ),
                           _SlideDirection.none => Tween<Offset>(
-                              begin: Offset.zero,
-                              end: Offset.zero,
-                            ),
+                            begin: Offset.zero,
+                            end: Offset.zero,
+                          ),
                         };
 
                         return SlideTransition(
@@ -114,16 +128,26 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
                           ),
                         );
                       },
-                      child: Text(
-                        widget.summary.formattedMonth,
-                        key: ValueKey(widget.summary.formattedMonth),
-                        style: Theme.of(context).textTheme.titleLarge,
+                      child: Builder(
+                        builder: (context) {
+                          final localeCode = _getLocaleCode(context);
+                          final monthText = widget.summary.formattedMonth(
+                            locale: localeCode,
+                          );
+                          return Text(
+                            monthText,
+                            key: ValueKey(monthText),
+                            style: Theme.of(context).textTheme.titleLarge,
+                          );
+                        },
                       ),
                     ),
                   ),
                   Semantics(
                     button: true,
-                    label: widget.canGoNext ? l10n.monthSummary_nextMonth : l10n.monthSummary_isLatestMonth,
+                    label: widget.canGoNext
+                        ? l10n.monthSummary_nextMonth
+                        : l10n.monthSummary_isLatestMonth,
                     child: IconButton(
                       onPressed: widget.canGoNext ? _handleNextMonth : null,
                       icon: const Icon(Icons.chevron_right),
@@ -213,9 +237,9 @@ class _AnimatedStatItem extends StatelessWidget {
           amount: amount,
           currencySymbol: 'HK\$',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
       ],
     );
@@ -258,9 +282,9 @@ class _AnimatedCountStatItem extends StatelessWidget {
           count: count,
           suffix: suffix,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
       ],
     );

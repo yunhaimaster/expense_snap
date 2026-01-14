@@ -6,12 +6,18 @@ import '../constants/currency_constants.dart';
 class Formatters {
   Formatters._();
 
-  // 日期格式化器
+  // 日期格式化器（語言無關的格式）
   static final DateFormat _dateFormatter = DateFormat('yyyy-MM-dd');
-  static final DateFormat _dateTimeFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
-  static final DateFormat _monthFormatter = DateFormat('yyyy年M月');
-  static final DateFormat _displayDateFormatter = DateFormat('M月d日');
-  static final DateFormat _displayDateTimeFormatter = DateFormat('M月d日 HH:mm');
+  static final DateFormat _dateTimeFormatter = DateFormat(
+    'yyyy-MM-dd HH:mm:ss',
+  );
+
+  // 中文日期格式化器（使用 pattern 而非 locale，避免需要初始化 locale data）
+  static final DateFormat _monthFormatterZh = DateFormat('yyyy年M月');
+  static final DateFormat _displayDateFormatterZh = DateFormat('M月d日');
+  static final DateFormat _displayDateTimeFormatterZh = DateFormat(
+    'M月d日 HH:mm',
+  );
 
   /// 格式化日期（ISO 8601 格式，用於儲存）
   /// 使用本地時間以確保日期查詢一致性
@@ -35,21 +41,74 @@ class Formatters {
     return _dateTimeFormatter.format(dateTime);
   }
 
-  /// 格式化月份（yyyy年M月）
-  static String formatMonth(DateTime date) {
-    return _monthFormatter.format(date);
+  /// 格式化月份
+  /// 根據 locale 自動選擇格式：
+  /// - 中文 (zh)：2025年1月
+  /// - 日文 (ja)：2025年1月
+  /// - 韓文 (ko)：2025년 1월
+  /// - 西班牙文 (es)：enero de 2025
+  /// - 其他語言：January 2025
+  static String formatMonth(DateTime date, {String? locale}) {
+    // 中文（繁體、簡體）和日文使用相同的年月格式
+    if (locale != null &&
+        (locale.startsWith('zh') || locale.startsWith('ja'))) {
+      return _monthFormatterZh.format(date);
+    }
+
+    // 韓文格式
+    if (locale == 'ko') {
+      return '${date.year}년 ${date.month}월';
+    }
+
+    // 西班牙文月份名稱
+    if (locale == 'es') {
+      const esMonths = [
+        'enero',
+        'febrero',
+        'marzo',
+        'abril',
+        'mayo',
+        'junio',
+        'julio',
+        'agosto',
+        'septiembre',
+        'octubre',
+        'noviembre',
+        'diciembre',
+      ];
+      return '${esMonths[date.month - 1]} de ${date.year}';
+    }
+
+    // 英文和其他語言
+    const enMonths = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return '${enMonths[date.month - 1]} ${date.year}';
   }
 
   /// 格式化日期用於顯示（M月d日）
   /// 自動轉換為本地時區
+  /// 注意：此方法使用中文格式，用於收據詳情等固定顯示
   static String formatDisplayDate(DateTime date) {
-    return _displayDateFormatter.format(date.toLocal());
+    return _displayDateFormatterZh.format(date.toLocal());
   }
 
   /// 格式化日期時間用於顯示（M月d日 HH:mm）
   /// 自動轉換為本地時區
+  /// 注意：此方法使用中文格式，用於收據詳情等固定顯示
   static String formatDisplayDateTime(DateTime dateTime) {
-    return _displayDateTimeFormatter.format(dateTime.toLocal());
+    return _displayDateTimeFormatterZh.format(dateTime.toLocal());
   }
 
   /// 格式化相對時間（例如：5分鐘前、2小時前）

@@ -300,7 +300,7 @@ void main() {
   });
 
   group('MonthSummary', () {
-    test('should format month correctly', () {
+    test('should format month correctly in Chinese', () {
       const summary = MonthSummary(
         year: 2025,
         month: 1,
@@ -308,7 +308,20 @@ void main() {
         totalHkdAmountCents: 250000,
       );
 
-      expect(summary.formattedMonth, equals('2025年1月'));
+      // 中文格式
+      expect(summary.formattedMonth(locale: 'zh'), equals('2025年1月'));
+    });
+
+    test('should format month correctly in English', () {
+      const summary = MonthSummary(
+        year: 2025,
+        month: 1,
+        totalCount: 15,
+        totalHkdAmountCents: 250000,
+      );
+
+      // 英文格式
+      expect(summary.formattedMonth(locale: 'en'), equals('January 2025'));
     });
 
     test('should format total amount correctly', () {

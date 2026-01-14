@@ -20,10 +20,17 @@ import '../../widgets/forms/date_picker_field.dart';
 
 /// 匯出畫面
 class ExportScreen extends StatefulWidget {
-  const ExportScreen({super.key, this.refreshTrigger = 0});
+  const ExportScreen({
+    super.key,
+    this.refreshTrigger = 0,
+    this.isActive = true,
+  });
 
   /// 刷新觸發器：每次值變化時重新載入資料
   final int refreshTrigger;
+
+  /// 是否為當前活躍頁面（用於控制 Showcase 顯示時機）
+  final bool isActive;
 
   @override
   State<ExportScreen> createState() => _ExportScreenState();
@@ -59,15 +66,19 @@ class _ExportScreenState extends State<ExportScreen> {
 
   /// 檢查是否應顯示匯出 Showcase
   void _checkExportShowcase() {
+    // 只有在頁面活躍時才顯示 showcase
+    if (!widget.isActive) return;
+
     // 延遲以確保 widget 建構完成（使用 Timer 以便 dispose 時取消）
+    _showcaseDelayTimer?.cancel();
     _showcaseDelayTimer = Timer(const Duration(milliseconds: 500), () async {
-      if (!mounted) return;
+      if (!mounted || !widget.isActive) return;
 
       final provider = context.read<ShowcaseProvider>();
       if (!provider.shouldShowExportShowcase) return;
 
       final ready = await provider.checkExportShowcaseReady();
-      if (!ready || !mounted) return;
+      if (!ready || !mounted || !widget.isActive) return;
 
       // 啟動 showcase
       final showcaseContext = _showcaseContext;
@@ -77,12 +88,30 @@ class _ExportScreenState extends State<ExportScreen> {
     });
   }
 
+  /// 關閉 Showcase
+  void _dismissShowcase() {
+    final showcaseContext = _showcaseContext;
+    if (showcaseContext != null && showcaseContext.mounted) {
+      ShowCaseWidget.of(showcaseContext).dismiss();
+    }
+  }
+
   @override
   void didUpdateWidget(ExportScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     // refreshTrigger 變化時重新載入資料
     if (widget.refreshTrigger != oldWidget.refreshTrigger) {
       _loadPreview();
+    }
+
+    // 頁面變為活躍時檢查 showcase
+    if (widget.isActive && !oldWidget.isActive) {
+      _checkExportShowcase();
+    }
+
+    // 頁面變為非活躍時關閉 showcase
+    if (!widget.isActive && oldWidget.isActive) {
+      _dismissShowcase();
     }
   }
 

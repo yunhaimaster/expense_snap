@@ -29,7 +29,10 @@ class _AppShellState extends State<AppShell> {
         index: _currentIndex,
         children: [
           HomeScreen(isActive: _currentIndex == 0),
-          ExportScreen(refreshTrigger: _exportRefreshTrigger),
+          ExportScreen(
+            refreshTrigger: _exportRefreshTrigger,
+            isActive: _currentIndex == 1,
+          ),
           const SettingsScreen(),
         ],
       ),

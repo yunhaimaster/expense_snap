@@ -87,10 +87,12 @@ class Expense {
       Formatters.formatAmount(hkdAmountCents, 'HKD');
 
   /// 格式化的匯率
-  String get formattedExchangeRate => Formatters.formatExchangeRate(exchangeRate);
+  String get formattedExchangeRate =>
+      Formatters.formatExchangeRate(exchangeRate);
 
   /// 是否有收據圖片
-  bool get hasReceipt => receiptImagePath != null && receiptImagePath!.isNotEmpty;
+  bool get hasReceipt =>
+      receiptImagePath != null && receiptImagePath!.isNotEmpty;
 
   /// 計算距離永久刪除的天數
   int? get daysUntilPermanentDelete {
@@ -218,7 +220,13 @@ class Expense {
 
     // 沒有 id 時，用多欄位組合
     return Object.hash(
-        date, originalAmountCents, originalCurrency, description, category, createdAt);
+      date,
+      originalAmountCents,
+      originalCurrency,
+      description,
+      category,
+      createdAt,
+    );
   }
 
   @override
@@ -242,9 +250,15 @@ class MonthSummary {
   final int totalCount;
   final int totalHkdAmountCents;
 
-  /// 格式化的月份（例如：2025年1月）
-  String get formattedMonth {
-    return Formatters.formatMonth(DateTime(year, month));
+  /// 格式化的月份
+  /// 根據 locale 自動選擇格式：
+  /// - 中文：2025年1月
+  /// - 英文：January 2025
+  /// - 日文：2025年1月
+  /// - 韓文：2025년 1월
+  /// - 西班牙文：enero de 2025
+  String formattedMonth({String? locale}) {
+    return Formatters.formatMonth(DateTime(year, month), locale: locale);
   }
 
   /// 格式化的總金額
