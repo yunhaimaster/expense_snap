@@ -18,11 +18,15 @@ class ExchangeRateDisplay extends StatefulWidget {
     super.key,
     required this.currency,
     required this.onRateChanged,
+    required this.targetCurrency,
     this.enabled = true,
   });
 
-  /// 要顯示的幣種
+  /// 要顯示的來源幣種
   final String currency;
+
+  /// 目標幣種（轉換後的幣種）
+  final String targetCurrency;
 
   /// 匯率變更回調
   final void Function(int rate, ExchangeRateSource source) onRateChanged;
@@ -70,7 +74,10 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
 
   Future<void> _loadRate() async {
     final provider = context.read<ExchangeRateProvider>();
-    final info = await provider.loadRate(widget.currency);
+    final info = await provider.loadRate(
+      widget.currency,
+      baseCurrency: widget.targetCurrency,
+    );
 
     if (info != null && mounted) {
       widget.onRateChanged(info.rate, info.source);
@@ -193,10 +200,10 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
               _SourceIndicator(source: source),
               const SizedBox(width: 8),
 
-              // 匯率文字
+              // 匯率文字（使用 targetCurrency）
               Expanded(
                 child: Text(
-                  '1 ${widget.currency} = $rate HKD',
+                  '1 ${widget.currency} = $rate ${widget.targetCurrency}',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),

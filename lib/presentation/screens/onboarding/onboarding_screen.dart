@@ -310,6 +310,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   /// 建立幣種選擇 Grid
   Widget _buildCurrencyGrid() {
+    final l10n = S.of(context);
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -317,20 +318,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       children: CurrencyConstants.primaryCurrencies.map((currency) {
         final isSelected = currency == _selectedCurrency;
         final symbol = CurrencyConstants.currencySymbols[currency] ?? currency;
-        return ChoiceChip(
-          label: Text('$symbol $currency'),
+        final currencyName =
+            CurrencyConstants.currencyNames[currency] ?? currency;
+        // 加入 Semantics 提供完整的幣種資訊給螢幕閱讀器
+        return Semantics(
+          label: isSelected
+              ? l10n.semantic_currencySelected(currencyName, currency)
+              : l10n.semantic_currencyOption(currencyName, currency),
           selected: isSelected,
-          onSelected: (selected) {
-            if (selected) {
-              setState(() => _selectedCurrency = currency);
-              AnimationUtils.selectionClick();
-            }
-          },
-          selectedColor: AppColors.primary.withValues(alpha: 0.2),
-          checkmarkColor: AppColors.primary,
-          labelStyle: TextStyle(
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: isSelected ? AppColors.primary : null,
+          child: ChoiceChip(
+            label: Text('$symbol $currency'),
+            selected: isSelected,
+            onSelected: (selected) {
+              if (selected) {
+                setState(() => _selectedCurrency = currency);
+                AnimationUtils.selectionClick();
+              }
+            },
+            selectedColor: AppColors.primary.withValues(alpha: 0.2),
+            checkmarkColor: AppColors.primary,
+            labelStyle: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              color: isSelected ? AppColors.primary : null,
+            ),
           ),
         );
       }).toList(),

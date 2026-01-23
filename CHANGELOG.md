@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-01-23
+
+### Added
+- **Configurable Primary Currency** - Users can now choose their primary/base currency during onboarding or in Settings
+  - 10 supported currencies: USD, EUR, GBP, JPY, CNY, HKD, TWD, KRW, SGD, AUD
+  - All expenses convert to selected primary currency
+  - JPY/KRW display with 0 decimal places (no cents)
+  - Currency selection persisted to database
+- **Dynamic Exchange Rates** - Exchange rates now use selected primary currency as base
+  - Rate display shows "1 USD = X.XX [primary]" format
+  - Historical expenses preserve their original conversion rate
+- **Onboarding Currency Selection** - New onboarding step for currency preference
+  - Accessible currency chips with proper Semantics labels
+  - Visual feedback for selected currency
+
+### Changed
+- Expense model now stores `targetCurrency` field for historical accuracy
+- Export headers dynamically use primary currency (e.g., "Amount (EUR)" instead of hardcoded "HKD")
+- Exchange rate provider accepts dynamic `baseCurrency` parameter
+- All UI components use dynamic currency instead of hardcoded 'HKD'
+
+### Fixed
+- Removed all hardcoded 'HKD' references from UI components
+- Added missing accessibility Semantics to currency selection chips
+- Test coverage updated for new currency parameters (1086 tests passing)
+
 ## [1.2.2] - 2026-01-14
 
 ### Changed

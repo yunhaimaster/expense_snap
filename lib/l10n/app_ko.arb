@@ -604,6 +604,20 @@
   "semantic_hasReceipt": "영수증 이미지 있음",
   "semantic_tapForDetails": "탭하여 상세 보기",
   "semantic_swipeToDelete": "왼쪽으로 스와이프하여 삭제",
+  "semantic_currencySelected": "{name} ({code}), 선택됨",
+  "@semantic_currencySelected": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
+  "semantic_currencyOption": "{name} ({code})",
+  "@semantic_currencyOption": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
   "validation_amountRequired": "금액을 입력하세요",
   "validation_amountTooSmall": "금액은 {min} 이상이어야 합니다",
   "@validation_amountTooSmall": {

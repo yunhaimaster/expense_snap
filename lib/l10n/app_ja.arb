@@ -604,6 +604,20 @@
   "semantic_hasReceipt": "レシート画像あり",
   "semantic_tapForDetails": "タップして詳細を表示",
   "semantic_swipeToDelete": "左にスワイプして削除",
+  "semantic_currencySelected": "{name}（{code}）、選択済み",
+  "@semantic_currencySelected": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
+  "semantic_currencyOption": "{name}（{code}）",
+  "@semantic_currencyOption": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
   "validation_amountRequired": "金額を入力してください",
   "validation_amountTooSmall": "金額は{min}以上にしてください",
   "@validation_amountTooSmall": {

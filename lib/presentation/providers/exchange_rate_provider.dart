@@ -41,9 +41,15 @@ class ExchangeRateProvider extends ChangeNotifier {
   Map<String, ExchangeRateInfo> get rates => Map.unmodifiable(_rates);
 
   /// 載入指定幣種的匯率
-  Future<ExchangeRateInfo?> loadRate(String currency) async {
-    // HKD 固定 1:1
-    if (currency == 'HKD') {
+  ///
+  /// [currency] 要查詢的來源幣種
+  /// [baseCurrency] 目標幣種（主要幣種），當 currency == baseCurrency 時返回 1:1
+  Future<ExchangeRateInfo?> loadRate(
+    String currency, {
+    required String baseCurrency,
+  }) async {
+    // 當來源幣種等於目標幣種時，固定 1:1
+    if (currency == baseCurrency) {
       final info = ExchangeRateInfo(
         rate: CurrencyConstants.ratePrecision,
         source: ExchangeRateSource.auto,

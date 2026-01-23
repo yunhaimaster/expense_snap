@@ -172,6 +172,7 @@ void main() {
                       amount: 1500.0,
                       currency: 'HKD',
                       convertedAmount: 1500.0,
+                      targetCurrency: 'HKD',
                     );
                   },
                   child: const Text('Show Dialog'),
@@ -194,7 +195,7 @@ void main() {
         expect(find.text('確認正確'), findsOneWidget);
       });
 
-      testWidgets('shows HKD equivalent for non-HKD currencies', (
+      testWidgets('shows target currency equivalent for non-target currencies', (
         tester,
       ) async {
         await tester.pumpWidget(
@@ -211,6 +212,7 @@ void main() {
                       amount: 200.0,
                       currency: 'USD',
                       convertedAmount: 1560.0,
+                      targetCurrency: 'HKD',
                     );
                   },
                   child: const Text('Show Dialog'),
@@ -223,8 +225,9 @@ void main() {
         await tester.tap(find.text('Show Dialog'));
         await tester.pumpAndSettle();
 
-        // 應顯示 HKD 換算金額
-        expect(find.textContaining('≈ HKD'), findsOneWidget);
+        // 應顯示目標幣種換算金額
+        expect(find.textContaining('≈'), findsOneWidget);
+        expect(find.textContaining('HK\$'), findsOneWidget);
       });
 
       testWidgets('returns false when cancelled', (tester) async {
@@ -245,6 +248,7 @@ void main() {
                           amount: 1500.0,
                           currency: 'HKD',
                           convertedAmount: 1500.0,
+                          targetCurrency: 'HKD',
                         );
                   },
                   child: const Text('Show Dialog'),
@@ -281,6 +285,7 @@ void main() {
                           amount: 1500.0,
                           currency: 'HKD',
                           convertedAmount: 1500.0,
+                          targetCurrency: 'HKD',
                         );
                   },
                   child: const Text('Show Dialog'),

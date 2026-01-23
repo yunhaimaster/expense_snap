@@ -1071,6 +1071,16 @@ class SEs extends S {
   String get semantic_swipeToDelete => 'Deslice a la izquierda para eliminar';
 
   @override
+  String semantic_currencySelected(String name, String code) {
+    return '$name ($code), seleccionada';
+  }
+
+  @override
+  String semantic_currencyOption(String name, String code) {
+    return '$name ($code)';
+  }
+
+  @override
   String get validation_amountRequired => 'Por favor ingrese un monto';
 
   @override

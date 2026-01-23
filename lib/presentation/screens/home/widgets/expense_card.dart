@@ -36,7 +36,8 @@ class ExpenseCard extends StatelessWidget {
       buffer.write('${l10n.semantic_category_prefix}：$categoryName。');
     }
     buffer.write('${l10n.semantic_amount(expense.formattedConvertedAmount)} ');
-    if (expense.originalCurrency != 'HKD') {
+    // 當原始幣種與目標幣種不同時，顯示原始金額
+    if (expense.originalCurrency != expense.targetCurrency) {
       buffer.write(
         '${l10n.semantic_originalAmount(expense.formattedOriginalAmount)} ',
       );
@@ -151,8 +152,8 @@ class ExpenseCard extends StatelessWidget {
                               ),
                         ),
 
-                        // 原始金額（如果非港幣）
-                        if (expense.originalCurrency != 'HKD')
+                        // 原始金額（如果原始幣種不同於目標幣種）
+                        if (expense.originalCurrency != expense.targetCurrency)
                           Text(
                             expense.formattedOriginalAmount,
                             style: Theme.of(context).textTheme.bodySmall,

@@ -604,6 +604,20 @@
   "semantic_hasReceipt": "有收據圖片",
   "semantic_tapForDetails": "點擊查看詳情",
   "semantic_swipeToDelete": "向左滑動刪除",
+  "semantic_currencySelected": "{name}（{code}），已選擇",
+  "@semantic_currencySelected": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
+  "semantic_currencyOption": "{name}（{code}）",
+  "@semantic_currencyOption": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
   "validation_amountRequired": "請輸入金額",
   "validation_amountTooSmall": "金額不能小於 {min}",
   "@validation_amountTooSmall": {

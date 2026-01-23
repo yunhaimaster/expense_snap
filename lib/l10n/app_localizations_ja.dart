@@ -1048,6 +1048,16 @@ class SJa extends S {
   String get semantic_swipeToDelete => '左にスワイプして削除';
 
   @override
+  String semantic_currencySelected(String name, String code) {
+    return '$name（$code）、選択済み';
+  }
+
+  @override
+  String semantic_currencyOption(String name, String code) {
+    return '$name（$code）';
+  }
+
+  @override
   String get validation_amountRequired => '金額を入力してください';
 
   @override

@@ -64,10 +64,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   }
 
   Future<void> _loadExchangeRate() async {
-    if (_selectedCurrency == 'HKD') return;
+    // 當來源幣種等於目標幣種時，不需要載入匯率
+    final settings = context.read<SettingsProvider>();
+    if (_selectedCurrency == settings.primaryCurrency) return;
 
     final provider = context.read<ExchangeRateProvider>();
-    final info = await provider.loadRate(_selectedCurrency);
+    final info = await provider.loadRate(
+      _selectedCurrency,
+      baseCurrency: settings.primaryCurrency,
+    );
 
     if (info != null && mounted) {
       setState(() {
@@ -99,6 +104,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
+    final settings = context.watch<SettingsProvider>();
+    final primaryCurrency = settings.primaryCurrency;
     return LoadingOverlay(
       isLoading: _isLoading,
       message: l10n.common_saving,
@@ -176,8 +183,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
                 const SizedBox(height: 16),
 
-                // 匯率（非港幣時顯示）
-                if (_selectedCurrency != 'HKD') ...[
+                // 匯率（當來源幣種不同於目標幣種時顯示）
+                if (_selectedCurrency != primaryCurrency) ...[
                   // 匯率顯示區
                   ExchangeRateDisplay(
                     currency: _selectedCurrency,
@@ -192,6 +199,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         }
                       });
                     },
+                    targetCurrency: primaryCurrency,
                   ),
 
                   const SizedBox(height: 12),
@@ -393,6 +401,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final amount = double.tryParse(_amountController.text) ?? 0;
     final rate = double.tryParse(_exchangeRateController.text) ?? 1;
     final convertedAmount = amount * rate;
+    final primaryCurrency = context.read<SettingsProvider>().primaryCurrency;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -411,9 +420,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             padding: EdgeInsets.symmetric(horizontal: 12),
             child: Icon(Icons.arrow_forward, size: 16),
           ),
-          // TODO: Phase 5 - 使用 primaryCurrency 取代 hardcoded 'HKD'
+          // 顯示轉換後金額（使用動態主要幣種）
           Text(
-            'HKD ${Formatters.formatCurrency(convertedAmount)}',
+            '$primaryCurrency ${Formatters.formatCurrency(convertedAmount)}',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.primary,
@@ -559,6 +568,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       return;
     }
 
+    // 取得設定（需要 primaryCurrency 進行轉換）
+    final settings = context.read<SettingsProvider>();
+
     // 安全解析金額（表單驗證應已確保有效，但加上防護）
     final amount = double.tryParse(_amountController.text);
     if (amount == null || amount <= 0) {
@@ -568,8 +580,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     // 使用幣種感知的轉換，正確處理 JPY/KRW 等無小數幣種
     final amountCents = Formatters.amountToCents(amount, _selectedCurrency);
 
-    // 安全解析匯率
-    final rate = _selectedCurrency == 'HKD'
+    // 安全解析匯率（當來源幣種等於目標幣種時，匯率為 1）
+    final rate = _selectedCurrency == settings.primaryCurrency
         ? 1.0
         : (double.tryParse(_exchangeRateController.text) ?? 1.0);
     // 驗證匯率有效性
@@ -580,7 +592,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final rateMicros = Formatters.rateToMicros(rate);
 
     // 使用整數運算避免浮點誤差
-    final convertedAmountCents = _selectedCurrency == 'HKD'
+    final convertedAmountCents = _selectedCurrency == settings.primaryCurrency
         ? amountCents
         : (amountCents * rateMicros) ~/ CurrencyConstants.ratePrecision;
 
@@ -594,6 +606,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         amount: amount,
         currency: _selectedCurrency,
         convertedAmount: convertedAmountCents / 100,
+        targetCurrency: settings.primaryCurrency,
       );
       if (!mounted) return;
       if (!confirmed) return;
@@ -621,7 +634,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     try {
       final provider = context.read<ExpenseProvider>();
-      final settings = context.read<SettingsProvider>();
 
       // 使用追蹤的匯率來源
       final rateSource = _selectedCurrency == settings.primaryCurrency

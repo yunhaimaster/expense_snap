@@ -6,8 +6,10 @@ import 'package:provider/provider.dart';
 
 import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/core/errors/result.dart';
+import 'package:expense_snap/data/models/backup_status.dart';
 import 'package:expense_snap/presentation/providers/exchange_rate_provider.dart';
 import 'package:expense_snap/presentation/providers/expense_provider.dart';
+import 'package:expense_snap/presentation/providers/settings_provider.dart';
 import 'package:expense_snap/presentation/screens/add_expense/add_expense_screen.dart';
 import 'package:expense_snap/data/repositories/exchange_rate_repository.dart';
 import 'package:expense_snap/core/constants/currency_constants.dart';
@@ -18,6 +20,8 @@ void main() {
   late MockIExpenseRepository mockExpenseRepository;
   late MockExchangeRateRepository mockExchangeRateRepository;
   late MockImageService mockImageService;
+  late MockDatabaseHelper mockDatabaseHelper;
+  late MockBackupRepository mockBackupRepository;
 
   final testRateInfo = ExchangeRateInfo(
     rate: 1000000,
@@ -30,18 +34,42 @@ void main() {
     provideDummy<Result<Map<String, ExchangeRateInfo>>>(
       Result.success(<String, ExchangeRateInfo>{}),
     );
+    provideDummy<Result<void>>(Result.success(null));
+    provideDummy<Result<BackupStatus>>(
+        Result.success(const BackupStatus(
+      lastBackupAt: null,
+      lastBackupCount: 0,
+      lastBackupSizeKb: 0,
+      googleEmail: null,
+    )));
+    provideDummy<Result<int>>(Result.success(0));
+    provideDummy<Result<String?>>(Result.success(null));
   });
 
   setUp(() {
     mockExpenseRepository = MockIExpenseRepository();
     mockExchangeRateRepository = MockExchangeRateRepository();
     mockImageService = MockImageService();
+    mockDatabaseHelper = MockDatabaseHelper();
+    mockBackupRepository = MockBackupRepository();
 
     when(
       mockExchangeRateRepository.getRate(any),
     ).thenAnswer((_) async => Result.success(testRateInfo));
     when(mockExchangeRateRepository.canRefresh).thenReturn(true);
     when(mockExchangeRateRepository.secondsUntilRefresh).thenReturn(0);
+
+    // SettingsProvider stubs
+    when(mockDatabaseHelper.getSetting(any)).thenAnswer((_) async => null);
+    when(mockBackupRepository.getBackupStatus())
+        .thenAnswer((_) async => Result.success(const BackupStatus(
+              lastBackupAt: null,
+              lastBackupCount: 0,
+              lastBackupSizeKb: 0,
+              googleEmail: null,
+            )));
+    when(mockBackupRepository.tryRestoreGoogleSession())
+        .thenAnswer((_) async => Result.success(null));
   });
 
   Widget buildTestWidget({double keyboardHeight = 0}) {
@@ -52,6 +80,10 @@ void main() {
     final exchangeRateProvider = ExchangeRateProvider(
       repository: mockExchangeRateRepository,
     );
+    final settingsProvider = SettingsProvider(
+      databaseHelper: mockDatabaseHelper,
+      backupRepository: mockBackupRepository,
+    );
 
     return MultiProvider(
       providers: [
@@ -59,6 +91,7 @@ void main() {
         ChangeNotifierProvider<ExchangeRateProvider>.value(
           value: exchangeRateProvider,
         ),
+        ChangeNotifierProvider<SettingsProvider>.value(value: settingsProvider),
       ],
       child: MaterialApp(
         locale: const Locale('zh'),

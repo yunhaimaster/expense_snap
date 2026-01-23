@@ -70,8 +70,9 @@ void main() {
   });
 
   group('ExchangeRateProvider.loadRate', () {
-    test('HKD 應返回固定 1:1 匯率', () async {
-      final result = await provider.loadRate('HKD');
+    test('當來源幣種等於目標幣種時應返回固定 1:1 匯率', () async {
+      // 當 currency == baseCurrency 時，返回 1:1
+      final result = await provider.loadRate('HKD', baseCurrency: 'HKD');
 
       expect(result, isNotNull);
       expect(result!.rate, CurrencyConstants.ratePrecision);
@@ -81,7 +82,7 @@ void main() {
     });
 
     test('成功載入 USD 匯率', () async {
-      final result = await provider.loadRate('USD');
+      final result = await provider.loadRate('USD', baseCurrency: 'HKD');
 
       expect(result, isNotNull);
       expect(result!.rate, 7800000);
@@ -94,7 +95,7 @@ void main() {
         (_) async => Result.failure(const NetworkException('網絡錯誤')),
       );
 
-      final result = await provider.loadRate('USD');
+      final result = await provider.loadRate('USD', baseCurrency: 'HKD');
 
       expect(result, isNull);
       expect(provider.error, isA<NetworkException>());
@@ -102,10 +103,10 @@ void main() {
 
     test('5 分鐘內應使用快取（避免重複請求）', () async {
       // 第一次載入
-      await provider.loadRate('USD');
+      await provider.loadRate('USD', baseCurrency: 'HKD');
 
       // 第二次載入（應使用快取）
-      await provider.loadRate('USD');
+      await provider.loadRate('USD', baseCurrency: 'HKD');
 
       // 只應調用一次
       verify(mockRepository.getRate('USD')).called(1);

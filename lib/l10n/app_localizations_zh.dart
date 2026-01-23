@@ -1047,6 +1047,16 @@ class SZh extends S {
   String get semantic_swipeToDelete => '向左滑動刪除';
 
   @override
+  String semantic_currencySelected(String name, String code) {
+    return '$name（$code），已選擇';
+  }
+
+  @override
+  String semantic_currencyOption(String name, String code) {
+    return '$name（$code）';
+  }
+
+  @override
   String get validation_amountRequired => '請輸入金額';
 
   @override
@@ -2130,6 +2140,16 @@ class SZhHans extends SZh {
 
   @override
   String get semantic_swipeToDelete => '向左滑动删除';
+
+  @override
+  String semantic_currencySelected(String name, String code) {
+    return '$name（$code），已选择';
+  }
+
+  @override
+  String semantic_currencyOption(String name, String code) {
+    return '$name（$code）';
+  }
 
   @override
   String get validation_amountRequired => '请输入金额';

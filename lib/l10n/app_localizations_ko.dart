@@ -1051,6 +1051,16 @@ class SKo extends S {
   String get semantic_swipeToDelete => '왼쪽으로 스와이프하여 삭제';
 
   @override
+  String semantic_currencySelected(String name, String code) {
+    return '$name ($code), 선택됨';
+  }
+
+  @override
+  String semantic_currencyOption(String name, String code) {
+    return '$name ($code)';
+  }
+
+  @override
   String get validation_amountRequired => '금액을 입력하세요';
 
   @override

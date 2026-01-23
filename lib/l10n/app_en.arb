@@ -604,6 +604,20 @@
   "semantic_hasReceipt": "Has receipt image",
   "semantic_tapForDetails": "Tap to view details",
   "semantic_swipeToDelete": "Swipe left to delete",
+  "semantic_currencySelected": "{name} ({code}), selected",
+  "@semantic_currencySelected": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
+  "semantic_currencyOption": "{name} ({code})",
+  "@semantic_currencyOption": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
   "validation_amountRequired": "Please enter an amount",
   "validation_amountTooSmall": "Amount cannot be less than {min}",
   "@validation_amountTooSmall": {

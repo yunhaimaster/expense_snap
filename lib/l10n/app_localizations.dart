@@ -2024,6 +2024,18 @@ abstract class S {
   /// **'向左滑動刪除'**
   String get semantic_swipeToDelete;
 
+  /// No description provided for @semantic_currencySelected.
+  ///
+  /// In zh, this message translates to:
+  /// **'{name}（{code}），已選擇'**
+  String semantic_currencySelected(String name, String code);
+
+  /// No description provided for @semantic_currencyOption.
+  ///
+  /// In zh, this message translates to:
+  /// **'{name}（{code}）'**
+  String semantic_currencyOption(String name, String code);
+
   /// No description provided for @validation_amountRequired.
   ///
   /// In zh, this message translates to:

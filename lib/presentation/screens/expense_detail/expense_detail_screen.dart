@@ -293,7 +293,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           ),
         ),
 
-        if (_expense!.originalCurrency != 'HKD') ...[
+        // 當原始幣種與目標幣種不同時，顯示轉換資訊
+        if (_expense!.originalCurrency != _expense!.targetCurrency) ...[
           const SizedBox(height: 8),
           _DetailRow(
             label: l10n.expenseDetail_hkdAmount,
@@ -303,7 +304,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           _DetailRow(
             label: l10n.expenseDetail_exchangeRate,
             value:
-                '1 ${_expense!.originalCurrency} = ${_expense!.formattedExchangeRate} HKD',
+                '1 ${_expense!.originalCurrency} = ${_expense!.formattedExchangeRate} ${_expense!.targetCurrency}',
             trailing: _buildRateSourceChip(),
           ),
         ],
@@ -405,7 +406,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
             suffix: _selectedCurrency,
           ),
 
-          if (_selectedCurrency != 'HKD') ...[
+          if (_selectedCurrency != _expense!.targetCurrency) ...[
             const SizedBox(height: 16),
             ExchangeRateInput(
               controller: _exchangeRateController,
@@ -469,7 +470,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       final amountCents = Formatters.amountToCents(amount, _selectedCurrency);
 
       // 安全解析匯率
-      final rate = _selectedCurrency == 'HKD'
+      final rate = _selectedCurrency == _expense!.targetCurrency
           ? 1.0
           : (double.tryParse(_exchangeRateController.text) ?? 1.0);
       // 驗證匯率有效性
@@ -485,7 +486,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       final rateMicros = Formatters.rateToMicros(rate);
 
       // 使用整數運算避免浮點誤差
-      final convertedAmountCents = _selectedCurrency == 'HKD'
+      final convertedAmountCents = _selectedCurrency == _expense!.targetCurrency
           ? amountCents
           : (amountCents * rateMicros) ~/ CurrencyConstants.ratePrecision;
 

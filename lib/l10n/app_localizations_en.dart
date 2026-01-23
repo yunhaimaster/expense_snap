@@ -1064,6 +1064,16 @@ class SEn extends S {
   String get semantic_swipeToDelete => 'Swipe left to delete';
 
   @override
+  String semantic_currencySelected(String name, String code) {
+    return '$name ($code), selected';
+  }
+
+  @override
+  String semantic_currencyOption(String name, String code) {
+    return '$name ($code)';
+  }
+
+  @override
   String get validation_amountRequired => 'Please enter an amount';
 
   @override

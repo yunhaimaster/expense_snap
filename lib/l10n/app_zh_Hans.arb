@@ -604,6 +604,20 @@
   "semantic_hasReceipt": "有收据图片",
   "semantic_tapForDetails": "点击查看详情",
   "semantic_swipeToDelete": "向左滑动删除",
+  "semantic_currencySelected": "{name}（{code}），已选择",
+  "@semantic_currencySelected": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
+  "semantic_currencyOption": "{name}（{code}）",
+  "@semantic_currencyOption": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
   "validation_amountRequired": "请输入金额",
   "validation_amountTooSmall": "金额不能小于 {min}",
   "@validation_amountTooSmall": {
