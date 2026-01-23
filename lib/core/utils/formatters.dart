@@ -132,20 +132,43 @@ class Formatters {
     }
   }
 
-  /// 金額：分轉元
-  static double centsToAmount(int cents) {
+  /// 金額：分轉元（尊重幣種小數位數）
+  /// [currency] 如為 null，預設使用 2 位小數（向後相容）
+  static double centsToAmount(int cents, [String? currency]) {
+    if (currency != null) {
+      final decimals = CurrencyConstants.getDecimalPlaces(currency);
+      if (decimals == 0) {
+        // JPY/KRW 等無小數幣種：cents 就是實際金額
+        return cents.toDouble();
+      }
+    }
     return cents / 100.0;
   }
 
-  /// 金額：元轉分
-  static int amountToCents(double amount) {
+  /// 金額：元轉分（尊重幣種小數位數）
+  /// [currency] 如為 null，預設使用 2 位小數（向後相容）
+  static int amountToCents(double amount, [String? currency]) {
+    if (currency != null) {
+      final decimals = CurrencyConstants.getDecimalPlaces(currency);
+      if (decimals == 0) {
+        // JPY/KRW 等無小數幣種：直接取整，不乘 100
+        return amount.round();
+      }
+    }
     return (amount * 100).round();
   }
 
-  /// 格式化金額顯示（帶幣種符號）
+  /// 格式化金額顯示（帶幣種符號，尊重小數位數）
   static String formatAmount(int cents, String currency) {
-    final amount = centsToAmount(cents);
+    final decimals = CurrencyConstants.getDecimalPlaces(currency);
     final symbol = CurrencyConstants.currencySymbols[currency] ?? currency;
+
+    if (decimals == 0) {
+      // JPY/KRW 等無小數幣種：直接用 cents 作為整數金額
+      return '$symbol${_formatNumberNoDecimals(cents)}';
+    }
+    // 其他幣種：cents / 100 轉換為元
+    final amount = centsToAmount(cents, currency);
     return '$symbol${_formatNumber(amount)}';
   }
 
@@ -158,6 +181,12 @@ class Formatters {
   /// 格式化數字（千分位分隔，保留2位小數）
   static String _formatNumber(double number) {
     final formatter = NumberFormat('#,##0.00');
+    return formatter.format(number);
+  }
+
+  /// 格式化整數（千分位分隔，無小數）
+  static String _formatNumberNoDecimals(int number) {
+    final formatter = NumberFormat('#,##0');
     return formatter.format(number);
   }
 

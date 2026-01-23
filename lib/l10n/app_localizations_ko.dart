@@ -152,6 +152,9 @@ class SKo extends S {
   String get addExpense_invalidAmount => '유효한 금액을 입력하세요';
 
   @override
+  String get addExpense_invalidExchangeRate => '환율은 0보다 커야 합니다';
+
+  @override
   String get expenseDetail_title => '지출 상세';
 
   @override

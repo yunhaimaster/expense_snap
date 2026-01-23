@@ -22,7 +22,7 @@ void main() {
     originalCurrency: 'HKD',
     exchangeRate: CurrencyConstants.ratePrecision,
     exchangeRateSource: ExchangeRateSource.auto,
-    hkdAmountCents: 10000,
+    convertedAmountCents: 10000,
     description: '測試支出',
     createdAt: now,
     updatedAt: now,
@@ -32,7 +32,7 @@ void main() {
     year: now.year,
     month: now.month,
     totalCount: 1,
-    totalHkdAmountCents: 10000,
+    totalConvertedAmountCents: 10000,
   );
 
   // 註冊 dummy values（Mockito 需要）
@@ -53,17 +53,21 @@ void main() {
     mockImageService = MockImageService();
 
     // 預設 stub
-    when(mockRepository.getExpensesByMonth(
-      year: anyNamed('year'),
-      month: anyNamed('month'),
-      limit: anyNamed('limit'),
-      offset: anyNamed('offset'),
-    )).thenAnswer((_) async => Result.success([testExpense]));
+    when(
+      mockRepository.getExpensesByMonth(
+        year: anyNamed('year'),
+        month: anyNamed('month'),
+        limit: anyNamed('limit'),
+        offset: anyNamed('offset'),
+      ),
+    ).thenAnswer((_) async => Result.success([testExpense]));
 
-    when(mockRepository.getMonthSummary(
-      year: anyNamed('year'),
-      month: anyNamed('month'),
-    )).thenAnswer((_) async => Result.success(testSummary));
+    when(
+      mockRepository.getMonthSummary(
+        year: anyNamed('year'),
+        month: anyNamed('month'),
+      ),
+    ).thenAnswer((_) async => Result.success(testSummary));
 
     provider = ExpenseProvider(
       repository: mockRepository,
@@ -104,14 +108,18 @@ void main() {
     });
 
     test('載入失敗應設定錯誤狀態', () async {
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => Result.failure(
-            const DatabaseException('查詢失敗'),
-          ));
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer(
+        (_) async => Result.failure(
+          const DatabaseException('查詢失敗'),
+        ),
+      );
 
       await provider.loadMonth(refresh: true);
 
@@ -120,12 +128,14 @@ void main() {
 
     test('重複調用 loadMonth 時應忽略（防止併發）', () async {
       // 模擬慢速回應
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async {
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async {
         await Future.delayed(const Duration(milliseconds: 100));
         return Result.success([testExpense]);
       });
@@ -137,12 +147,14 @@ void main() {
       await Future.wait([future1, future2]);
 
       // 應只調用一次
-      verify(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).called(1);
+      verify(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).called(1);
     });
   });
 
@@ -207,10 +219,12 @@ void main() {
 
   group('ExpenseProvider.addExpense', () {
     test('成功新增支出', () async {
-      when(mockRepository.addExpense(
-        expense: anyNamed('expense'),
-        imagePath: anyNamed('imagePath'),
-      )).thenAnswer((_) async => Result.success(testExpense));
+      when(
+        mockRepository.addExpense(
+          expense: anyNamed('expense'),
+          imagePath: anyNamed('imagePath'),
+        ),
+      ).thenAnswer((_) async => Result.success(testExpense));
 
       final result = await provider.addExpense(
         date: now,
@@ -218,7 +232,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: CurrencyConstants.ratePrecision,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 10000,
+        convertedAmountCents: 10000,
         description: '測試',
       );
 
@@ -226,12 +240,16 @@ void main() {
     });
 
     test('新增失敗應返回錯誤', () async {
-      when(mockRepository.addExpense(
-        expense: anyNamed('expense'),
-        imagePath: anyNamed('imagePath'),
-      )).thenAnswer((_) async => Result.failure(
-            const DatabaseException('寫入失敗'),
-          ));
+      when(
+        mockRepository.addExpense(
+          expense: anyNamed('expense'),
+          imagePath: anyNamed('imagePath'),
+        ),
+      ).thenAnswer(
+        (_) async => Result.failure(
+          const DatabaseException('寫入失敗'),
+        ),
+      );
 
       final result = await provider.addExpense(
         date: now,
@@ -239,7 +257,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: CurrencyConstants.ratePrecision,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 10000,
+        convertedAmountCents: 10000,
         description: '測試',
       );
 
@@ -253,8 +271,9 @@ void main() {
       await provider.loadMonth(refresh: true);
       expect(provider.expenses, hasLength(1));
 
-      when(mockRepository.softDeleteExpense(any))
-          .thenAnswer((_) async => Result.success(null));
+      when(
+        mockRepository.softDeleteExpense(any),
+      ).thenAnswer((_) async => Result.success(null));
 
       await provider.softDeleteExpense(1);
 
@@ -264,8 +283,9 @@ void main() {
 
   group('ExpenseProvider.pickImage', () {
     test('從相機拍照', () async {
-      when(mockImageService.pickFromCamera())
-          .thenAnswer((_) async => Result.success('/path/to/image.jpg'));
+      when(
+        mockImageService.pickFromCamera(),
+      ).thenAnswer((_) async => Result.success('/path/to/image.jpg'));
 
       final result = await provider.pickImageFromCamera();
 
@@ -273,8 +293,9 @@ void main() {
     });
 
     test('從相簿選擇', () async {
-      when(mockImageService.pickFromGallery())
-          .thenAnswer((_) async => Result.success('/path/to/image.jpg'));
+      when(
+        mockImageService.pickFromGallery(),
+      ).thenAnswer((_) async => Result.success('/path/to/image.jpg'));
 
       final result = await provider.pickImageFromGallery();
 
@@ -285,14 +306,18 @@ void main() {
   group('ExpenseProvider.clearError', () {
     test('應清除錯誤狀態', () async {
       // 先觸發錯誤
-      when(mockRepository.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => Result.failure(
-            const DatabaseException('錯誤'),
-          ));
+      when(
+        mockRepository.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer(
+        (_) async => Result.failure(
+          const DatabaseException('錯誤'),
+        ),
+      );
 
       await provider.loadMonth(refresh: true);
       expect(provider.error, isNotNull);

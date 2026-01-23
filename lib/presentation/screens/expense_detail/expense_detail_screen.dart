@@ -135,12 +135,19 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       message: l10n.common_saving,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_isEditing ? l10n.expenseDetail_editTitle : l10n.expenseDetail_title),
+          title: Text(
+            _isEditing
+                ? l10n.expenseDetail_editTitle
+                : l10n.expenseDetail_title,
+          ),
           actions: [
             if (_isEditing)
               TextButton(
                 onPressed: _saveChanges,
-                child: Text(l10n.common_save, style: const TextStyle(color: Colors.white)),
+                child: Text(
+                  l10n.common_save,
+                  style: const TextStyle(color: Colors.white),
+                ),
               )
             else ...[
               IconButton(
@@ -173,7 +180,10 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
                       children: [
                         const Icon(Icons.delete, color: AppColors.error),
                         const SizedBox(width: 8),
-                        Text(l10n.common_delete, style: const TextStyle(color: AppColors.error)),
+                        Text(
+                          l10n.common_delete,
+                          style: const TextStyle(color: AppColors.error),
+                        ),
                       ],
                     ),
                   ),
@@ -225,9 +235,16 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.broken_image, size: 48, color: Colors.white54),
+                  const Icon(
+                    Icons.broken_image,
+                    size: 48,
+                    color: Colors.white54,
+                  ),
                   const SizedBox(height: 8),
-                  Text(S.of(context).expenseDetail_imageLoadFailed, style: const TextStyle(color: Colors.white54)),
+                  Text(
+                    S.of(context).expenseDetail_imageLoadFailed,
+                    style: const TextStyle(color: Colors.white54),
+                  ),
                 ],
               ),
             ),
@@ -245,9 +262,16 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.receipt_outlined, size: 48, color: AppColors.textHint),
+            const Icon(
+              Icons.receipt_outlined,
+              size: 48,
+              color: AppColors.textHint,
+            ),
             const SizedBox(height: 8),
-            Text(S.of(context).expenseDetail_noReceipt, style: const TextStyle(color: AppColors.textHint)),
+            Text(
+              S.of(context).expenseDetail_noReceipt,
+              style: const TextStyle(color: AppColors.textHint),
+            ),
           ],
         ),
       ),
@@ -264,21 +288,22 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           label: l10n.expenseDetail_amount,
           value: _expense!.formattedOriginalAmount,
           valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
+            fontWeight: FontWeight.bold,
+            color: AppColors.primary,
+          ),
         ),
 
         if (_expense!.originalCurrency != 'HKD') ...[
           const SizedBox(height: 8),
           _DetailRow(
             label: l10n.expenseDetail_hkdAmount,
-            value: _expense!.formattedHkdAmount,
+            value: _expense!.formattedConvertedAmount,
           ),
           const SizedBox(height: 8),
           _DetailRow(
             label: l10n.expenseDetail_exchangeRate,
-            value: '1 ${_expense!.originalCurrency} = ${_expense!.formattedExchangeRate} HKD',
+            value:
+                '1 ${_expense!.originalCurrency} = ${_expense!.formattedExchangeRate} HKD',
             trailing: _buildRateSourceChip(),
           ),
         ],
@@ -303,8 +328,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           label: l10n.expenseDetail_createdAt,
           value: Formatters.formatDateTime(_expense!.createdAt),
           valueStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textSecondary,
-              ),
+            color: AppColors.textSecondary,
+          ),
         ),
       ],
     );
@@ -313,10 +338,26 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   Widget _buildRateSourceChip() {
     final l10n = S.of(context);
     final (icon, color, label) = switch (_expense!.exchangeRateSource) {
-      ExchangeRateSource.auto => (Icons.check_circle, AppColors.rateAuto, l10n.rateSource_auto),
-      ExchangeRateSource.offline => (Icons.offline_bolt, AppColors.rateOffline, l10n.rateSource_offline),
-      ExchangeRateSource.defaultRate => (Icons.warning, AppColors.rateDefault, l10n.rateSource_default),
-      ExchangeRateSource.manual => (Icons.edit, AppColors.rateManual, l10n.rateSource_manual),
+      ExchangeRateSource.auto => (
+        Icons.check_circle,
+        AppColors.rateAuto,
+        l10n.rateSource_auto,
+      ),
+      ExchangeRateSource.offline => (
+        Icons.offline_bolt,
+        AppColors.rateOffline,
+        l10n.rateSource_offline,
+      ),
+      ExchangeRateSource.defaultRate => (
+        Icons.warning,
+        AppColors.rateDefault,
+        l10n.rateSource_default,
+      ),
+      ExchangeRateSource.manual => (
+        Icons.edit,
+        AppColors.rateManual,
+        l10n.rateSource_manual,
+      ),
     };
 
     return Container(
@@ -352,7 +393,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
 
           CurrencyDropdown(
             value: _selectedCurrency,
-            onChanged: (currency) => setState(() => _selectedCurrency = currency),
+            onChanged: (currency) =>
+                setState(() => _selectedCurrency = currency),
           ),
 
           const SizedBox(height: 16),
@@ -423,24 +465,36 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
         );
         return;
       }
-      final amountCents = Formatters.amountToCents(amount);
+      // 使用幣種感知的轉換，正確處理 JPY/KRW 等無小數幣種
+      final amountCents = Formatters.amountToCents(amount, _selectedCurrency);
 
       // 安全解析匯率
       final rate = _selectedCurrency == 'HKD'
           ? 1.0
           : (double.tryParse(_exchangeRateController.text) ?? 1.0);
+      // 驗證匯率有效性
+      if (rate <= 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.addExpense_invalidExchangeRate),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
       final rateMicros = Formatters.rateToMicros(rate);
 
-      final hkdAmountCents = _selectedCurrency == 'HKD'
+      // 使用整數運算避免浮點誤差
+      final convertedAmountCents = _selectedCurrency == 'HKD'
           ? amountCents
-          : (amountCents * rate).round();
+          : (amountCents * rateMicros) ~/ CurrencyConstants.ratePrecision;
 
       final updated = _expense!.copyWith(
         date: _selectedDate,
         originalAmountCents: amountCents,
         originalCurrency: _selectedCurrency,
         exchangeRate: rateMicros,
-        hkdAmountCents: hkdAmountCents,
+        convertedAmountCents: convertedAmountCents,
         description: _descriptionController.text.trim(),
         updatedAt: DateTime.now(),
       );
@@ -636,8 +690,8 @@ class _DetailRow extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textSecondary,
-              ),
+            color: AppColors.textSecondary,
+          ),
         ),
         const SizedBox(height: 4),
         Row(

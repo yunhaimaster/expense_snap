@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../core/constants/app_constants.dart';
+import '../../core/constants/currency_constants.dart';
 import '../../core/errors/app_exception.dart';
 import '../../core/errors/result.dart';
 import '../../core/utils/app_logger.dart';
@@ -30,8 +31,8 @@ class SettingsProvider extends ChangeNotifier {
   SettingsProvider({
     required DatabaseHelper databaseHelper,
     required BackupRepository backupRepository,
-  })  : _db = databaseHelper,
-        _backupRepo = backupRepository;
+  }) : _db = databaseHelper,
+       _backupRepo = backupRepository;
 
   final DatabaseHelper _db;
   final BackupRepository _backupRepo;
@@ -53,11 +54,13 @@ class SettingsProvider extends ChangeNotifier {
   String? _errorMessage;
   int _localStorageUsageKb = 0;
   List<BackupInfo> _cloudBackups = [];
+  String _primaryCurrency = CurrencyConstants.defaultPrimaryCurrency;
 
   // ============ Getters ============
 
   bool get isLoading => _isLoading;
   String get userName => _userName;
+  String get primaryCurrency => _primaryCurrency;
   BackupStatus get backupStatus => _backupStatus;
   BackupOperationState get operationState => _operationState;
   double get operationProgress => _operationProgress;
@@ -111,6 +114,10 @@ class SettingsProvider extends ChangeNotifier {
       // 載入使用者名稱
       final name = await _db.getSetting('user_name');
       _userName = name ?? AppConstants.defaultUserName;
+
+      // 載入主要幣種
+      final currency = await _db.getSetting('primary_currency');
+      _primaryCurrency = currency ?? CurrencyConstants.defaultPrimaryCurrency;
 
       // 嘗試恢復 Google 登入狀態
       await _backupRepo.tryRestoreGoogleSession();
@@ -167,6 +174,28 @@ class SettingsProvider extends ChangeNotifier {
     }
   }
 
+  /// 更新主要幣種
+  Future<bool> updatePrimaryCurrency(String currency) async {
+    // 驗證幣種是否有效
+    if (!CurrencyConstants.primaryCurrencies.contains(currency)) {
+      return false;
+    }
+
+    try {
+      await _db.setSetting('primary_currency', currency);
+      _primaryCurrency = currency;
+      _safeNotifyListeners();
+      return true;
+    } catch (e) {
+      AppLogger.error(
+        'updatePrimaryCurrency failed',
+        error: e,
+        tag: 'Settings',
+      );
+      return false;
+    }
+  }
+
   // ============ Google 帳號 ============
 
   /// 連結 Google 帳號
@@ -180,7 +209,11 @@ class SettingsProvider extends ChangeNotifier {
     _operationLock = true;
 
     try {
-      _setOperationState(BackupOperationState.preparing, 0.0, '連接 Google 帳號...');
+      _setOperationState(
+        BackupOperationState.preparing,
+        0.0,
+        '連接 Google 帳號...',
+      );
 
       final result = await _backupRepo.signInWithGoogle();
 
@@ -296,7 +329,11 @@ class SettingsProvider extends ChangeNotifier {
       _setOperationState(BackupOperationState.success, 1.0, '備份完成');
       return Result.success(null);
     } catch (e) {
-      AppLogger.error('Backup to Google Drive failed', error: e, tag: 'Settings');
+      AppLogger.error(
+        'Backup to Google Drive failed',
+        error: e,
+        tag: 'Settings',
+      );
       _setError('備份失敗: $e');
       return Result.failure(StorageException('備份失敗: $e'));
     } finally {
@@ -375,7 +412,11 @@ class SettingsProvider extends ChangeNotifier {
       _setOperationState(BackupOperationState.success, 1.0, '還原完成');
       return Result.success(null);
     } catch (e) {
-      AppLogger.error('Restore from Google Drive failed', error: e, tag: 'Settings');
+      AppLogger.error(
+        'Restore from Google Drive failed',
+        error: e,
+        tag: 'Settings',
+      );
       _setError('還原失敗: $e');
       return Result.failure(StorageException('還原失敗: $e'));
     } finally {

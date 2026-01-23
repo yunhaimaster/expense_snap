@@ -154,6 +154,10 @@ class SEn extends S {
   String get addExpense_invalidAmount => 'Please enter a valid amount';
 
   @override
+  String get addExpense_invalidExchangeRate =>
+      'Exchange rate must be greater than 0';
+
+  @override
   String get expenseDetail_title => 'Expense Details';
 
   @override

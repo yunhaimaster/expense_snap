@@ -25,7 +25,7 @@ void main() {
     originalCurrency: 'HKD',
     exchangeRate: 1000000,
     exchangeRateSource: ExchangeRateSource.auto,
-    hkdAmountCents: 10000,
+    convertedAmountCents: 10000,
     description: '測試支出',
     receiptImagePath: '/path/to/image.jpg',
     createdAt: DateTime.now(),
@@ -35,7 +35,7 @@ void main() {
   final testSummary = MonthSummary(
     year: DateTime.now().year,
     month: DateTime.now().month,
-    totalHkdAmountCents: 10000,
+    totalConvertedAmountCents: 10000,
     totalCount: 1,
   );
 

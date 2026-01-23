@@ -21,8 +21,8 @@ class ExpenseProvider extends ChangeNotifier {
   ExpenseProvider({
     required IExpenseRepository repository,
     required ImageService imageService,
-  })  : _repository = repository,
-        _imageService = imageService {
+  }) : _repository = repository,
+       _imageService = imageService {
     _initCurrentMonth();
   }
 
@@ -34,7 +34,10 @@ class ExpenseProvider extends ChangeNotifier {
 
   // 狀態
   List<Expense> _expenses = [];
-  MonthSummary _summary = MonthSummary.empty(DateTime.now().year, DateTime.now().month);
+  MonthSummary _summary = MonthSummary.empty(
+    DateTime.now().year,
+    DateTime.now().month,
+  );
   bool _isLoading = false;
   bool _hasMore = true;
   AppException? _error;
@@ -81,7 +84,7 @@ class ExpenseProvider extends ChangeNotifier {
 
     _isLoading = true;
     _error = null;
-    notifyListeners();
+    _notifyIfNotDisposed();
 
     try {
       // 並行載入列表和摘要
@@ -137,6 +140,8 @@ class ExpenseProvider extends ChangeNotifier {
 
   /// 刷新資料
   Future<void> refresh() async {
+    // 防止並發刷新
+    if (_isLoading) return;
     await loadMonth(refresh: true);
   }
 
@@ -170,6 +175,17 @@ class ExpenseProvider extends ChangeNotifier {
 
   /// 跳轉至指定月份
   void goToMonth(int year, int month) {
+    // 驗證月份範圍
+    if (month < 1 || month > 12) {
+      AppLogger.warning('goToMonth: invalid month $month, ignoring');
+      return;
+    }
+    // 不允許超過當前月份
+    final now = DateTime.now();
+    if (year > now.year || (year == now.year && month > now.month)) {
+      AppLogger.warning('goToMonth: future month not allowed');
+      return;
+    }
     _currentYear = year;
     _currentMonth = month;
     loadMonth(refresh: true);
@@ -182,7 +198,7 @@ class ExpenseProvider extends ChangeNotifier {
     required String originalCurrency,
     required int exchangeRate,
     required ExchangeRateSource exchangeRateSource,
-    required int hkdAmountCents,
+    required int convertedAmountCents,
     required String description,
     String? imagePath,
     ExpenseCategory? category,
@@ -194,7 +210,7 @@ class ExpenseProvider extends ChangeNotifier {
       originalCurrency: originalCurrency,
       exchangeRate: exchangeRate,
       exchangeRateSource: exchangeRateSource,
-      hkdAmountCents: hkdAmountCents,
+      convertedAmountCents: convertedAmountCents,
       description: description,
       createdAt: now,
       updatedAt: now,
@@ -225,7 +241,7 @@ class ExpenseProvider extends ChangeNotifier {
       final index = _expenses.indexWhere((e) => e.id == expense.id);
       if (index >= 0) {
         _expenses[index] = expense;
-        notifyListeners();
+        _notifyIfNotDisposed();
       }
       // 刷新摘要
       _refreshSummary();
@@ -241,7 +257,7 @@ class ExpenseProvider extends ChangeNotifier {
     result.onSuccess((_) {
       // 從列表移除
       _expenses.removeWhere((e) => e.id == id);
-      notifyListeners();
+      _notifyIfNotDisposed();
       // 刷新摘要
       _refreshSummary();
     });
@@ -276,7 +292,7 @@ class ExpenseProvider extends ChangeNotifier {
       final index = _expenses.indexWhere((e) => e.id == expenseId);
       if (index >= 0) {
         _expenses[index] = updated;
-        notifyListeners();
+        _notifyIfNotDisposed();
       }
     });
 
@@ -308,7 +324,7 @@ class ExpenseProvider extends ChangeNotifier {
   /// 清除錯誤
   void clearError() {
     _error = null;
-    notifyListeners();
+    _notifyIfNotDisposed();
   }
 
   /// 安全通知監聽器（防止 dispose 後呼叫）

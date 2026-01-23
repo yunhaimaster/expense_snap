@@ -49,7 +49,11 @@ class ExportStrings {
   });
 
   /// 從 S (AppLocalizations) 建立
-  factory ExportStrings.fromL10n(S l10n, {required int year, required int month}) {
+  factory ExportStrings.fromL10n(
+    S l10n, {
+    required int year,
+    required int month,
+  }) {
     final monthStr = month.toString().padLeft(2, '0');
     return ExportStrings(
       sheetName: l10n.export_sheetName(year, month),
@@ -181,7 +185,10 @@ class ExportService {
       }
       if (year < 2000 || year > 2100) {
         return Result.failure(
-          const ValidationException('年份必須介於 2000 到 2100 之間', code: 'INVALID_YEAR'),
+          const ValidationException(
+            '年份必須介於 2000 到 2100 之間',
+            code: 'INVALID_YEAR',
+          ),
         );
       }
       if (expenses.isEmpty) {
@@ -211,11 +218,21 @@ class ExportService {
         // 生成收據檔名（如果有收據）
         String? receiptFileName;
         if (expense.hasReceipt && expense.receiptImagePath != null) {
-          receiptFileName = _generateReceiptFileName(expense, rowIndex, expense.receiptImagePath!);
+          receiptFileName = _generateReceiptFileName(
+            expense,
+            rowIndex,
+            expense.receiptImagePath!,
+          );
         }
 
-        _setDataRow(sheet, rowIndex, expense, strings, receiptFileName: receiptFileName);
-        totalHkdCents += expense.hkdAmountCents;
+        _setDataRow(
+          sheet,
+          rowIndex,
+          expense,
+          strings,
+          receiptFileName: receiptFileName,
+        );
+        totalHkdCents += expense.convertedAmountCents;
       }
 
       // 設定合計列
@@ -236,15 +253,19 @@ class ExportService {
       await File(filePath).writeAsBytes(fileBytes);
 
       final fileSize = await File(filePath).length();
-      AppLogger.info('Excel exported: $filePath (${Formatters.formatFileSize(fileSize)})');
+      AppLogger.info(
+        'Excel exported: $filePath (${Formatters.formatFileSize(fileSize)})',
+      );
 
-      return Result.success(ExportResult(
-        filePath: filePath,
-        fileName: fileName,
-        fileSize: fileSize,
-        expenseCount: expenses.length,
-        totalHkdCents: totalHkdCents,
-      ));
+      return Result.success(
+        ExportResult(
+          filePath: filePath,
+          fileName: fileName,
+          fileSize: fileSize,
+          expenseCount: expenses.length,
+          totalHkdCents: totalHkdCents,
+        ),
+      );
     } catch (e) {
       AppLogger.error('exportToExcel failed', error: e);
       return Result.failure(
@@ -280,7 +301,10 @@ class ExportService {
       }
       if (year < 2000 || year > 2100) {
         return Result.failure(
-          const ValidationException('年份必須介於 2000 到 2100 之間', code: 'INVALID_YEAR'),
+          const ValidationException(
+            '年份必須介於 2000 到 2100 之間',
+            code: 'INVALID_YEAR',
+          ),
         );
       }
       if (expenses.isEmpty) {
@@ -305,11 +329,13 @@ class ExportService {
 
       final excelInfo = excelResult.getOrThrow();
       final excelBytes = await File(excelInfo.filePath).readAsBytes();
-      archive.addFile(ArchiveFile(
-        excelInfo.fileName,
-        excelBytes.length,
-        excelBytes,
-      ));
+      archive.addFile(
+        ArchiveFile(
+          excelInfo.fileName,
+          excelBytes.length,
+          excelBytes,
+        ),
+      );
       onProgress?.call(0.3);
 
       // 2. 加入收據圖片（使用 Excel 行號作為檔名序號，方便配對）
@@ -326,13 +352,19 @@ class ExportService {
           final imageFile = File(imagePath);
           if (await imageFile.exists()) {
             final imageBytes = await imageFile.readAsBytes();
-            final imageName = _generateReceiptFileName(expense, excelRowIndex, imagePath);
+            final imageName = _generateReceiptFileName(
+              expense,
+              excelRowIndex,
+              imagePath,
+            );
 
-            archive.addFile(ArchiveFile(
-              'receipts/$imageName',
-              imageBytes.length,
-              imageBytes,
-            ));
+            archive.addFile(
+              ArchiveFile(
+                'receipts/$imageName',
+                imageBytes.length,
+                imageBytes,
+              ),
+            );
           }
         }
 
@@ -359,7 +391,9 @@ class ExportService {
       onProgress?.call(1.0);
 
       final fileSize = await File(filePath).length();
-      AppLogger.info('ZIP exported: $filePath (${Formatters.formatFileSize(fileSize)})');
+      AppLogger.info(
+        'ZIP exported: $filePath (${Formatters.formatFileSize(fileSize)})',
+      );
 
       // 清理暫時的 Excel 檔案（失敗時僅記錄，不影響 ZIP 匯出結果）
       try {
@@ -368,14 +402,16 @@ class ExportService {
         AppLogger.warning('Failed to cleanup temp Excel file: $e');
       }
 
-      return Result.success(ExportResult(
-        filePath: filePath,
-        fileName: fileName,
-        fileSize: fileSize,
-        expenseCount: expenses.length,
-        totalHkdCents: excelInfo.totalHkdCents,
-        receiptCount: receiptCount,
-      ));
+      return Result.success(
+        ExportResult(
+          filePath: filePath,
+          fileName: fileName,
+          fileSize: fileSize,
+          expenseCount: expenses.length,
+          totalHkdCents: excelInfo.totalHkdCents,
+          receiptCount: receiptCount,
+        ),
+      );
     } catch (e) {
       AppLogger.error('exportToZip failed', error: e);
       return Result.failure(ExportException.zipFailed(e.toString()));
@@ -386,7 +422,10 @@ class ExportService {
   ///
   /// [filePath] 檔案路徑
   /// [shareSubject] 分享主題（本地化字串）
-  Future<Result<void>> shareFile(String filePath, {String? shareSubject}) async {
+  Future<Result<void>> shareFile(
+    String filePath, {
+    String? shareSubject,
+  }) async {
     try {
       final file = File(filePath);
       if (!await file.exists()) {
@@ -454,7 +493,9 @@ class ExportService {
     ];
 
     for (int i = 0; i < headers.length; i++) {
-      final cell = sheet.cell(CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 0));
+      final cell = sheet.cell(
+        CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 0),
+      );
       cell.value = TextCellValue(headers[i]);
       cell.cellStyle = CellStyle(
         bold: true,
@@ -465,52 +506,97 @@ class ExportService {
   }
 
   /// 設定資料列
-  void _setDataRow(Sheet sheet, int rowIndex, Expense expense, ExportStrings strings, {String? receiptFileName}) {
+  void _setDataRow(
+    Sheet sheet,
+    int rowIndex,
+    Expense expense,
+    ExportStrings strings, {
+    String? receiptFileName,
+  }) {
     // 序號
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: rowIndex))
-      .value = IntCellValue(rowIndex);
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: rowIndex))
+        .value = IntCellValue(
+      rowIndex,
+    );
 
     // 日期
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: rowIndex))
-      .value = TextCellValue(Formatters.formatDate(expense.date));
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: rowIndex))
+        .value = TextCellValue(
+      Formatters.formatDate(expense.date),
+    );
 
     // 描述
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: rowIndex))
-      .value = TextCellValue(expense.description);
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: rowIndex))
+        .value = TextCellValue(
+      expense.description,
+    );
 
     // 原始金額
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: rowIndex))
-      .value = DoubleCellValue(expense.originalAmount);
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: rowIndex))
+        .value = DoubleCellValue(
+      expense.originalAmount,
+    );
 
     // 原始幣種
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: rowIndex))
-      .value = TextCellValue(expense.originalCurrency);
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: rowIndex))
+        .value = TextCellValue(
+      expense.originalCurrency,
+    );
 
     // 匯率
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 5, rowIndex: rowIndex))
-      .value = TextCellValue(expense.formattedExchangeRate);
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 5, rowIndex: rowIndex))
+        .value = TextCellValue(
+      expense.formattedExchangeRate,
+    );
 
     // 匯率來源
-    final rateSourceText = _getRateSourceText(expense.exchangeRateSource, strings);
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: rowIndex))
-      .value = TextCellValue(rateSourceText);
+    final rateSourceText = _getRateSourceText(
+      expense.exchangeRateSource,
+      strings,
+    );
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: rowIndex))
+        .value = TextCellValue(
+      rateSourceText,
+    );
 
-    // 港幣金額
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: rowIndex))
-      .value = DoubleCellValue(expense.hkdAmount);
+    // 轉換後金額
+    // TODO: Phase 5 - 使用 targetCurrency 欄位顯示動態幣種標題
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: rowIndex))
+        .value = DoubleCellValue(
+      expense.convertedAmount,
+    );
 
     // 分類（使用本地化名稱）
     final categoryName = strings.getCategoryName(expense.category);
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 8, rowIndex: rowIndex))
-      .value = TextCellValue(categoryName);
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 8, rowIndex: rowIndex))
+        .value = TextCellValue(
+      categoryName,
+    );
 
     // 收據檔名（有收據則顯示檔名，無則顯示「-」）
-    sheet.cell(CellIndex.indexByColumnRow(columnIndex: 9, rowIndex: rowIndex))
-      .value = TextCellValue(receiptFileName ?? '-');
+    sheet
+        .cell(CellIndex.indexByColumnRow(columnIndex: 9, rowIndex: rowIndex))
+        .value = TextCellValue(
+      receiptFileName ?? '-',
+    );
   }
 
   /// 設定合計列
-  void _setTotalRow(Sheet sheet, int rowIndex, int totalHkdCents, ExportStrings strings) {
+  void _setTotalRow(
+    Sheet sheet,
+    int rowIndex,
+    int totalHkdCents,
+    ExportStrings strings,
+  ) {
     // 合計標籤
     final labelCell = sheet.cell(
       CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: rowIndex),
@@ -522,7 +608,13 @@ class ExportService {
     final totalCell = sheet.cell(
       CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: rowIndex),
     );
-    totalCell.value = DoubleCellValue(Formatters.centsToAmount(totalHkdCents));
+    // 使用 primaryCurrency 進行正確轉換
+    totalCell.value = DoubleCellValue(
+      Formatters.centsToAmount(
+        totalHkdCents,
+        CurrencyConstants.defaultPrimaryCurrency,
+      ),
+    );
     totalCell.cellStyle = CellStyle(bold: true);
   }
 
@@ -545,7 +637,11 @@ class ExportService {
   /// [expense] 支出記錄
   /// [index] 序號
   /// [originalPath] 原始圖片路徑（用於取得副檔名）
-  String _generateReceiptFileName(Expense expense, int index, String originalPath) {
+  String _generateReceiptFileName(
+    Expense expense,
+    int index,
+    String originalPath,
+  ) {
     final dateStr = Formatters.formatDate(expense.date);
     final indexStr = index.toString().padLeft(3, '0');
 
@@ -609,5 +705,10 @@ class ExportResult {
   String get formattedFileSize => Formatters.formatFileSize(fileSize);
 
   /// 格式化的港幣總金額
-  String get formattedTotalAmount => Formatters.formatAmount(totalHkdCents, 'HKD');
+  /// TODO: Phase 5 - 使用 primaryCurrency 取代 hardcoded 常數
+  String get formattedTotalAmount =>
+      Formatters.formatAmount(
+        totalHkdCents,
+        CurrencyConstants.defaultPrimaryCurrency,
+      );
 }

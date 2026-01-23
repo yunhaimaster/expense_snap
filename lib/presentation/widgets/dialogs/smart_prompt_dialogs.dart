@@ -52,8 +52,9 @@ class SmartPromptDialogs {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
+                  // TODO: Phase 5 - 使用 targetCurrency 取代 hardcoded 'HKD'
                   Text(
-                    'HKD ${Formatters.formatCurrency(existingExpense.hkdAmountCents / 100)}',
+                    'HKD ${Formatters.formatCurrency(existingExpense.convertedAmountCents / 100)}',
                     style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w500,
@@ -97,7 +98,7 @@ class SmartPromptDialogs {
     BuildContext context, {
     required double amount,
     required String currency,
-    required double hkdAmount,
+    required double convertedAmount,
   }) async {
     // 在顯示對話框前捕獲 l10n，避免 context 問題
     final l10n = S.of(context);
@@ -136,18 +137,17 @@ class SmartPromptDialogs {
                 children: [
                   Text(
                     '$currency ${Formatters.formatCurrency(amount)}',
-                    style: Theme.of(dialogContext)
-                        .textTheme
-                        .headlineSmall
+                    style: Theme.of(dialogContext).textTheme.headlineSmall
                         ?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary,
                         ),
                   ),
+                  // TODO: Phase 5 - 使用 primaryCurrency 取代 hardcoded 'HKD'
                   if (currency != 'HKD') ...[
                     const SizedBox(height: 4),
                     Text(
-                      '≈ HKD ${Formatters.formatCurrency(hkdAmount)}',
+                      '≈ HKD ${Formatters.formatCurrency(convertedAmount)}',
                       style: const TextStyle(
                         color: AppColors.textSecondary,
                       ),

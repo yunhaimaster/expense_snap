@@ -14,7 +14,7 @@ class Expense {
     required this.originalCurrency,
     required this.exchangeRate,
     required this.exchangeRateSource,
-    required this.hkdAmountCents,
+    required this.convertedAmountCents,
     required this.description,
     this.category,
     this.receiptImagePath,
@@ -43,8 +43,8 @@ class Expense {
   /// 匯率來源
   final ExchangeRateSource exchangeRateSource;
 
-  /// 港幣金額（以分為單位）
-  final int hkdAmountCents;
+  /// 轉換後金額（以分為單位，目標幣種為 targetCurrency）
+  final int convertedAmountCents;
 
   /// 描述
   final String description;
@@ -72,19 +72,26 @@ class Expense {
 
   // 計算屬性
 
-  /// 原始金額（元）
-  double get originalAmount => Formatters.centsToAmount(originalAmountCents);
+  /// 原始金額（元）- 尊重原始幣種的小數位數
+  double get originalAmount =>
+      Formatters.centsToAmount(originalAmountCents, originalCurrency);
 
-  /// 港幣金額（元）
-  double get hkdAmount => Formatters.centsToAmount(hkdAmountCents);
+  /// 轉換後金額（元）
+  /// 注意：convertedAmountCents 對應的是 primaryCurrency，此處無法取得
+  /// 呼叫端應使用 formatAmount 並傳入 primaryCurrency
+  double get convertedAmount => Formatters.centsToAmount(convertedAmountCents);
 
   /// 格式化的原始金額
   String get formattedOriginalAmount =>
       Formatters.formatAmount(originalAmountCents, originalCurrency);
 
-  /// 格式化的港幣金額
-  String get formattedHkdAmount =>
-      Formatters.formatAmount(hkdAmountCents, 'HKD');
+  /// 格式化的轉換後金額
+  /// TODO: Phase 5 - 改為方法並傳入 primaryCurrency 以支援可配置主要幣種
+  String get formattedConvertedAmount =>
+      Formatters.formatAmount(
+        convertedAmountCents,
+        CurrencyConstants.defaultPrimaryCurrency,
+      );
 
   /// 格式化的匯率
   String get formattedExchangeRate =>
@@ -112,7 +119,7 @@ class Expense {
       exchangeRateSource: ExchangeRateSourceExtension.fromString(
         map['exchange_rate_source'] as String,
       ),
-      hkdAmountCents: map['hkd_amount'] as int,
+      convertedAmountCents: map['hkd_amount'] as int,
       description: map['description'] as String,
       category: ExpenseCategoryExtension.fromString(map['category'] as String?),
       receiptImagePath: map['receipt_image_path'] as String?,
@@ -135,7 +142,7 @@ class Expense {
       'original_currency': originalCurrency,
       'exchange_rate': exchangeRate,
       'exchange_rate_source': exchangeRateSource.value,
-      'hkd_amount': hkdAmountCents,
+      'hkd_amount': convertedAmountCents,
       'description': description,
       'category': category?.name,
       'receipt_image_path': receiptImagePath,
@@ -159,7 +166,7 @@ class Expense {
     String? originalCurrency,
     int? exchangeRate,
     ExchangeRateSource? exchangeRateSource,
-    int? hkdAmountCents,
+    int? convertedAmountCents,
     String? description,
     ExpenseCategory? category,
     bool clearCategory = false,
@@ -177,7 +184,7 @@ class Expense {
       originalCurrency: originalCurrency ?? this.originalCurrency,
       exchangeRate: exchangeRate ?? this.exchangeRate,
       exchangeRateSource: exchangeRateSource ?? this.exchangeRateSource,
-      hkdAmountCents: hkdAmountCents ?? this.hkdAmountCents,
+      convertedAmountCents: convertedAmountCents ?? this.convertedAmountCents,
       description: description ?? this.description,
       category: clearCategory ? null : (category ?? this.category),
       receiptImagePath: receiptImagePath ?? this.receiptImagePath,
@@ -242,13 +249,13 @@ class MonthSummary {
     required this.year,
     required this.month,
     required this.totalCount,
-    required this.totalHkdAmountCents,
+    required this.totalConvertedAmountCents,
   });
 
   final int year;
   final int month;
   final int totalCount;
-  final int totalHkdAmountCents;
+  final int totalConvertedAmountCents;
 
   /// 格式化的月份
   /// 根據 locale 自動選擇格式：
@@ -262,15 +269,19 @@ class MonthSummary {
   }
 
   /// 格式化的總金額
+  /// TODO: Phase 5 - 改為方法並傳入 primaryCurrency 以支援可配置主要幣種
   String get formattedTotalAmount =>
-      Formatters.formatAmount(totalHkdAmountCents, 'HKD');
+      Formatters.formatAmount(
+        totalConvertedAmountCents,
+        CurrencyConstants.defaultPrimaryCurrency,
+      );
 
   factory MonthSummary.empty(int year, int month) {
     return MonthSummary(
       year: year,
       month: month,
       totalCount: 0,
-      totalHkdAmountCents: 0,
+      totalConvertedAmountCents: 0,
     );
   }
 }

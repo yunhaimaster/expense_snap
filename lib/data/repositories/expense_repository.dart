@@ -18,8 +18,8 @@ class ExpenseRepository implements IExpenseRepository {
   ExpenseRepository({
     required DatabaseHelper databaseHelper,
     required ImageService imageService,
-  })  : _db = databaseHelper,
-        _imageService = imageService;
+  }) : _db = databaseHelper,
+       _imageService = imageService;
 
   final DatabaseHelper _db;
   final ImageService _imageService;
@@ -174,12 +174,15 @@ class ExpenseRepository implements IExpenseRepository {
     try {
       final map = await _db.getMonthSummary(year, month);
 
-      return Result.success(MonthSummary(
-        year: year,
-        month: month,
-        totalCount: map['total_count'] as int,
-        totalHkdAmountCents: map['total_hkd_amount'] as int,
-      ));
+      // NOTE: DB column 仍為 total_hkd_amount，將在 migration 中重命名
+      return Result.success(
+        MonthSummary(
+          year: year,
+          month: month,
+          totalCount: map['total_count'] as int,
+          totalConvertedAmountCents: map['total_hkd_amount'] as int,
+        ),
+      );
     } catch (e) {
       AppLogger.error('getMonthSummary failed', error: e);
       return Result.failure(

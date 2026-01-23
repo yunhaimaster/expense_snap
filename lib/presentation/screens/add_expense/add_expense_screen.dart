@@ -73,8 +73,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         _currentRateMicros = info.rateToHkd;
         _currentRateSource = info.source;
         if (!_useManualRate) {
-          _exchangeRateController.text =
-              Formatters.formatExchangeRate(info.rateToHkd);
+          _exchangeRateController.text = Formatters.formatExchangeRate(
+            info.rateToHkd,
+          );
         }
       });
     }
@@ -206,7 +207,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                 onChanged: (_) {
                                   // 更新手動匯率來源
                                   setState(() {
-                                    _currentRateSource = ExchangeRateSource.manual;
+                                    _currentRateSource =
+                                        ExchangeRateSource.manual;
                                   });
                                 },
                               )
@@ -226,7 +228,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                 if (!value) {
                                   // 恢復自動匯率
                                   _exchangeRateController.text =
-                                      Formatters.formatExchangeRate(_currentRateMicros);
+                                      Formatters.formatExchangeRate(
+                                        _currentRateMicros,
+                                      );
                                   _loadExchangeRate();
                                 }
                               });
@@ -281,8 +285,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         Text(
           l10n.addExpense_receiptImage,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: AppColors.textSecondary,
-              ),
+            color: AppColors.textSecondary,
+          ),
         ),
         const SizedBox(height: 8),
 
@@ -349,8 +353,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         Text(
           label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textSecondary,
-              ),
+            color: AppColors.textSecondary,
+          ),
         ),
         const SizedBox(height: 8),
         Shimmer.fromColors(
@@ -372,8 +376,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   Text(
                     l10n.addExpense_ocrProcessing,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 ],
               ),
@@ -387,7 +391,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   Widget _buildConversionPreview() {
     final amount = double.tryParse(_amountController.text) ?? 0;
     final rate = double.tryParse(_exchangeRateController.text) ?? 1;
-    final hkdAmount = amount * rate;
+    final convertedAmount = amount * rate;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -406,12 +410,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             padding: EdgeInsets.symmetric(horizontal: 12),
             child: Icon(Icons.arrow_forward, size: 16),
           ),
+          // TODO: Phase 5 - 使用 primaryCurrency 取代 hardcoded 'HKD'
           Text(
-            'HKD ${Formatters.formatCurrency(hkdAmount)}',
+            'HKD ${Formatters.formatCurrency(convertedAmount)}',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
           ),
         ],
       ),
@@ -492,7 +497,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           setState(() {
             // 幣別
             if (parsed.currency != null &&
-                CurrencyConstants.supportedCurrencies.contains(parsed.currency)) {
+                CurrencyConstants.supportedCurrencies.contains(
+                  parsed.currency,
+                )) {
               _selectedCurrency = parsed.currency!;
               _updateDefaultExchangeRate();
               _loadExchangeRate();
@@ -557,28 +564,35 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       _showError(S.of(context).addExpense_invalidAmount);
       return;
     }
-    final amountCents = Formatters.amountToCents(amount);
+    // 使用幣種感知的轉換，正確處理 JPY/KRW 等無小數幣種
+    final amountCents = Formatters.amountToCents(amount, _selectedCurrency);
 
     // 安全解析匯率
     final rate = _selectedCurrency == 'HKD'
         ? 1.0
         : (double.tryParse(_exchangeRateController.text) ?? 1.0);
+    // 驗證匯率有效性
+    if (rate <= 0) {
+      _showError(S.of(context).addExpense_invalidExchangeRate);
+      return;
+    }
     final rateMicros = Formatters.rateToMicros(rate);
 
-    final hkdAmountCents = _selectedCurrency == 'HKD'
+    // 使用整數運算避免浮點誤差
+    final convertedAmountCents = _selectedCurrency == 'HKD'
         ? amountCents
-        : (amountCents * rate).round();
+        : (amountCents * rateMicros) ~/ CurrencyConstants.ratePrecision;
 
     // 智慧提示檢查
     final smartPrompt = SmartPromptService.instance;
 
     // 檢查大金額
-    if (smartPrompt.isLargeAmount(hkdAmountCents)) {
+    if (smartPrompt.isLargeAmount(convertedAmountCents)) {
       final confirmed = await SmartPromptDialogs.showLargeAmountConfirmation(
         context,
         amount: amount,
         currency: _selectedCurrency,
-        hkdAmount: hkdAmountCents / 100,
+        convertedAmount: convertedAmountCents / 100,
       );
       if (!mounted) return;
       if (!confirmed) return;
@@ -586,7 +600,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     // 檢查重複支出
     final duplicate = await smartPrompt.findDuplicateExpense(
-      hkdAmountCents: hkdAmountCents,
+      convertedAmountCents: convertedAmountCents,
       description: _descriptionController.text.trim(),
       date: _selectedDate,
     );
@@ -617,7 +631,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         originalCurrency: _selectedCurrency,
         exchangeRate: rateMicros,
         exchangeRateSource: rateSource,
-        hkdAmountCents: hkdAmountCents,
+        convertedAmountCents: convertedAmountCents,
         description: _descriptionController.text.trim(),
         imagePath: _selectedImagePath,
         category: _selectedCategory,
@@ -688,8 +702,8 @@ class _ImagePickerButton extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+                color: AppColors.textSecondary,
+              ),
             ),
           ],
         ),

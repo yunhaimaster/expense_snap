@@ -386,6 +386,12 @@ abstract class S {
   /// **'請輸入有效金額'**
   String get addExpense_invalidAmount;
 
+  /// No description provided for @addExpense_invalidExchangeRate.
+  ///
+  /// In zh, this message translates to:
+  /// **'匯率必須大於 0'**
+  String get addExpense_invalidExchangeRate;
+
   /// No description provided for @expenseDetail_title.
   ///
   /// In zh, this message translates to:

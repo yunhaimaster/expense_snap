@@ -155,6 +155,10 @@ class SEs extends S {
   String get addExpense_invalidAmount => 'Por favor ingrese un monto válido';
 
   @override
+  String get addExpense_invalidExchangeRate =>
+      'El tipo de cambio debe ser mayor que 0';
+
+  @override
   String get expenseDetail_title => 'Detalles del gasto';
 
   @override

@@ -1,3 +1,5 @@
+import '../../core/constants/currency_constants.dart';
+
 /// App 設定鍵值
 class AppSettingsKey {
   AppSettingsKey._();
@@ -13,6 +15,9 @@ class AppSettingsKey {
 
   /// 上次匯率刷新時間（用於冷卻計算）
   static const String lastRateRefreshAt = 'last_rate_refresh_at';
+
+  /// 主要幣種（結算用）
+  static const String primaryCurrency = 'primary_currency';
 }
 
 /// App 設定 Model
@@ -20,6 +25,7 @@ class AppSettings {
   const AppSettings({
     required this.userName,
     required this.onboardingCompleted,
+    required this.primaryCurrency,
     this.lastCleanupAt,
     this.lastRateRefreshAt,
   });
@@ -30,6 +36,9 @@ class AppSettings {
   /// 是否已完成 Onboarding
   final bool onboardingCompleted;
 
+  /// 主要幣種（結算用）
+  final String primaryCurrency;
+
   /// 上次清理時間
   final DateTime? lastCleanupAt;
 
@@ -38,9 +47,10 @@ class AppSettings {
 
   /// 建立預設設定
   factory AppSettings.defaults() {
-    return const AppSettings(
+    return AppSettings(
       userName: '員工',
       onboardingCompleted: false,
+      primaryCurrency: CurrencyConstants.defaultPrimaryCurrency,
       lastCleanupAt: null,
       lastRateRefreshAt: null,
     );
@@ -50,8 +60,10 @@ class AppSettings {
   factory AppSettings.fromKeyValueMap(Map<String, String?> map) {
     return AppSettings(
       userName: map[AppSettingsKey.userName] ?? '員工',
-      onboardingCompleted:
-          map[AppSettingsKey.onboardingCompleted] == 'true',
+      onboardingCompleted: map[AppSettingsKey.onboardingCompleted] == 'true',
+      primaryCurrency:
+          map[AppSettingsKey.primaryCurrency] ??
+          CurrencyConstants.defaultPrimaryCurrency,
       lastCleanupAt: map[AppSettingsKey.lastCleanupAt] != null
           ? DateTime.tryParse(map[AppSettingsKey.lastCleanupAt]!)
           : null,
@@ -66,6 +78,7 @@ class AppSettings {
     return {
       AppSettingsKey.userName: userName,
       AppSettingsKey.onboardingCompleted: onboardingCompleted.toString(),
+      AppSettingsKey.primaryCurrency: primaryCurrency,
       if (lastCleanupAt != null)
         AppSettingsKey.lastCleanupAt: lastCleanupAt!.toIso8601String(),
       if (lastRateRefreshAt != null)
@@ -77,12 +90,14 @@ class AppSettings {
   AppSettings copyWith({
     String? userName,
     bool? onboardingCompleted,
+    String? primaryCurrency,
     DateTime? lastCleanupAt,
     DateTime? lastRateRefreshAt,
   }) {
     return AppSettings(
       userName: userName ?? this.userName,
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
+      primaryCurrency: primaryCurrency ?? this.primaryCurrency,
       lastCleanupAt: lastCleanupAt ?? this.lastCleanupAt,
       lastRateRefreshAt: lastRateRefreshAt ?? this.lastRateRefreshAt,
     );
@@ -90,6 +105,6 @@ class AppSettings {
 
   @override
   String toString() {
-    return 'AppSettings(userName: $userName, onboardingCompleted: $onboardingCompleted)';
+    return 'AppSettings(userName: $userName, onboardingCompleted: $onboardingCompleted, primaryCurrency: $primaryCurrency)';
   }
 }

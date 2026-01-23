@@ -16,14 +16,14 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1,
+        convertedAmountCents: 1,
         description: '最小金額測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
 
       expect(expense.originalAmountCents, 1);
-      expect(expense.hkdAmountCents, 1);
+      expect(expense.convertedAmountCents, 1);
     });
 
     test('大金額（10萬港幣）應正確處理', () {
@@ -34,7 +34,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 10000000,
+        convertedAmountCents: 10000000,
         description: '大金額測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -51,7 +51,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 100000000,
+        convertedAmountCents: 100000000,
         description: '極大金額測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -68,7 +68,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 0,
+        convertedAmountCents: 0,
         description: '零金額測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -88,7 +88,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '月初測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -107,7 +107,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '月末測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -125,7 +125,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '閏年測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -144,7 +144,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '跨年測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -164,7 +164,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '午夜測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -183,7 +183,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '深夜測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -203,7 +203,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000, // 1.0 × 10^6
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '1:1 匯率',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -221,7 +221,7 @@ void main() {
         originalCurrency: 'JPY',
         exchangeRate: 50000, // 0.05 × 10^6
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 500, // 5 港幣
+        convertedAmountCents: 500, // 5 港幣
         description: '極小匯率測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -239,7 +239,7 @@ void main() {
         originalCurrency: 'GBP',
         exchangeRate: 10000000, // 10.0 × 10^6
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 10000, // 100 港幣
+        convertedAmountCents: 10000, // 100 港幣
         description: '極大匯率測試',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -258,7 +258,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -276,7 +276,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: longDescription,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -293,7 +293,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '測試 "引號" \'單引號\' <tag> & 符號',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -313,7 +313,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '午餐 🍜 咖啡 ☕',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -331,7 +331,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '中文 English 日本語 한국어',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -353,7 +353,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '最小 ID',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -370,7 +370,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '大 ID',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -389,7 +389,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '無圖片',
         receiptImagePath: null,
         createdAt: DateTime.now(),
@@ -401,10 +401,10 @@ void main() {
 
     test('長路徑應正確處理', () {
       final longPath = [
-          '/storage/emulated/0/Android/data/com.example.app/files/',
-          'very/long/nested/directory/structure/' * 5,
-          'image.jpg',
-        ].join();
+        '/storage/emulated/0/Android/data/com.example.app/files/',
+        'very/long/nested/directory/structure/' * 5,
+        'image.jpg',
+      ].join();
 
       final expense = Expense(
         id: 1,
@@ -413,7 +413,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '長路徑測試',
         receiptImagePath: longPath,
         createdAt: DateTime.now(),
@@ -433,7 +433,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000,
+        convertedAmountCents: 1000,
         description: '含空格路徑',
         receiptImagePath: pathWithSpaces,
         createdAt: DateTime.now(),
@@ -456,7 +456,7 @@ void main() {
           originalCurrency: currency,
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 1000,
+          convertedAmountCents: 1000,
           description: '$currency 測試',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -479,7 +479,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: (index + 1) * 100,
+          convertedAmountCents: (index + 1) * 100,
           description: '支出 #${index + 1}',
           createdAt: now,
           updatedAt: now,
@@ -505,7 +505,9 @@ void main() {
       final stopwatch = Stopwatch()..start();
 
       // 過濾金額大於 5000 元的支出
-      final filtered = expenses.where((e) => e.hkdAmountCents > 500000).toList();
+      final filtered = expenses
+          .where((e) => e.convertedAmountCents > 500000)
+          .toList();
       stopwatch.stop();
 
       expect(filtered.length, greaterThan(0));
@@ -521,10 +523,15 @@ void main() {
 
       // 按金額排序
       final sorted = List<Expense>.from(expenses)
-        ..sort((a, b) => b.hkdAmountCents.compareTo(a.hkdAmountCents));
+        ..sort(
+          (a, b) => b.convertedAmountCents.compareTo(a.convertedAmountCents),
+        );
       stopwatch.stop();
 
-      expect(sorted.first.hkdAmountCents, greaterThan(sorted.last.hkdAmountCents));
+      expect(
+        sorted.first.convertedAmountCents,
+        greaterThan(sorted.last.convertedAmountCents),
+      );
 
       // 排序時間應在合理範圍內（< 200ms）
       expect(stopwatch.elapsedMilliseconds, lessThan(200));
@@ -535,7 +542,10 @@ void main() {
       final stopwatch = Stopwatch()..start();
 
       // 計算總金額（以分為單位）
-      final totalCents = expenses.fold<int>(0, (sum, e) => sum + e.hkdAmountCents);
+      final totalCents = expenses.fold<int>(
+        0,
+        (sum, e) => sum + e.convertedAmountCents,
+      );
       stopwatch.stop();
 
       // 預期總金額：sum(1 to 10000) * 100 = 50005000 * 100 = 5000500000
@@ -560,7 +570,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 1000,
+          convertedAmountCents: 1000,
           description: '月份測試 #${index + 1}',
           createdAt: now,
           updatedAt: now,
@@ -572,7 +582,8 @@ void main() {
       // 按月份分組
       final grouped = <String, List<Expense>>{};
       for (final expense in expenses) {
-        final key = '${expense.date.year}-${expense.date.month.toString().padLeft(2, '0')}';
+        final key =
+            '${expense.date.year}-${expense.date.month.toString().padLeft(2, '0')}';
         grouped.putIfAbsent(key, () => []).add(expense);
       }
       stopwatch.stop();
@@ -601,7 +612,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 100,
+          convertedAmountCents: 100,
           description: '同月支出 #${index + 1}',
           createdAt: now,
           updatedAt: now,
@@ -611,7 +622,8 @@ void main() {
       // 按月份分組應只有一組
       final grouped = <String, List<Expense>>{};
       for (final expense in expenses) {
-        final key = '${expense.date.year}-${expense.date.month.toString().padLeft(2, '0')}';
+        final key =
+            '${expense.date.year}-${expense.date.month.toString().padLeft(2, '0')}';
         grouped.putIfAbsent(key, () => []).add(expense);
       }
 

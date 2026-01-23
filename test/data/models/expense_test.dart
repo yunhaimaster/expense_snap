@@ -17,7 +17,7 @@ void main() {
         originalCurrency: 'CNY',
         exchangeRate: 1089000, // 1.089
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 10944, // 109.44 (100.50 * 1.089)
+        convertedAmountCents: 10944, // 109.44 (100.50 * 1.089)
         description: '午餐',
         category: ExpenseCategory.meals,
         receiptImagePath: '/path/to/image.jpg',
@@ -35,7 +35,7 @@ void main() {
       });
 
       test('should convert hkd cents to amount correctly', () {
-        expect(expense.hkdAmount, closeTo(109.44, 0.01));
+        expect(expense.convertedAmount, closeTo(109.44, 0.01));
       });
 
       test('should format original amount with currency symbol', () {
@@ -43,7 +43,46 @@ void main() {
       });
 
       test('should format HKD amount correctly', () {
-        expect(expense.formattedHkdAmount, equals('HK\$109.44'));
+        expect(expense.formattedConvertedAmount, equals('HK\$109.44'));
+      });
+
+      // JPY/KRW 無小數幣種測試
+      test('should handle JPY expense correctly (no decimals)', () {
+        final jpyExpense = Expense(
+          id: 100,
+          date: testDate,
+          originalAmountCents: 1000, // ¥1,000（無小數）
+          originalCurrency: 'JPY',
+          exchangeRate: 52000, // 0.052 HKD per JPY
+          exchangeRateSource: ExchangeRateSource.defaultRate,
+          convertedAmountCents: 52, // 1000 * 0.052 = 52 cents HKD
+          description: 'JPY test',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        // JPY cents 即為實際金額
+        expect(jpyExpense.originalAmount, equals(1000.0));
+        expect(jpyExpense.formattedOriginalAmount, equals('¥1,000'));
+      });
+
+      test('should handle KRW expense correctly (no decimals)', () {
+        final krwExpense = Expense(
+          id: 101,
+          date: testDate,
+          originalAmountCents: 50000, // ₩50,000
+          originalCurrency: 'KRW',
+          exchangeRate: 5700, // 0.0057 HKD per KRW
+          exchangeRateSource: ExchangeRateSource.defaultRate,
+          convertedAmountCents: 285, // 50000 * 0.0057 = 285 cents HKD
+          description: 'KRW test',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        // KRW cents 即為實際金額
+        expect(krwExpense.originalAmount, equals(50000.0));
+        expect(krwExpense.formattedOriginalAmount, equals('₩50,000'));
       });
     });
 
@@ -67,7 +106,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 5000,
+          convertedAmountCents: 5000,
           description: '無收據',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -113,7 +152,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 5000,
+          convertedAmountCents: 5000,
           description: '無分類支出',
           category: null,
           receiptImagePath: null,
@@ -273,7 +312,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 5000,
+          convertedAmountCents: 5000,
           description: '測試',
           category: ExpenseCategory.meals,
           createdAt: now,
@@ -286,7 +325,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 5000,
+          convertedAmountCents: 5000,
           description: '測試',
           category: ExpenseCategory.transport,
           createdAt: now,
@@ -305,7 +344,7 @@ void main() {
         year: 2025,
         month: 1,
         totalCount: 15,
-        totalHkdAmountCents: 250000,
+        totalConvertedAmountCents: 250000,
       );
 
       // 中文格式
@@ -317,7 +356,7 @@ void main() {
         year: 2025,
         month: 1,
         totalCount: 15,
-        totalHkdAmountCents: 250000,
+        totalConvertedAmountCents: 250000,
       );
 
       // 英文格式
@@ -329,7 +368,7 @@ void main() {
         year: 2025,
         month: 1,
         totalCount: 15,
-        totalHkdAmountCents: 250000,
+        totalConvertedAmountCents: 250000,
       );
 
       expect(summary.formattedTotalAmount, equals('HK\$2,500.00'));
@@ -341,7 +380,7 @@ void main() {
       expect(empty.year, equals(2025));
       expect(empty.month, equals(3));
       expect(empty.totalCount, equals(0));
-      expect(empty.totalHkdAmountCents, equals(0));
+      expect(empty.totalConvertedAmountCents, equals(0));
     });
   });
 }

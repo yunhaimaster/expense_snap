@@ -152,6 +152,9 @@ class SJa extends S {
   String get addExpense_invalidAmount => '有効な金額を入力してください';
 
   @override
+  String get addExpense_invalidExchangeRate => '為替レートは0より大きくする必要があります';
+
+  @override
   String get expenseDetail_title => '支出詳細';
 
   @override

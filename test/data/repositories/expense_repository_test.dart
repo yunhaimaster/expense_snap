@@ -25,7 +25,7 @@ void main() {
     originalCurrency: 'HKD',
     exchangeRate: 1000000,
     exchangeRateSource: ExchangeRateSource.auto,
-    hkdAmountCents: 10000,
+    convertedAmountCents: 10000,
     description: '測試支出',
     createdAt: DateTime(2025, 1, 15),
     updatedAt: DateTime(2025, 1, 15),
@@ -68,20 +68,23 @@ void main() {
     );
 
     // 預設 stub - deleteImages 總是成功
-    when(mockImageService.deleteImages(
-      fullPath: anyNamed('fullPath'),
-      thumbnailPath: anyNamed('thumbnailPath'),
-    )).thenAnswer((_) async => Result.success(null));
+    when(
+      mockImageService.deleteImages(
+        fullPath: anyNamed('fullPath'),
+        thumbnailPath: anyNamed('thumbnailPath'),
+      ),
+    ).thenAnswer((_) async => Result.success(null));
 
     // 預設 stub - processReceiptImage 總是成功
-    when(mockImageService.processReceiptImage(
-      sourcePath: anyNamed('sourcePath'),
-      expenseDate: anyNamed('expenseDate'),
-    )).thenAnswer((_) async => Result.success(testImagePaths));
+    when(
+      mockImageService.processReceiptImage(
+        sourcePath: anyNamed('sourcePath'),
+        expenseDate: anyNamed('expenseDate'),
+      ),
+    ).thenAnswer((_) async => Result.success(testImagePaths));
 
     // 預設 stub - updateExpense 總是成功
-    when(mockDatabaseHelper.updateExpense(any, any))
-        .thenAnswer((_) async => 1);
+    when(mockDatabaseHelper.updateExpense(any, any)).thenAnswer((_) async => 1);
   });
 
   group('ExpenseRepository addExpense', () {
@@ -99,19 +102,23 @@ void main() {
       final saved = result.getOrThrow();
       expect(saved.id, 1);
       verify(mockDatabaseHelper.insertExpense(any)).called(1);
-      verifyNever(mockImageService.processReceiptImage(
-        sourcePath: anyNamed('sourcePath'),
-        expenseDate: anyNamed('expenseDate'),
-      ));
+      verifyNever(
+        mockImageService.processReceiptImage(
+          sourcePath: anyNamed('sourcePath'),
+          expenseDate: anyNamed('expenseDate'),
+        ),
+      );
     });
 
     test('新增支出成功（含圖片）', () async {
       // Arrange
       when(mockDatabaseHelper.insertExpense(any)).thenAnswer((_) async => 1);
-      when(mockImageService.processReceiptImage(
-        sourcePath: anyNamed('sourcePath'),
-        expenseDate: anyNamed('expenseDate'),
-      )).thenAnswer((_) async => Result.success(testImagePaths));
+      when(
+        mockImageService.processReceiptImage(
+          sourcePath: anyNamed('sourcePath'),
+          expenseDate: anyNamed('expenseDate'),
+        ),
+      ).thenAnswer((_) async => Result.success(testImagePaths));
 
       final newExpense = testExpense.copyWith(id: null);
 
@@ -126,19 +133,25 @@ void main() {
       final saved = result.getOrThrow();
       expect(saved.receiptImagePath, testImagePaths.fullPath);
       expect(saved.thumbnailPath, testImagePaths.thumbnailPath);
-      verify(mockImageService.processReceiptImage(
-        sourcePath: anyNamed('sourcePath'),
-        expenseDate: anyNamed('expenseDate'),
-      )).called(1);
+      verify(
+        mockImageService.processReceiptImage(
+          sourcePath: anyNamed('sourcePath'),
+          expenseDate: anyNamed('expenseDate'),
+        ),
+      ).called(1);
     });
 
     test('圖片處理失敗時應回傳錯誤', () async {
       // Arrange
-      when(mockImageService.processReceiptImage(
-        sourcePath: anyNamed('sourcePath'),
-        expenseDate: anyNamed('expenseDate'),
-      )).thenAnswer((_) async =>
-          Result.failure(const StorageException('Image processing failed')));
+      when(
+        mockImageService.processReceiptImage(
+          sourcePath: anyNamed('sourcePath'),
+          expenseDate: anyNamed('expenseDate'),
+        ),
+      ).thenAnswer(
+        (_) async =>
+            Result.failure(const StorageException('Image processing failed')),
+      );
 
       final newExpense = testExpense.copyWith(id: null);
 
@@ -155,8 +168,9 @@ void main() {
 
     test('資料庫插入失敗時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.insertExpense(any))
-          .thenThrow(Exception('DB error'));
+      when(
+        mockDatabaseHelper.insertExpense(any),
+      ).thenThrow(Exception('DB error'));
 
       final newExpense = testExpense.copyWith(id: null);
 
@@ -171,8 +185,9 @@ void main() {
   group('ExpenseRepository updateExpense', () {
     test('更新支出成功', () async {
       // Arrange
-      when(mockDatabaseHelper.updateExpense(any, any))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabaseHelper.updateExpense(any, any),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await repository.updateExpense(testExpense);
@@ -191,7 +206,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 10000,
+        convertedAmountCents: 10000,
         description: '測試支出',
         createdAt: DateTime(2025, 1, 15),
         updatedAt: DateTime(2025, 1, 15),
@@ -209,8 +224,9 @@ void main() {
 
     test('找不到支出時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.updateExpense(any, any))
-          .thenAnswer((_) async => 0);
+      when(
+        mockDatabaseHelper.updateExpense(any, any),
+      ).thenAnswer((_) async => 0);
 
       // Act
       final result = await repository.updateExpense(testExpense);
@@ -221,8 +237,9 @@ void main() {
 
     test('資料庫更新失敗時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.updateExpense(any, any))
-          .thenThrow(Exception('DB error'));
+      when(
+        mockDatabaseHelper.updateExpense(any, any),
+      ).thenThrow(Exception('DB error'));
 
       // Act
       final result = await repository.updateExpense(testExpense);
@@ -235,8 +252,9 @@ void main() {
   group('ExpenseRepository getExpenseById', () {
     test('取得支出成功', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(1))
-          .thenAnswer((_) async => testExpenseMap);
+      when(
+        mockDatabaseHelper.getExpenseById(1),
+      ).thenAnswer((_) async => testExpenseMap);
 
       // Act
       final result = await repository.getExpenseById(1);
@@ -249,8 +267,9 @@ void main() {
 
     test('找不到支出時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(999))
-          .thenAnswer((_) async => null);
+      when(
+        mockDatabaseHelper.getExpenseById(999),
+      ).thenAnswer((_) async => null);
 
       // Act
       final result = await repository.getExpenseById(999);
@@ -261,8 +280,9 @@ void main() {
 
     test('資料庫查詢失敗時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(any))
-          .thenThrow(Exception('DB error'));
+      when(
+        mockDatabaseHelper.getExpenseById(any),
+      ).thenThrow(Exception('DB error'));
 
       // Act
       final result = await repository.getExpenseById(1);
@@ -275,13 +295,15 @@ void main() {
   group('ExpenseRepository getExpensesByMonth', () {
     test('取得月份支出成功', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        includeDeleted: anyNamed('includeDeleted'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenAnswer((_) async => [testExpenseMap]);
+      when(
+        mockDatabaseHelper.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          includeDeleted: anyNamed('includeDeleted'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenAnswer((_) async => [testExpenseMap]);
 
       // Act
       final result = await repository.getExpensesByMonth(
@@ -297,13 +319,15 @@ void main() {
 
     test('資料庫查詢失敗時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpensesByMonth(
-        year: anyNamed('year'),
-        month: anyNamed('month'),
-        includeDeleted: anyNamed('includeDeleted'),
-        limit: anyNamed('limit'),
-        offset: anyNamed('offset'),
-      )).thenThrow(Exception('DB error'));
+      when(
+        mockDatabaseHelper.getExpensesByMonth(
+          year: anyNamed('year'),
+          month: anyNamed('month'),
+          includeDeleted: anyNamed('includeDeleted'),
+          limit: anyNamed('limit'),
+          offset: anyNamed('offset'),
+        ),
+      ).thenThrow(Exception('DB error'));
 
       // Act
       final result = await repository.getExpensesByMonth(
@@ -330,13 +354,14 @@ void main() {
       expect(result.isSuccess, isTrue);
       final summary = result.getOrThrow();
       expect(summary.totalCount, 5);
-      expect(summary.totalHkdAmountCents, 50000);
+      expect(summary.totalConvertedAmountCents, 50000);
     });
 
     test('資料庫查詢失敗時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.getMonthSummary(any, any))
-          .thenThrow(Exception('DB error'));
+      when(
+        mockDatabaseHelper.getMonthSummary(any, any),
+      ).thenThrow(Exception('DB error'));
 
       // Act
       final result = await repository.getMonthSummary(year: 2025, month: 1);
@@ -349,10 +374,12 @@ void main() {
   group('ExpenseRepository softDeleteExpense', () {
     test('軟刪除支出成功', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(1))
-          .thenAnswer((_) async => testExpenseMap);
-      when(mockDatabaseHelper.updateExpense(any, any))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabaseHelper.getExpenseById(1),
+      ).thenAnswer((_) async => testExpenseMap);
+      when(
+        mockDatabaseHelper.updateExpense(any, any),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await repository.softDeleteExpense(1);
@@ -364,8 +391,9 @@ void main() {
 
     test('找不到支出時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(999))
-          .thenAnswer((_) async => null);
+      when(
+        mockDatabaseHelper.getExpenseById(999),
+      ).thenAnswer((_) async => null);
 
       // Act
       final result = await repository.softDeleteExpense(999);
@@ -378,8 +406,9 @@ void main() {
   group('ExpenseRepository restoreExpense', () {
     test('還原支出成功', () async {
       // Arrange
-      when(mockDatabaseHelper.updateExpense(any, any))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabaseHelper.updateExpense(any, any),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await repository.restoreExpense(1);
@@ -390,8 +419,9 @@ void main() {
 
     test('找不到支出時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.updateExpense(any, any))
-          .thenAnswer((_) async => 0);
+      when(
+        mockDatabaseHelper.updateExpense(any, any),
+      ).thenAnswer((_) async => 0);
 
       // Act
       final result = await repository.restoreExpense(999);
@@ -404,8 +434,9 @@ void main() {
   group('ExpenseRepository getDeletedExpenses', () {
     test('取得已刪除支出成功', () async {
       // Arrange
-      when(mockDatabaseHelper.getDeletedExpenses())
-          .thenAnswer((_) async => [testExpenseMap]);
+      when(
+        mockDatabaseHelper.getDeletedExpenses(),
+      ).thenAnswer((_) async => [testExpenseMap]);
 
       // Act
       final result = await repository.getDeletedExpenses();
@@ -420,12 +451,15 @@ void main() {
   group('ExpenseRepository permanentlyDeleteExpense', () {
     test('永久刪除支出成功', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(1))
-          .thenAnswer((_) async => testExpenseMap);
-      when(mockImageService.deleteImages(
-        fullPath: anyNamed('fullPath'),
-        thumbnailPath: anyNamed('thumbnailPath'),
-      )).thenAnswer((_) async => Result.success(null));
+      when(
+        mockDatabaseHelper.getExpenseById(1),
+      ).thenAnswer((_) async => testExpenseMap);
+      when(
+        mockImageService.deleteImages(
+          fullPath: anyNamed('fullPath'),
+          thumbnailPath: anyNamed('thumbnailPath'),
+        ),
+      ).thenAnswer((_) async => Result.success(null));
       when(mockDatabaseHelper.deleteExpense(1)).thenAnswer((_) async => 1);
 
       // Act
@@ -438,8 +472,9 @@ void main() {
 
     test('找不到支出時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(999))
-          .thenAnswer((_) async => null);
+      when(
+        mockDatabaseHelper.getExpenseById(999),
+      ).thenAnswer((_) async => null);
 
       // Act
       final result = await repository.permanentlyDeleteExpense(999);
@@ -452,14 +487,18 @@ void main() {
   group('ExpenseRepository cleanupExpiredDeletedExpenses', () {
     test('清理過期已刪除支出成功', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpiredDeletedExpenses(any))
-          .thenAnswer((_) async => [testExpenseMap]);
-      when(mockDatabaseHelper.getExpenseById(1))
-          .thenAnswer((_) async => testExpenseMap);
-      when(mockImageService.deleteImages(
-        fullPath: anyNamed('fullPath'),
-        thumbnailPath: anyNamed('thumbnailPath'),
-      )).thenAnswer((_) async => Result.success(null));
+      when(
+        mockDatabaseHelper.getExpiredDeletedExpenses(any),
+      ).thenAnswer((_) async => [testExpenseMap]);
+      when(
+        mockDatabaseHelper.getExpenseById(1),
+      ).thenAnswer((_) async => testExpenseMap);
+      when(
+        mockImageService.deleteImages(
+          fullPath: anyNamed('fullPath'),
+          thumbnailPath: anyNamed('thumbnailPath'),
+        ),
+      ).thenAnswer((_) async => Result.success(null));
       when(mockDatabaseHelper.deleteExpense(1)).thenAnswer((_) async => 1);
 
       // Act
@@ -472,8 +511,9 @@ void main() {
 
     test('無過期支出時回傳 0', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpiredDeletedExpenses(any))
-          .thenAnswer((_) async => []);
+      when(
+        mockDatabaseHelper.getExpiredDeletedExpenses(any),
+      ).thenAnswer((_) async => []);
 
       // Act
       final result = await repository.cleanupExpiredDeletedExpenses();
@@ -487,8 +527,9 @@ void main() {
   group('ExpenseRepository replaceReceiptImage', () {
     test('替換收據圖片成功', () async {
       // Arrange - getExpenseById stub needed
-      when(mockDatabaseHelper.getExpenseById(1))
-          .thenAnswer((_) async => testExpenseMap);
+      when(
+        mockDatabaseHelper.getExpenseById(1),
+      ).thenAnswer((_) async => testExpenseMap);
 
       // Act
       final result = await repository.replaceReceiptImage(
@@ -504,8 +545,9 @@ void main() {
 
     test('找不到支出時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(999))
-          .thenAnswer((_) async => null);
+      when(
+        mockDatabaseHelper.getExpenseById(999),
+      ).thenAnswer((_) async => null);
 
       // Act
       final result = await repository.replaceReceiptImage(
@@ -519,14 +561,19 @@ void main() {
 
     test('圖片處理失敗時應回傳錯誤', () async {
       // Arrange
-      when(mockDatabaseHelper.getExpenseById(1))
-          .thenAnswer((_) async => testExpenseMap);
+      when(
+        mockDatabaseHelper.getExpenseById(1),
+      ).thenAnswer((_) async => testExpenseMap);
       // Override processReceiptImage to fail
-      when(mockImageService.processReceiptImage(
-        sourcePath: anyNamed('sourcePath'),
-        expenseDate: anyNamed('expenseDate'),
-      )).thenAnswer((_) async =>
-          Result.failure(const StorageException('Image processing failed')));
+      when(
+        mockImageService.processReceiptImage(
+          sourcePath: anyNamed('sourcePath'),
+          expenseDate: anyNamed('expenseDate'),
+        ),
+      ).thenAnswer(
+        (_) async =>
+            Result.failure(const StorageException('Image processing failed')),
+      );
 
       // Act
       final result = await repository.replaceReceiptImage(

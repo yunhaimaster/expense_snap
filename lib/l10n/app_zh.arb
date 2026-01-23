@@ -55,6 +55,7 @@
   "addExpense_ocrSuccessVerify": "已自動識別收據內容，請確認是否正確",
   "addExpense_success": "支出已新增",
   "addExpense_invalidAmount": "請輸入有效金額",
+  "addExpense_invalidExchangeRate": "匯率必須大於 0",
   "expenseDetail_title": "支出詳情",
   "expenseDetail_editTitle": "編輯支出",
   "expenseDetail_amount": "金額",

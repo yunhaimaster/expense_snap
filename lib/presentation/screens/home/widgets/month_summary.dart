@@ -51,7 +51,7 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
   /// 建立語意描述
   String _buildSemanticLabel(BuildContext context) {
     final localeCode = _getLocaleCode(context);
-    final totalAmount = (widget.summary.totalHkdAmountCents / 100)
+    final totalAmount = (widget.summary.totalConvertedAmountCents / 100)
         .toStringAsFixed(2);
     return S
         .of(context)
@@ -169,7 +169,7 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
                     // 總金額（使用動畫）
                     _AnimatedStatItem(
                       label: l10n.monthSummary_totalExpense,
-                      amount: widget.summary.totalHkdAmountCents,
+                      amount: widget.summary.totalConvertedAmountCents,
                       icon: Icons.account_balance_wallet_outlined,
                       color: Theme.of(context).colorScheme.primary,
                     ),

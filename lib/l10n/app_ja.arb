@@ -55,6 +55,7 @@
   "addExpense_ocrSuccessVerify": "レシート内容を認識しました。確認してください",
   "addExpense_success": "支出を追加しました",
   "addExpense_invalidAmount": "有効な金額を入力してください",
+  "addExpense_invalidExchangeRate": "為替レートは0より大きくする必要があります",
   "expenseDetail_title": "支出詳細",
   "expenseDetail_editTitle": "支出を編集",
   "expenseDetail_amount": "金額",

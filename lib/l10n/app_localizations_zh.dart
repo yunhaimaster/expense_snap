@@ -152,6 +152,9 @@ class SZh extends S {
   String get addExpense_invalidAmount => '請輸入有效金額';
 
   @override
+  String get addExpense_invalidExchangeRate => '匯率必須大於 0';
+
+  @override
   String get expenseDetail_title => '支出詳情';
 
   @override
@@ -1191,6 +1194,9 @@ class SZhHans extends SZh {
 
   @override
   String get addExpense_invalidAmount => '请输入有效金额';
+
+  @override
+  String get addExpense_invalidExchangeRate => '汇率必须大于 0';
 
   @override
   String get expenseDetail_title => '支出详情';

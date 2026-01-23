@@ -14,7 +14,8 @@ class SmartPromptService {
   final _db = DatabaseHelper.instance;
 
   /// 大金額門檻（以港幣分計）- 使用集中管理的常數
-  static const int largeAmountThreshold = AppConstants.largeAmountThresholdCents;
+  static const int largeAmountThreshold =
+      AppConstants.largeAmountThresholdCents;
 
   /// 重複偵測時間窗口（小時）- 延長至 48 小時以涵蓋隔天同筆支出
   static const int duplicateWindowHours = 48;
@@ -23,8 +24,8 @@ class SmartPromptService {
   static const double similarityThreshold = 0.6;
 
   /// 檢查是否為大金額
-  bool isLargeAmount(int hkdAmountCents) {
-    return hkdAmountCents >= largeAmountThreshold;
+  bool isLargeAmount(int convertedAmountCents) {
+    return convertedAmountCents >= largeAmountThreshold;
   }
 
   /// 檢查是否有重複支出
@@ -33,18 +34,20 @@ class SmartPromptService {
   /// 使用 Levenshtein 編輯距離計算描述相似度
   /// 注意：只檢查過去的支出，避免與未來日期的支出誤匹配
   Future<Expense?> findDuplicateExpense({
-    required int hkdAmountCents,
+    required int convertedAmountCents,
     required String description,
     required DateTime date,
   }) async {
     final db = await _db.database;
 
     // 計算時間範圍（只往前看，不檢查未來的支出）
-    final startTime =
-        date.subtract(const Duration(hours: duplicateWindowHours));
+    final startTime = date.subtract(
+      const Duration(hours: duplicateWindowHours),
+    );
     final endTime = date; // 只檢查到當前日期，不包含未來
 
     // 查詢相同金額且時間接近的支出
+    // NOTE: DB column 仍為 hkd_amount，將在 migration 中重命名
     final result = await db.query(
       'expenses',
       where: '''
@@ -54,7 +57,7 @@ class SmartPromptService {
         AND date <= ?
       ''',
       whereArgs: [
-        hkdAmountCents,
+        convertedAmountCents,
         startTime.toIso8601String(),
         endTime.toIso8601String(),
       ],
@@ -142,12 +145,15 @@ class SmartPromptService {
     final yearMonthPrefix = '${now.year}-$monthStr';
 
     final db = await _db.database;
-    final result = await db.rawQuery('''
+    final result = await db.rawQuery(
+      '''
       SELECT COUNT(*) as count
       FROM expenses
       WHERE deleted_at IS NULL
         AND substr(date, 1, 7) = ?
-    ''', [yearMonthPrefix]);
+    ''',
+      [yearMonthPrefix],
+    );
 
     return (result.first['count'] as int?) ?? 0;
   }

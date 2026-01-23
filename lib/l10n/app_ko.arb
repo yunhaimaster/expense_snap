@@ -55,6 +55,7 @@
   "addExpense_ocrSuccessVerify": "영수증 내용을 인식했습니다. 확인해 주세요",
   "addExpense_success": "지출이 추가되었습니다",
   "addExpense_invalidAmount": "유효한 금액을 입력하세요",
+  "addExpense_invalidExchangeRate": "환율은 0보다 커야 합니다",
   "expenseDetail_title": "지출 상세",
   "expenseDetail_editTitle": "지출 편집",
   "expenseDetail_amount": "금액",

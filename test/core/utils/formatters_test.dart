@@ -20,6 +20,38 @@ void main() {
         expect(Formatters.amountToCents(100.505), equals(10051)); // round up
         expect(Formatters.amountToCents(100.504), equals(10050)); // round down
       });
+
+      // 幣種感知的轉換測試（JPY/KRW 等無小數幣種）
+      test('should convert JPY amount without multiplying by 100', () {
+        // JPY 無小數：1000 JPY → 1000 (not 100000)
+        expect(Formatters.amountToCents(1000, 'JPY'), equals(1000));
+        expect(Formatters.amountToCents(5000, 'JPY'), equals(5000));
+      });
+
+      test('should convert KRW amount without multiplying by 100', () {
+        // KRW 無小數：50000 KRW → 50000 (not 5000000)
+        expect(Formatters.amountToCents(50000, 'KRW'), equals(50000));
+      });
+
+      test('should convert JPY cents back without dividing by 100', () {
+        // JPY cents 即為實際金額
+        expect(Formatters.centsToAmount(1000, 'JPY'), equals(1000.0));
+        expect(Formatters.centsToAmount(5000, 'JPY'), equals(5000.0));
+      });
+
+      test('should convert KRW cents back without dividing by 100', () {
+        // KRW cents 即為實際金額
+        expect(Formatters.centsToAmount(50000, 'KRW'), equals(50000.0));
+      });
+
+      test('should convert HKD/USD normally (×100)', () {
+        // 一般幣種：100.50 HKD → 10050 cents
+        expect(Formatters.amountToCents(100.50, 'HKD'), equals(10050));
+        expect(Formatters.amountToCents(50.25, 'USD'), equals(5025));
+        // 反向：10050 cents → 100.50 HKD
+        expect(Formatters.centsToAmount(10050, 'HKD'), equals(100.50));
+        expect(Formatters.centsToAmount(5025, 'USD'), equals(50.25));
+      });
     });
 
     group('formatAmount', () {
@@ -35,8 +67,43 @@ void main() {
         expect(Formatters.formatAmount(5000, 'USD'), equals('\$50.00'));
       });
 
+      test('should format EUR correctly', () {
+        expect(Formatters.formatAmount(10000, 'EUR'), equals('€100.00'));
+      });
+
       test('should format unknown currency with code', () {
-        expect(Formatters.formatAmount(10000, 'EUR'), equals('EUR100.00'));
+        expect(Formatters.formatAmount(10000, 'XYZ'), equals('XYZ100.00'));
+      });
+
+      test('should format JPY without decimals', () {
+        // JPY 使用分作為最小單位，所以 10000 cents = ¥10,000
+        expect(Formatters.formatAmount(10000, 'JPY'), equals('¥10,000'));
+      });
+
+      test('should format KRW without decimals', () {
+        // KRW 使用分作為最小單位，所以 500000 cents = ₩500,000
+        expect(Formatters.formatAmount(500000, 'KRW'), equals('₩500,000'));
+      });
+
+      // JPY/KRW 邊界案例測試
+      test('should format minimum JPY amount (1)', () {
+        expect(Formatters.formatAmount(1, 'JPY'), equals('¥1'));
+      });
+
+      test('should format zero JPY amount', () {
+        expect(Formatters.formatAmount(0, 'JPY'), equals('¥0'));
+      });
+
+      test('should format large JPY amount', () {
+        expect(Formatters.formatAmount(9999999, 'JPY'), equals('¥9,999,999'));
+      });
+
+      test('should format minimum KRW amount (1)', () {
+        expect(Formatters.formatAmount(1, 'KRW'), equals('₩1'));
+      });
+
+      test('should format zero KRW amount', () {
+        expect(Formatters.formatAmount(0, 'KRW'), equals('₩0'));
       });
     });
 

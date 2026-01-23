@@ -54,7 +54,7 @@ void main() {
           originalCurrency: 'CNY',
           exchangeRate: 1089000, // 1.089
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 10944, // 109.44
+          convertedAmountCents: 10944, // 109.44
           description: '午餐',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -68,7 +68,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000, // 1.0
           exchangeRateSource: ExchangeRateSource.manual,
-          hkdAmountCents: 5000, // 50.00
+          convertedAmountCents: 5000, // 50.00
           description: '交通費',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -82,7 +82,7 @@ void main() {
           originalCurrency: 'USD',
           exchangeRate: 7800000, // 7.8
           exchangeRateSource: ExchangeRateSource.offline,
-          hkdAmountCents: 19500, // 195.00
+          convertedAmountCents: 19500, // 195.00
           description: '文具',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -190,7 +190,7 @@ void main() {
       test('test expenses should have correct total', () {
         final total = testExpenses.fold<int>(
           0,
-          (sum, e) => sum + e.hkdAmountCents,
+          (sum, e) => sum + e.convertedAmountCents,
         );
         expect(total, equals(35444)); // 10944 + 5000 + 19500
       });
@@ -207,9 +207,18 @@ void main() {
       });
 
       test('test expenses should have different rate sources', () {
-        expect(testExpenses[0].exchangeRateSource, equals(ExchangeRateSource.auto));
-        expect(testExpenses[1].exchangeRateSource, equals(ExchangeRateSource.manual));
-        expect(testExpenses[2].exchangeRateSource, equals(ExchangeRateSource.offline));
+        expect(
+          testExpenses[0].exchangeRateSource,
+          equals(ExchangeRateSource.auto),
+        );
+        expect(
+          testExpenses[1].exchangeRateSource,
+          equals(ExchangeRateSource.manual),
+        );
+        expect(
+          testExpenses[2].exchangeRateSource,
+          equals(ExchangeRateSource.offline),
+        );
       });
     });
 
@@ -263,7 +272,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 1000,
+          convertedAmountCents: 1000,
           description: '', // 空描述
           receiptImagePath: null,
           thumbnailPath: null,
@@ -299,7 +308,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 1000,
+          convertedAmountCents: 1000,
           description: '測試',
           receiptImagePath: '', // 空字串路徑
           thumbnailPath: null,
@@ -344,7 +353,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 1000,
+          convertedAmountCents: 1000,
           description: '🍔午餐 McDonald\'s 麥當勞',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -591,7 +600,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 1000 * (i + 1),
+          convertedAmountCents: 1000 * (i + 1),
           description: '測試支出 $i',
           receiptImagePath: null,
           thumbnailPath: null,

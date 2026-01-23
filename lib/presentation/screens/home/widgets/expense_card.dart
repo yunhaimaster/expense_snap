@@ -35,9 +35,11 @@ class ExpenseCard extends StatelessWidget {
       final categoryName = expense.category!.getLocalizedName(l10n);
       buffer.write('${l10n.semantic_category_prefix}：$categoryName。');
     }
-    buffer.write('${l10n.semantic_amount(expense.formattedHkdAmount)} ');
+    buffer.write('${l10n.semantic_amount(expense.formattedConvertedAmount)} ');
     if (expense.originalCurrency != 'HKD') {
-      buffer.write('${l10n.semantic_originalAmount(expense.formattedOriginalAmount)} ');
+      buffer.write(
+        '${l10n.semantic_originalAmount(expense.formattedOriginalAmount)} ',
+      );
     }
     buffer.write('${l10n.semantic_date(Formatters.formatDate(expense.date))} ');
     buffer.write('${l10n.semantic_rateSource(_getRateSourceLabel(l10n))} ');
@@ -78,97 +80,98 @@ class ExpenseCard extends StatelessWidget {
     // RepaintBoundary 減少列表滾動時的重繪範圍
     Widget card = RepaintBoundary(
       child: Semantics(
-      label: _buildSemanticLabel(l10n),
-      button: true,
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: ExcludeSemantics(
-              child: Row(
-                children: [
-                  // 縮圖
-                  _buildThumbnail(),
+        label: _buildSemanticLabel(l10n),
+        button: true,
+        child: Card(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: ExcludeSemantics(
+                child: Row(
+                  children: [
+                    // 縮圖
+                    _buildThumbnail(),
 
-                  const SizedBox(width: 12),
+                    const SizedBox(width: 12),
 
-                  // 內容
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // 描述
-                        Text(
-                          expense.description,
-                          style: Theme.of(context).textTheme.titleMedium,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                    // 內容
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 描述
+                          Text(
+                            expense.description,
+                            style: Theme.of(context).textTheme.titleMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
 
-                        const SizedBox(height: 4),
+                          const SizedBox(height: 4),
 
-                        // 日期、分類、匯率來源
-                        Row(
-                          children: [
-                            Text(
-                              Formatters.formatDate(expense.date),
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            const SizedBox(width: 8),
-                            _buildRateSourceBadge(context, l10n),
-                            // 分類標籤
-                            if (expense.category != null) ...[
-                              const SizedBox(width: 8),
-                              CategoryBadge(
-                                category: expense.category!,
-                                compact: true,
+                          // 日期、分類、匯率來源
+                          Row(
+                            children: [
+                              Text(
+                                Formatters.formatDate(expense.date),
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
+                              const SizedBox(width: 8),
+                              _buildRateSourceBadge(context, l10n),
+                              // 分類標籤
+                              if (expense.category != null) ...[
+                                const SizedBox(width: 8),
+                                CategoryBadge(
+                                  category: expense.category!,
+                                  compact: true,
+                                ),
+                              ],
                             ],
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(width: 12),
+
+                    // 金額
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        // 港幣金額
+                        Text(
+                          expense.formattedConvertedAmount,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
+
+                        // 原始金額（如果非港幣）
+                        if (expense.originalCurrency != 'HKD')
+                          Text(
+                            expense.formattedOriginalAmount,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                       ],
                     ),
-                  ),
 
-                  const SizedBox(width: 12),
-
-                  // 金額
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      // 港幣金額
-                      Text(
-                        expense.formattedHkdAmount,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                      ),
-
-                      // 原始金額（如果非港幣）
-                      if (expense.originalCurrency != 'HKD')
-                        Text(
-                          expense.formattedOriginalAmount,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                    ],
-                  ),
-
-                  const SizedBox(width: 4),
-                  Icon(
-                    Icons.chevron_right,
-                    color: Theme.of(context).hintColor,
-                  ),
-                ],
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Theme.of(context).hintColor,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
-    ),
     );
 
     // 滑動刪除
@@ -232,37 +235,38 @@ class ExpenseCard extends StatelessWidget {
     return Hero(
       tag: HeroTags.receiptImage(expenseId),
       // 避免動畫過程中裁剪
-      flightShuttleBuilder: (
-        BuildContext flightContext,
-        Animation<double> animation,
-        HeroFlightDirection flightDirection,
-        BuildContext fromHeroContext,
-        BuildContext toHeroContext,
-      ) {
-        return AnimatedBuilder(
-          animation: animation,
-          builder: (context, child) {
-            // 動畫過程中平滑變換圓角
-            final borderRadius = BorderRadius.circular(
-              8.0 * (1 - animation.value),
-            );
-            return ClipRRect(
-              borderRadius: borderRadius,
-              child: Image.file(
-                File(expense.thumbnailPath!),
-                fit: BoxFit.cover,
-                errorBuilder: (ctx, error, stack) => Container(
-                  color: Theme.of(ctx).dividerColor,
-                  child: Icon(
-                    Icons.broken_image_outlined,
-                    color: Theme.of(ctx).hintColor,
+      flightShuttleBuilder:
+          (
+            BuildContext flightContext,
+            Animation<double> animation,
+            HeroFlightDirection flightDirection,
+            BuildContext fromHeroContext,
+            BuildContext toHeroContext,
+          ) {
+            return AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                // 動畫過程中平滑變換圓角
+                final borderRadius = BorderRadius.circular(
+                  8.0 * (1 - animation.value),
+                );
+                return ClipRRect(
+                  borderRadius: borderRadius,
+                  child: Image.file(
+                    File(expense.thumbnailPath!),
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, error, stack) => Container(
+                      color: Theme.of(ctx).dividerColor,
+                      child: Icon(
+                        Icons.broken_image_outlined,
+                        color: Theme.of(ctx).hintColor,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
-        );
-      },
       child: _buildThumbnailImage(),
     );
   }
@@ -303,21 +307,21 @@ class ExpenseCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final (icon, color) = switch (expense.exchangeRateSource) {
       ExchangeRateSource.auto => (
-          Icons.check_circle,
-          isDark ? AppColors.dark.rateAuto : AppColors.rateAuto,
-        ),
+        Icons.check_circle,
+        isDark ? AppColors.dark.rateAuto : AppColors.rateAuto,
+      ),
       ExchangeRateSource.offline => (
-          Icons.offline_bolt,
-          isDark ? AppColors.dark.rateOffline : AppColors.rateOffline,
-        ),
+        Icons.offline_bolt,
+        isDark ? AppColors.dark.rateOffline : AppColors.rateOffline,
+      ),
       ExchangeRateSource.defaultRate => (
-          Icons.warning,
-          isDark ? AppColors.dark.rateDefault : AppColors.rateDefault,
-        ),
+        Icons.warning,
+        isDark ? AppColors.dark.rateDefault : AppColors.rateDefault,
+      ),
       ExchangeRateSource.manual => (
-          Icons.edit,
-          isDark ? AppColors.dark.rateManual : AppColors.rateManual,
-        ),
+        Icons.edit,
+        isDark ? AppColors.dark.rateManual : AppColors.rateManual,
+      ),
     };
     final label = _getRateSourceShortLabel(l10n);
 

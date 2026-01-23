@@ -261,7 +261,14 @@ void main() {
       test('should reject tomorrow at start of day', () {
         // 明天 00:00:00 應該無效
         final now = DateTime.now();
-        final startOfTomorrow = DateTime(now.year, now.month, now.day + 1, 0, 0, 0);
+        final startOfTomorrow = DateTime(
+          now.year,
+          now.month,
+          now.day + 1,
+          0,
+          0,
+          0,
+        );
         final result = Validators.validateDate(startOfTomorrow);
 
         expect(result.isFailure, isTrue);
@@ -324,7 +331,7 @@ void main() {
 
       test('should reject unsupported currency', () {
         final result = Validators.validateCurrency(
-          'EUR',
+          'XYZ', // 使用真正不支援的幣種
           supportedCurrencies: CurrencyConstants.supportedCurrencies,
         );
 

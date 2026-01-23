@@ -16,7 +16,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 10000,
+          convertedAmountCents: 10000,
           description: '午餐',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -66,7 +66,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 10000,
+          convertedAmountCents: 10000,
           description: '午餐',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -113,7 +113,7 @@ void main() {
           originalCurrency: 'HKD',
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
-          hkdAmountCents: 10000,
+          convertedAmountCents: 10000,
           description: '午餐',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -168,7 +168,7 @@ void main() {
                       context,
                       amount: 1500.0,
                       currency: 'HKD',
-                      hkdAmount: 1500.0,
+                      convertedAmount: 1500.0,
                     );
                   },
                   child: const Text('Show Dialog'),
@@ -191,8 +191,9 @@ void main() {
         expect(find.text('確認正確'), findsOneWidget);
       });
 
-      testWidgets('shows HKD equivalent for non-HKD currencies',
-          (tester) async {
+      testWidgets('shows HKD equivalent for non-HKD currencies', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           MaterialApp(
             locale: const Locale('zh'),
@@ -206,7 +207,7 @@ void main() {
                       context,
                       amount: 200.0,
                       currency: 'USD',
-                      hkdAmount: 1560.0,
+                      convertedAmount: 1560.0,
                     );
                   },
                   child: const Text('Show Dialog'),
@@ -237,11 +238,11 @@ void main() {
                   onPressed: () async {
                     result =
                         await SmartPromptDialogs.showLargeAmountConfirmation(
-                      context,
-                      amount: 1500.0,
-                      currency: 'HKD',
-                      hkdAmount: 1500.0,
-                    );
+                          context,
+                          amount: 1500.0,
+                          currency: 'HKD',
+                          convertedAmount: 1500.0,
+                        );
                   },
                   child: const Text('Show Dialog'),
                 );
@@ -273,11 +274,11 @@ void main() {
                   onPressed: () async {
                     result =
                         await SmartPromptDialogs.showLargeAmountConfirmation(
-                      context,
-                      amount: 1500.0,
-                      currency: 'HKD',
-                      hkdAmount: 1500.0,
-                    );
+                          context,
+                          amount: 1500.0,
+                          currency: 'HKD',
+                          convertedAmount: 1500.0,
+                        );
                   },
                   child: const Text('Show Dialog'),
                 );

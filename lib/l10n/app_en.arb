@@ -55,6 +55,7 @@
   "addExpense_ocrSuccessVerify": "Receipt content recognized, please verify",
   "addExpense_success": "Expense added",
   "addExpense_invalidAmount": "Please enter a valid amount",
+  "addExpense_invalidExchangeRate": "Exchange rate must be greater than 0",
   "expenseDetail_title": "Expense Details",
   "expenseDetail_editTitle": "Edit Expense",
   "expenseDetail_amount": "Amount",

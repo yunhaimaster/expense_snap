@@ -55,6 +55,7 @@
   "addExpense_ocrSuccessVerify": "Contenido del recibo reconocido, por favor verifique",
   "addExpense_success": "Gasto agregado",
   "addExpense_invalidAmount": "Por favor ingrese un monto válido",
+  "addExpense_invalidExchangeRate": "El tipo de cambio debe ser mayor que 0",
   "expenseDetail_title": "Detalles del gasto",
   "expenseDetail_editTitle": "Editar gasto",
   "expenseDetail_amount": "Monto",

@@ -30,7 +30,7 @@ void main() {
         originalCurrency: 'HKD',
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
-        hkdAmountCents: 1000 + (i * 10),
+        convertedAmountCents: 1000 + (i * 10),
         description: '測試支出 #$i',
         receiptImagePath: i % 3 == 0 ? '/path/to/image_$i.jpg' : null,
         createdAt: DateTime.now(),
@@ -47,7 +47,7 @@ void main() {
         MonthSummary(
           year: DateTime.now().year,
           month: DateTime.now().month,
-          totalHkdAmountCents: 0,
+          totalConvertedAmountCents: 0,
           totalCount: 0,
         ),
       ),
@@ -86,9 +86,9 @@ void main() {
       final summary = MonthSummary(
         year: DateTime.now().year,
         month: DateTime.now().month,
-        totalHkdAmountCents: expenses.fold(
+        totalConvertedAmountCents: expenses.fold(
           0,
-          (sum, e) => sum + e.hkdAmountCents,
+          (sum, e) => sum + e.convertedAmountCents,
         ),
         totalCount: expenses.length,
       );
@@ -123,9 +123,9 @@ void main() {
       final summary = MonthSummary(
         year: DateTime.now().year,
         month: DateTime.now().month,
-        totalHkdAmountCents: expenses.fold(
+        totalConvertedAmountCents: expenses.fold(
           0,
-          (sum, e) => sum + e.hkdAmountCents,
+          (sum, e) => sum + e.convertedAmountCents,
         ),
         totalCount: expenses.length,
       );
@@ -160,9 +160,9 @@ void main() {
       final summary = MonthSummary(
         year: DateTime.now().year,
         month: DateTime.now().month,
-        totalHkdAmountCents: expenses.fold(
+        totalConvertedAmountCents: expenses.fold(
           0,
-          (sum, e) => sum + e.hkdAmountCents,
+          (sum, e) => sum + e.convertedAmountCents,
         ),
         totalCount: expenses.length,
       );
@@ -196,7 +196,7 @@ void main() {
       final summary = MonthSummary(
         year: DateTime.now().year,
         month: DateTime.now().month,
-        totalHkdAmountCents: 0,
+        totalConvertedAmountCents: 0,
         totalCount: 0,
       );
 
@@ -253,7 +253,7 @@ void main() {
           MonthSummary(
             year: DateTime.now().year,
             month: DateTime.now().month,
-            totalHkdAmountCents: 500000,
+            totalConvertedAmountCents: 500000,
             totalCount: 500,
           ),
         ),
@@ -297,7 +297,7 @@ void main() {
           MonthSummary(
             year: DateTime.now().year,
             month: DateTime.now().month,
-            totalHkdAmountCents: 100000,
+            totalConvertedAmountCents: 100000,
             totalCount: 100,
           ),
         ),

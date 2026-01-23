@@ -15,7 +15,7 @@ void main() {
           description: '午餐',
           originalAmountCents: 10000,
           originalCurrency: 'HKD',
-          hkdAmountCents: 10000,
+          convertedAmountCents: 10000,
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           date: DateTime(2024, 1, 15),
@@ -44,10 +44,12 @@ void main() {
 
         // 找到外層的 Semantics 元件
         final semanticsWidget = tester.widget<Semantics>(
-          find.ancestor(
-            of: find.byType(Card),
-            matching: find.byType(Semantics),
-          ).first,
+          find
+              .ancestor(
+                of: find.byType(Card),
+                matching: find.byType(Semantics),
+              )
+              .first,
         );
 
         // 驗證語意標籤存在且不為空
@@ -64,7 +66,7 @@ void main() {
           description: '午餐',
           originalAmountCents: 10000,
           originalCurrency: 'HKD',
-          hkdAmountCents: 10000,
+          convertedAmountCents: 10000,
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           date: DateTime(2024, 1, 15),
@@ -98,7 +100,7 @@ void main() {
         const summary = MonthSummary(
           year: 2024,
           month: 1,
-          totalHkdAmountCents: 150000,
+          totalConvertedAmountCents: 150000,
           totalCount: 15,
         );
 
@@ -126,7 +128,7 @@ void main() {
         const summary = MonthSummary(
           year: 2024,
           month: 1,
-          totalHkdAmountCents: 100000,
+          totalConvertedAmountCents: 100000,
           totalCount: 10,
         );
 
@@ -167,7 +169,7 @@ void main() {
         const summary = MonthSummary(
           year: 2024,
           month: 1,
-          totalHkdAmountCents: 100000,
+          totalConvertedAmountCents: 100000,
           totalCount: 10,
         );
 

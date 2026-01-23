@@ -27,7 +27,7 @@ void main() {
     originalCurrency: 'HKD',
     exchangeRate: 1000000,
     exchangeRateSource: ExchangeRateSource.auto,
-    hkdAmountCents: 10000,
+    convertedAmountCents: 10000,
     description: '測試支出',
     createdAt: DateTime(2025, 1, 15),
     updatedAt: DateTime(2025, 1, 15),
@@ -36,7 +36,7 @@ void main() {
   const testSummary = MonthSummary(
     year: 2025,
     month: 1,
-    totalHkdAmountCents: 10000,
+    totalConvertedAmountCents: 10000,
     totalCount: 1,
   );
 
@@ -54,17 +54,21 @@ void main() {
     mockImageService = MockImageService();
 
     // 預設 stub
-    when(mockRepository.getExpensesByMonth(
-      year: anyNamed('year'),
-      month: anyNamed('month'),
-      limit: anyNamed('limit'),
-      offset: anyNamed('offset'),
-    )).thenAnswer((_) async => Result.success([testExpense]));
+    when(
+      mockRepository.getExpensesByMonth(
+        year: anyNamed('year'),
+        month: anyNamed('month'),
+        limit: anyNamed('limit'),
+        offset: anyNamed('offset'),
+      ),
+    ).thenAnswer((_) async => Result.success([testExpense]));
 
-    when(mockRepository.getMonthSummary(
-      year: anyNamed('year'),
-      month: anyNamed('month'),
-    )).thenAnswer((_) async => Result.success(testSummary));
+    when(
+      mockRepository.getMonthSummary(
+        year: anyNamed('year'),
+        month: anyNamed('month'),
+      ),
+    ).thenAnswer((_) async => Result.success(testSummary));
   });
 
   Widget buildTestWidget({
