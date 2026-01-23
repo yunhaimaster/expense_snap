@@ -215,7 +215,14 @@
   "export_headerOriginalCurrency": "통화",
   "export_headerExchangeRate": "환율",
   "export_headerRateSource": "환율 출처",
-  "export_headerHkdAmount": "HKD 금액",
+  "export_headerConvertedAmount": "{currency} 금액",
+  "@export_headerConvertedAmount": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
   "export_headerReceiptFile": "영수증",
   "export_headerTotal": "합계",
   "export_rateSourceAuto": "자동",

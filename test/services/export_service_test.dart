@@ -5,7 +5,11 @@ import 'package:expense_snap/services/export_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// 建立測試用的 ExportStrings
-ExportStrings createTestExportStrings({int year = 2025, int month = 1}) {
+ExportStrings createTestExportStrings({
+  int year = 2025,
+  int month = 1,
+  String primaryCurrency = 'HKD',
+}) {
   final monthStr = month.toString().padLeft(2, '0');
   return ExportStrings(
     sheetName: '$year年$month月報銷單',
@@ -18,7 +22,7 @@ ExportStrings createTestExportStrings({int year = 2025, int month = 1}) {
     headerOriginalCurrency: '原始幣種',
     headerExchangeRate: '匯率',
     headerRateSource: '匯率來源',
-    headerHkdAmount: '港幣金額',
+    headerConvertedAmount: '$primaryCurrency 金額',
     headerReceiptFile: '收據檔名',
     headerTotal: '合計',
     rateSourceAuto: '自動',
@@ -35,6 +39,7 @@ ExportStrings createTestExportStrings({int year = 2025, int month = 1}) {
     categoryEntertainment: '娛樂',
     categoryMedical: '醫療',
     categoryOther: '其他',
+    primaryCurrency: primaryCurrency,
   );
 }
 
@@ -103,7 +108,8 @@ void main() {
           fileName: 'test.xlsx',
           fileSize: 1024,
           expenseCount: 3,
-          totalHkdCents: 35444,
+          totalConvertedCents: 35444,
+          targetCurrency: 'HKD',
         );
 
         expect(result.formattedFileSize, equals('1.0 KB'));
@@ -115,7 +121,8 @@ void main() {
           fileName: 'test.xlsx',
           fileSize: 1024,
           expenseCount: 3,
-          totalHkdCents: 35444,
+          totalConvertedCents: 35444,
+          targetCurrency: 'HKD',
         );
 
         expect(result.formattedTotalAmount, equals('HK\$354.44'));
@@ -127,7 +134,8 @@ void main() {
           fileName: 'test.zip',
           fileSize: 2 * 1024 * 1024, // 2MB
           expenseCount: 10,
-          totalHkdCents: 100000,
+          totalConvertedCents: 100000,
+          targetCurrency: 'HKD',
           receiptCount: 8,
         );
 
@@ -140,7 +148,8 @@ void main() {
           fileName: 'test.zip',
           fileSize: 2 * 1024 * 1024 * 1024, // 2GB
           expenseCount: 10,
-          totalHkdCents: 100000,
+          totalConvertedCents: 100000,
+          targetCurrency: 'HKD',
           receiptCount: 8,
         );
 
@@ -153,7 +162,8 @@ void main() {
           fileName: 'test.xlsx',
           fileSize: 512,
           expenseCount: 1,
-          totalHkdCents: 1000,
+          totalConvertedCents: 1000,
+          targetCurrency: 'HKD',
         );
 
         expect(result.formattedFileSize, equals('512 B'));
@@ -165,7 +175,8 @@ void main() {
           fileName: 'test.xlsx',
           fileSize: 1024,
           expenseCount: 3,
-          totalHkdCents: 35444,
+          totalConvertedCents: 35444,
+          targetCurrency: 'HKD',
         );
 
         expect(result.receiptCount, isNull);
@@ -177,11 +188,94 @@ void main() {
           fileName: 'test.zip',
           fileSize: 1024 * 1024,
           expenseCount: 5,
-          totalHkdCents: 50000,
+          totalConvertedCents: 50000,
+          targetCurrency: 'HKD',
           receiptCount: 3,
         );
 
         expect(result.receiptCount, equals(3));
+      });
+
+      group('different currency formatting', () {
+        test('should format JPY correctly without decimals', () {
+          // JPY 無小數位：35444 分 = ¥35,444
+          const result = ExportResult(
+            filePath: '/test.xlsx',
+            fileName: 'test.xlsx',
+            fileSize: 1024,
+            expenseCount: 1,
+            totalConvertedCents: 35444,
+            targetCurrency: 'JPY',
+          );
+
+          expect(result.formattedTotalAmount, equals('¥35,444'));
+        });
+
+        test('should format KRW correctly without decimals', () {
+          // KRW 無小數位：456789 分 = ₩456,789
+          const result = ExportResult(
+            filePath: '/test.xlsx',
+            fileName: 'test.xlsx',
+            fileSize: 1024,
+            expenseCount: 1,
+            totalConvertedCents: 456789,
+            targetCurrency: 'KRW',
+          );
+
+          expect(result.formattedTotalAmount, equals('₩456,789'));
+        });
+
+        test('should format USD with 2 decimals', () {
+          // USD 有小數位：12345 分 = $123.45
+          const result = ExportResult(
+            filePath: '/test.xlsx',
+            fileName: 'test.xlsx',
+            fileSize: 1024,
+            expenseCount: 1,
+            totalConvertedCents: 12345,
+            targetCurrency: 'USD',
+          );
+
+          expect(result.formattedTotalAmount, equals('\$123.45'));
+        });
+
+        test('should handle unknown currency gracefully', () {
+          // 未知幣種應使用幣種代碼作為符號，預設 2 位小數
+          const result = ExportResult(
+            filePath: '/test.xlsx',
+            fileName: 'test.xlsx',
+            fileSize: 1024,
+            expenseCount: 1,
+            totalConvertedCents: 12345,
+            targetCurrency: 'XYZ',
+          );
+
+          // 未知幣種回退使用幣種代碼
+          expect(result.formattedTotalAmount, equals('XYZ123.45'));
+        });
+      });
+    });
+
+    group('ExportStrings with different primary currencies', () {
+      test('should create strings with JPY as primary currency', () {
+        final strings = createTestExportStrings(primaryCurrency: 'JPY');
+
+        expect(strings.primaryCurrency, equals('JPY'));
+        expect(strings.headerConvertedAmount, contains('JPY'));
+      });
+
+      test('should create strings with USD as primary currency', () {
+        final strings = createTestExportStrings(primaryCurrency: 'USD');
+
+        expect(strings.primaryCurrency, equals('USD'));
+        expect(strings.headerConvertedAmount, contains('USD'));
+      });
+
+      test('should create strings with KRW as primary currency', () {
+        final strings = createTestExportStrings(primaryCurrency: 'KRW');
+
+        expect(strings.primaryCurrency, equals('KRW'));
+        expect(strings.headerConvertedAmount, contains('KRW'));
       });
     });
 
@@ -257,7 +351,8 @@ void main() {
           fileName: 'user_202501_1234567890.xlsx',
           fileSize: 1024,
           expenseCount: 1,
-          totalHkdCents: 1000,
+          totalConvertedCents: 1000,
+          targetCurrency: 'HKD',
         );
         // 檔名應該不含特殊字元
         expect(result.fileName, isNot(contains('/')));
@@ -332,7 +427,8 @@ void main() {
           fileName: 'test.xlsx',
           fileSize: 1024,
           expenseCount: 1000,
-          totalHkdCents: largeAmount,
+          totalConvertedCents: largeAmount,
+          targetCurrency: 'HKD',
         );
         // 格式化不應該拋出異常
         expect(result.formattedTotalAmount, isNotEmpty);
@@ -344,7 +440,8 @@ void main() {
           fileName: 'test.xlsx',
           fileSize: 0,
           expenseCount: 0,
-          totalHkdCents: 0,
+          totalConvertedCents: 0,
+          targetCurrency: 'HKD',
         );
         expect(result.formattedFileSize, equals('0 B'));
       });

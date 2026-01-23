@@ -29,7 +29,7 @@ class ExportStrings {
     required this.headerOriginalCurrency,
     required this.headerExchangeRate,
     required this.headerRateSource,
-    required this.headerHkdAmount,
+    required this.headerConvertedAmount,
     required this.headerReceiptFile,
     required this.headerCategory,
     required this.headerTotal,
@@ -46,6 +46,7 @@ class ExportStrings {
     required this.categoryEntertainment,
     required this.categoryMedical,
     required this.categoryOther,
+    required this.primaryCurrency,
   });
 
   /// 從 S (AppLocalizations) 建立
@@ -53,6 +54,7 @@ class ExportStrings {
     S l10n, {
     required int year,
     required int month,
+    required String primaryCurrency,
   }) {
     final monthStr = month.toString().padLeft(2, '0');
     return ExportStrings(
@@ -66,7 +68,7 @@ class ExportStrings {
       headerOriginalCurrency: l10n.export_headerOriginalCurrency,
       headerExchangeRate: l10n.export_headerExchangeRate,
       headerRateSource: l10n.export_headerRateSource,
-      headerHkdAmount: l10n.export_headerHkdAmount,
+      headerConvertedAmount: l10n.export_headerConvertedAmount(primaryCurrency),
       headerReceiptFile: l10n.export_headerReceiptFile,
       headerTotal: l10n.export_headerTotal,
       rateSourceAuto: l10n.export_rateSourceAuto,
@@ -83,6 +85,7 @@ class ExportStrings {
       categoryEntertainment: l10n.category_entertainment,
       categoryMedical: l10n.category_medical,
       categoryOther: l10n.category_other,
+      primaryCurrency: primaryCurrency,
     );
   }
 
@@ -96,7 +99,7 @@ class ExportStrings {
   final String headerOriginalCurrency;
   final String headerExchangeRate;
   final String headerRateSource;
-  final String headerHkdAmount;
+  final String headerConvertedAmount;
   final String headerReceiptFile;
   final String headerTotal;
   final String rateSourceAuto;
@@ -114,6 +117,9 @@ class ExportStrings {
   final String categoryEntertainment;
   final String categoryMedical;
   final String categoryOther;
+
+  /// 主要幣種（用於金額格式化）
+  final String primaryCurrency;
 
   // 為了與 S 類別的 category_* 屬性命名保持一致（用於 getLocalizedName 動態調用）
   // ignore: non_constant_identifier_names
@@ -210,7 +216,7 @@ class ExportService {
       _setHeaderRow(sheet, strings);
 
       // 填入資料
-      int totalHkdCents = 0;
+      int totalConvertedCents = 0;
       for (int i = 0; i < expenses.length; i++) {
         final expense = expenses[i];
         final rowIndex = i + 1;
@@ -232,11 +238,11 @@ class ExportService {
           strings,
           receiptFileName: receiptFileName,
         );
-        totalHkdCents += expense.convertedAmountCents;
+        totalConvertedCents += expense.convertedAmountCents;
       }
 
       // 設定合計列
-      _setTotalRow(sheet, expenses.length + 1, totalHkdCents, strings);
+      _setTotalRow(sheet, expenses.length + 1, totalConvertedCents, strings);
 
       // 儲存檔案
       final tempDir = await _tempDir;
@@ -263,7 +269,8 @@ class ExportService {
           fileName: fileName,
           fileSize: fileSize,
           expenseCount: expenses.length,
-          totalHkdCents: totalHkdCents,
+          totalConvertedCents: totalConvertedCents,
+          targetCurrency: strings.primaryCurrency,
         ),
       );
     } catch (e) {
@@ -408,7 +415,8 @@ class ExportService {
           fileName: fileName,
           fileSize: fileSize,
           expenseCount: expenses.length,
-          totalHkdCents: excelInfo.totalHkdCents,
+          totalConvertedCents: excelInfo.totalConvertedCents,
+          targetCurrency: excelInfo.targetCurrency,
           receiptCount: receiptCount,
         ),
       );
@@ -487,7 +495,7 @@ class ExportService {
       strings.headerOriginalCurrency,
       strings.headerExchangeRate,
       strings.headerRateSource,
-      strings.headerHkdAmount,
+      strings.headerConvertedAmount,
       strings.headerCategory,
       strings.headerReceiptFile,
     ];
@@ -567,7 +575,6 @@ class ExportService {
     );
 
     // 轉換後金額
-    // TODO: Phase 5 - 使用 targetCurrency 欄位顯示動態幣種標題
     sheet
         .cell(CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: rowIndex))
         .value = DoubleCellValue(
@@ -594,7 +601,7 @@ class ExportService {
   void _setTotalRow(
     Sheet sheet,
     int rowIndex,
-    int totalHkdCents,
+    int totalConvertedCents,
     ExportStrings strings,
   ) {
     // 合計標籤
@@ -604,15 +611,14 @@ class ExportService {
     labelCell.value = TextCellValue(strings.headerTotal);
     labelCell.cellStyle = CellStyle(bold: true);
 
-    // 合計金額
+    // 合計金額（使用動態主要幣種）
     final totalCell = sheet.cell(
       CellIndex.indexByColumnRow(columnIndex: 7, rowIndex: rowIndex),
     );
-    // 使用 primaryCurrency 進行正確轉換
     totalCell.value = DoubleCellValue(
       Formatters.centsToAmount(
-        totalHkdCents,
-        CurrencyConstants.defaultPrimaryCurrency,
+        totalConvertedCents,
+        strings.primaryCurrency,
       ),
     );
     totalCell.cellStyle = CellStyle(bold: true);
@@ -679,7 +685,8 @@ class ExportResult {
     required this.fileName,
     required this.fileSize,
     required this.expenseCount,
-    required this.totalHkdCents,
+    required this.totalConvertedCents,
+    required this.targetCurrency,
     this.receiptCount,
   });
 
@@ -695,8 +702,11 @@ class ExportResult {
   /// 支出筆數
   final int expenseCount;
 
-  /// 港幣總金額（分）
-  final int totalHkdCents;
+  /// 轉換後總金額（分）
+  final int totalConvertedCents;
+
+  /// 目標幣種
+  final String targetCurrency;
 
   /// 收據數量（僅 ZIP 匯出時有值）
   final int? receiptCount;
@@ -704,11 +714,9 @@ class ExportResult {
   /// 格式化的檔案大小
   String get formattedFileSize => Formatters.formatFileSize(fileSize);
 
-  /// 格式化的港幣總金額
-  /// TODO: Phase 5 - 使用 primaryCurrency 取代 hardcoded 常數
-  String get formattedTotalAmount =>
-      Formatters.formatAmount(
-        totalHkdCents,
-        CurrencyConstants.defaultPrimaryCurrency,
-      );
+  /// 格式化的總金額（使用動態幣種）
+  String get formattedTotalAmount => Formatters.formatAmount(
+    totalConvertedCents,
+    targetCurrency,
+  );
 }

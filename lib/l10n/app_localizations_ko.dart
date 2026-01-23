@@ -379,7 +379,9 @@ class SKo extends S {
   String get export_headerRateSource => '환율 출처';
 
   @override
-  String get export_headerHkdAmount => 'HKD 금액';
+  String export_headerConvertedAmount(String currency) {
+    return '$currency 금액';
+  }
 
   @override
   String get export_headerReceiptFile => '영수증';

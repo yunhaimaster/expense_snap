@@ -379,7 +379,9 @@ class SJa extends S {
   String get export_headerRateSource => 'レート出典';
 
   @override
-  String get export_headerHkdAmount => 'HKD金額';
+  String export_headerConvertedAmount(String currency) {
+    return '$currency金額';
+  }
 
   @override
   String get export_headerReceiptFile => 'レシート';

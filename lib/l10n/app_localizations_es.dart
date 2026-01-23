@@ -385,7 +385,9 @@ class SEs extends S {
   String get export_headerRateSource => 'Fuente de tasa';
 
   @override
-  String get export_headerHkdAmount => 'Monto en HKD';
+  String export_headerConvertedAmount(String currency) {
+    return 'Monto en $currency';
+  }
 
   @override
   String get export_headerReceiptFile => 'Recibo';

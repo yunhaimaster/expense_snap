@@ -215,7 +215,14 @@
   "export_headerOriginalCurrency": "原始幣種",
   "export_headerExchangeRate": "匯率",
   "export_headerRateSource": "匯率來源",
-  "export_headerHkdAmount": "港幣金額",
+  "export_headerConvertedAmount": "{currency} 金額",
+  "@export_headerConvertedAmount": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
   "export_headerReceiptFile": "收據檔名",
   "export_headerTotal": "合計",
   "export_rateSourceAuto": "自動",

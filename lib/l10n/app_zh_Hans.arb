@@ -128,6 +128,7 @@
     }
   },
   "monthSummary_isLatestMonth": "已是最新月份",
+  "monthSummary_mixedCurrencies": "多币种",
   "export_title": "导出报销单",
   "export_preview": "预览",
   "export_expenseCount": "支出笔数",
@@ -214,7 +215,14 @@
   "export_headerOriginalCurrency": "原始币种",
   "export_headerExchangeRate": "汇率",
   "export_headerRateSource": "汇率来源",
-  "export_headerHkdAmount": "港币金额",
+  "export_headerConvertedAmount": "{currency} 金额",
+  "@export_headerConvertedAmount": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
   "export_headerReceiptFile": "收据文件名",
   "export_headerTotal": "合计",
   "export_rateSourceAuto": "自动",

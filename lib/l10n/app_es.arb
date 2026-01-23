@@ -215,7 +215,14 @@
   "export_headerOriginalCurrency": "Moneda",
   "export_headerExchangeRate": "Tipo de cambio",
   "export_headerRateSource": "Fuente de tasa",
-  "export_headerHkdAmount": "Monto en HKD",
+  "export_headerConvertedAmount": "Monto en {currency}",
+  "@export_headerConvertedAmount": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
   "export_headerReceiptFile": "Recibo",
   "export_headerTotal": "Total",
   "export_rateSourceAuto": "Automático",

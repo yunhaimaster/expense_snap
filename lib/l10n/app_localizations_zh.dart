@@ -379,7 +379,9 @@ class SZh extends S {
   String get export_headerRateSource => '匯率來源';
 
   @override
-  String get export_headerHkdAmount => '港幣金額';
+  String export_headerConvertedAmount(String currency) {
+    return '$currency 金額';
+  }
 
   @override
   String get export_headerReceiptFile => '收據檔名';
@@ -1361,6 +1363,9 @@ class SZhHans extends SZh {
   String get monthSummary_isLatestMonth => '已是最新月份';
 
   @override
+  String get monthSummary_mixedCurrencies => '多币种';
+
+  @override
   String get export_title => '导出报销单';
 
   @override
@@ -1459,7 +1464,9 @@ class SZhHans extends SZh {
   String get export_headerRateSource => '汇率来源';
 
   @override
-  String get export_headerHkdAmount => '港币金额';
+  String export_headerConvertedAmount(String currency) {
+    return '$currency 金额';
+  }
 
   @override
   String get export_headerReceiptFile => '收据文件名';

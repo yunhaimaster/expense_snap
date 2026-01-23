@@ -382,7 +382,9 @@ class SEn extends S {
   String get export_headerRateSource => 'Rate Source';
 
   @override
-  String get export_headerHkdAmount => 'HKD Amount';
+  String export_headerConvertedAmount(String currency) {
+    return '$currency Amount';
+  }
 
   @override
   String get export_headerReceiptFile => 'Receipt';

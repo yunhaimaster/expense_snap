@@ -12,6 +12,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../data/models/expense.dart';
 import '../../../domain/repositories/expense_repository.dart';
 import '../../../services/export_service.dart';
+import '../../providers/settings_provider.dart';
 import '../../providers/showcase_provider.dart';
 import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/loading_overlay.dart';
@@ -194,12 +195,14 @@ class _ExportScreenState extends State<ExportScreen> {
     final month = _selectedMonth;
     final userName = _userName;
     final l10n = S.of(context);
+    final primaryCurrency = context.read<SettingsProvider>().primaryCurrency;
 
     // 建立本地化字串（在 context 有效時建立）
     final exportStrings = ExportStrings.fromL10n(
       l10n,
       year: year,
       month: month,
+      primaryCurrency: primaryCurrency,
     );
 
     setState(() {

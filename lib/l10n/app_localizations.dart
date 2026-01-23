@@ -794,11 +794,11 @@ abstract class S {
   /// **'匯率來源'**
   String get export_headerRateSource;
 
-  /// No description provided for @export_headerHkdAmount.
+  /// No description provided for @export_headerConvertedAmount.
   ///
   /// In zh, this message translates to:
-  /// **'港幣金額'**
-  String get export_headerHkdAmount;
+  /// **'{currency} 金額'**
+  String export_headerConvertedAmount(String currency);
 
   /// No description provided for @export_headerReceiptFile.
   ///

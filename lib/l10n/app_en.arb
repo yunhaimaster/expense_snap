@@ -215,7 +215,14 @@
   "export_headerOriginalCurrency": "Currency",
   "export_headerExchangeRate": "Exchange Rate",
   "export_headerRateSource": "Rate Source",
-  "export_headerHkdAmount": "HKD Amount",
+  "export_headerConvertedAmount": "{currency} Amount",
+  "@export_headerConvertedAmount": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
   "export_headerReceiptFile": "Receipt",
   "export_headerTotal": "Total",
   "export_rateSourceAuto": "Auto",

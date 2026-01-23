@@ -215,7 +215,14 @@
   "export_headerOriginalCurrency": "通貨",
   "export_headerExchangeRate": "為替レート",
   "export_headerRateSource": "レート出典",
-  "export_headerHkdAmount": "HKD金額",
+  "export_headerConvertedAmount": "{currency}金額",
+  "@export_headerConvertedAmount": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
   "export_headerReceiptFile": "レシート",
   "export_headerTotal": "合計",
   "export_rateSourceAuto": "自動",
