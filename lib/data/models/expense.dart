@@ -15,6 +15,7 @@ class Expense {
     required this.exchangeRate,
     required this.exchangeRateSource,
     required this.convertedAmountCents,
+    required this.targetCurrency,
     required this.description,
     this.category,
     this.receiptImagePath,
@@ -46,6 +47,9 @@ class Expense {
   /// 轉換後金額（以分為單位，目標幣種為 targetCurrency）
   final int convertedAmountCents;
 
+  /// 目標幣種（用戶的主要幣種）
+  final String targetCurrency;
+
   /// 描述
   final String description;
 
@@ -76,22 +80,17 @@ class Expense {
   double get originalAmount =>
       Formatters.centsToAmount(originalAmountCents, originalCurrency);
 
-  /// 轉換後金額（元）
-  /// 注意：convertedAmountCents 對應的是 primaryCurrency，此處無法取得
-  /// 呼叫端應使用 formatAmount 並傳入 primaryCurrency
-  double get convertedAmount => Formatters.centsToAmount(convertedAmountCents);
+  /// 轉換後金額（元）- 使用 targetCurrency 決定小數位數
+  double get convertedAmount =>
+      Formatters.centsToAmount(convertedAmountCents, targetCurrency);
 
   /// 格式化的原始金額
   String get formattedOriginalAmount =>
       Formatters.formatAmount(originalAmountCents, originalCurrency);
 
   /// 格式化的轉換後金額
-  /// TODO: Phase 5 - 改為方法並傳入 primaryCurrency 以支援可配置主要幣種
   String get formattedConvertedAmount =>
-      Formatters.formatAmount(
-        convertedAmountCents,
-        CurrencyConstants.defaultPrimaryCurrency,
-      );
+      Formatters.formatAmount(convertedAmountCents, targetCurrency);
 
   /// 格式化的匯率
   String get formattedExchangeRate =>
@@ -120,6 +119,8 @@ class Expense {
         map['exchange_rate_source'] as String,
       ),
       convertedAmountCents: map['hkd_amount'] as int,
+      targetCurrency: (map['target_currency'] as String?) ??
+          CurrencyConstants.defaultPrimaryCurrency,
       description: map['description'] as String,
       category: ExpenseCategoryExtension.fromString(map['category'] as String?),
       receiptImagePath: map['receipt_image_path'] as String?,
@@ -143,6 +144,7 @@ class Expense {
       'exchange_rate': exchangeRate,
       'exchange_rate_source': exchangeRateSource.value,
       'hkd_amount': convertedAmountCents,
+      'target_currency': targetCurrency,
       'description': description,
       'category': category?.name,
       'receipt_image_path': receiptImagePath,
@@ -167,6 +169,7 @@ class Expense {
     int? exchangeRate,
     ExchangeRateSource? exchangeRateSource,
     int? convertedAmountCents,
+    String? targetCurrency,
     String? description,
     ExpenseCategory? category,
     bool clearCategory = false,
@@ -185,6 +188,7 @@ class Expense {
       exchangeRate: exchangeRate ?? this.exchangeRate,
       exchangeRateSource: exchangeRateSource ?? this.exchangeRateSource,
       convertedAmountCents: convertedAmountCents ?? this.convertedAmountCents,
+      targetCurrency: targetCurrency ?? this.targetCurrency,
       description: description ?? this.description,
       category: clearCategory ? null : (category ?? this.category),
       receiptImagePath: receiptImagePath ?? this.receiptImagePath,

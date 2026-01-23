@@ -55,6 +55,7 @@ void main() {
           exchangeRate: 1089000, // 1.089
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 10944, // 109.44
+          targetCurrency: 'HKD',
           description: '午餐',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -69,6 +70,7 @@ void main() {
           exchangeRate: 1000000, // 1.0
           exchangeRateSource: ExchangeRateSource.manual,
           convertedAmountCents: 5000, // 50.00
+          targetCurrency: 'HKD',
           description: '交通費',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -83,6 +85,7 @@ void main() {
           exchangeRate: 7800000, // 7.8
           exchangeRateSource: ExchangeRateSource.offline,
           convertedAmountCents: 19500, // 195.00
+          targetCurrency: 'HKD',
           description: '文具',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -273,6 +276,7 @@ void main() {
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 1000,
+          targetCurrency: 'HKD',
           description: '', // 空描述
           receiptImagePath: null,
           thumbnailPath: null,
@@ -309,6 +313,7 @@ void main() {
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 1000,
+          targetCurrency: 'HKD',
           description: '測試',
           receiptImagePath: '', // 空字串路徑
           thumbnailPath: null,
@@ -354,6 +359,7 @@ void main() {
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 1000,
+          targetCurrency: 'HKD',
           description: '🍔午餐 McDonald\'s 麥當勞',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -601,6 +607,7 @@ void main() {
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 1000 * (i + 1),
+          targetCurrency: 'HKD',
           description: '測試支出 $i',
           receiptImagePath: null,
           thumbnailPath: null,

@@ -23,6 +23,7 @@ void main() {
     exchangeRate: CurrencyConstants.ratePrecision,
     exchangeRateSource: ExchangeRateSource.auto,
     convertedAmountCents: 10000,
+    targetCurrency: 'HKD',
     description: '測試支出',
     createdAt: now,
     updatedAt: now,
@@ -233,6 +234,7 @@ void main() {
         exchangeRate: CurrencyConstants.ratePrecision,
         exchangeRateSource: ExchangeRateSource.auto,
         convertedAmountCents: 10000,
+        targetCurrency: 'HKD',
         description: '測試',
       );
 
@@ -258,6 +260,7 @@ void main() {
         exchangeRate: CurrencyConstants.ratePrecision,
         exchangeRateSource: ExchangeRateSource.auto,
         convertedAmountCents: 10000,
+        targetCurrency: 'HKD',
         description: '測試',
       );
 

@@ -31,6 +31,7 @@ void main() {
         exchangeRate: 1000000,
         exchangeRateSource: ExchangeRateSource.auto,
         convertedAmountCents: 1000 + (i * 10),
+        targetCurrency: 'HKD',
         description: '測試支出 #$i',
         receiptImagePath: i % 3 == 0 ? '/path/to/image_$i.jpg' : null,
         createdAt: DateTime.now(),

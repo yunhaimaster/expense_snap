@@ -13,7 +13,7 @@ class ExchangeRateInfo {
   const ExchangeRateInfo({
     required this.rate,
     required this.source,
-    this.baseCurrency = 'HKD',
+    this.baseCurrency = CurrencyConstants.defaultPrimaryCurrency,
     this.fetchedAt,
   });
 
@@ -76,7 +76,7 @@ class ExchangeRateRepository {
   /// 取得指定幣種的匯率
   ///
   /// [currency] 來源幣種
-  /// [baseCurrency] 目標幣種（預設 HKD）
+  /// [baseCurrency] 目標幣種（預設為用戶主要幣種）
   ///
   /// 按照 fallback chain 順序嘗試：
   /// 1. 快取有效 → 直接回傳
@@ -85,7 +85,7 @@ class ExchangeRateRepository {
   /// 4. 完全無快取 → 使用預設匯率
   Future<Result<ExchangeRateInfo>> getRate(
     String currency, {
-    String baseCurrency = 'HKD',
+    String baseCurrency = CurrencyConstants.defaultPrimaryCurrency,
   }) async {
     // 相同幣種固定 1:1
     if (currency == baseCurrency) {
@@ -188,10 +188,10 @@ class ExchangeRateRepository {
 
   /// 強制重新整理匯率（忽略快取）
   ///
-  /// [baseCurrency] 基準幣種（預設 HKD）
+  /// [baseCurrency] 基準幣種（預設為用戶主要幣種）
   /// [forceRefresh] 如果為 true，則繞過 30 秒冷卻限制（用於長按刷新）
   Future<Result<Map<String, ExchangeRateInfo>>> refreshRates({
-    String baseCurrency = 'HKD',
+    String baseCurrency = CurrencyConstants.defaultPrimaryCurrency,
     bool forceRefresh = false,
   }) async {
     if (!forceRefresh && !canRefresh) {
@@ -252,7 +252,7 @@ class ExchangeRateRepository {
 
   /// 取得所有支援幣種的匯率
   Future<Result<Map<String, ExchangeRateInfo>>> getAllRates({
-    String baseCurrency = 'HKD',
+    String baseCurrency = CurrencyConstants.defaultPrimaryCurrency,
   }) async {
     final result = <String, ExchangeRateInfo>{};
 

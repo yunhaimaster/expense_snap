@@ -26,6 +26,7 @@ void main() {
     exchangeRate: 1000000,
     exchangeRateSource: ExchangeRateSource.auto,
     convertedAmountCents: 10000,
+    targetCurrency: 'HKD',
     description: '測試支出',
     receiptImagePath: '/path/to/image.jpg',
     createdAt: DateTime.now(),

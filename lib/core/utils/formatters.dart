@@ -173,8 +173,15 @@ class Formatters {
   }
 
   /// 格式化金額顯示（純數字，帶千分位）
-  static String formatAmountNumber(int cents) {
-    final amount = centsToAmount(cents);
+  /// [currency] 幣種，用於決定小數位數（JPY/KRW 為 0）
+  static String formatAmountNumber(int cents, [String? currency]) {
+    final amount = centsToAmount(cents, currency);
+    if (currency != null) {
+      final decimals = CurrencyConstants.getDecimalPlaces(currency);
+      if (decimals == 0) {
+        return _formatNumberNoDecimals(cents);
+      }
+    }
     return _formatNumber(amount);
   }
 

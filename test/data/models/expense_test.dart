@@ -18,6 +18,7 @@ void main() {
         exchangeRate: 1089000, // 1.089
         exchangeRateSource: ExchangeRateSource.auto,
         convertedAmountCents: 10944, // 109.44 (100.50 * 1.089)
+        targetCurrency: 'HKD',
         description: '午餐',
         category: ExpenseCategory.meals,
         receiptImagePath: '/path/to/image.jpg',
@@ -56,6 +57,7 @@ void main() {
           exchangeRate: 52000, // 0.052 HKD per JPY
           exchangeRateSource: ExchangeRateSource.defaultRate,
           convertedAmountCents: 52, // 1000 * 0.052 = 52 cents HKD
+          targetCurrency: 'HKD',
           description: 'JPY test',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -75,6 +77,7 @@ void main() {
           exchangeRate: 5700, // 0.0057 HKD per KRW
           exchangeRateSource: ExchangeRateSource.defaultRate,
           convertedAmountCents: 285, // 50000 * 0.0057 = 285 cents HKD
+          targetCurrency: 'HKD',
           description: 'KRW test',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -107,6 +110,7 @@ void main() {
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 5000,
+          targetCurrency: 'HKD',
           description: '無收據',
           receiptImagePath: null,
           thumbnailPath: null,
@@ -153,6 +157,7 @@ void main() {
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 5000,
+          targetCurrency: 'HKD',
           description: '無分類支出',
           category: null,
           receiptImagePath: null,
@@ -313,6 +318,7 @@ void main() {
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 5000,
+          targetCurrency: 'HKD',
           description: '測試',
           category: ExpenseCategory.meals,
           createdAt: now,
@@ -326,6 +332,7 @@ void main() {
           exchangeRate: 1000000,
           exchangeRateSource: ExchangeRateSource.auto,
           convertedAmountCents: 5000,
+          targetCurrency: 'HKD',
           description: '測試',
           category: ExpenseCategory.transport,
           createdAt: now,

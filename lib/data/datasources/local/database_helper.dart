@@ -246,10 +246,12 @@ class DatabaseHelper {
         ''');
 
         // 3d. 恢復資料（舊資料都是 HKD 為基準）
+        // 使用 COALESCE 處理可能的 NULL rate，過濾無效資料
         await txn.execute('''
           INSERT INTO exchange_rate_cache (currency, base_currency, rate, fetched_at, source)
-          SELECT currency, 'HKD', rate, fetched_at, source
+          SELECT currency, 'HKD', COALESCE(rate, 0), fetched_at, source
           FROM exchange_rate_cache_backup
+          WHERE rate IS NOT NULL
         ''');
 
         // 3e. 刪除備份表

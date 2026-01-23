@@ -16,6 +16,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../services/receipt_parser.dart';
 import '../../providers/exchange_rate_provider.dart';
 import '../../providers/expense_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/forms/amount_input.dart';
 import '../../widgets/forms/category_picker.dart';
@@ -619,9 +620,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     try {
       final provider = context.read<ExpenseProvider>();
+      final settings = context.read<SettingsProvider>();
 
       // 使用追蹤的匯率來源
-      final rateSource = _selectedCurrency == 'HKD'
+      final rateSource = _selectedCurrency == settings.primaryCurrency
           ? ExchangeRateSource.auto
           : _currentRateSource;
 
@@ -632,6 +634,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         exchangeRate: rateMicros,
         exchangeRateSource: rateSource,
         convertedAmountCents: convertedAmountCents,
+        targetCurrency: settings.primaryCurrency,
         description: _descriptionController.text.trim(),
         imagePath: _selectedImagePath,
         category: _selectedCategory,
