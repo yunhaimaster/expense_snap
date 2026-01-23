@@ -11,13 +11,17 @@ import '../models/exchange_rate_cache.dart';
 /// 匯率來源資訊
 class ExchangeRateInfo {
   const ExchangeRateInfo({
-    required this.rateToHkd,
+    required this.rate,
     required this.source,
+    this.baseCurrency = 'HKD',
     this.fetchedAt,
   });
 
   /// 匯率（×10⁶ 精度）
-  final int rateToHkd;
+  final int rate;
+
+  /// 基準幣種
+  final String baseCurrency;
 
   /// 來源
   final ExchangeRateSource source;
@@ -26,7 +30,7 @@ class ExchangeRateInfo {
   final DateTime? fetchedAt;
 
   /// 格式化的匯率
-  String get formattedRate => Formatters.formatExchangeRate(rateToHkd);
+  String get formattedRate => Formatters.formatExchangeRate(rate);
 
   /// 格式化的相對時間
   String? get formattedFetchedAt =>
@@ -43,8 +47,8 @@ class ExchangeRateRepository {
   ExchangeRateRepository({
     DatabaseHelper? databaseHelper,
     ExchangeRateApi? api,
-  })  : _db = databaseHelper ?? DatabaseHelper.instance,
-        _api = api ?? ExchangeRateApi();
+  }) : _db = databaseHelper ?? DatabaseHelper.instance,
+       _api = api ?? ExchangeRateApi();
 
   final DatabaseHelper _db;
   final ExchangeRateApi _api;
@@ -65,23 +69,30 @@ class ExchangeRateRepository {
     final elapsed = DateTime.now().difference(_lastRefreshTime!);
     final remaining =
         AppConstants.minExchangeRateRefreshInterval.inSeconds -
-            elapsed.inSeconds;
+        elapsed.inSeconds;
     return remaining > 0 ? remaining : 0;
   }
 
   /// 取得指定幣種的匯率
+  ///
+  /// [currency] 來源幣種
+  /// [baseCurrency] 目標幣種（預設 HKD）
   ///
   /// 按照 fallback chain 順序嘗試：
   /// 1. 快取有效 → 直接回傳
   /// 2. 快取無效/不存在 → 嘗試 API
   /// 3. API 失敗 + 快取過期 → 使用過期快取
   /// 4. 完全無快取 → 使用預設匯率
-  Future<Result<ExchangeRateInfo>> getRate(String currency) async {
-    // HKD 對 HKD 固定 1:1
-    if (currency == 'HKD') {
+  Future<Result<ExchangeRateInfo>> getRate(
+    String currency, {
+    String baseCurrency = 'HKD',
+  }) async {
+    // 相同幣種固定 1:1
+    if (currency == baseCurrency) {
       return Result.success(
         ExchangeRateInfo(
-          rateToHkd: CurrencyConstants.ratePrecision,
+          rate: CurrencyConstants.ratePrecision,
+          baseCurrency: baseCurrency,
           source: ExchangeRateSource.auto,
           fetchedAt: DateTime.now(),
         ),
@@ -89,12 +100,13 @@ class ExchangeRateRepository {
     }
 
     // 1. 檢查快取
-    final cacheResult = await _getCachedRate(currency);
+    final cacheResult = await _getCachedRate(currency, baseCurrency);
     if (cacheResult != null && !cacheResult.isExpired) {
-      AppLogger.debug('Using valid cached rate for $currency');
+      AppLogger.debug('Using valid cached rate for $currency to $baseCurrency');
       return Result.success(
         ExchangeRateInfo(
-          rateToHkd: cacheResult.rateToHkd,
+          rate: cacheResult.rate,
+          baseCurrency: baseCurrency,
           source: ExchangeRateSource.auto,
           fetchedAt: cacheResult.fetchedAt,
         ),
@@ -102,20 +114,21 @@ class ExchangeRateRepository {
     }
 
     // 2. 嘗試從 API 獲取新匯率
-    final apiResult = await _api.fetchRates();
+    final apiResult = await _api.fetchRates(baseCurrency: baseCurrency);
 
     if (apiResult.isSuccess) {
       final rates = apiResult.getOrThrow();
 
       if (rates.containsKey(currency)) {
         // 更新快取
-        await _cacheRates(rates, 'primary');
+        await _cacheRates(rates, 'primary', baseCurrency);
 
         _lastRefreshTime = DateTime.now();
 
         return Result.success(
           ExchangeRateInfo(
-            rateToHkd: rates[currency]!,
+            rate: rates[currency]!,
+            baseCurrency: baseCurrency,
             source: ExchangeRateSource.auto,
             fetchedAt: DateTime.now(),
           ),
@@ -128,7 +141,8 @@ class ExchangeRateRepository {
       AppLogger.warning('API failed, using expired cache for $currency');
       return Result.success(
         ExchangeRateInfo(
-          rateToHkd: cacheResult.rateToHkd,
+          rate: cacheResult.rate,
+          baseCurrency: baseCurrency,
           source: ExchangeRateSource.offline,
           fetchedAt: cacheResult.fetchedAt,
         ),
@@ -136,12 +150,13 @@ class ExchangeRateRepository {
     }
 
     // 4. 完全無快取，使用預設匯率
-    final defaultRate = CurrencyConstants.defaultRatesToHkd[currency];
+    final defaultRate = _getDefaultRate(currency, baseCurrency);
     if (defaultRate != null) {
-      AppLogger.warning('Using default rate for $currency');
+      AppLogger.warning('Using default rate for $currency to $baseCurrency');
       return Result.success(
         ExchangeRateInfo(
-          rateToHkd: defaultRate,
+          rate: defaultRate,
+          baseCurrency: baseCurrency,
           source: ExchangeRateSource.defaultRate,
         ),
       );
@@ -153,10 +168,30 @@ class ExchangeRateRepository {
     );
   }
 
+  /// 取得預設匯率（支援任意基準幣種）
+  int? _getDefaultRate(String currency, String baseCurrency) {
+    if (baseCurrency == 'HKD') {
+      return CurrencyConstants.defaultRatesToHkd[currency];
+    }
+
+    // 跨幣種：先轉 HKD，再轉目標幣種
+    final currencyToHkd = CurrencyConstants.defaultRatesToHkd[currency];
+    final baseToHkd = CurrencyConstants.defaultRatesToHkd[baseCurrency];
+
+    if (currencyToHkd == null || baseToHkd == null) return null;
+
+    // rate = currencyToHkd / baseToHkd
+    // 使用高精度計算避免溢位
+    return ((currencyToHkd / baseToHkd) * CurrencyConstants.ratePrecision)
+        .round();
+  }
+
   /// 強制重新整理匯率（忽略快取）
   ///
+  /// [baseCurrency] 基準幣種（預設 HKD）
   /// [forceRefresh] 如果為 true，則繞過 30 秒冷卻限制（用於長按刷新）
   Future<Result<Map<String, ExchangeRateInfo>>> refreshRates({
+    String baseCurrency = 'HKD',
     bool forceRefresh = false,
   }) async {
     if (!forceRefresh && !canRefresh) {
@@ -172,19 +207,21 @@ class ExchangeRateRepository {
       AppLogger.info('Force refresh requested, bypassing cooldown');
     }
 
-    final apiResult = await _api.fetchRates();
+    final apiResult = await _api.fetchRates(baseCurrency: baseCurrency);
 
     if (apiResult.isFailure) {
-      return Result.failure(apiResult.fold(
-        onFailure: (e) => e,
-        onSuccess: (_) => throw StateError('Unreachable'),
-      ));
+      return Result.failure(
+        apiResult.fold(
+          onFailure: (e) => e,
+          onSuccess: (_) => throw StateError('Unreachable'),
+        ),
+      );
     }
 
     final rates = apiResult.getOrThrow();
 
     // 更新快取
-    await _cacheRates(rates, 'primary');
+    await _cacheRates(rates, 'primary', baseCurrency);
 
     _lastRefreshTime = DateTime.now();
 
@@ -192,7 +229,8 @@ class ExchangeRateRepository {
     final infoMap = <String, ExchangeRateInfo>{};
     for (final entry in rates.entries) {
       infoMap[entry.key] = ExchangeRateInfo(
-        rateToHkd: entry.value,
+        rate: entry.value,
+        baseCurrency: baseCurrency,
         source: ExchangeRateSource.auto,
         fetchedAt: DateTime.now(),
       );
@@ -213,18 +251,22 @@ class ExchangeRateRepository {
   }
 
   /// 取得所有支援幣種的匯率
-  Future<Result<Map<String, ExchangeRateInfo>>> getAllRates() async {
+  Future<Result<Map<String, ExchangeRateInfo>>> getAllRates({
+    String baseCurrency = 'HKD',
+  }) async {
     final result = <String, ExchangeRateInfo>{};
 
     for (final currency in CurrencyConstants.supportedCurrencies) {
-      final rateResult = await getRate(currency);
+      final rateResult = await getRate(currency, baseCurrency: baseCurrency);
       rateResult.fold(
         onFailure: (error) {
           // 使用預設值作為最後保障
-          final defaultRate = CurrencyConstants.defaultRatesToHkd[currency] ??
+          final defaultRate =
+              _getDefaultRate(currency, baseCurrency) ??
               CurrencyConstants.ratePrecision;
           result[currency] = ExchangeRateInfo(
-            rateToHkd: defaultRate,
+            rate: defaultRate,
+            baseCurrency: baseCurrency,
             source: ExchangeRateSource.defaultRate,
           );
         },
@@ -238,9 +280,15 @@ class ExchangeRateRepository {
   }
 
   /// 從快取取得匯率
-  Future<ExchangeRateCache?> _getCachedRate(String currency) async {
+  Future<ExchangeRateCache?> _getCachedRate(
+    String currency,
+    String baseCurrency,
+  ) async {
     try {
-      final map = await _db.getExchangeRateCache(currency);
+      final map = await _db.getExchangeRateCache(
+        currency,
+        baseCurrency: baseCurrency,
+      );
       if (map == null) return null;
       return ExchangeRateCache.fromMap(map);
     } catch (e) {
@@ -250,21 +298,28 @@ class ExchangeRateRepository {
   }
 
   /// 儲存匯率到快取
-  Future<void> _cacheRates(Map<String, int> rates, String source) async {
+  Future<void> _cacheRates(
+    Map<String, int> rates,
+    String source,
+    String baseCurrency,
+  ) async {
     try {
       final now = DateTime.now();
 
       for (final entry in rates.entries) {
         final cache = ExchangeRateCache(
           currency: entry.key,
-          rateToHkd: entry.value,
+          baseCurrency: baseCurrency,
+          rate: entry.value,
           fetchedAt: now,
           source: source,
         );
         await _db.upsertExchangeRateCache(cache.toMap());
       }
 
-      AppLogger.debug('Cached ${rates.length} exchange rates');
+      AppLogger.debug(
+        'Cached ${rates.length} exchange rates for $baseCurrency',
+      );
     } catch (e) {
       AppLogger.error('Failed to cache rates', error: e);
     }

@@ -39,13 +39,17 @@ class ExchangeRateApi {
     return elapsed.inSeconds < _minIntervalSeconds;
   }
 
-  /// 取得指定幣種對港幣的匯率
+  /// 取得指定幣種對基準幣種的匯率
+  ///
+  /// [baseCurrency] 基準幣種（預設 HKD）
   ///
   /// 會先嘗試主要 API，失敗後自動切換到備用 API
   /// 回傳：{幣種: 匯率(×10⁶), ...}
   ///
   /// 注意：內建速率限制，若距上次請求不足 5 秒會回傳錯誤
-  Future<Result<Map<String, int>>> fetchRates() async {
+  Future<Result<Map<String, int>>> fetchRates({
+    String baseCurrency = 'HKD',
+  }) async {
     // 速率限制檢查
     if (_isRateLimited) {
       final elapsed = DateTime.now().difference(_lastRequestTime!);
@@ -65,6 +69,7 @@ class ExchangeRateApi {
     final primaryResult = await _fetchFromUrl(
       ApiConfig.primaryExchangeRateApi,
       'primary',
+      baseCurrency,
     );
 
     if (primaryResult.isSuccess) {
@@ -76,6 +81,7 @@ class ExchangeRateApi {
     return await _fetchFromUrl(
       ApiConfig.fallbackExchangeRateApi,
       'fallback',
+      baseCurrency,
     );
   }
 
@@ -83,11 +89,12 @@ class ExchangeRateApi {
   Future<Result<Map<String, int>>> _fetchFromUrl(
     String baseUrl,
     String source,
+    String baseCurrency,
   ) async {
     try {
-      // API 格式：{baseUrl}/hkd.json
-      // 回傳以 HKD 為基準的其他幣種匯率
-      final url = '$baseUrl/hkd.json';
+      // API 格式：{baseUrl}/{baseCurrency}.json
+      // 回傳以 baseCurrency 為基準的其他幣種匯率
+      final url = '$baseUrl/${baseCurrency.toLowerCase()}.json';
 
       AppLogger.network('GET', url);
 
@@ -108,36 +115,37 @@ class ExchangeRateApi {
           const NetworkException('Invalid API response format'),
         );
       }
-      final hkdRates = responseData['hkd'] as Map<String, dynamic>?;
+      final baseLower = baseCurrency.toLowerCase();
+      final baseRates = responseData[baseLower] as Map<String, dynamic>?;
 
-      if (hkdRates == null) {
+      if (baseRates == null) {
         return Result.failure(
-          const NetworkException('Missing HKD rates in API response'),
+          NetworkException('Missing $baseCurrency rates in API response'),
         );
       }
 
       // 轉換為 Map<String, int>，以 ×10⁶ 精度儲存
-      // 注意：API 回傳的是 1 HKD = X currency
-      // 我們需要的是 1 currency = X HKD（反向）
+      // 注意：API 回傳的是 1 baseCurrency = X currency
+      // 我們需要的是 1 currency = X baseCurrency（反向）
       final rates = <String, int>{};
 
       for (final currency in CurrencyConstants.supportedCurrencies) {
-        if (currency == 'HKD') {
-          // HKD 對 HKD 固定 1:1
+        if (currency == baseCurrency) {
+          // 相同幣種固定 1:1
           rates[currency] = CurrencyConstants.ratePrecision;
         } else {
           final currencyLower = currency.toLowerCase();
-          final rateFromHkd = hkdRates[currencyLower];
+          final rateFromBase = baseRates[currencyLower];
 
-          if (rateFromHkd != null) {
-            // API 回傳 1 HKD = X currency
-            // 反向計算 1 currency = (1/X) HKD
-            final rateValue = (rateFromHkd as num).toDouble();
+          if (rateFromBase != null) {
+            // API 回傳 1 baseCurrency = X currency
+            // 反向計算 1 currency = (1/X) baseCurrency
+            final rateValue = (rateFromBase as num).toDouble();
             if (rateValue > 0) {
-              final rateToHkd = 1.0 / rateValue;
+              final rateToBase = 1.0 / rateValue;
               // 轉換為 ×10⁶ 精度的整數
-              rates[currency] =
-                  (rateToHkd * CurrencyConstants.ratePrecision).round();
+              rates[currency] = (rateToBase * CurrencyConstants.ratePrecision)
+                  .round();
             }
           }
         }

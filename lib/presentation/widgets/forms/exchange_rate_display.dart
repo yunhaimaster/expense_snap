@@ -25,7 +25,7 @@ class ExchangeRateDisplay extends StatefulWidget {
   final String currency;
 
   /// 匯率變更回調
-  final void Function(int rateToHkd, ExchangeRateSource source) onRateChanged;
+  final void Function(int rate, ExchangeRateSource source) onRateChanged;
 
   /// 是否啟用
   final bool enabled;
@@ -73,7 +73,7 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
     final info = await provider.loadRate(widget.currency);
 
     if (info != null && mounted) {
-      widget.onRateChanged(info.rateToHkd, info.source);
+      widget.onRateChanged(info.rate, info.source);
     }
   }
 
@@ -90,7 +90,7 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
     if (success && mounted) {
       final info = provider.getRate(widget.currency);
       if (info != null) {
-        widget.onRateChanged(info.rateToHkd, info.source);
+        widget.onRateChanged(info.rate, info.source);
       }
       // 強制刷新成功時顯示提示
       if (forceRefresh) {

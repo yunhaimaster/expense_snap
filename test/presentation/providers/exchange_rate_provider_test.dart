@@ -12,20 +12,20 @@ import 'exchange_rate_provider_test.mocks.dart';
 
 void main() {
   final testRateInfo = ExchangeRateInfo(
-    rateToHkd: 7800000,
+    rate: 7800000,
     source: ExchangeRateSource.auto,
     fetchedAt: DateTime.now(),
   );
 
   final allRates = <String, ExchangeRateInfo>{
     'HKD': ExchangeRateInfo(
-      rateToHkd: CurrencyConstants.ratePrecision,
+      rate: CurrencyConstants.ratePrecision,
       source: ExchangeRateSource.auto,
       fetchedAt: DateTime.now(),
     ),
     'USD': testRateInfo,
     'CNY': ExchangeRateInfo(
-      rateToHkd: 1089000,
+      rate: 1089000,
       source: ExchangeRateSource.auto,
       fetchedAt: DateTime.now(),
     ),
@@ -34,7 +34,9 @@ void main() {
   // 註冊 dummy values（Mockito 需要）
   setUpAll(() {
     provideDummy<Result<ExchangeRateInfo>>(Result.success(testRateInfo));
-    provideDummy<Result<Map<String, ExchangeRateInfo>>>(Result.success(allRates));
+    provideDummy<Result<Map<String, ExchangeRateInfo>>>(
+      Result.success(allRates),
+    );
   });
 
   late MockExchangeRateRepository mockRepository;
@@ -46,12 +48,15 @@ void main() {
     // 預設 stub
     when(mockRepository.canRefresh).thenReturn(true);
     when(mockRepository.secondsUntilRefresh).thenReturn(0);
-    when(mockRepository.getRate(any))
-        .thenAnswer((_) async => Result.success(testRateInfo));
-    when(mockRepository.getAllRates())
-        .thenAnswer((_) async => Result.success(allRates));
-    when(mockRepository.refreshRates())
-        .thenAnswer((_) async => Result.success(allRates));
+    when(
+      mockRepository.getRate(any),
+    ).thenAnswer((_) async => Result.success(testRateInfo));
+    when(
+      mockRepository.getAllRates(),
+    ).thenAnswer((_) async => Result.success(allRates));
+    when(
+      mockRepository.refreshRates(),
+    ).thenAnswer((_) async => Result.success(allRates));
 
     provider = ExchangeRateProvider(repository: mockRepository);
   });
@@ -69,7 +74,7 @@ void main() {
       final result = await provider.loadRate('HKD');
 
       expect(result, isNotNull);
-      expect(result!.rateToHkd, CurrencyConstants.ratePrecision);
+      expect(result!.rate, CurrencyConstants.ratePrecision);
       expect(result.source, ExchangeRateSource.auto);
       // 不應調用 repository
       verifyNever(mockRepository.getRate('HKD'));
@@ -79,7 +84,7 @@ void main() {
       final result = await provider.loadRate('USD');
 
       expect(result, isNotNull);
-      expect(result!.rateToHkd, 7800000);
+      expect(result!.rate, 7800000);
       expect(provider.getRate('USD'), isNotNull);
       expect(provider.isLoading, false);
     });
@@ -194,7 +199,7 @@ void main() {
   group('ExchangeRateInfo', () {
     test('formattedRate 應正確格式化', () {
       final info = ExchangeRateInfo(
-        rateToHkd: 7800000,
+        rate: 7800000,
         source: ExchangeRateSource.auto,
         fetchedAt: DateTime.now(),
       );

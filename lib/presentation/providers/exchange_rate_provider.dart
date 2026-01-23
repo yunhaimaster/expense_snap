@@ -10,7 +10,7 @@ import '../../data/repositories/exchange_rate_repository.dart';
 /// 管理匯率獲取、快取和 UI 狀態
 class ExchangeRateProvider extends ChangeNotifier {
   ExchangeRateProvider({ExchangeRateRepository? repository})
-      : _repository = repository ?? ExchangeRateRepository();
+    : _repository = repository ?? ExchangeRateRepository();
 
   final ExchangeRateRepository _repository;
 
@@ -45,7 +45,7 @@ class ExchangeRateProvider extends ChangeNotifier {
     // HKD 固定 1:1
     if (currency == 'HKD') {
       final info = ExchangeRateInfo(
-        rateToHkd: CurrencyConstants.ratePrecision,
+        rate: CurrencyConstants.ratePrecision,
         source: ExchangeRateSource.auto,
         fetchedAt: DateTime.now(),
       );
@@ -74,7 +74,8 @@ class ExchangeRateProvider extends ChangeNotifier {
         onFailure: (error) {
           _error = error;
           AppLogger.warning(
-              'Failed to load rate for $currency: ${error.message}');
+            'Failed to load rate for $currency: ${error.message}',
+          );
           return null;
         },
         onSuccess: (info) {

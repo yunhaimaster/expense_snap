@@ -70,11 +70,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     if (info != null && mounted) {
       setState(() {
-        _currentRateMicros = info.rateToHkd;
+        _currentRateMicros = info.rate;
         _currentRateSource = info.source;
         if (!_useManualRate) {
           _exchangeRateController.text = Formatters.formatExchangeRate(
-            info.rateToHkd,
+            info.rate,
           );
         }
       });

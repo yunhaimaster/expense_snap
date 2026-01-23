@@ -12,7 +12,10 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const String _databaseName = 'expense_snap.db';
-  static const int _databaseVersion = 2; // v1→v2: 新增 category 欄位
+  static const int _databaseVersion = 3; // v2→v3: 新增 target_currency 欄位
+
+  /// 匯率快取最大條目數
+  static const int maxCacheEntries = 50;
 
   Database? _database;
   // 使用 Lock 確保並發初始化時的線程安全
@@ -79,7 +82,7 @@ class DatabaseHelper {
   Future<void> _onCreate(Database db, int version) async {
     AppLogger.database('Creating database tables (version $version)');
 
-    // 建立 expenses 表（含 category 欄位）
+    // 建立 expenses 表（含 category 和 target_currency 欄位）
     await db.execute('''
       CREATE TABLE expenses (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -91,6 +94,7 @@ class DatabaseHelper {
         hkd_amount INTEGER NOT NULL,
         description TEXT NOT NULL,
         category TEXT,
+        target_currency TEXT NOT NULL DEFAULT 'HKD',
         receipt_image_path TEXT,
         thumbnail_path TEXT,
         is_deleted INTEGER NOT NULL DEFAULT 0,
@@ -126,14 +130,20 @@ class DatabaseHelper {
     await db.execute('''
       CREATE INDEX idx_expenses_deleted_category ON expenses (is_deleted, category)
     ''');
+    // 目標幣種索引：支援多幣種查詢
+    await db.execute('''
+      CREATE INDEX idx_expenses_target_currency ON expenses (target_currency)
+    ''');
 
-    // 建立 exchange_rate_cache 表
+    // 建立 exchange_rate_cache 表（複合主鍵：currency + base_currency）
     await db.execute('''
       CREATE TABLE exchange_rate_cache (
-        currency TEXT PRIMARY KEY,
-        rate_to_hkd INTEGER NOT NULL,
+        currency TEXT NOT NULL,
+        base_currency TEXT NOT NULL DEFAULT 'HKD',
+        rate INTEGER NOT NULL,
         fetched_at TEXT NOT NULL,
-        source TEXT NOT NULL
+        source TEXT NOT NULL,
+        PRIMARY KEY (currency, base_currency)
       )
     ''');
 
@@ -191,7 +201,66 @@ class DatabaseHelper {
       // 執行 ANALYZE 更新統計資訊，優化查詢計劃
       await db.execute('ANALYZE');
 
-      AppLogger.database('Migration v1→v2 completed in ${stopwatch.elapsedMilliseconds}ms');
+      AppLogger.database(
+        'Migration v1→v2 completed in ${stopwatch.elapsedMilliseconds}ms',
+      );
+    }
+
+    // v2 → v3: 新增 target_currency 欄位，更新 exchange_rate_cache 結構
+    if (oldVersion < 3) {
+      AppLogger.database('Migration v2→v3: Adding target_currency column');
+
+      // 使用 transaction 確保原子性
+      await db.transaction((txn) async {
+        // 1. 新增 target_currency 欄位（預設 HKD）
+        await txn.execute(
+          "ALTER TABLE expenses ADD COLUMN target_currency TEXT NOT NULL DEFAULT 'HKD'",
+        );
+
+        // 2. 新增索引
+        await txn.execute('''
+          CREATE INDEX IF NOT EXISTS idx_expenses_target_currency ON expenses (target_currency)
+        ''');
+
+        // 3. 重建 exchange_rate_cache 表（複合主鍵）
+        // 3a. 備份舊資料
+        await txn.execute('''
+          CREATE TABLE exchange_rate_cache_backup AS
+          SELECT currency, rate_to_hkd as rate, fetched_at, source
+          FROM exchange_rate_cache
+        ''');
+
+        // 3b. 刪除舊表
+        await txn.execute('DROP TABLE exchange_rate_cache');
+
+        // 3c. 建立新表（複合主鍵）
+        await txn.execute('''
+          CREATE TABLE exchange_rate_cache (
+            currency TEXT NOT NULL,
+            base_currency TEXT NOT NULL DEFAULT 'HKD',
+            rate INTEGER NOT NULL,
+            fetched_at TEXT NOT NULL,
+            source TEXT NOT NULL,
+            PRIMARY KEY (currency, base_currency)
+          )
+        ''');
+
+        // 3d. 恢復資料（舊資料都是 HKD 為基準）
+        await txn.execute('''
+          INSERT INTO exchange_rate_cache (currency, base_currency, rate, fetched_at, source)
+          SELECT currency, 'HKD', rate, fetched_at, source
+          FROM exchange_rate_cache_backup
+        ''');
+
+        // 3e. 刪除備份表
+        await txn.execute('DROP TABLE exchange_rate_cache_backup');
+      });
+
+      await db.execute('ANALYZE');
+
+      AppLogger.database(
+        'Migration v2→v3 completed in ${stopwatch.elapsedMilliseconds}ms',
+      );
     }
 
     stopwatch.stop();
@@ -281,11 +350,14 @@ class DatabaseHelper {
     final monthStr = month.toString().padLeft(2, '0');
     final yearMonthPrefix = '$year-$monthStr';
 
-    final results = await db.rawQuery('''
+    final results = await db.rawQuery(
+      '''
       SELECT COUNT(*) as count
       FROM expenses
       WHERE substr(date, 1, 7) = ? AND is_deleted = 0
-    ''', [yearMonthPrefix]);
+    ''',
+      [yearMonthPrefix],
+    );
 
     return results.first['count'] as int;
   }
@@ -319,7 +391,9 @@ class DatabaseHelper {
   }
 
   /// 查詢待清理的過期刪除支出
-  Future<List<Map<String, dynamic>>> getExpiredDeletedExpenses(int retentionDays) async {
+  Future<List<Map<String, dynamic>>> getExpiredDeletedExpenses(
+    int retentionDays,
+  ) async {
     final db = await database;
     final cutoffDate = DateTime.now().subtract(Duration(days: retentionDays));
 
@@ -350,7 +424,7 @@ class DatabaseHelper {
     return rows;
   }
 
-  /// 查詢月份摘要
+  /// 查詢月份摘要（支援多幣種偵測）
   Future<Map<String, dynamic>> getMonthSummary(int year, int month) async {
     final db = await database;
 
@@ -358,32 +432,47 @@ class DatabaseHelper {
     final monthStr = month.toString().padLeft(2, '0');
     final yearMonthPrefix = '$year-$monthStr';
 
-    final results = await db.rawQuery('''
+    final results = await db.rawQuery(
+      '''
       SELECT
         COUNT(*) as total_count,
-        COALESCE(SUM(hkd_amount), 0) as total_hkd_amount
+        COALESCE(SUM(hkd_amount), 0) as total_hkd_amount,
+        COUNT(DISTINCT target_currency) as currency_count,
+        (
+          SELECT target_currency
+          FROM expenses
+          WHERE substr(date, 1, 7) = ? AND is_deleted = 0
+          GROUP BY target_currency
+          ORDER BY COUNT(*) DESC
+          LIMIT 1
+        ) as dominant_currency
       FROM expenses
       WHERE substr(date, 1, 7) = ? AND is_deleted = 0
-    ''', [yearMonthPrefix]);
+    ''',
+      [yearMonthPrefix, yearMonthPrefix],
+    );
 
     return results.first;
   }
 
   // ============ Exchange Rate Cache ============
 
-  /// 取得快取匯率
-  Future<Map<String, dynamic>?> getExchangeRateCache(String currency) async {
+  /// 取得快取匯率（支援指定基準幣種）
+  Future<Map<String, dynamic>?> getExchangeRateCache(
+    String currency, {
+    String baseCurrency = 'HKD',
+  }) async {
     final db = await database;
     final results = await db.query(
       'exchange_rate_cache',
-      where: 'currency = ?',
-      whereArgs: [currency],
+      where: 'currency = ? AND base_currency = ?',
+      whereArgs: [currency, baseCurrency],
       limit: 1,
     );
     return results.isNotEmpty ? results.first : null;
   }
 
-  /// 儲存或更新快取匯率
+  /// 儲存或更新快取匯率（支援指定基準幣種）
   Future<void> upsertExchangeRateCache(Map<String, dynamic> cache) async {
     final db = await database;
     await db.insert(
@@ -391,14 +480,53 @@ class DatabaseHelper {
       cache,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    AppLogger.database('Upsert exchange rate cache', table: 'exchange_rate_cache');
+    AppLogger.database(
+      'Upsert exchange rate cache',
+      table: 'exchange_rate_cache',
+    );
+
+    // 清理超過限制的舊快取
+    await _cleanupOldCache(db);
   }
 
-  /// 清除所有匯率快取（用於強制刷新）
-  Future<void> clearExchangeRateCache() async {
+  /// 清理超過限制的舊快取
+  Future<void> _cleanupOldCache(Database db) async {
+    final count = Sqflite.firstIntValue(
+      await db.rawQuery('SELECT COUNT(*) FROM exchange_rate_cache'),
+    );
+
+    if (count != null && count > maxCacheEntries) {
+      final deleted = await db.rawDelete('''
+        DELETE FROM exchange_rate_cache
+        WHERE rowid NOT IN (
+          SELECT rowid FROM exchange_rate_cache
+          ORDER BY fetched_at DESC LIMIT $maxCacheEntries
+        )
+      ''');
+      AppLogger.database(
+        'Cleaned up exchange rate cache',
+        table: 'exchange_rate_cache',
+        affectedRows: deleted,
+      );
+    }
+  }
+
+  /// 清除匯率快取（用於強制刷新）
+  Future<void> clearExchangeRateCache({String? baseCurrency}) async {
     final db = await database;
-    await db.delete('exchange_rate_cache');
-    AppLogger.database('Cleared exchange rate cache', table: 'exchange_rate_cache');
+    if (baseCurrency != null) {
+      await db.delete(
+        'exchange_rate_cache',
+        where: 'base_currency = ?',
+        whereArgs: [baseCurrency],
+      );
+    } else {
+      await db.delete('exchange_rate_cache');
+    }
+    AppLogger.database(
+      'Cleared exchange rate cache',
+      table: 'exchange_rate_cache',
+    );
   }
 
   // ============ Backup Status ============

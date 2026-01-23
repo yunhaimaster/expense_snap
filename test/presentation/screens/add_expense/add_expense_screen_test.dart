@@ -23,7 +23,7 @@ void main() {
   late MockImageService mockImageService;
 
   final testRateInfo = ExchangeRateInfo(
-    rateToHkd: 1000000,
+    rate: 1000000,
     source: ExchangeRateSource.auto,
     fetchedAt: DateTime.now(),
   );
@@ -32,7 +32,8 @@ void main() {
     // 註冊 dummy values
     provideDummy<Result<ExchangeRateInfo>>(Result.success(testRateInfo));
     provideDummy<Result<Map<String, ExchangeRateInfo>>>(
-        Result.success(<String, ExchangeRateInfo>{}));
+      Result.success(<String, ExchangeRateInfo>{}),
+    );
   });
 
   setUp(() {
@@ -41,8 +42,9 @@ void main() {
     mockImageService = MockImageService();
 
     // 預設 stub
-    when(mockExchangeRateRepository.getRate(any))
-        .thenAnswer((_) async => Result.success(testRateInfo));
+    when(
+      mockExchangeRateRepository.getRate(any),
+    ).thenAnswer((_) async => Result.success(testRateInfo));
     when(mockExchangeRateRepository.canRefresh).thenReturn(true);
     when(mockExchangeRateRepository.secondsUntilRefresh).thenReturn(0);
   });
@@ -60,7 +62,8 @@ void main() {
       providers: [
         ChangeNotifierProvider<ExpenseProvider>.value(value: expenseProvider),
         ChangeNotifierProvider<ExchangeRateProvider>.value(
-            value: exchangeRateProvider),
+          value: exchangeRateProvider,
+        ),
       ],
       child: const MaterialApp(
         locale: Locale('zh'),
