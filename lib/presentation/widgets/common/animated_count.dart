@@ -230,6 +230,7 @@ class AnimatedAmount extends StatefulWidget {
     this.style,
     this.currencySymbol = '\$',
     this.decimalDigits = 2,
+    this.hasMixedCurrencies = false,
   });
 
   /// 金額（分）
@@ -249,6 +250,9 @@ class AnimatedAmount extends StatefulWidget {
 
   /// 小數位數
   final int decimalDigits;
+
+  /// 是否為混合幣種（顯示 ≈ 前綴）
+  final bool hasMixedCurrencies;
 
   @override
   State<AnimatedAmount> createState() => _AnimatedAmountState();
@@ -303,21 +307,45 @@ class _AnimatedAmountState extends State<AnimatedAmount>
   Widget build(BuildContext context) {
     // 減少動畫模式
     if (AnimationUtils.shouldReduceMotion(context)) {
-      return Text(
-        _formatAmount(widget.amount.toDouble()),
-        style: widget.style,
+      return _buildWithSemantics(
+        Text(
+          _formatAmount(widget.amount.toDouble()),
+          style: widget.style,
+        ),
       );
     }
 
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        return Text(
-          _formatAmount(_animation.value),
-          style: widget.style,
+        return _buildWithSemantics(
+          Text(
+            _formatAmount(_animation.value),
+            style: widget.style,
+          ),
         );
       },
     );
+  }
+
+  /// 為混合幣種添加無障礙語義標籤
+  Widget _buildWithSemantics(Widget child) {
+    if (!widget.hasMixedCurrencies) {
+      return child;
+    }
+    // 混合幣種時，為 ≈ 符號提供語義說明
+    return Semantics(
+      label: _getSemanticLabel(),
+      child: ExcludeSemantics(child: child),
+    );
+  }
+
+  /// 取得無障礙語義標籤
+  String _getSemanticLabel() {
+    final amount = widget.amount / 100;
+    final formatted = amount.toStringAsFixed(widget.decimalDigits);
+    // 「約」表示這是近似值
+    return '約 ${widget.currencySymbol}$formatted';
   }
 
   String _formatAmount(double cents) {
@@ -330,6 +358,8 @@ class _AnimatedAmountState extends State<AnimatedAmount>
     );
     final formatted =
         widget.decimalDigits > 0 ? '$intPart.${parts[1]}' : intPart;
-    return '${widget.currencySymbol}$formatted';
+    // 混合幣種時顯示 ≈ 前綴
+    final prefix = widget.hasMixedCurrencies ? '≈ ' : '';
+    return '$prefix${widget.currencySymbol}$formatted';
   }
 }

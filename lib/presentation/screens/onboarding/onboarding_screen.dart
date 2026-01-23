@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../core/constants/currency_constants.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -30,6 +31,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   int _currentPage = 0;
   bool _isLoading = false;
+  String? _selectedCurrency;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 根據 locale 自動選擇預設幣種（只在首次設定）
+    if (_selectedCurrency == null) {
+      final locale = Localizations.localeOf(context);
+      _selectedCurrency = CurrencyConstants.currencyFromLocale(locale);
+    }
+  }
 
   /// Onboarding 頁面資料（使用 key 引用，實際文字在 build 時透過 l10n 取得）
   static const _pages = [
@@ -89,6 +101,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           : _nameController.text.trim();
       await db.setSetting('user_name', name);
 
+      // 儲存主要幣種
+      final currency =
+          _selectedCurrency ?? CurrencyConstants.defaultPrimaryCurrency;
+      await db.setSetting('primary_currency', currency);
+
       // 標記 onboarding 完成
       await db.setSetting('onboarding_completed', 'true');
 
@@ -117,7 +134,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: TextButton(
-                  onPressed: _isLoading ? null : () => _completeOnboarding(skip: true),
+                  onPressed: _isLoading
+                      ? null
+                      : () => _completeOnboarding(skip: true),
                   child: Text(
                     S.of(context).onboarding_skip,
                     style: const TextStyle(
@@ -158,8 +177,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onPressed: _isLoading
                       ? null
                       : (_currentPage < _pages.length - 1
-                          ? _nextPage
-                          : _completeOnboarding),
+                            ? _nextPage
+                            : _completeOnboarding),
                   child: _isLoading
                       ? const SizedBox(
                           width: 20,
@@ -191,13 +210,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     // 根據頁面索引取得對應的標題和描述
     final String title;
     final String description;
+    final bool isCurrencyPage = page.pageIndex == 2;
     switch (page.pageIndex) {
       case 1:
         title = l10n.onboarding_page1Title;
         description = l10n.onboarding_page1Desc;
       case 2:
-        title = l10n.onboarding_page2Title;
-        description = l10n.onboarding_page2Desc;
+        // 第二頁改為幣種選擇
+        title = l10n.onboarding_selectCurrencyTitle;
+        description = l10n.onboarding_selectCurrencyDesc;
       case 3:
         title = l10n.onboarding_page3Title;
         description = l10n.onboarding_page3Desc;
@@ -236,8 +257,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Text(
             title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              fontWeight: FontWeight.bold,
+            ),
             textAlign: TextAlign.center,
           ),
 
@@ -247,11 +268,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Text(
             description,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppColors.textSecondary,
-                  height: 1.5,
-                ),
+              color: AppColors.textSecondary,
+              height: 1.5,
+            ),
             textAlign: TextAlign.center,
           ),
+
+          // 第二頁顯示幣種選擇
+          if (isCurrencyPage) ...[
+            const SizedBox(height: 24),
+            _buildCurrencyGrid(),
+          ],
 
           // 最後一頁顯示名稱輸入
           if (page.isLastPage) ...[
@@ -278,6 +305,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 32),
         ],
       ),
+    );
+  }
+
+  /// 建立幣種選擇 Grid
+  Widget _buildCurrencyGrid() {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      alignment: WrapAlignment.center,
+      children: CurrencyConstants.primaryCurrencies.map((currency) {
+        final isSelected = currency == _selectedCurrency;
+        final symbol = CurrencyConstants.currencySymbols[currency] ?? currency;
+        return ChoiceChip(
+          label: Text('$symbol $currency'),
+          selected: isSelected,
+          onSelected: (selected) {
+            if (selected) {
+              setState(() => _selectedCurrency = currency);
+              AnimationUtils.selectionClick();
+            }
+          },
+          selectedColor: AppColors.primary.withValues(alpha: 0.2),
+          checkmarkColor: AppColors.primary,
+          labelStyle: TextStyle(
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            color: isSelected ? AppColors.primary : null,
+          ),
+        );
+      }).toList(),
     );
   }
 }

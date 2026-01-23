@@ -3,6 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../core/constants/currency_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
@@ -113,6 +114,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onTap: () => _showLanguageDialog(localeProvider),
                       );
                     },
+                  ),
+                  // 主要幣種設定
+                  ListTile(
+                    leading: const Icon(Icons.currency_exchange_outlined),
+                    title: Text(S.of(context).settings_primaryCurrency),
+                    subtitle: Text(
+                      '${CurrencyConstants.currencySymbols[provider.primaryCurrency]} '
+                      '${provider.primaryCurrency}',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => _showCurrencyDialog(provider),
                   ),
 
                   const Divider(),
@@ -267,6 +279,98 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _showCurrencyDialog(SettingsProvider provider) async {
+    final s = S.of(context);
+    final selectedCurrency = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(s.settings_selectCurrency),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 警告訊息
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.warning.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.info_outline,
+                    color: AppColors.warning,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      s.settings_changeCurrencyWarning,
+                      style: Theme.of(dialogContext).textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            // 幣種列表
+            SizedBox(
+              width: double.maxFinite,
+              height: 300,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: CurrencyConstants.primaryCurrencies.length,
+                itemBuilder: (context, index) {
+                  final currency = CurrencyConstants.primaryCurrencies[index];
+                  final isSelected = currency == provider.primaryCurrency;
+                  final symbol =
+                      CurrencyConstants.currencySymbols[currency] ?? currency;
+                  final name =
+                      CurrencyConstants.currencyNames[currency] ?? currency;
+                  return ListTile(
+                    leading: Text(
+                      symbol,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    title: Text(currency),
+                    subtitle: Text(name),
+                    trailing: isSelected
+                        ? Icon(
+                            Icons.check,
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                        : null,
+                    selected: isSelected,
+                    onTap: () => Navigator.of(dialogContext).pop(currency),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(s.common_cancel),
+          ),
+        ],
+      ),
+    );
+
+    if (selectedCurrency == null || !mounted) return;
+
+    final success = await provider.updatePrimaryCurrency(selectedCurrency);
+
+    if (mounted && success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).settings_saved)),
+      );
+    }
   }
 
   Future<void> _showThemeModeDialog(ThemeProvider themeProvider) async {

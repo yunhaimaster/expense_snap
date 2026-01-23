@@ -281,6 +281,9 @@ class SEn extends S {
   String get monthSummary_isLatestMonth => 'Already at latest month';
 
   @override
+  String get monthSummary_mixedCurrencies => 'Mixed currencies';
+
+  @override
   String get export_title => 'Export Report';
 
   @override
@@ -612,6 +615,13 @@ class SEn extends S {
       'Export Excel + receipt images\nEasy expense reporting';
 
   @override
+  String get onboarding_selectCurrencyTitle => 'Select Settlement Currency';
+
+  @override
+  String get onboarding_selectCurrencyDesc =>
+      'Expenses will be automatically converted to this currency';
+
+  @override
   String get onboarding_nameLabel => 'Your Name (Optional)';
 
   @override
@@ -820,6 +830,27 @@ class SEn extends S {
   String get currency_USD => 'USD';
 
   @override
+  String get currency_EUR => 'EUR';
+
+  @override
+  String get currency_GBP => 'GBP';
+
+  @override
+  String get currency_JPY => 'JPY';
+
+  @override
+  String get currency_TWD => 'TWD';
+
+  @override
+  String get currency_KRW => 'KRW';
+
+  @override
+  String get currency_SGD => 'SGD';
+
+  @override
+  String get currency_AUD => 'AUD';
+
+  @override
   String get datePicker_selectDate => 'Select Date';
 
   @override
@@ -883,6 +914,16 @@ class SEn extends S {
 
   @override
   String get settings_languageSystem => 'Follow System';
+
+  @override
+  String get settings_primaryCurrency => 'Primary Currency';
+
+  @override
+  String get settings_selectCurrency => 'Select Currency';
+
+  @override
+  String get settings_changeCurrencyWarning =>
+      'Changes only affect future expenses';
 
   @override
   String get settings_selectTheme => 'Select Theme';

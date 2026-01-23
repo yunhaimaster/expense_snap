@@ -278,6 +278,9 @@ class SJa extends S {
   String get monthSummary_isLatestMonth => '最新の月です';
 
   @override
+  String get monthSummary_mixedCurrencies => '複数通貨';
+
+  @override
   String get export_title => 'レポートをエクスポート';
 
   @override
@@ -604,6 +607,12 @@ class SJa extends S {
   String get onboarding_page3Desc => 'Excel + レシート画像をエクスポート\n簡単に経費精算';
 
   @override
+  String get onboarding_selectCurrencyTitle => '決済通貨を選択';
+
+  @override
+  String get onboarding_selectCurrencyDesc => '支出はこの通貨に自動変換されます';
+
+  @override
   String get onboarding_nameLabel => 'お名前（任意）';
 
   @override
@@ -808,6 +817,27 @@ class SJa extends S {
   String get currency_USD => '米ドル';
 
   @override
+  String get currency_EUR => 'ユーロ';
+
+  @override
+  String get currency_GBP => '英ポンド';
+
+  @override
+  String get currency_JPY => '日本円';
+
+  @override
+  String get currency_TWD => '台湾ドル';
+
+  @override
+  String get currency_KRW => '韓国ウォン';
+
+  @override
+  String get currency_SGD => 'シンガポールドル';
+
+  @override
+  String get currency_AUD => '豪ドル';
+
+  @override
   String get datePicker_selectDate => '日付を選択';
 
   @override
@@ -869,6 +899,15 @@ class SJa extends S {
 
   @override
   String get settings_languageSystem => 'システム設定に従う';
+
+  @override
+  String get settings_primaryCurrency => 'メイン通貨';
+
+  @override
+  String get settings_selectCurrency => '通貨を選択';
+
+  @override
+  String get settings_changeCurrencyWarning => '変更は今後の支出にのみ適用されます';
 
   @override
   String get settings_selectTheme => 'テーマを選択';

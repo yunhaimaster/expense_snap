@@ -278,6 +278,9 @@ class SKo extends S {
   String get monthSummary_isLatestMonth => '최신 월입니다';
 
   @override
+  String get monthSummary_mixedCurrencies => '다중 통화';
+
+  @override
   String get export_title => '보고서 내보내기';
 
   @override
@@ -607,6 +610,12 @@ class SKo extends S {
   String get onboarding_page3Desc => 'Excel + 영수증 이미지 내보내기\n간편한 경비 정산';
 
   @override
+  String get onboarding_selectCurrencyTitle => '결제 통화 선택';
+
+  @override
+  String get onboarding_selectCurrencyDesc => '지출이 자동으로 이 통화로 변환됩니다';
+
+  @override
   String get onboarding_nameLabel => '이름 (선택사항)';
 
   @override
@@ -811,6 +820,27 @@ class SKo extends S {
   String get currency_USD => '미국 달러';
 
   @override
+  String get currency_EUR => '유로';
+
+  @override
+  String get currency_GBP => '영국 파운드';
+
+  @override
+  String get currency_JPY => '일본 엔';
+
+  @override
+  String get currency_TWD => '대만 달러';
+
+  @override
+  String get currency_KRW => '한국 원';
+
+  @override
+  String get currency_SGD => '싱가포르 달러';
+
+  @override
+  String get currency_AUD => '호주 달러';
+
+  @override
   String get datePicker_selectDate => '날짜 선택';
 
   @override
@@ -872,6 +902,15 @@ class SKo extends S {
 
   @override
   String get settings_languageSystem => '시스템 설정';
+
+  @override
+  String get settings_primaryCurrency => '기본 통화';
+
+  @override
+  String get settings_selectCurrency => '통화 선택';
+
+  @override
+  String get settings_changeCurrencyWarning => '변경 사항은 향후 지출에만 적용됩니다';
 
   @override
   String get settings_selectTheme => '테마 선택';

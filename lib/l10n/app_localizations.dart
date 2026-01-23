@@ -620,6 +620,12 @@ abstract class S {
   /// **'已是最新月份'**
   String get monthSummary_isLatestMonth;
 
+  /// No description provided for @monthSummary_mixedCurrencies.
+  ///
+  /// In zh, this message translates to:
+  /// **'多幣種'**
+  String get monthSummary_mixedCurrencies;
+
   /// No description provided for @export_title.
   ///
   /// In zh, this message translates to:
@@ -1196,6 +1202,18 @@ abstract class S {
   /// **'月結時一鍵匯出 Excel + 收據圖片\n輕鬆完成報銷'**
   String get onboarding_page3Desc;
 
+  /// No description provided for @onboarding_selectCurrencyTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'選擇結算幣種'**
+  String get onboarding_selectCurrencyTitle;
+
+  /// No description provided for @onboarding_selectCurrencyDesc.
+  ///
+  /// In zh, this message translates to:
+  /// **'支出將自動轉換為此幣種'**
+  String get onboarding_selectCurrencyDesc;
+
   /// No description provided for @onboarding_nameLabel.
   ///
   /// In zh, this message translates to:
@@ -1592,6 +1610,48 @@ abstract class S {
   /// **'美元'**
   String get currency_USD;
 
+  /// No description provided for @currency_EUR.
+  ///
+  /// In zh, this message translates to:
+  /// **'歐元'**
+  String get currency_EUR;
+
+  /// No description provided for @currency_GBP.
+  ///
+  /// In zh, this message translates to:
+  /// **'英鎊'**
+  String get currency_GBP;
+
+  /// No description provided for @currency_JPY.
+  ///
+  /// In zh, this message translates to:
+  /// **'日圓'**
+  String get currency_JPY;
+
+  /// No description provided for @currency_TWD.
+  ///
+  /// In zh, this message translates to:
+  /// **'新台幣'**
+  String get currency_TWD;
+
+  /// No description provided for @currency_KRW.
+  ///
+  /// In zh, this message translates to:
+  /// **'韓元'**
+  String get currency_KRW;
+
+  /// No description provided for @currency_SGD.
+  ///
+  /// In zh, this message translates to:
+  /// **'新加坡幣'**
+  String get currency_SGD;
+
+  /// No description provided for @currency_AUD.
+  ///
+  /// In zh, this message translates to:
+  /// **'澳幣'**
+  String get currency_AUD;
+
   /// No description provided for @datePicker_selectDate.
   ///
   /// In zh, this message translates to:
@@ -1717,6 +1777,24 @@ abstract class S {
   /// In zh, this message translates to:
   /// **'跟隨系統'**
   String get settings_languageSystem;
+
+  /// No description provided for @settings_primaryCurrency.
+  ///
+  /// In zh, this message translates to:
+  /// **'主要幣種'**
+  String get settings_primaryCurrency;
+
+  /// No description provided for @settings_selectCurrency.
+  ///
+  /// In zh, this message translates to:
+  /// **'選擇幣種'**
+  String get settings_selectCurrency;
+
+  /// No description provided for @settings_changeCurrencyWarning.
+  ///
+  /// In zh, this message translates to:
+  /// **'更改僅影響未來的支出記錄'**
+  String get settings_changeCurrencyWarning;
 
   /// No description provided for @settings_selectTheme.
   ///

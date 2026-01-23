@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/currency_constants.dart';
 import '../../../../core/utils/animation_utils.dart';
 import '../../../../data/models/expense.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -172,6 +173,11 @@ class _MonthSummaryCardState extends State<MonthSummaryCard> {
                       amount: widget.summary.totalConvertedAmountCents,
                       icon: Icons.account_balance_wallet_outlined,
                       color: Theme.of(context).colorScheme.primary,
+                      currencySymbol: CurrencyConstants.currencySymbols[
+                          widget.summary.dominantCurrency ?? 'HKD'] ?? 'HK\$',
+                      decimalDigits: CurrencyConstants.getDecimalPlaces(
+                          widget.summary.dominantCurrency ?? 'HKD'),
+                      hasMixedCurrencies: widget.summary.hasMixedCurrencies,
                     ),
 
                     // 分隔線
@@ -210,12 +216,18 @@ class _AnimatedStatItem extends StatelessWidget {
     required this.amount,
     required this.icon,
     required this.color,
+    this.currencySymbol = '\$',
+    this.decimalDigits = 2,
+    this.hasMixedCurrencies = false,
   });
 
   final String label;
   final int amount;
   final IconData icon;
   final Color color;
+  final String currencySymbol;
+  final int decimalDigits;
+  final bool hasMixedCurrencies;
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +247,9 @@ class _AnimatedStatItem extends StatelessWidget {
         const SizedBox(height: 4),
         AnimatedAmount(
           amount: amount,
-          currencySymbol: 'HK\$',
+          currencySymbol: currencySymbol,
+          decimalDigits: decimalDigits,
+          hasMixedCurrencies: hasMixedCurrencies,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: color,

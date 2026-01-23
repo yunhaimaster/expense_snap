@@ -63,8 +63,8 @@ void main() {
       await tester.tap(find.text('下一步'));
       await tester.pumpAndSettle();
 
-      // 第二頁標題
-      expect(find.text('多幣種自動轉換'), findsOneWidget);
+      // 第二頁標題（幣種選擇）
+      expect(find.text('選擇結算幣種'), findsOneWidget);
     });
 
     testWidgets('navigates through all pages correctly', (tester) async {
@@ -87,8 +87,10 @@ void main() {
       await tester.tap(find.text('下一步'));
       await tester.pumpAndSettle();
 
-      // 應該在第二頁
-      expect(find.text('多幣種自動轉換'), findsOneWidget);
+      // 應該在第二頁（幣種選擇）
+      expect(find.text('選擇結算幣種'), findsOneWidget);
+      // 應有幣種選擇 chips
+      expect(find.byType(ChoiceChip), findsWidgets);
 
       // 點擊下一步到第三頁
       await tester.tap(find.text('下一步'));

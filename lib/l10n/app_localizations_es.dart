@@ -283,6 +283,9 @@ class SEs extends S {
   String get monthSummary_isLatestMonth => 'Ya está en el mes más reciente';
 
   @override
+  String get monthSummary_mixedCurrencies => 'Múltiples monedas';
+
+  @override
   String get export_title => 'Exportar informe';
 
   @override
@@ -615,6 +618,14 @@ class SEs extends S {
       'Exporta Excel + imágenes de recibos\nInformes de gastos fáciles';
 
   @override
+  String get onboarding_selectCurrencyTitle =>
+      'Seleccionar moneda de liquidación';
+
+  @override
+  String get onboarding_selectCurrencyDesc =>
+      'Los gastos se convertirán automáticamente a esta moneda';
+
+  @override
   String get onboarding_nameLabel => 'Su nombre (Opcional)';
 
   @override
@@ -825,6 +836,27 @@ class SEs extends S {
   String get currency_USD => 'USD';
 
   @override
+  String get currency_EUR => 'Euro';
+
+  @override
+  String get currency_GBP => 'Libra esterlina';
+
+  @override
+  String get currency_JPY => 'Yen japonés';
+
+  @override
+  String get currency_TWD => 'Dólar taiwanés';
+
+  @override
+  String get currency_KRW => 'Won surcoreano';
+
+  @override
+  String get currency_SGD => 'Dólar singapurense';
+
+  @override
+  String get currency_AUD => 'Dólar australiano';
+
+  @override
   String get datePicker_selectDate => 'Seleccionar fecha';
 
   @override
@@ -889,6 +921,16 @@ class SEs extends S {
 
   @override
   String get settings_languageSystem => 'Seguir sistema';
+
+  @override
+  String get settings_primaryCurrency => 'Moneda principal';
+
+  @override
+  String get settings_selectCurrency => 'Seleccionar moneda';
+
+  @override
+  String get settings_changeCurrencyWarning =>
+      'Los cambios solo afectan a gastos futuros';
 
   @override
   String get settings_selectTheme => 'Seleccionar tema';

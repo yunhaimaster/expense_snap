@@ -278,6 +278,9 @@ class SZh extends S {
   String get monthSummary_isLatestMonth => '已是最新月份';
 
   @override
+  String get monthSummary_mixedCurrencies => '多幣種';
+
+  @override
   String get export_title => '匯出報銷單';
 
   @override
@@ -604,6 +607,12 @@ class SZh extends S {
   String get onboarding_page3Desc => '月結時一鍵匯出 Excel + 收據圖片\n輕鬆完成報銷';
 
   @override
+  String get onboarding_selectCurrencyTitle => '選擇結算幣種';
+
+  @override
+  String get onboarding_selectCurrencyDesc => '支出將自動轉換為此幣種';
+
+  @override
   String get onboarding_nameLabel => '您的名字（選填）';
 
   @override
@@ -808,6 +817,27 @@ class SZh extends S {
   String get currency_USD => '美元';
 
   @override
+  String get currency_EUR => '歐元';
+
+  @override
+  String get currency_GBP => '英鎊';
+
+  @override
+  String get currency_JPY => '日圓';
+
+  @override
+  String get currency_TWD => '新台幣';
+
+  @override
+  String get currency_KRW => '韓元';
+
+  @override
+  String get currency_SGD => '新加坡幣';
+
+  @override
+  String get currency_AUD => '澳幣';
+
+  @override
   String get datePicker_selectDate => '選擇日期';
 
   @override
@@ -869,6 +899,15 @@ class SZh extends S {
 
   @override
   String get settings_languageSystem => '跟隨系統';
+
+  @override
+  String get settings_primaryCurrency => '主要幣種';
+
+  @override
+  String get settings_selectCurrency => '選擇幣種';
+
+  @override
+  String get settings_changeCurrencyWarning => '更改僅影響未來的支出記錄';
 
   @override
   String get settings_selectTheme => '選擇主題';
