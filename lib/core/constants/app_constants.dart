@@ -4,7 +4,6 @@ class AppConstants {
 
   // App 資訊
   static const String appName = 'Expense Snap';
-  static const String appVersion = '1.2.0';
 
   // 圖片設定
   static const int imageMaxWidth = 1920;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_constants.dart';
@@ -22,9 +23,15 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  PackageInfo? _packageInfo;
+
   @override
   void initState() {
     super.initState();
+    // 載入版本資訊
+    PackageInfo.fromPlatform().then((info) {
+      if (mounted) setState(() => _packageInfo = info);
+    });
     // 載入設定
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -179,8 +186,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ListTile(
                     leading: const Icon(Icons.info_outline),
                     title: Text(S.of(context).settings_version),
-                    subtitle: const Text(
-                      '${AppConstants.appName} v${AppConstants.appVersion}',
+                    subtitle: Text(
+                      _packageInfo != null
+                          ? '${_packageInfo!.appName} v${_packageInfo!.version} (${_packageInfo!.buildNumber})'
+                          : '${AppConstants.appName} v...',
                     ),
                   ),
                   ListTile(
