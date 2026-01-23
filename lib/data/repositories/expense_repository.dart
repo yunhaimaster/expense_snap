@@ -174,13 +174,19 @@ class ExpenseRepository implements IExpenseRepository {
     try {
       final map = await _db.getMonthSummary(year, month);
 
+      // 解析混合幣種資訊
+      final currencyCount = map['currency_count'] as int? ?? 1;
+      final dominantCurrency = map['dominant_currency'] as String?;
+
       // NOTE: DB column 仍為 total_hkd_amount，將在 migration 中重命名
       return Result.success(
         MonthSummary(
           year: year,
           month: month,
-          totalCount: map['total_count'] as int,
-          totalConvertedAmountCents: map['total_hkd_amount'] as int,
+          totalCount: (map['total_count'] as int?) ?? 0,
+          totalConvertedAmountCents: (map['total_hkd_amount'] as int?) ?? 0,
+          dominantCurrency: dominantCurrency,
+          hasMixedCurrencies: currencyCount > 1,
         ),
       );
     } catch (e) {

@@ -254,12 +254,20 @@ class MonthSummary {
     required this.month,
     required this.totalCount,
     required this.totalConvertedAmountCents,
+    this.dominantCurrency,
+    this.hasMixedCurrencies = false,
   });
 
   final int year;
   final int month;
   final int totalCount;
   final int totalConvertedAmountCents;
+
+  /// 主要的目標幣種（如果所有支出相同）
+  final String? dominantCurrency;
+
+  /// 是否有混合幣種
+  final bool hasMixedCurrencies;
 
   /// 格式化的月份
   /// 根據 locale 自動選擇格式：
@@ -272,13 +280,15 @@ class MonthSummary {
     return Formatters.formatMonth(DateTime(year, month), locale: locale);
   }
 
-  /// 格式化的總金額
-  /// TODO: Phase 5 - 改為方法並傳入 primaryCurrency 以支援可配置主要幣種
-  String get formattedTotalAmount =>
-      Formatters.formatAmount(
-        totalConvertedAmountCents,
-        CurrencyConstants.defaultPrimaryCurrency,
-      );
+  /// 格式化的總金額（處理混合幣種）
+  String get formattedTotalAmount {
+    final currency = dominantCurrency ?? CurrencyConstants.defaultPrimaryCurrency;
+    final formatted = Formatters.formatAmount(totalConvertedAmountCents, currency);
+    if (hasMixedCurrencies) {
+      return '≈ $formatted';
+    }
+    return formatted;
+  }
 
   factory MonthSummary.empty(int year, int month) {
     return MonthSummary(
@@ -286,6 +296,8 @@ class MonthSummary {
       month: month,
       totalCount: 0,
       totalConvertedAmountCents: 0,
+      dominantCurrency: CurrencyConstants.defaultPrimaryCurrency,
+      hasMixedCurrencies: false,
     );
   }
 }

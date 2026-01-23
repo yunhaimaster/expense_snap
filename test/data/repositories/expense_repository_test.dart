@@ -346,7 +346,12 @@ void main() {
     test('取得月份總計成功', () async {
       // Arrange
       when(mockDatabaseHelper.getMonthSummary(2025, 1)).thenAnswer(
-        (_) async => {'total_count': 5, 'total_hkd_amount': 50000},
+        (_) async => {
+          'total_count': 5,
+          'total_hkd_amount': 50000,
+          'currency_count': 1,
+          'dominant_currency': 'HKD',
+        },
       );
 
       // Act
@@ -357,6 +362,29 @@ void main() {
       final summary = result.getOrThrow();
       expect(summary.totalCount, 5);
       expect(summary.totalConvertedAmountCents, 50000);
+      expect(summary.dominantCurrency, 'HKD');
+      expect(summary.hasMixedCurrencies, isFalse);
+    });
+
+    test('混合幣種時 hasMixedCurrencies 應為 true', () async {
+      // Arrange
+      when(mockDatabaseHelper.getMonthSummary(2025, 2)).thenAnswer(
+        (_) async => {
+          'total_count': 10,
+          'total_hkd_amount': 100000,
+          'currency_count': 3,
+          'dominant_currency': 'USD',
+        },
+      );
+
+      // Act
+      final result = await repository.getMonthSummary(year: 2025, month: 2);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      final summary = result.getOrThrow();
+      expect(summary.dominantCurrency, 'USD');
+      expect(summary.hasMixedCurrencies, isTrue);
     });
 
     test('資料庫查詢失敗時應回傳錯誤', () async {

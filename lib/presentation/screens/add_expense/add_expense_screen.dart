@@ -601,7 +601,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     // 檢查重複支出
     final duplicate = await smartPrompt.findDuplicateExpense(
-      convertedAmountCents: convertedAmountCents,
+      originalAmountCents: amountCents,
+      originalCurrency: _selectedCurrency,
       description: _descriptionController.text.trim(),
       date: _selectedDate,
     );

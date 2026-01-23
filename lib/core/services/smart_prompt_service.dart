@@ -30,11 +30,14 @@ class SmartPromptService {
 
   /// 檢查是否有重複支出
   ///
-  /// 條件：過去 48 小時內相同金額且描述相似的支出
+  /// 條件：過去 48 小時內相同原始金額、相同幣種且描述相似的支出
   /// 使用 Levenshtein 編輯距離計算描述相似度
   /// 注意：只檢查過去的支出，避免與未來日期的支出誤匹配
+  ///
+  /// 改用原始金額比對，避免因匯率變動導致相同支出因轉換金額不同而漏判
   Future<Expense?> findDuplicateExpense({
-    required int convertedAmountCents,
+    required int originalAmountCents,
+    required String originalCurrency,
     required String description,
     required DateTime date,
   }) async {
@@ -46,18 +49,19 @@ class SmartPromptService {
     );
     final endTime = date; // 只檢查到當前日期，不包含未來
 
-    // 查詢相同金額且時間接近的支出
-    // NOTE: DB column 仍為 hkd_amount，將在 migration 中重命名
+    // 查詢相同原始金額、相同幣種且時間接近的支出
     final result = await db.query(
       'expenses',
       where: '''
         deleted_at IS NULL
-        AND hkd_amount = ?
+        AND original_amount = ?
+        AND original_currency = ?
         AND date >= ?
         AND date <= ?
       ''',
       whereArgs: [
-        convertedAmountCents,
+        originalAmountCents,
+        originalCurrency,
         startTime.toIso8601String(),
         endTime.toIso8601String(),
       ],

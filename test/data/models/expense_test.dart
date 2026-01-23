@@ -352,6 +352,7 @@ void main() {
         month: 1,
         totalCount: 15,
         totalConvertedAmountCents: 250000,
+        dominantCurrency: 'HKD',
       );
 
       // 中文格式
@@ -364,6 +365,7 @@ void main() {
         month: 1,
         totalCount: 15,
         totalConvertedAmountCents: 250000,
+        dominantCurrency: 'HKD',
       );
 
       // 英文格式
@@ -376,9 +378,47 @@ void main() {
         month: 1,
         totalCount: 15,
         totalConvertedAmountCents: 250000,
+        dominantCurrency: 'HKD',
       );
 
       expect(summary.formattedTotalAmount, equals('HK\$2,500.00'));
+    });
+
+    test('should format amount with dominant currency', () {
+      const summary = MonthSummary(
+        year: 2025,
+        month: 1,
+        totalCount: 5,
+        totalConvertedAmountCents: 10000,
+        dominantCurrency: 'USD',
+      );
+
+      expect(summary.formattedTotalAmount, equals('\$100.00'));
+    });
+
+    test('should show ≈ prefix for mixed currencies', () {
+      const summary = MonthSummary(
+        year: 2025,
+        month: 1,
+        totalCount: 10,
+        totalConvertedAmountCents: 50000,
+        dominantCurrency: 'HKD',
+        hasMixedCurrencies: true,
+      );
+
+      expect(summary.formattedTotalAmount, equals('≈ HK\$500.00'));
+    });
+
+    test('should handle JPY without decimals', () {
+      const summary = MonthSummary(
+        year: 2025,
+        month: 1,
+        totalCount: 3,
+        totalConvertedAmountCents: 10000, // 10000 yen (no cents for JPY)
+        dominantCurrency: 'JPY',
+      );
+
+      expect(summary.formattedTotalAmount, equals('¥10,000'));
     });
 
     test('should create empty summary', () {
@@ -388,6 +428,8 @@ void main() {
       expect(empty.month, equals(3));
       expect(empty.totalCount, equals(0));
       expect(empty.totalConvertedAmountCents, equals(0));
+      expect(empty.dominantCurrency, equals('HKD'));
+      expect(empty.hasMixedCurrencies, isFalse);
     });
   });
 }
