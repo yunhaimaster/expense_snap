@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/currency_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/repositories/exchange_rate_repository.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../providers/exchange_rate_provider.dart';
 
 /// 匯率顯示與控制元件
@@ -103,9 +104,9 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
   void _showForceRefreshSuccess() {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('匯率已強制更新'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Text(S.of(context).rate_forceUpdated),
+        duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -151,22 +152,24 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
         color: AppColors.surfaceSecondary,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          SizedBox(
+          const SizedBox(
             width: 16,
             height: 16,
             child: CircularProgressIndicator(strokeWidth: 2),
           ),
-          SizedBox(width: 12),
-          Text('正在取得匯率...'),
+          const SizedBox(width: 12),
+          Text(S.of(context).rate_loading),
         ],
       ),
     );
   }
 
   Widget _buildRateDisplay(
-      ExchangeRateInfo? info, ExchangeRateProvider provider) {
+    ExchangeRateInfo? info,
+    ExchangeRateProvider provider,
+  ) {
     final rate = info?.formattedRate ?? '--';
     final source = info?.source ?? ExchangeRateSource.defaultRate;
     final fetchedAt = info?.formattedFetchedAt;
@@ -195,8 +198,8 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
                 child: Text(
                   '1 ${widget.currency} = $rate HKD',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
 
@@ -211,8 +214,8 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
             Text(
               '更新於 $fetchedAt',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textTertiary,
-                  ),
+                color: AppColors.textTertiary,
+              ),
             ),
           ],
         ],
@@ -255,8 +258,8 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
                       Text(
                         '${_cooldownSeconds}s',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textTertiary,
-                            ),
+                          color: AppColors.textTertiary,
+                        ),
                       ),
                     ],
                   ],

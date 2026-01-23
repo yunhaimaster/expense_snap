@@ -4,7 +4,19 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:expense_snap/core/errors/app_exception.dart';
 import 'package:expense_snap/core/theme/app_theme.dart';
+import 'package:expense_snap/l10n/app_localizations.dart';
 import 'package:expense_snap/presentation/widgets/common/error_boundary.dart';
+
+/// 建立帶有 i18n 支援的 MaterialApp wrapper
+Widget buildTestAppWithL10n({required Widget home}) {
+  return MaterialApp(
+    theme: AppTheme.light,
+    locale: const Locale('zh'),
+    supportedLocales: S.supportedLocales,
+    localizationsDelegates: S.localizationsDelegates,
+    home: home,
+  );
+}
 
 void main() {
   group('ErrorFallbackScreen', () {
@@ -134,8 +146,7 @@ void main() {
       final exception = NetworkException.noConnection();
 
       await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
+        buildTestAppWithL10n(
           home: Scaffold(
             body: ErrorBanner(
               error: exception,
@@ -146,14 +157,14 @@ void main() {
           ),
         ),
       );
+      await tester.pumpAndSettle();
 
-      // 如果有重試按鈕，點擊它
+      // 找到重試按鈕（使用 i18n 字串 '重試'）
       final retryButton = find.text('重試');
-      if (retryButton.evaluate().isNotEmpty) {
-        await tester.tap(retryButton);
-        await tester.pump();
-        expect(retryCalled, isTrue);
-      }
+      expect(retryButton, findsOneWidget);
+      await tester.tap(retryButton);
+      await tester.pump();
+      expect(retryCalled, isTrue);
     });
   });
 
@@ -162,8 +173,7 @@ void main() {
       const exception = ValidationException('測試錯誤訊息', field: 'test');
 
       await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
+        buildTestAppWithL10n(
           home: Builder(
             builder: (context) => Scaffold(
               body: ElevatedButton(
@@ -176,6 +186,7 @@ void main() {
           ),
         ),
       );
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('顯示錯誤'));
       await tester.pump();
@@ -188,8 +199,7 @@ void main() {
       final exception = NetworkException.noConnection();
 
       await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
+        buildTestAppWithL10n(
           home: Builder(
             builder: (context) => Scaffold(
               body: ElevatedButton(
@@ -202,6 +212,7 @@ void main() {
           ),
         ),
       );
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('顯示錯誤'));
       await tester.pump();

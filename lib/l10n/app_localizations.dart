@@ -1981,6 +1981,36 @@ abstract class S {
   /// In zh, this message translates to:
   /// **'請輸入有效匯率'**
   String get validation_exchangeRateInvalid;
+
+  /// No description provided for @rate_forceUpdated.
+  ///
+  /// In zh, this message translates to:
+  /// **'匯率已強制更新'**
+  String get rate_forceUpdated;
+
+  /// No description provided for @rate_loading.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在取得匯率...'**
+  String get rate_loading;
+
+  /// No description provided for @error_title.
+  ///
+  /// In zh, this message translates to:
+  /// **'錯誤'**
+  String get error_title;
+
+  /// No description provided for @error_invalidExpenseId.
+  ///
+  /// In zh, this message translates to:
+  /// **'無效的支出 ID'**
+  String get error_invalidExpenseId;
+
+  /// No description provided for @error_pageNotFound.
+  ///
+  /// In zh, this message translates to:
+  /// **'頁面不存在'**
+  String get error_pageNotFound;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

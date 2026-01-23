@@ -5,6 +5,7 @@ import '../../../core/errors/app_exception.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/error_messages.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// 全局錯誤邊界組件
 ///
@@ -37,7 +38,10 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
     // 注意：FlutterError.onError 已在 main.dart 設置用於全局異步錯誤
     // 這裡使用 ErrorWidget.builder 捕獲 Widget build 過程中的錯誤
     ErrorWidget.builder = (FlutterErrorDetails details) {
-      widget.onError?.call(details.exception, details.stack ?? StackTrace.current);
+      widget.onError?.call(
+        details.exception,
+        details.stack ?? StackTrace.current,
+      );
       // 使用 addPostFrameCallback 避免在 build 過程中 setState
       SchedulerBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
@@ -90,7 +94,9 @@ class ErrorFallbackScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorCode = error is AppException ? (error as AppException).code : null;
+    final errorCode = error is AppException
+        ? (error as AppException).code
+        : null;
     final message = ErrorMessages.getMessage(
       errorCode,
       fallbackMessage: '應用程式發生錯誤',
@@ -104,82 +110,82 @@ class ErrorFallbackScreen extends StatelessWidget {
       theme: AppTheme.light, // 使用 App 主題確保樣式一致
       home: Material(
         child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // 錯誤圖示
-              Container(
-                width: 80,
-                height: 80,
-                decoration: const BoxDecoration(
-                  color: AppColors.errorLight,
-                  shape: BoxShape.circle,
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // 錯誤圖示
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    color: AppColors.errorLight,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: AppColors.error,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.error_outline,
-                  size: 48,
-                  color: AppColors.error,
-                ),
-              ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // 錯誤標題
-              Text(
-                '發生問題了',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // 錯誤訊息
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-              ),
-
-              // 建議動作
-              if (suggestedAction != null) ...[
-                const SizedBox(height: 8),
+                // 錯誤標題
                 Text(
-                  suggestedAction,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.primary,
-                      ),
+                  '發生問題了',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ],
 
-              const SizedBox(height: 32),
+                const SizedBox(height: 12),
 
-              // 重試按鈕
-              if (isRetryable)
-                ElevatedButton.icon(
-                  onPressed: onRetry,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('重試'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 12,
+                // 錯誤訊息
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+
+                // 建議動作
+                if (suggestedAction != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    suggestedAction,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.primary,
                     ),
                   ),
-                )
-              else
-                OutlinedButton(
-                  onPressed: onRetry,
-                  child: const Text('返回'),
-                ),
-            ],
+                ],
+
+                const SizedBox(height: 32),
+
+                // 重試按鈕
+                if (isRetryable)
+                  ElevatedButton.icon(
+                    onPressed: onRetry,
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('重試'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 12,
+                      ),
+                    ),
+                  )
+                else
+                  OutlinedButton(
+                    onPressed: onRetry,
+                    child: const Text('返回'),
+                  ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );
@@ -231,8 +237,8 @@ class ErrorBanner extends StatelessWidget {
               child: Text(
                 message,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.error,
-                    ),
+                  color: AppColors.error,
+                ),
               ),
             ),
             if (isRetryable && onRetry != null)
@@ -242,7 +248,7 @@ class ErrorBanner extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   minimumSize: const Size(0, 32),
                 ),
-                child: const Text('重試'),
+                child: Text(S.of(context).common_retry),
               ),
             if (onDismiss != null)
               IconButton(
@@ -279,7 +285,7 @@ void showErrorSnackBar(
       backgroundColor: AppColors.error,
       action: isRetryable && onRetry != null
           ? SnackBarAction(
-              label: '重試',
+              label: S.of(context).common_retry,
               textColor: Colors.white,
               onPressed: onRetry,
             )

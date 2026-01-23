@@ -610,5 +610,10 @@
     }
   },
   "validation_exchangeRateRequired": "為替レートを入力してください",
-  "validation_exchangeRateInvalid": "有効な為替レートを入力してください"
+  "validation_exchangeRateInvalid": "有効な為替レートを入力してください",
+  "rate_forceUpdated": "為替レートを強制更新しました",
+  "rate_loading": "為替レートを取得中...",
+  "error_title": "エラー",
+  "error_invalidExpenseId": "無効な支出ID",
+  "error_pageNotFound": "ページが見つかりません"
 }

@@ -1028,6 +1028,21 @@ class SZh extends S {
 
   @override
   String get validation_exchangeRateInvalid => '請輸入有效匯率';
+
+  @override
+  String get rate_forceUpdated => '匯率已強制更新';
+
+  @override
+  String get rate_loading => '正在取得匯率...';
+
+  @override
+  String get error_title => '錯誤';
+
+  @override
+  String get error_invalidExpenseId => '無效的支出 ID';
+
+  @override
+  String get error_pageNotFound => '頁面不存在';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2054,4 +2069,19 @@ class SZhHans extends SZh {
 
   @override
   String get validation_exchangeRateInvalid => '请输入有效汇率';
+
+  @override
+  String get rate_forceUpdated => '汇率已强制更新';
+
+  @override
+  String get rate_loading => '正在获取汇率...';
+
+  @override
+  String get error_title => '错误';
+
+  @override
+  String get error_invalidExpenseId => '无效的支出 ID';
+
+  @override
+  String get error_pageNotFound => '页面不存在';
 }

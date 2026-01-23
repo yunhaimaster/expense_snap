@@ -42,7 +42,10 @@ void main() {
 
     group('formatAmountNumber', () {
       test('should format with thousand separator', () {
-        expect(Formatters.formatAmountNumber(123456789), equals('1,234,567.89'));
+        expect(
+          Formatters.formatAmountNumber(123456789),
+          equals('1,234,567.89'),
+        );
       });
 
       test('should format small amount', () {
@@ -76,7 +79,9 @@ void main() {
       });
 
       test('should parse date from storage', () {
-        final parsed = Formatters.parseDateFromStorage('2025-01-15T10:30:00.000Z');
+        final parsed = Formatters.parseDateFromStorage(
+          '2025-01-15T10:30:00.000Z',
+        );
 
         expect(parsed, isNotNull);
         expect(parsed!.year, equals(2025));
@@ -101,7 +106,19 @@ void main() {
 
       test('should format month correctly', () {
         final date = DateTime(2025, 1, 15);
-        expect(Formatters.formatMonth(date), equals('2025年1月'));
+        // 傳入 zh locale 時應返回中文格式
+        expect(Formatters.formatMonth(date, locale: 'zh'), equals('2025年1月'));
+        // 不傳 locale 時應返回英文格式
+        expect(Formatters.formatMonth(date), equals('January 2025'));
+        // 日文 locale 也使用中文年月格式
+        expect(Formatters.formatMonth(date, locale: 'ja'), equals('2025年1月'));
+        // 韓文 locale
+        expect(Formatters.formatMonth(date, locale: 'ko'), equals('2025년 1월'));
+        // 西班牙文 locale
+        expect(
+          Formatters.formatMonth(date, locale: 'es'),
+          equals('enero de 2025'),
+        );
       });
 
       test('should format display date', () {

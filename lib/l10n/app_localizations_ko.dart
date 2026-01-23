@@ -1032,4 +1032,19 @@ class SKo extends S {
 
   @override
   String get validation_exchangeRateInvalid => '유효한 환율을 입력하세요';
+
+  @override
+  String get rate_forceUpdated => '환율이 강제 업데이트되었습니다';
+
+  @override
+  String get rate_loading => '환율을 가져오는 중...';
+
+  @override
+  String get error_title => '오류';
+
+  @override
+  String get error_invalidExpenseId => '잘못된 지출 ID';
+
+  @override
+  String get error_pageNotFound => '페이지를 찾을 수 없습니다';
 }

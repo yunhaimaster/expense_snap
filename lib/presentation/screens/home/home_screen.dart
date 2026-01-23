@@ -5,6 +5,7 @@ import 'package:showcaseview/showcaseview.dart';
 import '../../../core/errors/app_exception.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../data/models/expense.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/expense_provider.dart';
 import '../../providers/showcase_provider.dart';
@@ -127,78 +128,111 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: SafeArea(
         bottom: false, // 底部讓 FAB 自己處理
-        child: Consumer<ExpenseProvider>(
-          builder: (context, provider, child) {
-            return Column(
-              children: [
-                // 離線狀態橫幅
-                const AnimatedConnectivityBanner(),
+        child: Column(
+          children: [
+            // 離線狀態橫幅
+            const AnimatedConnectivityBanner(),
 
-                // 月份摘要
-                MonthSummaryCard(
-                  summary: provider.summary,
+            // 月份摘要 - 只在 summary 或 isCurrentMonth 變化時重建
+            Selector<
+              ExpenseProvider,
+              ({MonthSummary summary, bool isCurrentMonth})
+            >(
+              selector: (_, p) =>
+                  (summary: p.summary, isCurrentMonth: p.isCurrentMonth),
+              builder: (context, state, _) {
+                final provider = context.read<ExpenseProvider>();
+                return MonthSummaryCard(
+                  summary: state.summary,
                   onPreviousMonth: provider.previousMonth,
                   onNextMonth: provider.nextMonth,
-                  canGoNext: !provider.isCurrentMonth,
-                ),
+                  canGoNext: !state.isCurrentMonth,
+                );
+              },
+            ),
 
-                // 錯誤提示
-                if (provider.error != null)
-                  _buildErrorBanner(context, provider.error!),
+            // 錯誤提示 - 只在 error 變化時重建
+            Selector<ExpenseProvider, AppException?>(
+              selector: (_, p) => p.error,
+              builder: (context, error, _) {
+                if (error == null) return const SizedBox.shrink();
+                return _buildErrorBanner(context, error);
+              },
+            ),
 
-                // 支出列表
-                Expanded(
-                  child: ExpenseList(
-                    expenses: provider.expenses,
-                    isLoading: provider.isLoading,
-                    hasMore: provider.hasMore,
-                    onRefresh: provider.refresh,
-                    onLoadMore: provider.loadMore,
-                    swipeShowcaseKey: _swipeShowcaseKey,
-                    onFirstExpenseLoaded: _startSwipeShowcase,
-                    onExpenseTap: (expense) {
-                      Navigator.of(context).pushNamed(
-                        AppRouter.expenseDetail,
-                        arguments: expense.id,
-                      );
-                    },
-                    onExpenseDelete: (expense) async {
-                      final result = await provider.softDeleteExpense(
-                        expense.id!,
-                      );
-                      if (!context.mounted) return;
-
-                      result.fold(
-                        onFailure: (error) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(S.of(context).home_deleteFailed(error.message)),
-                              backgroundColor: AppColors.error,
-                            ),
+            // 支出列表 - 只在 expenses/isLoading/hasMore 變化時重建
+            Expanded(
+              child:
+                  Selector<
+                    ExpenseProvider,
+                    ({List<Expense> expenses, bool isLoading, bool hasMore})
+                  >(
+                    selector: (_, p) => (
+                      expenses: p.expenses,
+                      isLoading: p.isLoading,
+                      hasMore: p.hasMore,
+                    ),
+                    builder: (context, state, _) {
+                      final provider = context.read<ExpenseProvider>();
+                      return ExpenseList(
+                        expenses: state.expenses,
+                        isLoading: state.isLoading,
+                        hasMore: state.hasMore,
+                        onRefresh: provider.refresh,
+                        onLoadMore: provider.loadMore,
+                        swipeShowcaseKey: _swipeShowcaseKey,
+                        onFirstExpenseLoaded: _startSwipeShowcase,
+                        onExpenseTap: (expense) {
+                          Navigator.of(context).pushNamed(
+                            AppRouter.expenseDetail,
+                            arguments: expense.id,
                           );
                         },
-                        onSuccess: (_) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(S.of(context).home_deleteSuccess),
-                              action: SnackBarAction(
-                                label: S.of(context).home_undo,
-                                onPressed: () async {
-                                  await provider.restoreExpense(expense.id!);
-                                  if (!context.mounted) return;
-                                  await provider.refresh();
-                                },
-                              ),
-                            ),
+                        onExpenseDelete: (expense) async {
+                          final result = await provider.softDeleteExpense(
+                            expense.id!,
+                          );
+                          if (!context.mounted) return;
+
+                          result.fold(
+                            onFailure: (error) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    S
+                                        .of(context)
+                                        .home_deleteFailed(error.message),
+                                  ),
+                                  backgroundColor: AppColors.error,
+                                ),
+                              );
+                            },
+                            onSuccess: (_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    S.of(context).home_deleteSuccess,
+                                  ),
+                                  action: SnackBarAction(
+                                    label: S.of(context).home_undo,
+                                    onPressed: () async {
+                                      await provider.restoreExpense(
+                                        expense.id!,
+                                      );
+                                      if (!context.mounted) return;
+                                      await provider.refresh();
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
                           );
                         },
                       );
                     },
                   ),
-                ),
-              ],
-            );
-          },
+            ),
+          ],
         ),
       ),
       floatingActionButton:

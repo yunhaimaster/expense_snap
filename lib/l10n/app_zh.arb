@@ -610,5 +610,10 @@
     }
   },
   "validation_exchangeRateRequired": "請輸入匯率",
-  "validation_exchangeRateInvalid": "請輸入有效匯率"
+  "validation_exchangeRateInvalid": "請輸入有效匯率",
+  "rate_forceUpdated": "匯率已強制更新",
+  "rate_loading": "正在取得匯率...",
+  "error_title": "錯誤",
+  "error_invalidExpenseId": "無效的支出 ID",
+  "error_pageNotFound": "頁面不存在"
 }

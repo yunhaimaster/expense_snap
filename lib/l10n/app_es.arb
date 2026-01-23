@@ -610,5 +610,10 @@
     }
   },
   "validation_exchangeRateRequired": "Por favor ingrese el tipo de cambio",
-  "validation_exchangeRateInvalid": "Por favor ingrese un tipo de cambio válido"
+  "validation_exchangeRateInvalid": "Por favor ingrese un tipo de cambio válido",
+  "rate_forceUpdated": "Tipo de cambio actualizado forzosamente",
+  "rate_loading": "Obteniendo tipo de cambio...",
+  "error_title": "Error",
+  "error_invalidExpenseId": "ID de gasto inválido",
+  "error_pageNotFound": "Página no encontrada"
 }

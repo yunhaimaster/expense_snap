@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// 日期選擇欄位（含快捷按鈕）
 class DatePickerField extends StatelessWidget {
@@ -76,8 +77,8 @@ class DatePickerField extends StatelessWidget {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppColors.primary,
-                ),
+              primary: AppColors.primary,
+            ),
           ),
           child: child!,
         );
@@ -138,7 +139,7 @@ class MonthPickerField extends StatelessWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('選擇月份'),
+              title: Text(S.of(context).datePicker_selectMonth),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -175,7 +176,8 @@ class MonthPickerField extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(12, (index) {
                       final m = index + 1;
-                      final isDisabled = selectedYear == now.year && m > now.month;
+                      final isDisabled =
+                          selectedYear == now.year && m > now.month;
                       final isSelected = m == selectedMonth;
 
                       return SizedBox(
@@ -205,14 +207,14 @@ class MonthPickerField extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('取消'),
+                  child: Text(S.of(context).common_cancel),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     onChanged(selectedYear, selectedMonth);
                     Navigator.of(context).pop();
                   },
-                  child: const Text('確定'),
+                  child: Text(S.of(context).common_confirm),
                 ),
               ],
             );

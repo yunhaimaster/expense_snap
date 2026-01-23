@@ -1050,4 +1050,19 @@ class SEs extends S {
   @override
   String get validation_exchangeRateInvalid =>
       'Por favor ingrese un tipo de cambio válido';
+
+  @override
+  String get rate_forceUpdated => 'Tipo de cambio actualizado forzosamente';
+
+  @override
+  String get rate_loading => 'Obteniendo tipo de cambio...';
+
+  @override
+  String get error_title => 'Error';
+
+  @override
+  String get error_invalidExpenseId => 'ID de gasto inválido';
+
+  @override
+  String get error_pageNotFound => 'Página no encontrada';
 }

@@ -610,5 +610,10 @@
     }
   },
   "validation_exchangeRateRequired": "Please enter exchange rate",
-  "validation_exchangeRateInvalid": "Please enter a valid exchange rate"
+  "validation_exchangeRateInvalid": "Please enter a valid exchange rate",
+  "rate_forceUpdated": "Exchange rate force updated",
+  "rate_loading": "Getting exchange rate...",
+  "error_title": "Error",
+  "error_invalidExpenseId": "Invalid expense ID",
+  "error_pageNotFound": "Page not found"
 }

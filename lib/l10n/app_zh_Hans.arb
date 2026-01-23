@@ -610,5 +610,10 @@
     }
   },
   "validation_exchangeRateRequired": "请输入汇率",
-  "validation_exchangeRateInvalid": "请输入有效汇率"
+  "validation_exchangeRateInvalid": "请输入有效汇率",
+  "rate_forceUpdated": "汇率已强制更新",
+  "rate_loading": "正在获取汇率...",
+  "error_title": "错误",
+  "error_invalidExpenseId": "无效的支出 ID",
+  "error_pageNotFound": "页面不存在"
 }

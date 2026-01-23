@@ -1043,4 +1043,19 @@ class SEn extends S {
   @override
   String get validation_exchangeRateInvalid =>
       'Please enter a valid exchange rate';
+
+  @override
+  String get rate_forceUpdated => 'Exchange rate force updated';
+
+  @override
+  String get rate_loading => 'Getting exchange rate...';
+
+  @override
+  String get error_title => 'Error';
+
+  @override
+  String get error_invalidExpenseId => 'Invalid expense ID';
+
+  @override
+  String get error_pageNotFound => 'Page not found';
 }

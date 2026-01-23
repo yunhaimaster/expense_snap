@@ -610,5 +610,10 @@
     }
   },
   "validation_exchangeRateRequired": "환율을 입력하세요",
-  "validation_exchangeRateInvalid": "유효한 환율을 입력하세요"
+  "validation_exchangeRateInvalid": "유효한 환율을 입력하세요",
+  "rate_forceUpdated": "환율이 강제 업데이트되었습니다",
+  "rate_loading": "환율을 가져오는 중...",
+  "error_title": "오류",
+  "error_invalidExpenseId": "잘못된 지출 ID",
+  "error_pageNotFound": "페이지를 찾을 수 없습니다"
 }

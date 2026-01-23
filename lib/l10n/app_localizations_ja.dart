@@ -1029,4 +1029,19 @@ class SJa extends S {
 
   @override
   String get validation_exchangeRateInvalid => '有効な為替レートを入力してください';
+
+  @override
+  String get rate_forceUpdated => '為替レートを強制更新しました';
+
+  @override
+  String get rate_loading => '為替レートを取得中...';
+
+  @override
+  String get error_title => 'エラー';
+
+  @override
+  String get error_invalidExpenseId => '無効な支出ID';
+
+  @override
+  String get error_pageNotFound => 'ページが見つかりません';
 }
