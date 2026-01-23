@@ -1694,6 +1694,12 @@ class SZhHans extends SZh {
   String get onboarding_page3Desc => '月结时一键导出 Excel + 收据图片\n轻松完成报销';
 
   @override
+  String get onboarding_selectCurrencyTitle => '选择结算币种';
+
+  @override
+  String get onboarding_selectCurrencyDesc => '支出将自动转换为此币种';
+
+  @override
   String get onboarding_nameLabel => '您的名字（选填）';
 
   @override
@@ -1898,6 +1904,27 @@ class SZhHans extends SZh {
   String get currency_USD => '美元';
 
   @override
+  String get currency_EUR => '欧元';
+
+  @override
+  String get currency_GBP => '英镑';
+
+  @override
+  String get currency_JPY => '日元';
+
+  @override
+  String get currency_TWD => '新台币';
+
+  @override
+  String get currency_KRW => '韩元';
+
+  @override
+  String get currency_SGD => '新加坡元';
+
+  @override
+  String get currency_AUD => '澳元';
+
+  @override
   String get datePicker_selectDate => '选择日期';
 
   @override
@@ -1959,6 +1986,15 @@ class SZhHans extends SZh {
 
   @override
   String get settings_languageSystem => '跟随系统';
+
+  @override
+  String get settings_primaryCurrency => '主要币种';
+
+  @override
+  String get settings_selectCurrency => '选择币种';
+
+  @override
+  String get settings_changeCurrencyWarning => '更改仅影响未来的支出记录';
 
   @override
   String get settings_selectTheme => '选择主题';
