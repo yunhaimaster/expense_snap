@@ -88,6 +88,12 @@ class BackupProvider extends ChangeNotifier {
 
   // ============ 初始化 ============
 
+  /// 清除雲端備份列表（在斷開 Google 帳號時呼叫）
+  void clearCloudBackups() {
+    _cloudBackups = [];
+    _safeNotifyListeners();
+  }
+
   /// 計算儲存使用量
   Future<void> calculateStorageUsage() async {
     _localStorageUsageKb = await _backupRepo.calculateLocalStorageUsageKb();

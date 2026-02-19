@@ -16,7 +16,7 @@ class ApiConfig {
   static const Duration sendTimeout = Duration(seconds: 10);
 
   // 重試設定
-  static const int retryAttempts = 2;
+  static const int retryAttempts = 1;
   static const Duration retryDelay = Duration(seconds: 1);
 
   // Google Drive API

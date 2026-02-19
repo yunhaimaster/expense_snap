@@ -12,6 +12,7 @@ import 'package:expense_snap/core/errors/result.dart';
 import 'package:expense_snap/data/models/expense.dart';
 import 'package:expense_snap/domain/repositories/expense_repository.dart';
 import 'package:expense_snap/presentation/screens/deleted_items/deleted_items_screen.dart';
+import 'package:expense_snap/presentation/widgets/common/skeleton.dart';
 
 @GenerateMocks([IExpenseRepository])
 import 'deleted_items_screen_test.mocks.dart';
@@ -322,8 +323,8 @@ void main() {
       // 只 pump 一次（不等完成），此時仍在載入
       await tester.pump();
 
-      // 應顯示 Scaffold（畫面已渲染）
-      expect(find.byType(Scaffold), findsAtLeastNWidgets(1));
+      // 應顯示骨架屏（載入中）
+      expect(find.byType(ExpenseListSkeleton), findsOneWidget);
 
       // 完成 completer 以清理 pending futures
       completer.complete(Result.success(<Expense>[]));

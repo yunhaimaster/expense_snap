@@ -97,6 +97,9 @@ void main() {
       imageService: mockImageService,
     );
 
+    // 確保 .value provider 正確釋放資源
+    addTearDown(expenseProvider.dispose);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ExpenseProvider>.value(value: expenseProvider),

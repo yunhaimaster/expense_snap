@@ -28,6 +28,7 @@ class BackupSection extends StatelessWidget {
       children: [
         _GoogleAccountTile(
           authProvider: authProvider,
+          backupProvider: backupProvider,
           isOperationInProgress: backupProvider.isOperationInProgress,
         ),
         if (authProvider.isGoogleConnected) ...[
@@ -70,10 +71,12 @@ class BackupSection extends StatelessWidget {
 class _GoogleAccountTile extends StatelessWidget {
   const _GoogleAccountTile({
     required this.authProvider,
+    required this.backupProvider,
     required this.isOperationInProgress,
   });
 
   final GoogleAuthProvider authProvider;
+  final BackupProvider backupProvider;
   final bool isOperationInProgress;
 
   @override
@@ -173,6 +176,8 @@ class _GoogleAccountTile extends StatelessWidget {
         );
       },
       onSuccess: (_) {
+        // 清除舊帳號的雲端備份列表
+        backupProvider.clearCloudBackups();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).settings_googleDisconnected),

@@ -129,6 +129,16 @@ void main() {
       googleAuthProvider: googleAuthProvider,
     );
 
+    // 確保 .value providers 正確釋放資源
+    addTearDown(() {
+      expenseProvider.dispose();
+      settingsProvider.dispose();
+      themeProvider.dispose();
+      localeProvider.dispose();
+      googleAuthProvider.dispose();
+      backupProvider.dispose();
+    });
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ExpenseProvider>.value(value: expenseProvider),

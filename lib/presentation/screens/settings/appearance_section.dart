@@ -4,26 +4,25 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/currency_constants.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/locale_provider.dart';
-import '../../providers/settings_provider.dart';
 import '../../providers/theme_provider.dart';
 
 /// 外觀區塊 — 主題、語言、幣種
 class AppearanceSection extends StatelessWidget {
   const AppearanceSection({
     super.key,
+    required this.primaryCurrency,
     required this.onShowThemeDialog,
     required this.onShowLanguageDialog,
     required this.onShowCurrencyDialog,
   });
 
+  final String primaryCurrency;
   final VoidCallback onShowThemeDialog;
   final VoidCallback onShowLanguageDialog;
   final VoidCallback onShowCurrencyDialog;
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<SettingsProvider>();
-
     return Column(
       children: [
         Consumer<ThemeProvider>(
@@ -69,8 +68,8 @@ class AppearanceSection extends StatelessWidget {
           leading: const Icon(Icons.currency_exchange_outlined),
           title: Text(S.of(context).settings_primaryCurrency),
           subtitle: Text(
-            '${CurrencyConstants.currencySymbols[provider.primaryCurrency]} '
-            '${provider.primaryCurrency}',
+            '${CurrencyConstants.currencySymbols[primaryCurrency]} '
+            '$primaryCurrency',
           ),
           trailing: const Icon(Icons.chevron_right),
           onTap: onShowCurrencyDialog,

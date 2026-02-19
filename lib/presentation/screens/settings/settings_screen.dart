@@ -77,6 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   // 外觀區塊
                   _SectionHeader(title: S.of(context).settings_appearance),
                   AppearanceSection(
+                    primaryCurrency: settings.primaryCurrency,
                     onShowThemeDialog: () => _showThemeModeDialog(
                       context.read<ThemeProvider>(),
                     ),

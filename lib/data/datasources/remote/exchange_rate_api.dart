@@ -56,6 +56,15 @@ class _RetryInterceptor extends Interceptor {
       handler.resolve(response);
     } on DioException catch (retryErr) {
       handler.next(retryErr);
+    } on Object catch (e) {
+      // 非 Dio 例外（如 SocketException）包裝為 DioException
+      handler.next(
+        DioException(
+          requestOptions: err.requestOptions,
+          error: e,
+          type: DioExceptionType.unknown,
+        ),
+      );
     }
   }
 }
