@@ -6,6 +6,60 @@ import '../../../core/errors/app_exception.dart';
 import '../../../core/errors/result.dart';
 import '../../../core/utils/app_logger.dart';
 
+/// 暫時性錯誤重試攔截器（僅重試一次）
+///
+/// 針對 5xx 伺服器錯誤和逾時錯誤自動重試
+class _RetryInterceptor extends Interceptor {
+  _RetryInterceptor(this._dio);
+
+  final Dio _dio;
+
+  /// 判斷是否為可重試的暫時性錯誤
+  static bool _isTransient(DioException err) {
+    // 逾時錯誤
+    if (err.type == DioExceptionType.connectionTimeout ||
+        err.type == DioExceptionType.receiveTimeout ||
+        err.type == DioExceptionType.sendTimeout) {
+      return true;
+    }
+    // 5xx 伺服器錯誤
+    final statusCode = err.response?.statusCode;
+    if (statusCode != null && statusCode >= 500) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    // 已重試過則不再重試
+    if (err.requestOptions.extra['_retried'] == true) {
+      handler.next(err);
+      return;
+    }
+
+    if (!_isTransient(err)) {
+      handler.next(err);
+      return;
+    }
+
+    AppLogger.info('Retrying request: ${err.requestOptions.uri}');
+
+    try {
+      // 標記已重試，延遲後重試
+      err.requestOptions.extra['_retried'] = true;
+      await Future<void>.delayed(ApiConfig.retryDelay);
+      final response = await _dio.fetch(err.requestOptions);
+      handler.resolve(response);
+    } on DioException catch (retryErr) {
+      handler.next(retryErr);
+    }
+  }
+}
+
 /// 匯率 API 資料來源
 ///
 /// 使用 fawazahmed0/currency-api，支援主要和備用 CDN
@@ -21,15 +75,17 @@ class ExchangeRateApi {
   /// 上次請求時間
   DateTime? _lastRequestTime;
 
-  /// 建立 Dio 實例
+  /// 建立 Dio 實例（含重試攔截器）
   static Dio _createDio() {
-    return Dio(
+    final dio = Dio(
       BaseOptions(
         connectTimeout: ApiConfig.connectTimeout,
         receiveTimeout: ApiConfig.receiveTimeout,
         sendTimeout: ApiConfig.sendTimeout,
       ),
     );
+    dio.interceptors.add(_RetryInterceptor(dio));
+    return dio;
   }
 
   /// 檢查是否受速率限制
@@ -178,7 +234,7 @@ class ExchangeRateApi {
           statusCode: e.response?.statusCode,
         ),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Unexpected error fetching rates from $source', error: e);
       return Result.failure(NetworkException('Unexpected error: $e'));
     }

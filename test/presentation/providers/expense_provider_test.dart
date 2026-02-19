@@ -330,4 +330,21 @@ void main() {
       expect(provider.error, isNull);
     });
   });
+
+  group('ExpenseProvider.dispose', () {
+    test('dispose 後操作不應拋出錯誤', () {
+      provider.dispose();
+
+      // dispose 後 clearError 應靜默（不拋出 FlutterError）
+      provider.clearError();
+    });
+
+    test('dispose 後 loadMonth 不應觸發 notifyListeners 錯誤', () async {
+      provider.dispose();
+
+      // 非同步操作在 dispose 後完成時，_notifyIfNotDisposed 應保護
+      await provider.loadMonth(refresh: true);
+      // 測試通過即表示沒有錯誤
+    });
+  });
 }

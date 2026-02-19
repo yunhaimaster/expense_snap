@@ -21,6 +21,13 @@ void main() {
         isNot(BackgroundService.cleanupTaskName),
       );
     });
+
+    test('initialBackoffDelay 應為 15 分鐘', () {
+      expect(
+        BackgroundService.initialBackoffDelay,
+        const Duration(minutes: 15),
+      );
+    });
   });
 
   group('BackgroundService 設計', () {
@@ -28,6 +35,18 @@ void main() {
       // BackgroundService._() 是私有建構子
       // 所有方法都是 static，不需要實例化
       expect(BackgroundService.cleanupTaskId, isNotNull);
+    });
+
+    test('initialBackoffDelay 應為合理的退避時間', () {
+      // 退避時間不應太短（避免頻繁重試）也不應太長
+      expect(
+        BackgroundService.initialBackoffDelay.inMinutes,
+        greaterThanOrEqualTo(1),
+      );
+      expect(
+        BackgroundService.initialBackoffDelay.inHours,
+        lessThanOrEqualTo(1),
+      );
     });
   });
 }

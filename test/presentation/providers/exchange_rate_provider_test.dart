@@ -197,6 +197,28 @@ void main() {
     });
   });
 
+  group('ExchangeRateProvider.dispose', () {
+    test('dispose 後不應拋出錯誤', () async {
+      // 載入資料
+      await provider.loadAllRates();
+      expect(provider.rates.isNotEmpty, true);
+
+      // dispose 後操作不應拋出錯誤
+      provider.dispose();
+
+      // 後續操作應靜默（不拋出 FlutterError）
+      provider.clearError();
+    });
+
+    test('dispose 後 loadRate 不應觸發 notifyListeners 錯誤', () async {
+      provider.dispose();
+
+      // 非同步操作在 dispose 後完成時，_safeNotifyListeners 應保護
+      await provider.loadRate('USD', baseCurrency: 'HKD');
+      // 測試通過即表示沒有錯誤
+    });
+  });
+
   group('ExchangeRateInfo', () {
     test('formattedRate 應正確格式化', () {
       final info = ExchangeRateInfo(

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:expense_snap/core/constants/api_config.dart';
 import 'package:expense_snap/core/constants/currency_constants.dart';
 import 'package:expense_snap/core/errors/app_exception.dart';
 import 'package:expense_snap/data/datasources/remote/exchange_rate_api.dart';
@@ -27,14 +28,16 @@ void main() {
           'hkd': {
             'cny': 0.918, // 1 HKD = 0.918 CNY
             'usd': 0.128, // 1 HKD = 0.128 USD
-          }
+          },
         };
 
-        when(mockDio.get(any)).thenAnswer((_) async => Response(
-              requestOptions: RequestOptions(),
-              statusCode: 200,
-              data: responseData,
-            ));
+        when(mockDio.get(any)).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(),
+            statusCode: 200,
+            data: responseData,
+          ),
+        );
 
         // Act
         final result = await api.fetchRates();
@@ -78,7 +81,7 @@ void main() {
                 'hkd': {
                   'cny': 0.92,
                   'usd': 0.13,
-                }
+                },
               },
             );
           }
@@ -94,10 +97,12 @@ void main() {
 
       test('兩個 API 都失敗時回傳錯誤', () async {
         // Arrange
-        when(mockDio.get(any)).thenThrow(DioException(
-          requestOptions: RequestOptions(),
-          type: DioExceptionType.connectionError,
-        ));
+        when(mockDio.get(any)).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(),
+            type: DioExceptionType.connectionError,
+          ),
+        );
 
         // Act
         final result = await api.fetchRates();
@@ -114,11 +119,13 @@ void main() {
 
       test('伺服器錯誤時回傳錯誤', () async {
         // Arrange
-        when(mockDio.get(any)).thenAnswer((_) async => Response(
-              requestOptions: RequestOptions(),
-              statusCode: 500,
-              data: null,
-            ));
+        when(mockDio.get(any)).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(),
+            statusCode: 500,
+            data: null,
+          ),
+        );
 
         // Act
         final result = await api.fetchRates();
@@ -135,11 +142,13 @@ void main() {
 
       test('回應格式錯誤時回傳錯誤', () async {
         // Arrange
-        when(mockDio.get(any)).thenAnswer((_) async => Response(
-              requestOptions: RequestOptions(),
-              statusCode: 200,
-              data: {'invalid': 'format'}, // 缺少 'hkd' 欄位
-            ));
+        when(mockDio.get(any)).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(),
+            statusCode: 200,
+            data: {'invalid': 'format'}, // 缺少 'hkd' 欄位
+          ),
+        );
 
         // Act
         final result = await api.fetchRates();
@@ -151,7 +160,8 @@ void main() {
             expect(e, isA<NetworkException>());
             // 錯誤訊息應包含 'Missing HKD' 或 'Invalid'（更具體的錯誤說明）
             expect(
-              e.message.contains('Missing HKD') || e.message.contains('Invalid'),
+              e.message.contains('Missing HKD') ||
+                  e.message.contains('Invalid'),
               true,
               reason: 'Error message should indicate missing/invalid response',
             );
@@ -162,10 +172,12 @@ void main() {
 
       test('逾時時回傳 timeout 錯誤', () async {
         // Arrange
-        when(mockDio.get(any)).thenThrow(DioException(
-          requestOptions: RequestOptions(),
-          type: DioExceptionType.receiveTimeout,
-        ));
+        when(mockDio.get(any)).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(),
+            type: DioExceptionType.receiveTimeout,
+          ),
+        );
 
         // Act
         final result = await api.fetchRates();
@@ -180,6 +192,25 @@ void main() {
           onSuccess: (_) => fail('Should fail'),
         );
       });
+    });
+  });
+
+  group('ApiConfig 逾時設定', () {
+    test('connectTimeout 應為 10 秒', () {
+      expect(ApiConfig.connectTimeout, const Duration(seconds: 10));
+    });
+
+    test('receiveTimeout 應為 15 秒', () {
+      expect(ApiConfig.receiveTimeout, const Duration(seconds: 15));
+    });
+
+    test('sendTimeout 應為 10 秒', () {
+      expect(ApiConfig.sendTimeout, const Duration(seconds: 10));
+    });
+
+    test('retryDelay 應為合理的延遲', () {
+      expect(ApiConfig.retryDelay.inSeconds, greaterThanOrEqualTo(1));
+      expect(ApiConfig.retryDelay.inSeconds, lessThanOrEqualTo(5));
     });
   });
 }
