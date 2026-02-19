@@ -48,7 +48,7 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
     // 延遲到 build 完成後再載入匯率，避免在 build 過程中觸發 notifyListeners
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        _loadRate();
+        unawaited(_loadRate());
       }
     });
   }
@@ -60,7 +60,7 @@ class _ExchangeRateDisplayState extends State<ExchangeRateDisplay> {
       // 使用 postFrameCallback 避免在 build 過程中觸發 notifyListeners
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          _loadRate();
+          unawaited(_loadRate());
         }
       });
     }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/validation_rules.dart';
@@ -37,7 +39,7 @@ class _DescriptionAutocompleteState extends State<DescriptionAutocomplete> {
     super.initState();
     widget.controller.addListener(_onTextChanged);
     _focusNode.addListener(_onFocusChanged);
-    _loadInitialSuggestions();
+    unawaited(_loadInitialSuggestions());
   }
 
   @override
@@ -63,9 +65,9 @@ class _DescriptionAutocompleteState extends State<DescriptionAutocomplete> {
   void _onTextChanged() {
     final text = widget.controller.text;
     if (text.isEmpty) {
-      _loadInitialSuggestions();
+      unawaited(_loadInitialSuggestions());
     } else {
-      _searchSuggestions(text);
+      unawaited(_searchSuggestions(text));
     }
   }
 
@@ -197,7 +199,8 @@ class _DescriptionAutocompleteState extends State<DescriptionAutocomplete> {
         ),
         maxLength: ValidationRules.maxDescriptionLength,
         maxLines: 2,
-        validator: widget.validator ??
+        validator:
+            widget.validator ??
             (value) {
               if (value == null || value.trim().isEmpty) {
                 return '請輸入描述';

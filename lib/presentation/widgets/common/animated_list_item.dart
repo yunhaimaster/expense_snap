@@ -62,20 +62,23 @@ class _AnimatedListItemState extends State<AnimatedListItem>
       SlideDirection.bottom => const Offset(0, 0.3),
     };
 
-    _slideAnimation = Tween<Offset>(
-      begin: beginOffset,
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: AnimationUtils.emphasized,
-    ));
+    _slideAnimation =
+        Tween<Offset>(
+          begin: beginOffset,
+          end: Offset.zero,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: AnimationUtils.emphasized,
+          ),
+        );
 
     if (widget.animateOnMount) {
       // Stagger 延遲（使用可取消的 Timer）
       final delay = AnimationUtils.staggerOffset(widget.index);
       _staggerDelayTimer = Timer(delay, () {
         if (mounted) {
-          _controller.forward();
+          unawaited(_controller.forward());
         }
       });
     } else {
@@ -179,7 +182,7 @@ class _AnimatedRemoveItemState extends State<AnimatedRemoveItem>
   void didUpdateWidget(AnimatedRemoveItem oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.removed && !oldWidget.removed) {
-      _controller.forward();
+      unawaited(_controller.forward());
     }
   }
 

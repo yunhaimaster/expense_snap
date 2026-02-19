@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import '../../core/constants/app_constants.dart';
@@ -123,7 +125,7 @@ class ExpenseProvider extends ChangeNotifier {
         onFailure: (e) => _error ??= e,
         onSuccess: (s) => _summary = s,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('loadMonth failed', error: e);
       _error = DatabaseException.queryFailed(e.toString());
     } finally {
@@ -153,7 +155,7 @@ class ExpenseProvider extends ChangeNotifier {
     } else {
       _currentMonth--;
     }
-    loadMonth(refresh: true);
+    unawaited(loadMonth(refresh: true));
   }
 
   /// 前往下個月
@@ -170,7 +172,7 @@ class ExpenseProvider extends ChangeNotifier {
     } else {
       _currentMonth++;
     }
-    loadMonth(refresh: true);
+    unawaited(loadMonth(refresh: true));
   }
 
   /// 跳轉至指定月份
@@ -188,7 +190,7 @@ class ExpenseProvider extends ChangeNotifier {
     }
     _currentYear = year;
     _currentMonth = month;
-    loadMonth(refresh: true);
+    unawaited(loadMonth(refresh: true));
   }
 
   /// 新增支出
@@ -227,7 +229,7 @@ class ExpenseProvider extends ChangeNotifier {
     result.onSuccess((_) {
       // 如果是當前月份，刷新列表
       if (date.year == _currentYear && date.month == _currentMonth) {
-        refresh();
+        unawaited(refresh());
       }
     });
 
@@ -246,7 +248,7 @@ class ExpenseProvider extends ChangeNotifier {
         _notifyIfNotDisposed();
       }
       // 刷新摘要
-      _refreshSummary();
+      unawaited(_refreshSummary());
     });
 
     return result;
@@ -261,7 +263,7 @@ class ExpenseProvider extends ChangeNotifier {
       _expenses.removeWhere((e) => e.id == id);
       _notifyIfNotDisposed();
       // 刷新摘要
-      _refreshSummary();
+      unawaited(_refreshSummary());
     });
 
     return result;

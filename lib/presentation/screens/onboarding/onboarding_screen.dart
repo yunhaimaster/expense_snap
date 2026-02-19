@@ -69,14 +69,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _onPageChanged(int page) {
     setState(() => _currentPage = page);
-    AnimationUtils.selectionClick();
+    unawaited(AnimationUtils.selectionClick());
   }
 
   void _nextPage() {
     if (_currentPage < _pages.length - 1) {
-      _pageController.nextPage(
-        duration: AnimationUtils.standard,
-        curve: AnimationUtils.standardInOut,
+      unawaited(
+        _pageController.nextPage(
+          duration: AnimationUtils.standard,
+          curve: AnimationUtils.standardInOut,
+        ),
       );
     }
   }
@@ -332,7 +334,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onSelected: (selected) {
               if (selected) {
                 setState(() => _selectedCurrency = currency);
-                AnimationUtils.selectionClick();
+                unawaited(AnimationUtils.selectionClick());
               }
             },
             selectedColor: AppColors.primary.withValues(alpha: 0.2),

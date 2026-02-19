@@ -67,8 +67,8 @@ class LogEntry {
     if (fields != null && fields!.isNotEmpty) {
       try {
         buffer.write(' ${jsonEncode(fields)}');
-      } catch (_) {
-        // 如果 fields 包含無法序列化的物件，使用 toString 替代
+      } on Object catch (_) {
+        // JsonCyclicError 等非 Exception 錯誤也需捕獲
         buffer.write(' {fields: [non-serializable]}');
       }
     }
@@ -93,13 +93,15 @@ class AppLogger {
     String? tag,
     Map<String, dynamic>? fields,
   }) {
-    _logEntry(LogEntry(
-      level: LogLevel.debug,
-      message: message,
-      timestamp: DateTime.now(),
-      tag: tag ?? _defaultTag,
-      fields: fields,
-    ));
+    _logEntry(
+      LogEntry(
+        level: LogLevel.debug,
+        message: message,
+        timestamp: DateTime.now(),
+        tag: tag ?? _defaultTag,
+        fields: fields,
+      ),
+    );
   }
 
   /// Info 等級日誌
@@ -108,13 +110,15 @@ class AppLogger {
     String? tag,
     Map<String, dynamic>? fields,
   }) {
-    _logEntry(LogEntry(
-      level: LogLevel.info,
-      message: message,
-      timestamp: DateTime.now(),
-      tag: tag ?? _defaultTag,
-      fields: fields,
-    ));
+    _logEntry(
+      LogEntry(
+        level: LogLevel.info,
+        message: message,
+        timestamp: DateTime.now(),
+        tag: tag ?? _defaultTag,
+        fields: fields,
+      ),
+    );
   }
 
   /// Warning 等級日誌
@@ -124,14 +128,16 @@ class AppLogger {
     Object? error,
     Map<String, dynamic>? fields,
   }) {
-    _logEntry(LogEntry(
-      level: LogLevel.warning,
-      message: message,
-      timestamp: DateTime.now(),
-      tag: tag ?? _defaultTag,
-      error: error,
-      fields: fields,
-    ));
+    _logEntry(
+      LogEntry(
+        level: LogLevel.warning,
+        message: message,
+        timestamp: DateTime.now(),
+        tag: tag ?? _defaultTag,
+        error: error,
+        fields: fields,
+      ),
+    );
   }
 
   /// Error 等級日誌
@@ -142,15 +148,17 @@ class AppLogger {
     StackTrace? stackTrace,
     Map<String, dynamic>? fields,
   }) {
-    _logEntry(LogEntry(
-      level: LogLevel.error,
-      message: message,
-      timestamp: DateTime.now(),
-      tag: tag ?? _defaultTag,
-      error: error,
-      stackTrace: stackTrace,
-      fields: fields,
-    ));
+    _logEntry(
+      LogEntry(
+        level: LogLevel.error,
+        message: message,
+        timestamp: DateTime.now(),
+        tag: tag ?? _defaultTag,
+        error: error,
+        stackTrace: stackTrace,
+        fields: fields,
+      ),
+    );
   }
 
   /// 記錄網絡請求

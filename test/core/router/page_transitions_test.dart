@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:expense_snap/core/router/page_transitions.dart';
 import 'package:expense_snap/core/utils/animation_utils.dart';
 import 'package:expense_snap/l10n/app_localizations.dart';
@@ -15,10 +17,12 @@ void main() {
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  SlidePageRoute(
-                    page: const Scaffold(
-                      body: Center(child: Text('Slide Page')),
+                unawaited(
+                  Navigator.of(context).push(
+                    SlidePageRoute(
+                      page: const Scaffold(
+                        body: Center(child: Text('Slide Page')),
+                      ),
                     ),
                   ),
                 );
@@ -73,10 +77,12 @@ void main() {
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  FadePageRoute(
-                    page: const Scaffold(
-                      body: Center(child: Text('Fade Page')),
+                unawaited(
+                  Navigator.of(context).push(
+                    FadePageRoute(
+                      page: const Scaffold(
+                        body: Center(child: Text('Fade Page')),
+                      ),
                     ),
                   ),
                 );
@@ -112,10 +118,12 @@ void main() {
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  BottomSlidePageRoute(
-                    page: const Scaffold(
-                      body: Center(child: Text('Bottom Slide Page')),
+                unawaited(
+                  Navigator.of(context).push(
+                    BottomSlidePageRoute(
+                      page: const Scaffold(
+                        body: Center(child: Text('Bottom Slide Page')),
+                      ),
                     ),
                   ),
                 );
@@ -151,10 +159,12 @@ void main() {
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  ScalePageRoute(
-                    page: const Scaffold(
-                      body: Center(child: Text('Scale Page')),
+                unawaited(
+                  Navigator.of(context).push(
+                    ScalePageRoute(
+                      page: const Scaffold(
+                        body: Center(child: Text('Scale Page')),
+                      ),
                     ),
                   ),
                 );
@@ -191,11 +201,13 @@ void main() {
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  SlidePageRoute(
-                    page: Scaffold(
-                      appBar: AppBar(title: const Text('Detail')),
-                      body: const Center(child: Text('Slide Page')),
+                unawaited(
+                  Navigator.of(context).push(
+                    SlidePageRoute(
+                      page: Scaffold(
+                        appBar: AppBar(title: const Text('Detail')),
+                        body: const Center(child: Text('Slide Page')),
+                      ),
                     ),
                   ),
                 );
@@ -226,11 +238,13 @@ void main() {
           home: Builder(
             builder: (context) => ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  BottomSlidePageRoute(
-                    page: Scaffold(
-                      appBar: AppBar(title: const Text('Modal')),
-                      body: const Center(child: Text('Bottom Slide Page')),
+                unawaited(
+                  Navigator.of(context).push(
+                    BottomSlidePageRoute(
+                      page: Scaffold(
+                        appBar: AppBar(title: const Text('Modal')),
+                        body: const Center(child: Text('Bottom Slide Page')),
+                      ),
                     ),
                   ),
                 );

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
     // 只在首次呼叫時載入資料（避免重複載入）
     if (!_initialized) {
       _initialized = true;
-      _loadExpense();
+      unawaited(_loadExpense());
     }
   }
 
@@ -158,9 +159,9 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
               PopupMenuButton<String>(
                 onSelected: (value) {
                   if (value == 'delete') {
-                    _confirmDelete();
+                    unawaited(_confirmDelete());
                   } else if (value == 'replace_image') {
-                    _replaceImage();
+                    unawaited(_replaceImage());
                   }
                 },
                 itemBuilder: (context) => [
@@ -231,6 +232,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           child: Image.file(
             File(_expense!.receiptImagePath!),
             fit: BoxFit.contain,
+            // 限制記憶體使用，2x 以支援高密度螢幕
+            cacheHeight: 500,
             errorBuilder: (context, error, stack) => Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -507,7 +510,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       result.fold(
         onFailure: (error) {
           // 觸覺回饋 - 錯誤
-          AnimationUtils.heavyImpact();
+          unawaited(AnimationUtils.heavyImpact());
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(l10n.expenseDetail_saveFailed(error.message)),
@@ -517,7 +520,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
         },
         onSuccess: (expense) {
           // 觸覺回饋 - 儲存成功
-          AnimationUtils.lightImpact();
+          unawaited(AnimationUtils.lightImpact());
           setState(() {
             _expense = expense;
             _isEditing = false;
@@ -549,7 +552,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
           TextButton(
             onPressed: () {
               // 觸覺回饋 - 確認刪除
-              AnimationUtils.mediumImpact();
+              unawaited(AnimationUtils.mediumImpact());
               Navigator.of(context).pop(true);
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
@@ -569,7 +572,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
     result.fold(
       onFailure: (error) {
         // 觸覺回饋 - 錯誤
-        AnimationUtils.heavyImpact();
+        unawaited(AnimationUtils.heavyImpact());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.expenseDetail_deleteFailed(error.message)),
@@ -579,7 +582,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       },
       onSuccess: (_) {
         // 觸覺回饋 - 刪除成功
-        AnimationUtils.lightImpact();
+        unawaited(AnimationUtils.lightImpact());
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.expenseDetail_deleted)),
@@ -655,11 +658,13 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   }
 
   void _showFullImage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => _FullImageViewer(
-          imagePath: _expense!.receiptImagePath!,
-          heroTag: HeroTags.receiptImage(_expense!.id!),
+    unawaited(
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => _FullImageViewer(
+            imagePath: _expense!.receiptImagePath!,
+            heroTag: HeroTags.receiptImage(_expense!.id!),
+          ),
         ),
       ),
     );

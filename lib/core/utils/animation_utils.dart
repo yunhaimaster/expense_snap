@@ -90,8 +90,8 @@ class AnimationUtils {
     try {
       final themeProvider = context.read<ThemeProvider>();
       return themeProvider.reduceMotion;
-    } catch (_) {
-      // Provider 不可用時回傳 false
+    } on Object catch (_) {
+      // Provider 不可用時回傳 false（ProviderNotFoundException 非 Exception）
       return false;
     }
   }

@@ -273,7 +273,8 @@ class ExportService {
           targetCurrency: strings.primaryCurrency,
         ),
       );
-    } catch (e) {
+    } on Object catch (e) {
+      // FlutterError (extends Error) 可能在 binding 未初始化時拋出
       AppLogger.error('exportToExcel failed', error: e);
       return Result.failure(
         ExportException.excelGenerationFailed(e.toString()),
@@ -405,7 +406,7 @@ class ExportService {
       // 清理暫時的 Excel 檔案（失敗時僅記錄，不影響 ZIP 匯出結果）
       try {
         await File(excelInfo.filePath).delete();
-      } catch (e) {
+      } on Exception catch (e) {
         AppLogger.warning('Failed to cleanup temp Excel file: $e');
       }
 
@@ -420,7 +421,7 @@ class ExportService {
           receiptCount: receiptCount,
         ),
       );
-    } catch (e) {
+    } on Object catch (e) {
       AppLogger.error('exportToZip failed', error: e);
       return Result.failure(ExportException.zipFailed(e.toString()));
     }
@@ -452,7 +453,7 @@ class ExportService {
       }
 
       return Result.success(null);
-    } catch (e) {
+    } on Object catch (e) {
       AppLogger.error('shareFile failed', error: e);
       return Result.failure(ExportException.shareFailed());
     }
@@ -477,7 +478,7 @@ class ExportService {
 
       AppLogger.info('Cleaned up $deletedCount temp files');
       return Result.success(deletedCount);
-    } catch (e) {
+    } on Object catch (e) {
       AppLogger.error('cleanupTempFiles failed', error: e);
       return Result.failure(StorageException('清理暫存檔案失敗: $e'));
     }

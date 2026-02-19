@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/utils/animation_utils.dart';
@@ -56,27 +58,33 @@ class _AnimatedCountState extends State<AnimatedCount>
       duration: widget.duration ?? AnimationUtils.standard,
       vsync: this,
     );
-    _animation = Tween<double>(
-      begin: widget.count,
-      end: widget.count,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: widget.curve ?? AnimationUtils.emphasized,
-    ));
+    _animation =
+        Tween<double>(
+          begin: widget.count,
+          end: widget.count,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: widget.curve ?? AnimationUtils.emphasized,
+          ),
+        );
   }
 
   @override
   void didUpdateWidget(AnimatedCount oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.count != widget.count) {
-      _animation = Tween<double>(
-        begin: _previousCount,
-        end: widget.count,
-      ).animate(CurvedAnimation(
-        parent: _controller,
-        curve: widget.curve ?? AnimationUtils.emphasized,
-      ));
-      _controller.forward(from: 0);
+      _animation =
+          Tween<double>(
+            begin: _previousCount,
+            end: widget.count,
+          ).animate(
+            CurvedAnimation(
+              parent: _controller,
+              curve: widget.curve ?? AnimationUtils.emphasized,
+            ),
+          );
+      unawaited(_controller.forward(from: 0));
       _previousCount = widget.count;
     }
   }
@@ -176,16 +184,17 @@ class _AnimatedIntCountState extends State<AnimatedIntCount>
   void didUpdateWidget(AnimatedIntCount oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.count != widget.count) {
-      _animation = IntTween(
-        begin: _previousCount,
-        end: widget.count,
-      ).animate(
-        CurvedAnimation(
-          parent: _controller,
-          curve: widget.curve ?? AnimationUtils.emphasized,
-        ),
-      );
-      _controller.forward(from: 0);
+      _animation =
+          IntTween(
+            begin: _previousCount,
+            end: widget.count,
+          ).animate(
+            CurvedAnimation(
+              parent: _controller,
+              curve: widget.curve ?? AnimationUtils.emphasized,
+            ),
+          );
+      unawaited(_controller.forward(from: 0));
       _previousCount = widget.count;
     }
   }
@@ -272,27 +281,33 @@ class _AnimatedAmountState extends State<AnimatedAmount>
       duration: widget.duration ?? AnimationUtils.slow,
       vsync: this,
     );
-    _animation = Tween<double>(
-      begin: _previousAmount,
-      end: _previousAmount,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: widget.curve ?? AnimationUtils.emphasized,
-    ));
+    _animation =
+        Tween<double>(
+          begin: _previousAmount,
+          end: _previousAmount,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: widget.curve ?? AnimationUtils.emphasized,
+          ),
+        );
   }
 
   @override
   void didUpdateWidget(AnimatedAmount oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.amount != widget.amount) {
-      _animation = Tween<double>(
-        begin: _previousAmount,
-        end: widget.amount.toDouble(),
-      ).animate(CurvedAnimation(
-        parent: _controller,
-        curve: widget.curve ?? AnimationUtils.emphasized,
-      ));
-      _controller.forward(from: 0);
+      _animation =
+          Tween<double>(
+            begin: _previousAmount,
+            end: widget.amount.toDouble(),
+          ).animate(
+            CurvedAnimation(
+              parent: _controller,
+              curve: widget.curve ?? AnimationUtils.emphasized,
+            ),
+          );
+      unawaited(_controller.forward(from: 0));
       _previousAmount = widget.amount.toDouble();
     }
   }
@@ -356,8 +371,9 @@ class _AnimatedAmountState extends State<AnimatedAmount>
       RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
       (match) => '${match[1]},',
     );
-    final formatted =
-        widget.decimalDigits > 0 ? '$intPart.${parts[1]}' : intPart;
+    final formatted = widget.decimalDigits > 0
+        ? '$intPart.${parts[1]}'
+        : intPart;
     // 混合幣種時顯示 ≈ 前綴
     final prefix = widget.hasMixedCurrencies ? '≈ ' : '';
     return '$prefix${widget.currencySymbol}$formatted';

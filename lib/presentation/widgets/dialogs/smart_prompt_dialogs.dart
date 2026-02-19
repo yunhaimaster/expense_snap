@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -229,7 +231,7 @@ class SmartPromptDialogs {
             onPressed: () {
               Navigator.of(dialogContext).pop();
               // 導航到匯出頁面
-              navigator.pushNamed('/export');
+              unawaited(navigator.pushNamed('/export'));
             },
             icon: const Icon(Icons.file_download),
             label: Text(l10n.dialog_goExport),

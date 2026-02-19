@@ -67,7 +67,7 @@ class ExpenseRepository implements IExpenseRepository {
       AppLogger.info('Expense added: id=$id');
 
       return Result.success(savedExpense);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('addExpense failed', error: e);
       return Result.failure(
         DatabaseException.insertFailed(e.toString()),
@@ -97,7 +97,7 @@ class ExpenseRepository implements IExpenseRepository {
 
       AppLogger.info('Expense updated: id=${expense.id}');
       return Result.success(updatedExpense);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('updateExpense failed', error: e);
       return Result.failure(
         DatabaseException.updateFailed(e.toString()),
@@ -116,7 +116,7 @@ class ExpenseRepository implements IExpenseRepository {
       }
 
       return Result.success(Expense.fromMap(map));
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('getExpenseById failed', error: e);
       return Result.failure(
         DatabaseException.queryFailed(e.toString()),
@@ -142,7 +142,7 @@ class ExpenseRepository implements IExpenseRepository {
 
       final expenses = maps.map(Expense.fromMap).toList();
       return Result.success(expenses);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('getExpensesByMonth failed', error: e);
       return Result.failure(
         DatabaseException.queryFailed(e.toString()),
@@ -158,7 +158,7 @@ class ExpenseRepository implements IExpenseRepository {
     try {
       final count = await _db.getExpenseCountByMonth(year: year, month: month);
       return Result.success(count);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('getExpenseCount failed', error: e);
       return Result.failure(
         DatabaseException.queryFailed(e.toString()),
@@ -189,7 +189,7 @@ class ExpenseRepository implements IExpenseRepository {
           hasMixedCurrencies: currencyCount > 1,
         ),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('getMonthSummary failed', error: e);
       return Result.failure(
         DatabaseException.queryFailed(e.toString()),
@@ -218,7 +218,7 @@ class ExpenseRepository implements IExpenseRepository {
 
       AppLogger.info('Expense soft deleted: id=$id');
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('softDeleteExpense failed', error: e);
       return Result.failure(
         DatabaseException.deleteFailed(e.toString()),
@@ -244,7 +244,7 @@ class ExpenseRepository implements IExpenseRepository {
 
       AppLogger.info('Expense restored: id=$id');
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('restoreExpense failed', error: e);
       return Result.failure(
         DatabaseException.updateFailed(e.toString()),
@@ -258,7 +258,7 @@ class ExpenseRepository implements IExpenseRepository {
       final maps = await _db.getDeletedExpenses();
       final expenses = maps.map(Expense.fromMap).toList();
       return Result.success(expenses);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('getDeletedExpenses failed', error: e);
       return Result.failure(
         DatabaseException.queryFailed(e.toString()),
@@ -290,7 +290,7 @@ class ExpenseRepository implements IExpenseRepository {
           fullPath: expense.receiptImagePath,
           thumbnailPath: expense.thumbnailPath,
         );
-      } catch (imageError) {
+      } on Exception catch (imageError) {
         // 記錄孤立圖片警告，但不影響整體刪除操作成功
         AppLogger.warning(
           'Failed to delete orphaned images for expense id=$id: '
@@ -301,7 +301,7 @@ class ExpenseRepository implements IExpenseRepository {
 
       AppLogger.info('Expense permanently deleted: id=$id');
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('permanentlyDeleteExpense failed', error: e);
       return Result.failure(
         DatabaseException.deleteFailed(e.toString()),
@@ -338,7 +338,7 @@ class ExpenseRepository implements IExpenseRepository {
 
       AppLogger.info('Cleaned up $deletedCount expired deleted expenses');
       return Result.success(deletedCount);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('cleanupExpiredDeletedExpenses failed', error: e);
       return Result.failure(
         DatabaseException.deleteFailed(e.toString()),
@@ -391,7 +391,7 @@ class ExpenseRepository implements IExpenseRepository {
 
       AppLogger.info('Receipt image replaced: id=$expenseId');
       return Result.success(updatedExpense);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('replaceReceiptImage failed', error: e);
       return Result.failure(
         DatabaseException.updateFailed(e.toString()),

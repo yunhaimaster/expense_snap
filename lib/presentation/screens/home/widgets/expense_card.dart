@@ -256,6 +256,9 @@ class ExpenseCard extends StatelessWidget {
                   child: Image.file(
                     File(expense.thumbnailPath!),
                     fit: BoxFit.cover,
+                    // Hero 動畫用縮圖，限制記憶體
+                    cacheWidth: 96,
+                    cacheHeight: 96,
                     errorBuilder: (ctx, error, stack) => Container(
                       color: Theme.of(ctx).dividerColor,
                       child: Icon(
@@ -368,7 +371,7 @@ class ExpenseCard extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   // 觸覺回饋 - 確認刪除
-                  AnimationUtils.mediumImpact();
+                  unawaited(AnimationUtils.mediumImpact());
                   Navigator.of(context).pop(true);
                 },
                 style: TextButton.styleFrom(

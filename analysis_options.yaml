@@ -55,11 +55,11 @@ linter:
     unnecessary_raw_strings: false
     use_raw_strings: false
 
-    # Catch 規則 - 暫時停用（需要大量重構）
-    avoid_catches_without_on_clauses: false
+    # Catch 規則 - 已啟用（所有 catch 都有 on 子句）
+    avoid_catches_without_on_clauses: true
 
-    # Async 規則 - 停用過於嚴格的
-    discarded_futures: false  # 暫停，需逐步修復
+    # Async 規則
+    discarded_futures: true  # 已啟用 - 所有 Future 須 await 或 unawaited()
     unnecessary_await_in_return: false
 
     # 其他 - 停用

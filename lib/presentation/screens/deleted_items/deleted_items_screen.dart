@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadDeletedExpenses();
+    unawaited(_loadDeletedExpenses());
   }
 
   Future<void> _loadDeletedExpenses() async {
@@ -173,7 +174,9 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
       onFailure: (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.deletedItems_permanentDeleteFailed(error.message)),
+            content: Text(
+              l10n.deletedItems_permanentDeleteFailed(error.message),
+            ),
             backgroundColor: AppColors.error,
           ),
         );
@@ -197,7 +200,9 @@ class _DeletedItemsScreenState extends State<DeletedItemsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.deletedItems_clearAllTitle),
-        content: Text(l10n.deletedItems_clearAllConfirm(_deletedExpenses.length)),
+        content: Text(
+          l10n.deletedItems_clearAllConfirm(_deletedExpenses.length),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -287,9 +292,9 @@ class _DeletedExpenseCard extends StatelessWidget {
                       Text(
                         expense.formattedOriginalAmount,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -307,7 +312,9 @@ class _DeletedExpenseCard extends StatelessWidget {
                 Icon(
                   Icons.schedule,
                   size: 16,
-                  color: daysRemaining <= 7 ? AppColors.error : AppColors.textSecondary,
+                  color: daysRemaining <= 7
+                      ? AppColors.error
+                      : AppColors.textSecondary,
                 ),
                 const SizedBox(width: 4),
                 Expanded(
@@ -316,10 +323,10 @@ class _DeletedExpenseCard extends StatelessWidget {
                         ? l10n.deletedItems_daysRemaining(daysRemaining)
                         : l10n.deletedItems_soonDeleted,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: daysRemaining <= 7
-                              ? AppColors.error
-                              : AppColors.textSecondary,
-                        ),
+                      color: daysRemaining <= 7
+                          ? AppColors.error
+                          : AppColors.textSecondary,
+                    ),
                   ),
                 ),
                 TextButton.icon(
@@ -370,6 +377,9 @@ class _DeletedExpenseCard extends StatelessWidget {
         child: Image.file(
           File(expense.thumbnailPath!),
           fit: BoxFit.cover,
+          // 縮圖快取尺寸，2x 以支援高密度螢幕
+          cacheWidth: 96,
+          cacheHeight: 96,
           errorBuilder: (context, error, stack) => Container(
             color: AppColors.divider,
             child: const Icon(

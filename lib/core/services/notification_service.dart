@@ -49,7 +49,9 @@ class NotificationService {
       tz_data.initializeTimeZones();
 
       // Android 設定
-      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const androidSettings = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
 
       // iOS 設定
       const iosSettings = DarwinInitializationSettings(
@@ -71,7 +73,7 @@ class NotificationService {
       _initialized = true;
       _initializationCompleter!.complete();
       AppLogger.info('NotificationService initialized');
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       _initializationCompleter!.completeError(e, stackTrace);
       _initializationCompleter = null; // 允許重試
       AppLogger.error(
@@ -85,15 +87,19 @@ class NotificationService {
   /// 請求通知權限
   Future<bool> requestPermission() async {
     try {
-      final android = _notifications.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+      final android = _notifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       if (android != null) {
         final granted = await android.requestNotificationsPermission();
         return granted ?? false;
       }
 
-      final ios = _notifications.resolvePlatformSpecificImplementation<
-          IOSFlutterLocalNotificationsPlugin>();
+      final ios = _notifications
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
       if (ios != null) {
         final granted = await ios.requestPermissions(
           alert: true,
@@ -104,7 +110,7 @@ class NotificationService {
       }
 
       return false;
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to request notification permission: $e');
       return false;
     }
@@ -120,7 +126,10 @@ class NotificationService {
   /// 設定月底提醒狀態
   Future<void> setMonthEndReminder(bool enabled) async {
     final db = DatabaseHelper.instance;
-    await db.setSetting('month_end_reminder_enabled', enabled ? 'true' : 'false');
+    await db.setSetting(
+      'month_end_reminder_enabled',
+      enabled ? 'true' : 'false',
+    );
 
     if (enabled) {
       await _scheduleMonthEndReminder();
@@ -194,7 +203,7 @@ class NotificationService {
       );
 
       AppLogger.info('Month-end reminder scheduled for $scheduledDate');
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to schedule month-end reminder',
         error: e,
@@ -208,7 +217,7 @@ class NotificationService {
     try {
       await _notifications.cancel(monthEndReminderId);
       AppLogger.info('Month-end reminder cancelled');
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to cancel month-end reminder: $e');
     }
   }
@@ -242,7 +251,7 @@ class NotificationService {
       );
 
       await _notifications.show(id, title, body, details);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to show notification: $e');
     }
   }

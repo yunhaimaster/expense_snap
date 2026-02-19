@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -24,7 +26,7 @@ enum AppThemeMode {
 /// - 減少動畫選項
 class ThemeProvider extends ChangeNotifier {
   ThemeProvider() {
-    _loadSettings();
+    unawaited(_loadSettings());
   }
 
   // ============ 狀態 ============
@@ -124,7 +126,8 @@ class ThemeProvider extends ChangeNotifier {
 
       _isLoading = false;
       _safeNotifyListeners();
-    } catch (e) {
+    } on Object catch (e) {
+      // StateError 可能在 sl 未初始化時拋出（非 Exception）
       AppLogger.warning('Failed to load theme settings: $e');
       _isLoading = false;
       _safeNotifyListeners();
@@ -135,7 +138,7 @@ class ThemeProvider extends ChangeNotifier {
   Future<void> _saveThemeMode(AppThemeMode mode) async {
     try {
       await sl.databaseHelper.setSetting('theme_mode', mode.name);
-    } catch (e) {
+    } on Object catch (e) {
       AppLogger.warning('Failed to save theme mode: $e');
     }
   }
@@ -144,7 +147,7 @@ class ThemeProvider extends ChangeNotifier {
   Future<void> _saveReduceMotion(bool value) async {
     try {
       await sl.databaseHelper.setSetting('reduce_motion', value.toString());
-    } catch (e) {
+    } on Object catch (e) {
       AppLogger.warning('Failed to save reduce motion setting: $e');
     }
   }

@@ -10,8 +10,8 @@ import '../../core/utils/app_logger.dart';
 /// 使用 connectivity_plus 監聽網絡狀態變化
 class ConnectivityProvider extends ChangeNotifier {
   ConnectivityProvider({Connectivity? connectivity})
-      : _connectivity = connectivity ?? Connectivity() {
-    _init();
+    : _connectivity = connectivity ?? Connectivity() {
+    unawaited(_init());
   }
 
   final Connectivity _connectivity;
@@ -93,7 +93,7 @@ class ConnectivityProvider extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
-    _subscription?.cancel();
+    unawaited(_subscription?.cancel());
     AppLogger.debug('ConnectivityProvider disposed');
     super.dispose();
   }

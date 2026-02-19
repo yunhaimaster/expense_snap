@@ -66,7 +66,7 @@ class _AnimatedFabState extends State<AnimatedFab>
     // 延遲進場（使用可取消的 Timer）
     _entryDelayTimer = Timer(AnimationUtils.standard, () {
       if (mounted) {
-        _entryController.forward();
+        unawaited(_entryController.forward());
       }
     });
 
@@ -83,7 +83,7 @@ class _AnimatedFabState extends State<AnimatedFab>
     );
 
     if (widget.showPulse) {
-      _pulseController.repeat(reverse: true);
+      unawaited(_pulseController.repeat(reverse: true));
     }
   }
 
@@ -93,7 +93,7 @@ class _AnimatedFabState extends State<AnimatedFab>
 
     if (widget.showPulse != oldWidget.showPulse) {
       if (widget.showPulse) {
-        _pulseController.repeat(reverse: true);
+        unawaited(_pulseController.repeat(reverse: true));
       } else {
         _pulseController.stop();
         _pulseController.value = 0;
@@ -118,7 +118,7 @@ class _AnimatedFabState extends State<AnimatedFab>
       heroTag: widget.heroTag,
       onPressed: () {
         // 觸覺回饋
-        AnimationUtils.selectionClick();
+        unawaited(AnimationUtils.selectionClick());
         widget.onPressed();
       },
       tooltip: widget.tooltip,
@@ -200,12 +200,12 @@ class _ExpandableFabState extends State<ExpandableFab>
     setState(() {
       _isOpen = !_isOpen;
       if (_isOpen) {
-        _controller.forward();
+        unawaited(_controller.forward());
       } else {
-        _controller.reverse();
+        unawaited(_controller.reverse());
       }
     });
-    AnimationUtils.selectionClick();
+    unawaited(AnimationUtils.selectionClick());
   }
 
   @override
@@ -291,8 +291,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           onPressed: _toggle,
           child: AnimatedRotation(
             turns: _isOpen ? 0.125 : 0,
-            duration:
-                reduceMotion ? Duration.zero : AnimationUtils.standard,
+            duration: reduceMotion ? Duration.zero : AnimationUtils.standard,
             child: Icon(_isOpen ? widget.closeIcon : widget.icon),
           ),
         ),

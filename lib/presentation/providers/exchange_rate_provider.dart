@@ -9,8 +9,8 @@ import '../../data/repositories/exchange_rate_repository.dart';
 ///
 /// 管理匯率獲取、快取和 UI 狀態
 class ExchangeRateProvider extends ChangeNotifier {
-  ExchangeRateProvider({ExchangeRateRepository? repository})
-    : _repository = repository ?? ExchangeRateRepository();
+  ExchangeRateProvider({required ExchangeRateRepository repository})
+    : _repository = repository;
 
   final ExchangeRateRepository _repository;
 

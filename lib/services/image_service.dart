@@ -48,7 +48,7 @@ class ImageService {
       }
 
       return Result.success(image.path);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('pickFromCamera failed', error: e);
       return Result.failure(
         StorageException('無法開啟相機: $e', code: 'CAMERA_ERROR'),
@@ -71,7 +71,7 @@ class ImageService {
       }
 
       return Result.success(image.path);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('pickFromGallery failed', error: e);
       return Result.failure(
         StorageException('無法開啟相簿: $e', code: 'GALLERY_ERROR'),
@@ -105,8 +105,10 @@ class ImageService {
       final uniqueId = _uuid.v4().substring(0, AppConstants.shortUuidLength);
       final monthFolder = _formatMonthFolder(expenseDate);
 
-      final fullFileName = '${timestamp}_$uniqueId${AppConstants.fullImageSuffix}';
-      final thumbFileName = '${timestamp}_$uniqueId${AppConstants.thumbnailSuffix}';
+      final fullFileName =
+          '${timestamp}_$uniqueId${AppConstants.fullImageSuffix}';
+      final thumbFileName =
+          '${timestamp}_$uniqueId${AppConstants.thumbnailSuffix}';
 
       // 建立目標路徑
       final fullPath = PathValidator.buildSafeImagePath(
@@ -140,27 +142,40 @@ class ImageService {
 
       _ProcessImageResult result;
       try {
-        result = await compute(_processImageIsolate, params)
-            .timeout(processingTimeout);
+        result = await compute(
+          _processImageIsolate,
+          params,
+        ).timeout(processingTimeout);
 
         // 若 isolate 內部因 UnimplementedError 失敗，回退到主線程重試
-        if (!result.success && result.error?.contains('UnimplementedError') == true) {
-          AppLogger.warning('Isolate image processing not supported, retrying on main thread');
-          result = await _processImageMainThread(params)
-              .timeout(processingTimeout);
+        if (!result.success &&
+            result.error?.contains('UnimplementedError') == true) {
+          AppLogger.warning(
+            'Isolate image processing not supported, retrying on main thread',
+          );
+          result = await _processImageMainThread(
+            params,
+          ).timeout(processingTimeout);
         }
       } on TimeoutException {
         // 超時不回退到主線程，直接返回超時錯誤
-        AppLogger.warning('Image processing timeout after ${processingTimeout.inSeconds}s');
+        AppLogger.warning(
+          'Image processing timeout after ${processingTimeout.inSeconds}s',
+        );
         return Result.failure(ImageException.processingTimeout());
-      } catch (e) {
+      } on Exception catch (e) {
         // Isolate 執行本身失敗，回退到主線程（含超時）
-        AppLogger.warning('Isolate image processing failed, falling back to main thread: $e');
+        AppLogger.warning(
+          'Isolate image processing failed, falling back to main thread: $e',
+        );
         try {
-          result = await _processImageMainThread(params)
-              .timeout(processingTimeout);
+          result = await _processImageMainThread(
+            params,
+          ).timeout(processingTimeout);
         } on TimeoutException {
-          AppLogger.warning('Main thread image processing timeout after ${processingTimeout.inSeconds}s');
+          AppLogger.warning(
+            'Main thread image processing timeout after ${processingTimeout.inSeconds}s',
+          );
           return Result.failure(ImageException.processingTimeout());
         }
       }
@@ -173,11 +188,13 @@ class ImageService {
         'Image processed: full=${result.fullSize}KB, thumb=${result.thumbSize}KB',
       );
 
-      return Result.success(ProcessedImagePaths(
-        fullPath: fullPath,
-        thumbnailPath: thumbPath,
-      ));
-    } catch (e) {
+      return Result.success(
+        ProcessedImagePaths(
+          fullPath: fullPath,
+          thumbnailPath: thumbPath,
+        ),
+      );
+    } on Exception catch (e) {
       AppLogger.error('processReceiptImage failed', error: e);
       return Result.failure(
         ImageException('圖片處理失敗: $e', code: 'PROCESS_FAILED'),
@@ -198,7 +215,7 @@ class ImageService {
         await _deleteFileIfExists(thumbnailPath);
       }
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('deleteImages failed', error: e);
       return Result.failure(
         StorageException('刪除圖片失敗: $e', code: 'DELETE_FAILED'),
@@ -221,7 +238,7 @@ class ImageService {
         return (bytes / 1024).round();
       }
       return 0;
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('getImageSizeKb failed for path: $path', error: e);
       return 0;
     }
@@ -255,12 +272,12 @@ class ImageService {
               await entity.delete();
               AppLogger.debug('Deleted temp file: ${entity.path}');
             }
-          } catch (e) {
+          } on Exception catch (_) {
             AppLogger.warning('Failed to delete temp file: ${entity.path}');
           }
         }
       }
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to cleanup temp files: $e');
     }
   }
@@ -338,7 +355,9 @@ class _ProcessImageResult {
 /// 3. 儲存壓縮後的原圖
 /// 4. 生成縮圖
 /// 5. 儲存縮圖
-Future<_ProcessImageResult> _processImageCore(_ProcessImageParams params) async {
+Future<_ProcessImageResult> _processImageCore(
+  _ProcessImageParams params,
+) async {
   try {
     // 讀取原圖
     final sourceBytes = await File(params.sourcePath).readAsBytes();
@@ -390,7 +409,7 @@ Future<_ProcessImageResult> _processImageCore(_ProcessImageParams params) async 
       fullSize: (compressedBytes.length / 1024).round(),
       thumbSize: (thumbnailBytes.length / 1024).round(),
     );
-  } catch (e) {
+  } on Exception catch (e) {
     return _ProcessImageResult(
       success: false,
       error: e.toString(),
@@ -399,13 +418,17 @@ Future<_ProcessImageResult> _processImageCore(_ProcessImageParams params) async 
 }
 
 /// 在 isolate 中處理圖片
-Future<_ProcessImageResult> _processImageIsolate(_ProcessImageParams params) async {
+Future<_ProcessImageResult> _processImageIsolate(
+  _ProcessImageParams params,
+) async {
   return _processImageCore(params);
 }
 
 /// 主線程版本的圖片處理（備援方案）
 ///
 /// 當 isolate 不支援時使用此方法
-Future<_ProcessImageResult> _processImageMainThread(_ProcessImageParams params) async {
+Future<_ProcessImageResult> _processImageMainThread(
+  _ProcessImageParams params,
+) async {
   return _processImageCore(params);
 }

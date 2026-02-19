@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -178,7 +180,8 @@ class _ShimmerEffectState extends State<_ShimmerEffect>
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
-    )..repeat();
+    );
+    unawaited(_controller.repeat());
     _animation = Tween<double>(begin: -1, end: 2).animate(_controller);
   }
 

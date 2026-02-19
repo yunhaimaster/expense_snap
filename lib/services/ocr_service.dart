@@ -59,7 +59,7 @@ class OcrService {
       AppLogger.info('Chinese text recognizer initialized');
       _initCompleter!.complete(_textRecognizer);
       return _textRecognizer;
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to init Chinese recognizer: $e');
       _initCompleter!.complete(null);
       return null;
@@ -127,7 +127,9 @@ class OcrService {
             .timeout(timeoutDuration);
       } on TimeoutException {
         stopwatch.stop();
-        AppLogger.warning('OCR timeout after ${stopwatch.elapsedMilliseconds}ms');
+        AppLogger.warning(
+          'OCR timeout after ${stopwatch.elapsedMilliseconds}ms',
+        );
         return Result.failure(OcrException.timeout());
       }
 
@@ -139,7 +141,7 @@ class OcrService {
       );
 
       return Result.success(recognizedText);
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       AppLogger.error('OCR failed', error: e, stackTrace: stackTrace);
       return Result.failure(
         OcrException('文字識別失敗: $e', code: 'OCR_FAILED'),
@@ -159,7 +161,7 @@ class OcrService {
       _lastOcrRequest = null;
       _scriptType = 'unknown';
       AppLogger.info('OcrService disposed');
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to dispose OcrService: $e');
     }
   }

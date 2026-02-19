@@ -54,7 +54,7 @@ class ShowcaseProvider extends ChangeNotifier {
 
       _initialized = true;
       _safeNotifyListeners();
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to initialize showcase state: $e');
     }
   }
@@ -68,7 +68,7 @@ class ShowcaseProvider extends ChangeNotifier {
       if (_disposed) return;
       _fabShowcaseComplete = true;
       _safeNotifyListeners();
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to complete FAB showcase: $e');
     }
   }
@@ -82,7 +82,7 @@ class ShowcaseProvider extends ChangeNotifier {
       if (_disposed) return;
       _swipeShowcaseComplete = true;
       _safeNotifyListeners();
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to complete swipe showcase: $e');
     }
   }
@@ -96,7 +96,7 @@ class ShowcaseProvider extends ChangeNotifier {
       if (_disposed) return;
       _exportShowcaseComplete = true;
       _safeNotifyListeners();
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to complete export showcase: $e');
     }
   }
@@ -108,7 +108,7 @@ class ShowcaseProvider extends ChangeNotifier {
     try {
       final count = await _service.getExpenseCount();
       return count >= 5;
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to check export showcase ready: $e');
       return false;
     }
@@ -123,7 +123,7 @@ class ShowcaseProvider extends ChangeNotifier {
       _swipeShowcaseComplete = false;
       _exportShowcaseComplete = false;
       _safeNotifyListeners();
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning('Failed to reset showcases: $e');
     }
   }

@@ -18,14 +18,16 @@ void main() {
     streamController = StreamController<List<ConnectivityResult>>.broadcast();
 
     // 預設 stub
-    when(mockConnectivity.checkConnectivity())
-        .thenAnswer((_) async => [ConnectivityResult.wifi]);
-    when(mockConnectivity.onConnectivityChanged)
-        .thenAnswer((_) => streamController.stream);
+    when(
+      mockConnectivity.checkConnectivity(),
+    ).thenAnswer((_) async => [ConnectivityResult.wifi]);
+    when(
+      mockConnectivity.onConnectivityChanged,
+    ).thenAnswer((_) => streamController.stream);
   });
 
-  tearDown(() {
-    streamController.close();
+  tearDown(() async {
+    await streamController.close();
   });
 
   group('ConnectivityProvider 初始化', () {
@@ -43,8 +45,9 @@ void main() {
     });
 
     test('初始化時無網絡應顯示離線', () async {
-      when(mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [ConnectivityResult.none]);
+      when(
+        mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.none]);
 
       final provider = ConnectivityProvider(connectivity: mockConnectivity);
       await Future.delayed(Duration.zero);
@@ -70,8 +73,9 @@ void main() {
 
   group('ConnectivityProvider.isMobile', () {
     test('使用行動網絡時應為 true', () async {
-      when(mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [ConnectivityResult.mobile]);
+      when(
+        mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.mobile]);
 
       final provider = ConnectivityProvider(connectivity: mockConnectivity);
       await Future.delayed(Duration.zero);
@@ -108,11 +112,12 @@ void main() {
     });
 
     test('多種連線類型應正確識別', () async {
-      when(mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [
-                ConnectivityResult.wifi,
-                ConnectivityResult.mobile,
-              ]);
+      when(mockConnectivity.checkConnectivity()).thenAnswer(
+        (_) async => [
+          ConnectivityResult.wifi,
+          ConnectivityResult.mobile,
+        ],
+      );
 
       final provider = ConnectivityProvider(connectivity: mockConnectivity);
       await Future.delayed(Duration.zero);
@@ -131,8 +136,9 @@ void main() {
       await Future.delayed(Duration.zero);
 
       // 模擬狀態變化
-      when(mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [ConnectivityResult.mobile]);
+      when(
+        mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.mobile]);
 
       final isConnected = await provider.checkConnectivity();
 
@@ -146,8 +152,7 @@ void main() {
       final provider = ConnectivityProvider(connectivity: mockConnectivity);
       await Future.delayed(Duration.zero);
 
-      when(mockConnectivity.checkConnectivity())
-          .thenThrow(Exception('檢查失敗'));
+      when(mockConnectivity.checkConnectivity()).thenThrow(Exception('檢查失敗'));
 
       final isConnected = await provider.checkConnectivity();
 
@@ -175,8 +180,7 @@ void main() {
 
   group('ConnectivityProvider 錯誤處理', () {
     test('初始化檢查失敗應保持預設狀態', () async {
-      when(mockConnectivity.checkConnectivity())
-          .thenThrow(Exception('初始化失敗'));
+      when(mockConnectivity.checkConnectivity()).thenThrow(Exception('初始化失敗'));
 
       final provider = ConnectivityProvider(connectivity: mockConnectivity);
       await Future.delayed(Duration.zero);

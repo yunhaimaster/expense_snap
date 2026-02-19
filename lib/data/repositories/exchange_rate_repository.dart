@@ -45,9 +45,9 @@ class ExchangeRateInfo {
 /// 3. Default Hardcoded Rates
 class ExchangeRateRepository {
   ExchangeRateRepository({
-    DatabaseHelper? databaseHelper,
+    required DatabaseHelper databaseHelper,
     ExchangeRateApi? api,
-  }) : _db = databaseHelper ?? DatabaseHelper.instance,
+  }) : _db = databaseHelper,
        _api = api ?? ExchangeRateApi();
 
   final DatabaseHelper _db;
@@ -245,7 +245,7 @@ class ExchangeRateRepository {
       await _db.clearExchangeRateCache();
       _lastRefreshTime = null;
       AppLogger.info('Exchange rate cache invalidated');
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to invalidate cache', error: e);
     }
   }
@@ -291,7 +291,7 @@ class ExchangeRateRepository {
       );
       if (map == null) return null;
       return ExchangeRateCache.fromMap(map);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to get cached rate', error: e);
       return null;
     }
@@ -320,7 +320,7 @@ class ExchangeRateRepository {
       AppLogger.debug(
         'Cached ${rates.length} exchange rates for $baseCurrency',
       );
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to cache rates', error: e);
     }
   }

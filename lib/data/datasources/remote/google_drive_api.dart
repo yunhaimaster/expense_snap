@@ -36,7 +36,9 @@ class DriveBackupInfo {
   /// 格式化大小
   String get formattedSize {
     if (sizeBytes < 1024) return '$sizeBytes B';
-    if (sizeBytes < 1024 * 1024) return '${(sizeBytes / 1024).toStringAsFixed(1)} KB';
+    if (sizeBytes < 1024 * 1024) {
+      return '${(sizeBytes / 1024).toStringAsFixed(1)} KB';
+    }
     return '${(sizeBytes / (1024 * 1024)).toStringAsFixed(1)} MB';
   }
 
@@ -67,8 +69,8 @@ class GoogleDriveApi {
   GoogleDriveApi({
     GoogleSignIn? googleSignIn,
     SecureStorageHelper? secureStorage,
-  })  : _googleSignIn = googleSignIn ?? _createGoogleSignIn(),
-        _secureStorage = secureStorage ?? SecureStorageHelper.instance;
+  }) : _googleSignIn = googleSignIn ?? _createGoogleSignIn(),
+       _secureStorage = secureStorage ?? SecureStorageHelper.instance;
 
   final GoogleSignIn _googleSignIn;
   final SecureStorageHelper _secureStorage;
@@ -84,7 +86,6 @@ class GoogleDriveApi {
 
   // API 操作超時時間（60 秒）
   static const Duration _apiTimeout = Duration(seconds: 60);
-
 
   // 當前登入帳號
   GoogleSignInAccount? _currentAccount;
@@ -145,14 +146,19 @@ class GoogleDriveApi {
       // 初始化 Drive API
       await _initDriveApi();
 
-      AppLogger.info('Google Sign-In successful: ${account.email}', tag: 'GoogleDrive');
+      AppLogger.info(
+        'Google Sign-In successful: ${account.email}',
+        tag: 'GoogleDrive',
+      );
 
-      return Result.success(GoogleAccountInfo(
-        email: account.email,
-        displayName: account.displayName,
-        photoUrl: account.photoUrl,
-      ));
-    } catch (e) {
+      return Result.success(
+        GoogleAccountInfo(
+          email: account.email,
+          displayName: account.displayName,
+          photoUrl: account.photoUrl,
+        ),
+      );
+    } on Exception catch (e) {
       AppLogger.error('Google Sign-In failed', error: e, tag: 'GoogleDrive');
       return Result.failure(AuthException('登入失敗: $e'));
     }
@@ -174,7 +180,7 @@ class GoogleDriveApi {
 
       AppLogger.info('Google Sign-Out successful', tag: 'GoogleDrive');
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Google Sign-Out failed', error: e, tag: 'GoogleDrive');
       return Result.failure(AuthException('登出失敗: $e'));
     }
@@ -196,7 +202,7 @@ class GoogleDriveApi {
 
       AppLogger.info('Google account disconnected', tag: 'GoogleDrive');
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Google disconnect failed', error: e, tag: 'GoogleDrive');
       return Result.failure(AuthException('斷開連接失敗: $e'));
     }
@@ -264,7 +270,7 @@ class GoogleDriveApi {
       final success = Result<void>.success(null);
       _refreshCompleter!.complete(success);
       return success;
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Token refresh failed', error: e, tag: 'GoogleDrive');
       final failure = Result<void>.failure(AuthException.tokenExpired());
       _refreshCompleter!.complete(failure);
@@ -287,18 +293,23 @@ class GoogleDriveApi {
       final driveApi = _driveApi!;
 
       // 搜尋現有資料夾
-      final folderList = await driveApi.files.list(
-        q: "name = '$_backupFolderName' and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
-        spaces: 'drive',
-        $fields: 'files(id, name)',
-      ).timeout(_apiTimeout);
+      final folderList = await driveApi.files
+          .list(
+            q: "name = '$_backupFolderName' and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
+            spaces: 'drive',
+            $fields: 'files(id, name)',
+          )
+          .timeout(_apiTimeout);
 
       if (folderList.files != null && folderList.files!.isNotEmpty) {
         final firstFolder = folderList.files!.first;
         if (firstFolder.id == null) {
           return Result.failure(const StorageException('備份資料夾 ID 無效'));
         }
-        AppLogger.info('Found existing backup folder: ${firstFolder.id}', tag: 'GoogleDrive');
+        AppLogger.info(
+          'Found existing backup folder: ${firstFolder.id}',
+          tag: 'GoogleDrive',
+        );
         return Result.success(firstFolder.id!);
       }
 
@@ -307,22 +318,34 @@ class GoogleDriveApi {
         ..name = _backupFolderName
         ..mimeType = 'application/vnd.google-apps.folder';
 
-      final createdFolder = await driveApi.files.create(
-        folder,
-        $fields: 'id',
-      ).timeout(_apiTimeout);
+      final createdFolder = await driveApi.files
+          .create(
+            folder,
+            $fields: 'id',
+          )
+          .timeout(_apiTimeout);
 
       if (createdFolder.id == null) {
         return Result.failure(const StorageException('建立資料夾失敗：未取得 ID'));
       }
 
-      AppLogger.info('Created backup folder: ${createdFolder.id}', tag: 'GoogleDrive');
+      AppLogger.info(
+        'Created backup folder: ${createdFolder.id}',
+        tag: 'GoogleDrive',
+      );
       return Result.success(createdFolder.id!);
     } on TimeoutException {
-      AppLogger.warning('Folder operation timeout after ${_apiTimeout.inSeconds}s', tag: 'GoogleDrive');
+      AppLogger.warning(
+        'Folder operation timeout after ${_apiTimeout.inSeconds}s',
+        tag: 'GoogleDrive',
+      );
       return Result.failure(NetworkException.timeout());
-    } catch (e) {
-      AppLogger.error('Failed to get/create backup folder', error: e, tag: 'GoogleDrive');
+    } on Exception catch (e) {
+      AppLogger.error(
+        'Failed to get/create backup folder',
+        error: e,
+        tag: 'GoogleDrive',
+      );
       return Result.failure(StorageException('無法建立備份資料夾: $e'));
     }
   }
@@ -369,11 +392,13 @@ class GoogleDriveApi {
       } else {
         // 使用簡單上傳
         final media = drive.Media(file.openRead(), fileSize);
-        uploadedFile = await _driveApi!.files.create(
-          driveFile,
-          uploadMedia: media,
-          $fields: 'id, name, createdTime, size',
-        ).timeout(_apiTimeout);
+        uploadedFile = await _driveApi!.files
+            .create(
+              driveFile,
+              uploadMedia: media,
+              $fields: 'id, name, createdTime, size',
+            )
+            .timeout(_apiTimeout);
       }
 
       final backupInfo = DriveBackupInfo(
@@ -383,12 +408,18 @@ class GoogleDriveApi {
         sizeBytes: int.tryParse(uploadedFile.size ?? '0') ?? fileSize,
       );
 
-      AppLogger.info('Backup uploaded successfully: ${backupInfo.id}', tag: 'GoogleDrive');
+      AppLogger.info(
+        'Backup uploaded successfully: ${backupInfo.id}',
+        tag: 'GoogleDrive',
+      );
       return Result.success(backupInfo);
     } on TimeoutException {
-      AppLogger.warning('Upload timeout after ${_apiTimeout.inSeconds}s', tag: 'GoogleDrive');
+      AppLogger.warning(
+        'Upload timeout after ${_apiTimeout.inSeconds}s',
+        tag: 'GoogleDrive',
+      );
       return Result.failure(NetworkException.timeout());
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to upload backup', error: e, tag: 'GoogleDrive');
       return Result.failure(StorageException('上傳備份失敗: $e'));
     }
@@ -412,11 +443,13 @@ class GoogleDriveApi {
 
     drive.File result;
     try {
-      result = await _driveApi!.files.create(
-        driveFile,
-        uploadMedia: media,
-        $fields: 'id, name, createdTime, size',
-      ).timeout(_apiTimeout);
+      result = await _driveApi!.files
+          .create(
+            driveFile,
+            uploadMedia: media,
+            $fields: 'id, name, createdTime, size',
+          )
+          .timeout(_apiTimeout);
     } on TimeoutException {
       AppLogger.warning('Upload timeout after ${_apiTimeout.inSeconds}s');
       throw TimeoutException('上傳超時', _apiTimeout);
@@ -440,29 +473,36 @@ class GoogleDriveApi {
     final folderId = folderResult.getOrThrow();
 
     try {
-      final fileList = await _driveApi!.files.list(
-        q: "'$folderId' in parents and mimeType = '$_backupMimeType' and trashed = false",
-        spaces: 'drive',
-        orderBy: 'createdTime desc',
-        $fields: 'files(id, name, createdTime, size)',
-      ).timeout(_apiTimeout);
+      final fileList = await _driveApi!.files
+          .list(
+            q: "'$folderId' in parents and mimeType = '$_backupMimeType' and trashed = false",
+            spaces: 'drive',
+            orderBy: 'createdTime desc',
+            $fields: 'files(id, name, createdTime, size)',
+          )
+          .timeout(_apiTimeout);
 
       final backups = (fileList.files ?? [])
           .where((f) => f.id != null && f.name != null)
-          .map((f) => DriveBackupInfo(
-                id: f.id!,
-                name: f.name!,
-                createdTime: f.createdTime ?? DateTime.now(),
-                sizeBytes: int.tryParse(f.size ?? '0') ?? 0,
-              ))
+          .map(
+            (f) => DriveBackupInfo(
+              id: f.id!,
+              name: f.name!,
+              createdTime: f.createdTime ?? DateTime.now(),
+              sizeBytes: int.tryParse(f.size ?? '0') ?? 0,
+            ),
+          )
           .toList();
 
       AppLogger.info('Found ${backups.length} backups', tag: 'GoogleDrive');
       return Result.success(backups);
     } on TimeoutException {
-      AppLogger.warning('List backups timeout after ${_apiTimeout.inSeconds}s', tag: 'GoogleDrive');
+      AppLogger.warning(
+        'List backups timeout after ${_apiTimeout.inSeconds}s',
+        tag: 'GoogleDrive',
+      );
       return Result.failure(NetworkException.timeout());
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to list backups', error: e, tag: 'GoogleDrive');
       return Result.failure(StorageException('無法列出備份: $e'));
     }
@@ -482,10 +522,14 @@ class GoogleDriveApi {
     try {
       AppLogger.info('Downloading backup: $fileId', tag: 'GoogleDrive');
 
-      final media = await _driveApi!.files.get(
-        fileId,
-        downloadOptions: drive.DownloadOptions.fullMedia,
-      ).timeout(_apiTimeout) as drive.Media;
+      final media =
+          await _driveApi!.files
+                  .get(
+                    fileId,
+                    downloadOptions: drive.DownloadOptions.fullMedia,
+                  )
+                  .timeout(_apiTimeout)
+              as drive.Media;
 
       // 使用暫存檔案串流寫入，避免大檔案記憶體問題
       final tempDir = await getTemporaryDirectory();
@@ -512,7 +556,7 @@ class GoogleDriveApi {
       // 清理暫存檔案
       try {
         await tempFile.delete();
-      } catch (_) {
+      } on Exception catch (_) {
         // 忽略清理失敗
       }
 
@@ -522,8 +566,12 @@ class GoogleDriveApi {
       );
 
       return Result.success(bytes);
-    } catch (e) {
-      AppLogger.error('Failed to download backup', error: e, tag: 'GoogleDrive');
+    } on Exception catch (e) {
+      AppLogger.error(
+        'Failed to download backup',
+        error: e,
+        tag: 'GoogleDrive',
+      );
       return Result.failure(StorageException('下載備份失敗: $e'));
     }
   }
@@ -544,7 +592,7 @@ class GoogleDriveApi {
 
       AppLogger.info('Backup deleted successfully', tag: 'GoogleDrive');
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('Failed to delete backup', error: e, tag: 'GoogleDrive');
       return Result.failure(StorageException('刪除備份失敗: $e'));
     }
@@ -558,16 +606,21 @@ class GoogleDriveApi {
         _currentAccount = account;
         await _initDriveApi();
 
-        AppLogger.info('Session restored: ${account.email}', tag: 'GoogleDrive');
-        return Result.success(GoogleAccountInfo(
-          email: account.email,
-          displayName: account.displayName,
-          photoUrl: account.photoUrl,
-        ));
+        AppLogger.info(
+          'Session restored: ${account.email}',
+          tag: 'GoogleDrive',
+        );
+        return Result.success(
+          GoogleAccountInfo(
+            email: account.email,
+            displayName: account.displayName,
+            photoUrl: account.photoUrl,
+          ),
+        );
       }
 
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (_) {
       AppLogger.warning('Failed to restore session', tag: 'GoogleDrive');
       return Result.success(null); // 不視為錯誤
     }

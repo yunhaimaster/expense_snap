@@ -85,7 +85,7 @@ class ImageCleanupService {
             '已刪除孤立檔案: ${file.path} (${_formatBytes(fileSize)})',
             tag: 'ImageCleanup',
           );
-        } catch (e) {
+        } on Exception catch (e) {
           AppLogger.warning(
             '刪除檔案失敗: ${file.path} - $e',
             tag: 'ImageCleanup',
@@ -107,7 +107,7 @@ class ImageCleanupService {
       );
 
       return Result.success(result);
-    } catch (e, stack) {
+    } on Exception catch (e, stack) {
       AppLogger.error(
         '孤立圖片清理失敗',
         tag: 'ImageCleanup',
@@ -180,7 +180,7 @@ class ImageCleanupService {
               '已刪除空目錄: ${entity.path}',
               tag: 'ImageCleanup',
             );
-          } catch (e) {
+          } on Exception catch (e) {
             AppLogger.warning(
               '刪除空目錄失敗: ${entity.path} - $e',
               tag: 'ImageCleanup',
@@ -207,9 +207,9 @@ class CleanupResult {
   });
 
   factory CleanupResult.empty() => const CleanupResult(
-        deletedCount: 0,
-        freedBytes: 0,
-      );
+    deletedCount: 0,
+    freedBytes: 0,
+  );
 
   /// 刪除的檔案數量
   final int deletedCount;

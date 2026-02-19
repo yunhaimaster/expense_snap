@@ -19,12 +19,12 @@ void main() {
       expect(ocrService, isNotNull);
     });
 
-    test('creates service with custom timeout', () {
+    test('creates service with custom timeout', () async {
       final customService = OcrService(
         timeoutDuration: const Duration(seconds: 10),
       );
       expect(customService.timeoutDuration, const Duration(seconds: 10));
-      customService.dispose();
+      await customService.dispose();
     });
 
     test('default timeout is 5 seconds', () {
@@ -36,12 +36,12 @@ void main() {
       expect(ocrService.rateLimitDuration, const Duration(seconds: 2));
     });
 
-    test('creates service with custom rate limit', () {
+    test('creates service with custom rate limit', () async {
       final customService = OcrService(
         rateLimitDuration: const Duration(seconds: 5),
       );
       expect(customService.rateLimitDuration, const Duration(seconds: 5));
-      customService.dispose();
+      await customService.dispose();
     });
 
     test('dispose completes without error', () async {
@@ -64,11 +64,11 @@ void main() {
   });
 
   group('OcrService rate limiting', () {
-    test('first request has no rate limit', () {
+    test('first request has no rate limit', () async {
       final service = OcrService();
       final remaining = service.getRateLimitRemaining();
       expect(remaining, isNull);
-      service.dispose();
+      await service.dispose();
     });
 
     test('second request within rate limit returns remaining time', () async {
@@ -163,16 +163,16 @@ void main() {
     });
 
     test('rateLimited factory creates correct exception', () {
-      final exception =
-          OcrException.rateLimited(const Duration(milliseconds: 1500));
+      final exception = OcrException.rateLimited(
+        const Duration(milliseconds: 1500),
+      );
 
       expect(exception.message, '請稍候 1.5 秒後再試');
       expect(exception.code, 'RATE_LIMITED');
     });
 
     test('rateLimited with whole seconds', () {
-      final exception =
-          OcrException.rateLimited(const Duration(seconds: 2));
+      final exception = OcrException.rateLimited(const Duration(seconds: 2));
 
       expect(exception.message, '請稍候 2.0 秒後再試');
       expect(exception.code, 'RATE_LIMITED');

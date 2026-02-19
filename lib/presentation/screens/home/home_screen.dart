@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -40,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // 首次載入資料
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ExpenseProvider>().loadMonth(refresh: true);
-      _checkAndStartShowcase();
+      unawaited(context.read<ExpenseProvider>().loadMonth(refresh: true));
+      unawaited(_checkAndStartShowcase());
     });
   }
 
@@ -111,9 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
       onComplete: (index, key) {
         final showcaseProvider = context.read<ShowcaseProvider>();
         if (key == _fabShowcaseKey) {
-          showcaseProvider.completeFabShowcase();
+          unawaited(showcaseProvider.completeFabShowcase());
         } else if (key == _swipeShowcaseKey) {
-          showcaseProvider.completeSwipeShowcase();
+          unawaited(showcaseProvider.completeSwipeShowcase());
         }
       },
       builder: (showcaseContext) {
@@ -183,9 +185,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         swipeShowcaseKey: _swipeShowcaseKey,
                         onFirstExpenseLoaded: _startSwipeShowcase,
                         onExpenseTap: (expense) {
-                          Navigator.of(context).pushNamed(
-                            AppRouter.expenseDetail,
-                            arguments: expense.id,
+                          unawaited(
+                            Navigator.of(context).pushNamed(
+                              AppRouter.expenseDetail,
+                              arguments: expense.id,
+                            ),
                           );
                         },
                         onExpenseDelete: (expense) async {
@@ -253,7 +257,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 tooltipPosition: TooltipPosition.top,
                 child: AnimatedFab(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(AppRouter.addExpense);
+                    unawaited(
+                      Navigator.of(context).pushNamed(AppRouter.addExpense),
+                    );
                   },
                   tooltip: S.of(context).home_addExpense,
                   showPulse: showPulse,
@@ -284,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             onPressed: () {
               context.read<ExpenseProvider>().clearError();
-              context.read<ExpenseProvider>().refresh();
+              unawaited(context.read<ExpenseProvider>().refresh());
             },
             child: Text(S.of(context).common_retry),
           ),

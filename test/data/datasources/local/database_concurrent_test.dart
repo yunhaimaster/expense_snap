@@ -169,7 +169,7 @@ void main() {
       // 第一個任務失敗
       try {
         await taskWithError(true);
-      } catch (_) {}
+      } on Exception catch (_) {}
 
       // 第二個任務應該能正常執行（不應被第一個任務阻塞）
       await taskWithError(false);

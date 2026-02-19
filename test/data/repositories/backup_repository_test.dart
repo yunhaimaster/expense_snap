@@ -23,17 +23,22 @@ void main() {
   setUpAll(() {
     // 為 Mockito 提供 Result 類型的 dummy 值
     provideDummy<Result<GoogleAccountInfo>>(
-        Result.failure(const AuthException('dummy')));
+      Result.failure(const AuthException('dummy')),
+    );
     provideDummy<Result<void>>(Result.success(null));
     provideDummy<Result<Uint8List>>(Result.success(Uint8List(0)));
     provideDummy<Result<List<DriveBackupInfo>>>(Result.success([]));
     provideDummy<Result<String>>(Result.success(''));
-    provideDummy<Result<DriveBackupInfo>>(Result.success(DriveBackupInfo(
-      id: 'dummy',
-      name: 'dummy.zip',
-      createdTime: DateTime(2025, 1, 1),
-      sizeBytes: 0,
-    )));
+    provideDummy<Result<DriveBackupInfo>>(
+      Result.success(
+        DriveBackupInfo(
+          id: 'dummy',
+          name: 'dummy.zip',
+          createdTime: DateTime(2025, 1, 1),
+          sizeBytes: 0,
+        ),
+      ),
+    );
   });
 
   setUp(() {
@@ -188,10 +193,12 @@ void main() {
     test('登入成功應回傳 email', () async {
       // Arrange
       when(mockDriveApi.signIn()).thenAnswer(
-        (_) async => Result.success(const GoogleAccountInfo(
-          email: 'test@gmail.com',
-          displayName: 'Test User',
-        )),
+        (_) async => Result.success(
+          const GoogleAccountInfo(
+            email: 'test@gmail.com',
+            displayName: 'Test User',
+          ),
+        ),
       );
       when(mockDb.updateBackupStatus(any)).thenAnswer((_) async {});
 
@@ -201,8 +208,9 @@ void main() {
       // Assert
       expect(result.isSuccess, true);
       expect(result.getOrThrow(), 'test@gmail.com');
-      verify(mockDb.updateBackupStatus({'google_email': 'test@gmail.com'}))
-          .called(1);
+      verify(
+        mockDb.updateBackupStatus({'google_email': 'test@gmail.com'}),
+      ).called(1);
     });
 
     test('登入失敗應回傳錯誤', () async {
@@ -222,8 +230,9 @@ void main() {
   group('signOutFromGoogle', () {
     test('登出成功應清除 email', () async {
       // Arrange
-      when(mockDriveApi.signOut())
-          .thenAnswer((_) async => Result.success(null));
+      when(
+        mockDriveApi.signOut(),
+      ).thenAnswer((_) async => Result.success(null));
       when(mockDb.updateBackupStatus(any)).thenAnswer((_) async {});
 
       // Act
@@ -270,12 +279,14 @@ void main() {
 
     test('有備份狀態應回傳正確資訊', () async {
       // Arrange
-      when(mockDb.getBackupStatus()).thenAnswer((_) async => {
-            'last_backup_at': '2025-01-03T12:00:00',
-            'last_backup_count': 10,
-            'last_backup_size_kb': 1024,
-            'google_email': 'test@gmail.com',
-          });
+      when(mockDb.getBackupStatus()).thenAnswer(
+        (_) async => {
+          'last_backup_at': '2025-01-03T12:00:00',
+          'last_backup_count': 10,
+          'last_backup_size_kb': 1024,
+          'google_email': 'test@gmail.com',
+        },
+      );
       when(mockDriveApi.currentAccount).thenReturn(
         const GoogleAccountInfo(email: 'test@gmail.com', displayName: 'Test'),
       );
@@ -321,8 +332,9 @@ void main() {
 
     test('檔案不存在應回傳錯誤', () async {
       // Act
-      final result = await repository
-          .uploadBackupToGoogleDrive('/non/existent/path.zip');
+      final result = await repository.uploadBackupToGoogleDrive(
+        '/non/existent/path.zip',
+      );
 
       // Assert
       expect(result.isFailure, true);
@@ -335,20 +347,22 @@ void main() {
   group('listGoogleDriveBackups', () {
     test('列出備份成功應回傳列表', () async {
       // Arrange
-      when(mockDriveApi.listBackups()).thenAnswer((_) async => Result.success([
-            DriveBackupInfo(
-              id: 'file_1',
-              name: 'backup_1.zip',
-              createdTime: DateTime(2025, 1, 1),
-              sizeBytes: 1024,
-            ),
-            DriveBackupInfo(
-              id: 'file_2',
-              name: 'backup_2.zip',
-              createdTime: DateTime(2025, 1, 2),
-              sizeBytes: 2048,
-            ),
-          ]));
+      when(mockDriveApi.listBackups()).thenAnswer(
+        (_) async => Result.success([
+          DriveBackupInfo(
+            id: 'file_1',
+            name: 'backup_1.zip',
+            createdTime: DateTime(2025, 1, 1),
+            sizeBytes: 1024,
+          ),
+          DriveBackupInfo(
+            id: 'file_2',
+            name: 'backup_2.zip',
+            createdTime: DateTime(2025, 1, 2),
+            sizeBytes: 2048,
+          ),
+        ]),
+      );
 
       // Act
       final result = await repository.listGoogleDriveBackups();
@@ -364,7 +378,8 @@ void main() {
     test('API 錯誤應回傳失敗', () async {
       // Arrange
       when(mockDriveApi.listBackups()).thenAnswer(
-          (_) async => Result.failure(const StorageException('List failed')));
+        (_) async => Result.failure(const StorageException('List failed')),
+      );
 
       // Act
       final result = await repository.listGoogleDriveBackups();
@@ -377,12 +392,12 @@ void main() {
   group('downloadBackupFromGoogleDrive', () {
     test('API 錯誤應回傳失敗', () async {
       // Arrange
-      when(mockDriveApi.downloadBackup(any)).thenAnswer((_) async =>
-          Result.failure(const StorageException('Download failed')));
+      when(mockDriveApi.downloadBackup(any)).thenAnswer(
+        (_) async => Result.failure(const StorageException('Download failed')),
+      );
 
       // Act
-      final result =
-          await repository.downloadBackupFromGoogleDrive('file_123');
+      final result = await repository.downloadBackupFromGoogleDrive('file_123');
 
       // Assert
       expect(result.isFailure, true);
@@ -469,7 +484,7 @@ bool _isPathSafeForRestoreWithUrlDecode(String filePath) {
   String decodedPath;
   try {
     decodedPath = Uri.decodeComponent(filePath);
-  } catch (_) {
+  } on Exception catch (_) {
     return false;
   }
 

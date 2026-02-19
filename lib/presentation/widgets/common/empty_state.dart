@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -20,9 +22,9 @@ class EmptyState extends StatefulWidget {
     this.onAction,
     this.animate = true,
   }) : assert(
-          icon != null || illustrationAsset != null,
-          '必須提供 icon 或 illustrationAsset',
-        );
+         icon != null || illustrationAsset != null,
+         '必須提供 icon 或 illustrationAsset',
+       );
 
   /// 圖標（與 illustrationAsset 二選一）
   final IconData? icon;
@@ -73,13 +75,16 @@ class _EmptyStateState extends State<EmptyState>
       curve: Curves.easeOut,
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.1),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(
+          begin: const Offset(0, 0.1),
+          end: Offset.zero,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: Curves.easeOutCubic,
+          ),
+        );
   }
 
   @override
@@ -98,7 +103,7 @@ class _EmptyStateState extends State<EmptyState>
     final disableAnimations = MediaQuery.of(context).disableAnimations;
 
     if (widget.animate && !disableAnimations) {
-      _controller.forward();
+      unawaited(_controller.forward());
     } else {
       _controller.value = 1.0;
     }
@@ -111,7 +116,7 @@ class _EmptyStateState extends State<EmptyState>
     if (widget.animate != oldWidget.animate) {
       final disableAnimations = MediaQuery.of(context).disableAnimations;
       if (widget.animate && !disableAnimations) {
-        _controller.forward(from: 0);
+        unawaited(_controller.forward(from: 0));
       } else {
         _controller.value = 1.0;
       }
@@ -153,8 +158,8 @@ class _EmptyStateState extends State<EmptyState>
                   Text(
                     widget.subtitle!,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      color: AppColors.textSecondary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],

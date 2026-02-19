@@ -108,7 +108,8 @@ class LocaleProvider extends ChangeNotifier {
         }
       }
       // savedLocale == null 或 'system' 時，_locale 保持 null（跟隨系統）
-    } catch (e) {
+    } on Object catch (e) {
+      // StateError 可能在 sl 未初始化時拋出（非 Exception）
       AppLogger.warning('Failed to load locale setting: $e');
     }
 
@@ -152,7 +153,7 @@ class LocaleProvider extends ChangeNotifier {
       }
       await sl.databaseHelper.setSetting('app_locale', value);
       AppLogger.info('Locale saved: $value');
-    } catch (e) {
+    } on Object catch (e) {
       AppLogger.warning('Failed to save locale setting: $e');
     }
   }

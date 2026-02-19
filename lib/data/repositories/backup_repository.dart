@@ -30,8 +30,8 @@ class BackupRepository implements IBackupRepository {
   BackupRepository({
     required DatabaseHelper databaseHelper,
     GoogleDriveApi? googleDriveApi,
-  })  : _db = databaseHelper,
-        _driveApi = googleDriveApi ?? GoogleDriveApi();
+  }) : _db = databaseHelper,
+       _driveApi = googleDriveApi ?? GoogleDriveApi();
 
   final DatabaseHelper _db;
   final GoogleDriveApi _driveApi;
@@ -103,11 +103,13 @@ class BackupRepository implements IBackupRepository {
           );
 
           final imageBytes = await imageFile.readAsBytes();
-          archive.addFile(ArchiveFile(
-            relativePath,
-            imageBytes.length,
-            imageBytes,
-          ));
+          archive.addFile(
+            ArchiveFile(
+              relativePath,
+              imageBytes.length,
+              imageBytes,
+            ),
+          );
 
           // 更新進度（0.3 ~ 0.8）
           final progress = 0.3 + (0.5 * (i + 1) / totalImages);
@@ -141,16 +143,17 @@ class BackupRepository implements IBackupRepository {
       onProgress?.call(1.0, '備份完成');
 
       return Result.success(filePath);
-    } catch (e) {
+    } on Exception catch (e) {
       // 清理可能產生的部分檔案
       try {
         final tempDir = await _backupTempDir;
         await for (final entity in tempDir.list()) {
-          if (entity is File && path.basename(entity.path).startsWith('backup_')) {
+          if (entity is File &&
+              path.basename(entity.path).startsWith('backup_')) {
             await entity.delete();
           }
         }
-      } catch (_) {
+      } on Exception catch (_) {
         // 忽略清理失敗
       }
 
@@ -226,8 +229,12 @@ class BackupRepository implements IBackupRepository {
       );
 
       return Result.success(null);
-    } catch (e) {
-      AppLogger.error('uploadBackupToGoogleDrive failed', error: e, tag: 'Backup');
+    } on Exception catch (e) {
+      AppLogger.error(
+        'uploadBackupToGoogleDrive failed',
+        error: e,
+        tag: 'Backup',
+      );
       return Result.failure(StorageException('上傳備份失敗: $e'));
     }
   }
@@ -245,16 +252,18 @@ class BackupRepository implements IBackupRepository {
 
       final driveBackups = result.getOrThrow();
       final backups = driveBackups
-          .map((b) => BackupInfo(
-                fileId: b.id,
-                fileName: b.name,
-                createdAt: b.createdTime,
-                sizeBytes: b.sizeBytes,
-              ))
+          .map(
+            (b) => BackupInfo(
+              fileId: b.id,
+              fileName: b.name,
+              createdAt: b.createdTime,
+              sizeBytes: b.sizeBytes,
+            ),
+          )
           .toList();
 
       return Result.success(backups);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('listGoogleDriveBackups failed', error: e, tag: 'Backup');
       return Result.failure(StorageException('無法列出備份: $e'));
     }
@@ -289,8 +298,12 @@ class BackupRepository implements IBackupRepository {
 
       AppLogger.info('Backup downloaded: $filePath', tag: 'Backup');
       return Result.success(filePath);
-    } catch (e) {
-      AppLogger.error('downloadBackupFromGoogleDrive failed', error: e, tag: 'Backup');
+    } on Exception catch (e) {
+      AppLogger.error(
+        'downloadBackupFromGoogleDrive failed',
+        error: e,
+        tag: 'Backup',
+      );
       return Result.failure(StorageException('下載備份失敗: $e'));
     }
   }
@@ -348,11 +361,11 @@ class BackupRepository implements IBackupRepository {
 
       AppLogger.info('Backup restored successfully', tag: 'Backup');
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       // 確保資料庫重新開啟
       try {
         await _db.database;
-      } catch (_) {}
+      } on Exception catch (_) {}
 
       AppLogger.error('restoreFromBackup failed', error: e, tag: 'Backup');
       return Result.failure(StorageException('還原備份失敗: $e'));
@@ -390,7 +403,7 @@ class BackupRepository implements IBackupRepository {
     String decodedPath;
     try {
       decodedPath = Uri.decodeComponent(filePath);
-    } catch (_) {
+    } on Exception catch (_) {
       // 解碼失敗視為不安全
       return false;
     }
@@ -459,7 +472,7 @@ class BackupRepository implements IBackupRepository {
         }
 
         return Result.success(null);
-      } catch (e) {
+      } on Exception catch (_) {
         // 還原失敗，恢復備份
         final backupFile = File(backupPath);
         if (await backupFile.exists()) {
@@ -468,7 +481,7 @@ class BackupRepository implements IBackupRepository {
         }
         rethrow;
       }
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('restoreDatabase failed', error: e, tag: 'Backup');
       return Result.failure(StorageException('還原資料庫失敗: $e'));
     }
@@ -497,7 +510,10 @@ class BackupRepository implements IBackupRepository {
 
         // 再次驗證路徑安全性
         if (!_isPathSafeForRestore(file.name)) {
-          AppLogger.warning('Skipping unsafe path: ${file.name}', tag: 'Backup');
+          AppLogger.warning(
+            'Skipping unsafe path: ${file.name}',
+            tag: 'Backup',
+          );
           continue;
         }
 
@@ -516,7 +532,7 @@ class BackupRepository implements IBackupRepository {
       }
 
       return Result.success(null);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('restoreReceipts failed', error: e, tag: 'Backup');
       return Result.failure(StorageException('還原收據圖片失敗: $e'));
     }
@@ -541,7 +557,7 @@ class BackupRepository implements IBackupRepository {
       });
 
       return Result.success(status);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('getBackupStatus failed', error: e, tag: 'Backup');
       return Result.failure(DatabaseException.queryFailed(e.toString()));
     }
@@ -638,9 +654,12 @@ class BackupRepository implements IBackupRepository {
         }
       }
 
-      AppLogger.info('Cleaned up $deletedCount backup temp files', tag: 'Backup');
+      AppLogger.info(
+        'Cleaned up $deletedCount backup temp files',
+        tag: 'Backup',
+      );
       return Result.success(deletedCount);
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error('cleanupBackupTempFiles failed', error: e, tag: 'Backup');
       return Result.failure(StorageException('清理備份暫存失敗: $e'));
     }
@@ -672,8 +691,12 @@ class BackupRepository implements IBackupRepository {
       }
 
       return (totalBytes / 1024).round();
-    } catch (e) {
-      AppLogger.error('calculateLocalStorageUsageKb failed', error: e, tag: 'Backup');
+    } on Exception catch (e) {
+      AppLogger.error(
+        'calculateLocalStorageUsageKb failed',
+        error: e,
+        tag: 'Backup',
+      );
       return 0;
     }
   }

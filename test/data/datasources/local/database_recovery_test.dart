@@ -71,10 +71,10 @@ void main() {
 
     test('多個錯誤類型應正確區分', () {
       final dbError = Result<int>.failure(DatabaseException.corrupted());
-      final networkError =
-          Result<int>.failure(NetworkException.noConnection());
-      final validationError =
-          Result<int>.failure(const ValidationException('無效', field: 'test'));
+      final networkError = Result<int>.failure(NetworkException.noConnection());
+      final validationError = Result<int>.failure(
+        const ValidationException('無效', field: 'test'),
+      );
 
       // 驗證類型可以正確區分
       dbError.fold(
@@ -206,8 +206,8 @@ void main() {
       try {
         // 模擬遷移失敗
         throw DatabaseException.updateFailed('遷移 v1 -> v2 失敗');
-      } catch (e) {
-        migrationResult = Result.failure(e as AppException);
+      } on AppException catch (e) {
+        migrationResult = Result.failure(e);
       }
 
       expect(migrationResult.isFailure, isTrue);
@@ -253,8 +253,8 @@ void main() {
             throw DatabaseException.queryFailed('錯誤 $i');
           }
           return i;
-        } catch (e) {
-          errors.add(e as AppException);
+        } on AppException catch (e) {
+          errors.add(e);
           return -1;
         }
       });
