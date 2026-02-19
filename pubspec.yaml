@@ -104,6 +104,9 @@ dev_dependencies:
   flutter_native_splash: ^2.4.4
   very_good_analysis: ^10.0.0
 
+  # 資料庫遷移整合測試（使用 FFI 實作在記憶體中執行 SQLite）
+  sqflite_common_ffi: ^2.3.4+4
+
 flutter:
   uses-material-design: true
   generate: true
