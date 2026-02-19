@@ -17,6 +17,8 @@ import 'presentation/providers/connectivity_provider.dart';
 import 'presentation/providers/exchange_rate_provider.dart';
 import 'presentation/providers/expense_provider.dart';
 import 'presentation/providers/locale_provider.dart';
+import 'presentation/providers/backup_provider.dart';
+import 'presentation/providers/google_auth_provider.dart';
 import 'presentation/providers/settings_provider.dart';
 import 'presentation/providers/showcase_provider.dart';
 import 'presentation/providers/theme_provider.dart';
@@ -27,56 +29,61 @@ import 'services/image_service.dart';
 /// App 入口點
 void main() async {
   // 在 zone 中執行，捕獲所有未處理的異步錯誤
-  await runZonedGuarded(() async {
-    // 確保 Flutter binding 初始化
-    WidgetsFlutterBinding.ensureInitialized();
+  await runZonedGuarded(
+    () async {
+      // 確保 Flutter binding 初始化
+      WidgetsFlutterBinding.ensureInitialized();
 
-    // 設置 Flutter 錯誤處理
-    FlutterError.onError = (details) {
-      AppLogger.error(
-        'Flutter error',
-        error: details.exception,
-        stackTrace: details.stack,
+      // 設置 Flutter 錯誤處理
+      FlutterError.onError = (details) {
+        AppLogger.error(
+          'Flutter error',
+          error: details.exception,
+          stackTrace: details.stack,
+        );
+        // Debug 模式下顯示錯誤，Release 模式下靜默處理
+        if (kDebugMode) {
+          FlutterError.dumpErrorToConsole(details);
+        }
+      };
+
+      // 初始化服務定位器（依賴注入，包含所有 Repositories）
+      await _initializeApp();
+
+      // 初始化背景任務
+      await _initializeWorkManager();
+
+      // 從 ServiceLocator 取得已初始化的服務和 Repositories（使用介面）
+      final imageService = sl.imageService;
+      final expenseRepository = sl.expenseRepository;
+      final exchangeRateRepository = sl.exchangeRateRepository;
+      final backupRepository = sl.backupRepository;
+
+      // 檢查是否需要 onboarding
+      final needsOnboarding = await _checkOnboarding();
+
+      // 啟動時執行清理（如果距離上次清理超過 7 天）
+      await _performStartupCleanup(expenseRepository, imageService);
+
+      runApp(
+        ExpenseSnapApp(
+          needsOnboarding: needsOnboarding,
+          expenseRepository: expenseRepository,
+          imageService: imageService,
+          exchangeRateRepository: exchangeRateRepository,
+          backupRepository: backupRepository,
+        ),
       );
-      // Debug 模式下顯示錯誤，Release 模式下靜默處理
-      if (kDebugMode) {
-        FlutterError.dumpErrorToConsole(details);
-      }
-    };
-
-    // 初始化服務定位器（依賴注入，包含所有 Repositories）
-    await _initializeApp();
-
-    // 初始化背景任務
-    await _initializeWorkManager();
-
-    // 從 ServiceLocator 取得已初始化的服務和 Repositories（使用介面）
-    final imageService = sl.imageService;
-    final expenseRepository = sl.expenseRepository;
-    final exchangeRateRepository = sl.exchangeRateRepository;
-    final backupRepository = sl.backupRepository;
-
-    // 檢查是否需要 onboarding
-    final needsOnboarding = await _checkOnboarding();
-
-    // 啟動時執行清理（如果距離上次清理超過 7 天）
-    await _performStartupCleanup(expenseRepository, imageService);
-
-    runApp(ExpenseSnapApp(
-      needsOnboarding: needsOnboarding,
-      expenseRepository: expenseRepository,
-      imageService: imageService,
-      exchangeRateRepository: exchangeRateRepository,
-      backupRepository: backupRepository,
-    ));
-  }, (error, stackTrace) {
-    // 捕獲所有未處理的異步錯誤
-    AppLogger.error(
-      'Uncaught async error',
-      error: error,
-      stackTrace: stackTrace,
-    );
-  });
+    },
+    (error, stackTrace) {
+      // 捕獲所有未處理的異步錯誤
+      AppLogger.error(
+        'Uncaught async error',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    },
+  );
 }
 
 /// 初始化應用程式
@@ -87,7 +94,7 @@ Future<void> _initializeApp() async {
     // 初始化依賴注入
     await ServiceLocator.instance.initialize();
     AppLogger.info('App initialization completed');
-  } catch (e, stackTrace) {
+  } on Exception catch (e, stackTrace) {
     AppLogger.error(
       'App initialization failed',
       error: e,
@@ -105,7 +112,7 @@ Future<bool> _checkOnboarding() async {
     final completed = await db.getSetting('onboarding_completed');
     // 空字串或 null 都視為未完成
     return completed != 'true';
-  } catch (e) {
+  } on Exception catch (e) {
     AppLogger.warning('Failed to check onboarding status: $e');
     return true;
   }
@@ -119,7 +126,7 @@ Future<void> _initializeWorkManager() async {
       // isInDebugMode 已棄用，改用 WorkmanagerDebug handlers
     );
 
-    // 註冊每週清理任務
+    // 註冊每週清理任務（失敗時指數退避重試）
     await Workmanager().registerPeriodicTask(
       BackgroundService.cleanupTaskId,
       BackgroundService.cleanupTaskName,
@@ -128,10 +135,12 @@ Future<void> _initializeWorkManager() async {
         networkType: NetworkType.notRequired,
       ),
       existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
+      backoffPolicy: BackoffPolicy.exponential,
+      backoffPolicyDelay: BackgroundService.initialBackoffDelay,
     );
 
     AppLogger.info('WorkManager initialized');
-  } catch (e) {
+  } on Exception catch (e) {
     AppLogger.warning('Failed to initialize WorkManager: $e');
   }
 }
@@ -151,8 +160,8 @@ Future<void> _performStartupCleanup(
     }
 
     final now = DateTime.now();
-    final shouldCleanup = lastCleanup == null ||
-        now.difference(lastCleanup).inDays >= 7;
+    final shouldCleanup =
+        lastCleanup == null || now.difference(lastCleanup).inDays >= 7;
 
     if (shouldCleanup) {
       AppLogger.info('Performing startup cleanup...');
@@ -170,7 +179,7 @@ Future<void> _performStartupCleanup(
       // 記錄清理時間
       await db.setSetting('last_cleanup_at', now.toIso8601String());
     }
-  } catch (e) {
+  } on Exception catch (e) {
     AppLogger.warning('Startup cleanup failed: $e');
   }
 }
@@ -222,19 +231,49 @@ class ExpenseSnapApp extends StatelessWidget {
         ChangeNotifierProvider<SettingsProvider>(
           create: (_) => SettingsProvider(
             databaseHelper: sl.databaseHelper,
-            backupRepository: backupRepository,
           ),
         ),
+        ChangeNotifierProvider<GoogleAuthProvider>(
+          create: (_) {
+            final p = GoogleAuthProvider(
+              backupRepository: backupRepository,
+            );
+            unawaited(p.initialize());
+            return p;
+          },
+        ),
+        ChangeNotifierProvider<BackupProvider>(
+          create: (context) {
+            final p = BackupProvider(
+              backupRepository: backupRepository,
+              googleAuthProvider: context.read<GoogleAuthProvider>(),
+            );
+            unawaited(p.calculateStorageUsage());
+            return p;
+          },
+        ),
         ChangeNotifierProvider<ShowcaseProvider>(
-          create: (_) => ShowcaseProvider()..initialize(),
+          create: (_) {
+            final p = ShowcaseProvider();
+            unawaited(p.initialize());
+            return p;
+          },
         ),
         ChangeNotifierProvider<LocaleProvider>(
-          create: (_) => LocaleProvider()..initialize(),
+          create: (_) {
+            final p = LocaleProvider();
+            unawaited(p.initialize());
+            return p;
+          },
         ),
       ],
       child: ErrorBoundary(
         onError: (error, stackTrace) {
-          AppLogger.error('Global error caught', error: error, stackTrace: stackTrace);
+          AppLogger.error(
+            'Global error caught',
+            error: error,
+            stackTrace: stackTrace,
+          );
         },
         child: Consumer2<ThemeProvider, LocaleProvider>(
           builder: (context, themeProvider, localeProvider, child) {
@@ -244,7 +283,9 @@ class ExpenseSnapApp extends StatelessWidget {
               darkTheme: AppTheme.dark,
               themeMode: themeProvider.materialThemeMode,
               debugShowCheckedModeBanner: false,
-              initialRoute: needsOnboarding ? AppRouter.onboarding : AppRouter.home,
+              initialRoute: needsOnboarding
+                  ? AppRouter.onboarding
+                  : AppRouter.home,
               onGenerateRoute: AppRouter.generateRoute,
               // 語言設定（null 表示跟隨系統）
               locale: localeProvider.locale,

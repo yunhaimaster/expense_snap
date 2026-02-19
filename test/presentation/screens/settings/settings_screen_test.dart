@@ -10,6 +10,8 @@ import 'package:expense_snap/data/datasources/local/database_helper.dart';
 import 'package:expense_snap/data/models/backup_status.dart';
 import 'package:expense_snap/data/repositories/backup_repository.dart';
 import 'package:expense_snap/presentation/providers/locale_provider.dart';
+import 'package:expense_snap/presentation/providers/backup_provider.dart';
+import 'package:expense_snap/presentation/providers/google_auth_provider.dart';
 import 'package:expense_snap/presentation/providers/settings_provider.dart';
 import 'package:expense_snap/presentation/providers/theme_provider.dart';
 import 'package:expense_snap/presentation/screens/settings/settings_screen.dart';
@@ -42,16 +44,21 @@ void main() {
 
     // 預設 stub
     when(mockDatabaseHelper.getSetting(any)).thenAnswer((_) async => null);
-    when(mockBackupRepository.getBackupStatus())
-        .thenAnswer((_) async => Result.success(testBackupStatus));
-    when(mockBackupRepository.tryRestoreGoogleSession())
-        .thenAnswer((_) async => Result.success(null));
-    when(mockBackupRepository.calculateLocalStorageUsageKb())
-        .thenAnswer((_) async => 1024);
-    when(mockBackupRepository.cleanupBackupTempFiles())
-        .thenAnswer((_) async => Result.success(0));
-    when(mockBackupRepository.isGoogleSignedIn())
-        .thenAnswer((_) async => false);
+    when(
+      mockBackupRepository.getBackupStatus(),
+    ).thenAnswer((_) async => Result.success(testBackupStatus));
+    when(
+      mockBackupRepository.tryRestoreGoogleSession(),
+    ).thenAnswer((_) async => Result.success(null));
+    when(
+      mockBackupRepository.calculateLocalStorageUsageKb(),
+    ).thenAnswer((_) async => 1024);
+    when(
+      mockBackupRepository.cleanupBackupTempFiles(),
+    ).thenAnswer((_) async => Result.success(0));
+    when(
+      mockBackupRepository.isGoogleSignedIn(),
+    ).thenAnswer((_) async => false);
   });
 
   // 設定測試用的螢幕大小（較高以容納所有內容）
@@ -63,16 +70,26 @@ void main() {
 
     final settingsProvider = SettingsProvider(
       databaseHelper: mockDatabaseHelper,
-      backupRepository: mockBackupRepository,
     );
     final themeProvider = ThemeProvider();
     final localeProvider = LocaleProvider();
+    final googleAuthProvider = GoogleAuthProvider(
+      backupRepository: mockBackupRepository,
+    );
+    final backupProvider = BackupProvider(
+      backupRepository: mockBackupRepository,
+      googleAuthProvider: googleAuthProvider,
+    );
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<SettingsProvider>.value(value: settingsProvider),
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
         ChangeNotifierProvider<LocaleProvider>.value(value: localeProvider),
+        ChangeNotifierProvider<GoogleAuthProvider>.value(
+          value: googleAuthProvider,
+        ),
+        ChangeNotifierProvider<BackupProvider>.value(value: backupProvider),
       ],
       child: const MaterialApp(
         locale: Locale('zh'),
@@ -207,12 +224,17 @@ void main() {
       expect(find.byType(ListView), findsOneWidget);
     });
 
-    testWidgets('應使用 Consumer 監聽 SettingsProvider', (tester) async {
+    testWidgets('應使用 Consumer3 監聽三個 Provider', (tester) async {
       addTearDown(() => tester.view.resetPhysicalSize());
       await tester.pumpWidget(buildTestWidget(tester));
       await tester.pump();
 
-      expect(find.byType(Consumer<SettingsProvider>), findsOneWidget);
+      expect(
+        find.byType(
+          Consumer3<SettingsProvider, GoogleAuthProvider, BackupProvider>,
+        ),
+        findsOneWidget,
+      );
     });
   });
 }

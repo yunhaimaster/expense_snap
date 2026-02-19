@@ -48,7 +48,15 @@ void main() {
     );
     provideDummy<Result<void>>(Result.success(null));
     provideDummy<Result<BackupStatus>>(
-        Result.success(const BackupStatus(lastBackupAt: null, lastBackupCount: 0, lastBackupSizeKb: 0, googleEmail: null)));
+      Result.success(
+        const BackupStatus(
+          lastBackupAt: null,
+          lastBackupCount: 0,
+          lastBackupSizeKb: 0,
+          googleEmail: null,
+        ),
+      ),
+    );
     provideDummy<Result<int>>(Result.success(0));
     provideDummy<Result<String?>>(Result.success(null));
   });
@@ -69,15 +77,19 @@ void main() {
 
     // SettingsProvider stubs
     when(mockDatabaseHelper.getSetting(any)).thenAnswer((_) async => null);
-    when(mockBackupRepository.getBackupStatus())
-        .thenAnswer((_) async => Result.success(const BackupStatus(
-              lastBackupAt: null,
-              lastBackupCount: 0,
-              lastBackupSizeKb: 0,
-              googleEmail: null,
-            )));
-    when(mockBackupRepository.tryRestoreGoogleSession())
-        .thenAnswer((_) async => Result.success(null));
+    when(mockBackupRepository.getBackupStatus()).thenAnswer(
+      (_) async => Result.success(
+        const BackupStatus(
+          lastBackupAt: null,
+          lastBackupCount: 0,
+          lastBackupSizeKb: 0,
+          googleEmail: null,
+        ),
+      ),
+    );
+    when(
+      mockBackupRepository.tryRestoreGoogleSession(),
+    ).thenAnswer((_) async => Result.success(null));
   });
 
   Widget buildTestWidget() {
@@ -90,7 +102,6 @@ void main() {
     );
     final settingsProvider = SettingsProvider(
       databaseHelper: mockDatabaseHelper,
-      backupRepository: mockBackupRepository,
     );
 
     return MultiProvider(

@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../core/constants/currency_constants.dart';
 import '../../../core/constants/expense_category.dart';
@@ -26,6 +24,8 @@ import '../../widgets/dialogs/smart_prompt_dialogs.dart';
 import '../../widgets/forms/description_autocomplete.dart';
 import '../../widgets/forms/exchange_rate_display.dart';
 import '../../../core/services/smart_prompt_service.dart';
+import 'image_picker_section.dart';
+import 'ocr_result_section.dart';
 
 /// 新增支出畫面
 class AddExpenseScreen extends StatefulWidget {
@@ -59,7 +59,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     _updateDefaultExchangeRate();
     // 初始化時載入匯率
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadExchangeRate();
+      unawaited(_loadExchangeRate());
     });
   }
 
@@ -136,7 +136,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 收據圖片
-                _buildImagePicker(),
+                ImagePickerSection(
+                  selectedImagePath: _selectedImagePath,
+                  onPickFromCamera: _pickFromCamera,
+                  onPickFromGallery: _pickFromGallery,
+                  onRemoveImage: () {
+                    setState(() => _selectedImagePath = null);
+                  },
+                ),
 
                 const SizedBox(height: 24),
 
@@ -164,7 +171,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       }
                     });
                     // 載入新幣種的匯率
-                    _loadExchangeRate();
+                    unawaited(_loadExchangeRate());
                   },
                 ),
 
@@ -172,7 +179,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
                 // 金額（含 OCR 識別中的 shimmer 效果）
                 if (_isProcessingOcr)
-                  _buildOcrShimmer(context, label: l10n.addExpense_amount)
+                  OcrShimmerField(label: l10n.addExpense_amount)
                 else
                   AmountInput(
                     controller: _amountController,
@@ -240,7 +247,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                       Formatters.formatExchangeRate(
                                         _currentRateMicros,
                                       );
-                                  _loadExchangeRate();
+                                  unawaited(_loadExchangeRate());
                                 }
                               });
                             },
@@ -261,7 +268,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
                 // 描述（含自動完成、OCR 識別中的 shimmer 效果）
                 if (_isProcessingOcr)
-                  _buildOcrShimmer(context, label: l10n.addExpense_description)
+                  OcrShimmerField(label: l10n.addExpense_description)
                 else
                   DescriptionAutocomplete(
                     controller: _descriptionController,
@@ -283,117 +290,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildImagePicker() {
-    final l10n = S.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.addExpense_receiptImage,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 8),
-
-        if (_selectedImagePath != null)
-          // 圖片預覽
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(_selectedImagePath!),
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() => _selectedImagePath = null);
-                  },
-                  icon: const Icon(Icons.close),
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.black54,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          )
-        else
-          // 選擇按鈕
-          Row(
-            children: [
-              Expanded(
-                child: _ImagePickerButton(
-                  icon: Icons.camera_alt,
-                  label: l10n.addExpense_camera,
-                  onTap: _pickFromCamera,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _ImagePickerButton(
-                  icon: Icons.photo_library,
-                  label: l10n.addExpense_gallery,
-                  onTap: _pickFromGallery,
-                ),
-              ),
-            ],
-          ),
-      ],
-    );
-  }
-
-  /// 建立 OCR 處理中的 shimmer 效果
-  Widget _buildOcrShimmer(BuildContext context, {required String label}) {
-    final l10n = S.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          child: Container(
-            height: 56,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.divider),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  const Icon(Icons.document_scanner, size: 20),
-                  const SizedBox(width: 12),
-                  Text(
-                    l10n.addExpense_ocrProcessing,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -448,10 +344,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       },
       onSuccess: (path) {
         // 觸覺回饋 - 成功拍照
-        AnimationUtils.lightImpact();
+        unawaited(AnimationUtils.lightImpact());
         setState(() => _selectedImagePath = path);
         // 執行 OCR 識別
-        _processOcr(path);
+        unawaited(_processOcr(path));
       },
     );
   }
@@ -469,7 +365,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       onSuccess: (path) {
         setState(() => _selectedImagePath = path);
         // 執行 OCR 識別
-        _processOcr(path);
+        unawaited(_processOcr(path));
       },
     );
   }
@@ -512,7 +408,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 )) {
               _selectedCurrency = parsed.currency!;
               _updateDefaultExchangeRate();
-              _loadExchangeRate();
+              unawaited(_loadExchangeRate());
             }
 
             // 金額（轉換為元顯示）
@@ -539,7 +435,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
           // 顯示 OCR 識別結果提示
           if (parsed.hasData && mounted) {
-            AnimationUtils.lightImpact();
+            unawaited(AnimationUtils.lightImpact());
             final l10n = S.of(context);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -658,12 +554,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       result.fold(
         onFailure: (error) {
           // 觸覺回饋 - 錯誤
-          AnimationUtils.heavyImpact();
+          unawaited(AnimationUtils.heavyImpact());
           _showError(error.message);
         },
         onSuccess: (_) {
           // 觸覺回饋 - 儲存成功
-          AnimationUtils.lightImpact();
+          unawaited(AnimationUtils.lightImpact());
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(S.of(context).addExpense_success)),
@@ -682,47 +578,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       SnackBar(
         content: Text(message),
         backgroundColor: AppColors.error,
-      ),
-    );
-  }
-}
-
-/// 圖片選擇按鈕
-class _ImagePickerButton extends StatelessWidget {
-  const _ImagePickerButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.divider),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 32, color: AppColors.primary),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

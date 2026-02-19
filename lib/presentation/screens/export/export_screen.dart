@@ -14,10 +14,9 @@ import '../../../domain/repositories/expense_repository.dart';
 import '../../../services/export_service.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/showcase_provider.dart';
-import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/loading_overlay.dart';
-import '../../widgets/common/skeleton.dart';
-import '../../widgets/forms/date_picker_field.dart';
+import 'date_range_selector.dart';
+import 'export_preview.dart';
 
 /// 匯出畫面
 class ExportScreen extends StatefulWidget {
@@ -60,8 +59,8 @@ class _ExportScreenState extends State<ExportScreen> {
   void initState() {
     super.initState();
     _exportService = ExportService();
-    _loadPreview();
-    _loadUserName();
+    unawaited(_loadPreview());
+    unawaited(_loadUserName());
     _checkExportShowcase();
   }
 
@@ -102,7 +101,7 @@ class _ExportScreenState extends State<ExportScreen> {
     super.didUpdateWidget(oldWidget);
     // refreshTrigger 變化時重新載入資料
     if (widget.refreshTrigger != oldWidget.refreshTrigger) {
-      _loadPreview();
+      unawaited(_loadPreview());
     }
 
     // 頁面變為活躍時檢查 showcase
@@ -130,7 +129,8 @@ class _ExportScreenState extends State<ExportScreen> {
       if (mounted && name != null && name.isNotEmpty) {
         setState(() => _userName = name);
       }
-    } catch (e) {
+    } on Object catch (e) {
+      // StateError 可能在 sl 未初始化時拋出
       AppLogger.warning('Failed to load user name for export', error: e);
       // 使用預設名稱
     }
@@ -169,7 +169,7 @@ class _ExportScreenState extends State<ExportScreen> {
           _isLoadingPreview = false;
         });
       }
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.warning(
         'Failed to load export preview',
         error: e,
@@ -266,7 +266,7 @@ class _ExportScreenState extends State<ExportScreen> {
               .export_failed(error?.message ?? S.of(context).error_unknown),
         );
       }
-    } catch (e) {
+    } on Exception catch (e) {
       AppLogger.error(
         'Export ZIP failed unexpectedly',
         error: e,
@@ -320,7 +320,7 @@ class _ExportScreenState extends State<ExportScreen> {
       onComplete: (index, key) {
         if (!mounted) return;
         if (key == _exportShowcaseKey) {
-          context.read<ShowcaseProvider>().completeExportShowcase();
+          unawaited(context.read<ShowcaseProvider>().completeExportShowcase());
         }
       },
       builder: (showcaseContext) {
@@ -345,29 +345,30 @@ class _ExportScreenState extends State<ExportScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 月份選擇（匯出中禁用）
-              IgnorePointer(
-                ignoring: _isExporting,
-                child: Opacity(
-                  opacity: _isExporting ? 0.5 : 1.0,
-                  child: MonthPickerField(
-                    year: _selectedYear,
-                    month: _selectedMonth,
-                    onChanged: (year, month) {
-                      setState(() {
-                        _selectedYear = year;
-                        _selectedMonth = month;
-                      });
-                      _loadPreview();
-                    },
-                  ),
-                ),
+              DateRangeSelector(
+                year: _selectedYear,
+                month: _selectedMonth,
+                isExporting: _isExporting,
+                onChanged: (year, month) {
+                  setState(() {
+                    _selectedYear = year;
+                    _selectedMonth = month;
+                  });
+                  unawaited(_loadPreview());
+                },
               ),
 
               const SizedBox(height: 24),
 
               // 匯出預覽
               Expanded(
-                child: _buildPreviewCard(),
+                child: ExportPreview(
+                  isLoading: _isLoadingPreview,
+                  expenses: _expenses,
+                  summary: _summary,
+                  selectedYear: _selectedYear,
+                  selectedMonth: _selectedMonth,
+                ),
               ),
 
               const SizedBox(height: 16),
@@ -409,134 +410,6 @@ class _ExportScreenState extends State<ExportScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  /// 建立預覽卡片
-  Widget _buildPreviewCard() {
-    // 載入中 - 使用 shimmer 骨架屏
-    if (_isLoadingPreview) {
-      return const ExportPreviewSkeleton();
-    }
-
-    if (_expenses.isEmpty) {
-      final l10n = S.of(context);
-      return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: EmptyState(
-            illustrationAsset: 'assets/illustrations/empty_expenses.svg',
-            title: l10n.export_noData,
-            subtitle: l10n.export_noDataMessage(_selectedYear, _selectedMonth),
-            animate: false,
-          ),
-        ),
-      );
-    }
-
-    final receiptCount = _expenses.where((e) => e.hasReceipt).length;
-    final l10n = S.of(context);
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // 圖示
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: AppColors.primaryLight,
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: const Icon(
-                Icons.description,
-                size: 40,
-                color: AppColors.primary,
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // 月份
-            Text(
-              l10n.export_yearMonth(_selectedYear, _selectedMonth),
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // 統計資料
-            _buildStatRow(
-              icon: Icons.receipt_long,
-              label: l10n.export_expenseCount,
-              value: l10n.export_countUnit(
-                _summary?.totalCount ?? _expenses.length,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            _buildStatRow(
-              icon: Icons.attach_money,
-              label: l10n.export_totalHkd,
-              value: _summary?.formattedTotalAmount ?? 'HKD 0.00',
-              valueColor: AppColors.primary,
-            ),
-
-            const SizedBox(height: 8),
-
-            _buildStatRow(
-              icon: Icons.photo,
-              label: l10n.export_receiptCount,
-              value: l10n.export_imageUnit(receiptCount),
-            ),
-
-            const SizedBox(height: 24),
-
-            // 提示文字
-            Text(
-              l10n.export_hint,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textTertiary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// 建立統計列
-  Widget _buildStatRow({
-    required IconData icon,
-    required String label,
-    required String value,
-    Color? valueColor,
-  }) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: AppColors.textSecondary),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const Spacer(),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: valueColor ?? AppColors.textPrimary,
-          ),
-        ),
-      ],
     );
   }
 }
